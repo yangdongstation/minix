@@ -1,0 +1,117 @@
+#
+# MINIX 3 Set list for RISC-V 64-bit
+#
+# Defines the files to include in the distribution
+#
+
+# Kernel
+./boot/kernel                           base-kernel
+./boot/boot.cfg                         base-kernel
+
+# Essential servers
+./service/pm                            base-server
+./service/vfs                           base-server
+./service/vm                            base-server
+./service/rs                            base-server
+./service/ds                            base-server
+./service/is                            base-server
+./service/sched                         base-server
+
+# Drivers
+./service/virtio_blk_mmio               base-driver
+./service/ns16550                       base-driver
+./service/memory                        base-driver
+./service/log                           base-driver
+
+# Essential binaries
+./bin/sh                                base-bin
+./bin/ls                                base-bin
+./bin/cat                               base-bin
+./bin/cp                                base-bin
+./bin/mv                                base-bin
+./bin/rm                                base-bin
+./bin/mkdir                             base-bin
+./bin/rmdir                             base-bin
+./bin/echo                              base-bin
+./bin/test                              base-bin
+./bin/pwd                               base-bin
+./bin/date                              base-bin
+./bin/sleep                             base-bin
+./bin/kill                              base-bin
+./bin/expr                              base-bin
+./bin/ed                                base-bin
+./bin/hostname                          base-bin
+./bin/sync                              base-bin
+
+# System binaries
+./sbin/init                             base-sbin
+./sbin/mount                            base-sbin
+./sbin/umount                           base-sbin
+./sbin/reboot                           base-sbin
+./sbin/halt                             base-sbin
+./sbin/shutdown                         base-sbin
+./sbin/fsck                             base-sbin
+./sbin/mkfs                             base-sbin
+./sbin/fdisk                            base-sbin
+./sbin/sysctl                           base-sbin
+./sbin/dmesg                            base-sbin
+
+# Configuration
+./etc/rc                                base-etc
+./etc/rc.conf                           base-etc
+./etc/fstab                             base-etc
+./etc/ttys                              base-etc
+./etc/passwd                            base-etc
+./etc/group                             base-etc
+./etc/hosts                             base-etc
+./etc/motd                              base-etc
+./etc/profile                           base-etc
+./etc/shells                            base-etc
+./etc/devmap                            base-etc
+./etc/rc.d/riscv64_init                 base-etc
+
+# User binaries (optional)
+./usr/bin/vi                            comp-bin
+./usr/bin/grep                          comp-bin
+./usr/bin/sed                           comp-bin
+./usr/bin/awk                           comp-bin
+./usr/bin/make                          comp-bin
+./usr/bin/diff                          comp-bin
+./usr/bin/find                          comp-bin
+./usr/bin/tar                           comp-bin
+./usr/bin/gzip                          comp-bin
+./usr/bin/less                          comp-bin
+./usr/bin/more                          comp-bin
+./usr/bin/head                          comp-bin
+./usr/bin/tail                          comp-bin
+./usr/bin/sort                          comp-bin
+./usr/bin/uniq                          comp-bin
+./usr/bin/wc                            comp-bin
+./usr/bin/tee                           comp-bin
+./usr/bin/xargs                         comp-bin
+./usr/bin/file                          comp-bin
+./usr/bin/which                         comp-bin
+./usr/bin/arch                          comp-bin
+./usr/bin/cpuinfo                       comp-bin
+
+# Libraries
+./lib/libc.so                           base-lib
+./lib/libm.so                           base-lib
+./lib/libsys.so                         base-lib
+./lib/libutil.so                        base-lib
+./lib/libvirtio_mmio.so                 base-lib
+
+# Development (optional)
+./usr/lib/libc.a                        comp-lib
+./usr/lib/libm.a                        comp-lib
+./usr/include                           comp-include
+
+# Directories
+./dev                                   base-dir
+./proc                                  base-dir
+./tmp                                   base-dir
+./var/log                               base-dir
+./var/run                               base-dir
+./var/tmp                               base-dir
+./home                                  base-dir
+./root                                  base-dir

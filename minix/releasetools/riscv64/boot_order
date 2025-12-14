@@ -1,0 +1,40 @@
+#
+# MINIX 3 Boot Order for RISC-V 64-bit
+#
+# This file defines the order in which services are started
+# during system boot.
+#
+# Format: service_name [arguments]
+#
+
+# Phase 1: Core System Services
+# These are started by the kernel during boot
+rs
+ds
+pm
+sched
+vfs
+vm
+
+# Phase 2: Essential Drivers
+# Started after core services are running
+memory
+log
+tty
+
+# Phase 3: Platform-Specific Drivers
+# RISC-V / QEMU virt specific
+ns16550                             # UART (if not using tty)
+virtio_blk_mmio                     # Block device
+
+# Phase 4: Optional Drivers
+# Uncomment as needed
+# virtio_net_mmio                   # Network
+# virtio_rng_mmio                   # RNG
+
+# Phase 5: System Services
+is                                  # Information server
+
+# Phase 6: Init
+# Starts the user-space init process
+init
