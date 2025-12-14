@@ -87,6 +87,13 @@ CPPFLAGS+= ${SMP_FLAGS}
 CFLAGS+= -mno-unaligned-access
 .endif
 
+# RISC-V 64 编译标志
+.if ${MACHINE_ARCH} == "riscv64"
+CFLAGS+= -march=rv64gc -mabi=lp64d
+.elif ${MACHINE_ARCH} == "riscv32"
+CFLAGS+= -march=rv32gc -mabi=ilp32d
+.endif
+
 __uname_s!= uname -s
 .if ${__uname_s:Uunknown} == "Minix" 
 USETOOLS?=	never
@@ -120,6 +127,11 @@ USETOOLS?=	never
 # LSC FIXME: RELEASEMACHINEDIR is set to evbarm, instead of evbearm-el
 .if !empty(MACHINE:Mevbarm*)
 RELEASEMACHINEDIR:= evbearm-el
+.endif
+
+# RISC-V 64 RELEASEMACHINEDIR 设置
+.if !empty(MACHINE:Mevbriscv64*)
+RELEASEMACHINEDIR:= evbriscv64-el
 .endif
 
 .if ${HAVE_GCC:Dyes} == "yes" || \

@@ -24,6 +24,12 @@ SUBDIR= evbarm
 .else
 SUBDIR= acorn26 acorn32 cats epoc32 evbarm hpcarm iyonix netwinder shark zaurus
 .endif # defined(__MINIX)
+.elif ${MACHINE_CPU} == "riscv"
+.if defined(__MINIX)
+SUBDIR= evbriscv64
+.else
+SUBDIR= riscv
+.endif # defined(__MINIX)
 .else
 SUBDIR=	${MACHINE}
 .endif
@@ -67,7 +73,7 @@ SUBDIR+= xen
 #	x68k x86_64 xen \
 #	zaurus
 
-.if ${MACHINE_CPU} == aarch64 || ${MACHINE_CPU} == "arm"
+.if ${MACHINE_CPU} == aarch64 || ${MACHINE_CPU} == "arm" || ${MACHINE_CPU} == "riscv"
 INCSYMLINKS= ${MACHINE_CPU} /usr/include/machine
 .else
 INCSYMLINKS= ${MACHINE} /usr/include/machine
