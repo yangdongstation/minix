@@ -1,0 +1,17 @@
+#
+# /etc/ttys configuration for RISC-V 64-bit (QEMU virt platform)
+#
+# Terminal configuration for serial console
+#
+
+# Console - NS16550 UART at 0x10000000
+console "/usr/libexec/getty std.115200"   vt100   on  secure
+
+# Serial port (same physical device, different name)
+ttyS0   "/usr/libexec/getty std.115200"   vt100   off secure
+
+# Virtual terminals (if VirtIO console is available)
+ttyv0   "/usr/libexec/getty std.115200"   vt100   off secure
+ttyv1   "/usr/libexec/getty std.115200"   vt100   off secure
+ttyv2   "/usr/libexec/getty std.115200"   vt100   off secure
+ttyv3   "/usr/libexec/getty std.115200"   vt100   off secure

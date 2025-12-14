@@ -1,0 +1,20 @@
+#
+# /etc/fstab for RISC-V 64-bit (QEMU virt platform)
+#
+# VirtIO block device configuration
+#
+
+# Root filesystem on VirtIO block device
+/dev/c0d0p0     /       mfs     rw      1 1
+
+# /usr partition
+/dev/c0d0p1     /usr    mfs     rw      1 2
+
+# /home partition
+/dev/c0d0p2     /home   mfs     rw      1 3
+
+# Memory filesystem for /tmp
+none            /tmp    mfs     rw,-s=64m       0 0
+
+# Proc filesystem
+proc            /proc   procfs  rw      0 0

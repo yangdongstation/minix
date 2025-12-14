@@ -1,0 +1,190 @@
+/*
+ * Device Tree Blob source for MINIX/RISC-V 64-bit
+ *
+ * This is a reference DTB for QEMU virt platform.
+ * QEMU provides its own DTB, but this documents the expected layout.
+ */
+
+/dts-v1/;
+
+/ {
+    #address-cells = <2>;
+    #size-cells = <2>;
+    compatible = "riscv-virtio";
+    model = "riscv-virtio,qemu";
+
+    chosen {
+        bootargs = "console=ttyS0,115200 root=/dev/vda rw";
+        stdout-path = "/soc/serial@10000000";
+    };
+
+    cpus {
+        #address-cells = <1>;
+        #size-cells = <0>;
+        timebase-frequency = <10000000>;
+
+        cpu@0 {
+            device_type = "cpu";
+            reg = <0>;
+            status = "okay";
+            compatible = "riscv";
+            riscv,isa = "rv64imafdc";
+            mmu-type = "riscv,sv39";
+
+            interrupt-controller {
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+        cpu@1 {
+            device_type = "cpu";
+            reg = <1>;
+            status = "okay";
+            compatible = "riscv";
+            riscv,isa = "rv64imafdc";
+            mmu-type = "riscv,sv39";
+
+            interrupt-controller {
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+        cpu@2 {
+            device_type = "cpu";
+            reg = <2>;
+            status = "okay";
+            compatible = "riscv";
+            riscv,isa = "rv64imafdc";
+            mmu-type = "riscv,sv39";
+
+            interrupt-controller {
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+
+        cpu@3 {
+            device_type = "cpu";
+            reg = <3>;
+            status = "okay";
+            compatible = "riscv";
+            riscv,isa = "rv64imafdc";
+            mmu-type = "riscv,sv39";
+
+            interrupt-controller {
+                #interrupt-cells = <1>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+    };
+
+    memory@80000000 {
+        device_type = "memory";
+        reg = <0x0 0x80000000 0x0 0x10000000>; /* 256MB */
+    };
+
+    soc {
+        #address-cells = <2>;
+        #size-cells = <2>;
+        compatible = "simple-bus";
+        ranges;
+
+        /* PLIC - Platform Level Interrupt Controller */
+        plic@c000000 {
+            compatible = "sifive,plic-1.0.0", "riscv,plic0";
+            reg = <0x0 0x0c000000 0x0 0x4000000>;
+            #interrupt-cells = <1>;
+            interrupt-controller;
+            interrupts-extended = <
+                &cpu0_intc 11 &cpu0_intc 9
+                &cpu1_intc 11 &cpu1_intc 9
+                &cpu2_intc 11 &cpu2_intc 9
+                &cpu3_intc 11 &cpu3_intc 9
+            >;
+            riscv,ndev = <96>;
+        };
+
+        /* CLINT - Core Local Interruptor */
+        clint@2000000 {
+            compatible = "sifive,clint0", "riscv,clint0";
+            reg = <0x0 0x02000000 0x0 0x10000>;
+            interrupts-extended = <
+                &cpu0_intc 3 &cpu0_intc 7
+                &cpu1_intc 3 &cpu1_intc 7
+                &cpu2_intc 3 &cpu2_intc 7
+                &cpu3_intc 3 &cpu3_intc 7
+            >;
+        };
+
+        /* NS16550 UART */
+        serial@10000000 {
+            compatible = "ns16550a";
+            reg = <0x0 0x10000000 0x0 0x100>;
+            clock-frequency = <3686400>;
+            interrupts = <10>;
+            interrupt-parent = <&plic>;
+        };
+
+        /* VirtIO Block Device */
+        virtio_block@10001000 {
+            compatible = "virtio,mmio";
+            reg = <0x0 0x10001000 0x0 0x1000>;
+            interrupts = <1>;
+            interrupt-parent = <&plic>;
+        };
+
+        /* VirtIO Network Device */
+        virtio_net@10002000 {
+            compatible = "virtio,mmio";
+            reg = <0x0 0x10002000 0x0 0x1000>;
+            interrupts = <2>;
+            interrupt-parent = <&plic>;
+        };
+
+        /* VirtIO Console */
+        virtio_console@10003000 {
+            compatible = "virtio,mmio";
+            reg = <0x0 0x10003000 0x0 0x1000>;
+            interrupts = <3>;
+            interrupt-parent = <&plic>;
+        };
+
+        /* VirtIO GPU (optional) */
+        virtio_gpu@10004000 {
+            compatible = "virtio,mmio";
+            reg = <0x0 0x10004000 0x0 0x1000>;
+            interrupts = <4>;
+            interrupt-parent = <&plic>;
+        };
+
+        /* VirtIO Input - Keyboard */
+        virtio_keyboard@10005000 {
+            compatible = "virtio,mmio";
+            reg = <0x0 0x10005000 0x0 0x1000>;
+            interrupts = <5>;
+            interrupt-parent = <&plic>;
+        };
+
+        /* VirtIO Input - Mouse */
+        virtio_mouse@10006000 {
+            compatible = "virtio,mmio";
+            reg = <0x0 0x10006000 0x0 0x1000>;
+            interrupts = <6>;
+            interrupt-parent = <&plic>;
+        };
+
+        /* VirtIO RNG */
+        virtio_rng@10007000 {
+            compatible = "virtio,mmio";
+            reg = <0x0 0x10007000 0x0 0x1000>;
+            interrupts = <8>;
+            interrupt-parent = <&plic>;
+        };
+    };
+};

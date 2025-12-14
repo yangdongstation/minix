@@ -1,0 +1,33 @@
+#
+# /etc/rc.conf for RISC-V 64-bit (QEMU virt platform)
+#
+# System configuration defaults
+#
+
+# Platform identification
+machine="evbriscv64"
+machine_arch="riscv64"
+
+# Enable RISC-V platform initialization
+riscv64_init="YES"
+
+# Console settings
+rc_info="YES"
+rc_debug="NO"
+
+# Network configuration (if VirtIO net is available)
+# hostname="minix-riscv64"
+# defaultroute="10.0.2.2"
+# ifconfig_eth0="inet 10.0.2.15 netmask 255.255.255.0"
+
+# Services to start
+sshd="NO"               # Enable if network is configured
+syslogd="YES"
+cron="YES"
+
+# Memory settings
+swapspace="NO"          # VirtIO doesn't need swap initially
+
+# Development/debug options
+dmesg_at_boot="YES"
+kernel_debug="NO"

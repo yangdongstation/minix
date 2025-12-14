@@ -1,0 +1,33 @@
+#
+# Device map for RISC-V 64-bit (QEMU virt platform)
+#
+# Maps device names to major/minor numbers
+#
+
+# VirtIO block devices
+c0d0    virtio_blk      0       # First VirtIO disk
+c0d0p0  virtio_blk      1       # Partition 0
+c0d0p1  virtio_blk      2       # Partition 1
+c0d0p2  virtio_blk      3       # Partition 2
+c0d0p3  virtio_blk      4       # Partition 3
+
+c1d0    virtio_blk      64      # Second VirtIO disk
+c1d0p0  virtio_blk      65      # Partition 0
+c1d0p1  virtio_blk      66      # Partition 1
+
+# Serial console
+console ns16550         0       # Main console
+ttyS0   ns16550         1       # Serial port 0
+
+# VirtIO console (if available)
+ttyv0   virtio_console  0       # Virtual terminal 0
+ttyv1   virtio_console  1       # Virtual terminal 1
+ttyv2   virtio_console  2       # Virtual terminal 2
+ttyv3   virtio_console  3       # Virtual terminal 3
+
+# VirtIO network
+eth0    virtio_net      0       # First network interface
+
+# VirtIO RNG
+random  virtio_rng      0       # Random number generator
+urandom virtio_rng      1       # Non-blocking random

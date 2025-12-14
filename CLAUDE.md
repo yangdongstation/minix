@@ -53,7 +53,7 @@ make regression-tests
 
 - **kernel/**: Microkernel implementation with architecture-specific code (arch/)
   - Responsible for process scheduling, interrupt handling, message passing
-  - Architecture: Currently supports i386 and earm (ARM)
+  - Architecture: Supports i386, earm (ARM), and riscv64 (RISC-V 64-bit)
   - Key files: clock.c, interrupt.c, debug.c
 
 - **servers/**: Userspace servers that provide core OS functionality
@@ -167,3 +167,55 @@ Recent commits show:
 3. **Testing**: Use ATF (Automated Test Framework) for new tests
 4. **Build dependencies**: Always build tools first, then libraries, then applications
 5. **Portability**: Tools in tools/ must be highly portable (C89 compatible where possible)
+
+## RISC-V 64-bit Port
+
+The RISC-V 64-bit port targets the QEMU virt platform. Key components:
+
+### Build Commands
+```bash
+# Build for RISC-V 64-bit
+./build.sh -m evbriscv64 tools
+./build.sh -m evbriscv64 distribution
+
+# Check architecture recognition
+./build.sh -m evbriscv64 list-arch
+```
+
+### Running with QEMU
+```bash
+# Basic run
+./minix/scripts/qemu-riscv64.sh -k /path/to/kernel
+
+# Debug mode (GDB)
+./minix/scripts/qemu-riscv64.sh -d -k /path/to/kernel
+
+# Connect debugger
+./minix/scripts/gdb-riscv64.sh /path/to/kernel
+```
+
+### RISC-V Architecture Files
+- **minix/kernel/arch/riscv64/**: Kernel architecture support
+  - `sbi.c`: SBI firmware interface
+  - `plic.c`: PLIC interrupt controller (with `plic_irq_cpu_mask()` for SMP)
+  - `head.S`: Boot entry with Sv39 page table setup
+  - `exception.c`: Trap handling
+- **minix/lib/libc/arch/riscv64/**: C library stubs
+- **minix/lib/libsys/arch/riscv64/**: System library
+- **minix/drivers/storage/virtio_blk_mmio/**: VirtIO block driver
+- **minix/drivers/tty/ns16550/**: UART driver for QEMU
+
+### Memory Map (QEMU virt)
+| Address      | Device           |
+|--------------|------------------|
+| 0x02000000   | CLINT (timer)    |
+| 0x0C000000   | PLIC             |
+| 0x10000000   | UART (NS16550)   |
+| 0x10001000   | VirtIO MMIO      |
+| 0x80000000   | RAM start        |
+
+### Tests
+```bash
+# Run RISC-V specific tests
+./minix/tests/riscv64/run_tests.sh all
+```
