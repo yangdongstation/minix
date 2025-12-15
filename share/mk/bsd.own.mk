@@ -1506,15 +1506,17 @@ ${var}?= yes
 .endfor
 
 #MINIX-specific vars
-.for var in \
-	USE_WATCHDOG USE_ACPI USE_PAE USE_APIC USE_DEBUGREG USE_SYSDEBUG \
-	USE_LIVEUPDATE USE_PCI USE_BITCODE USE_MAGIC USE_ASR
-.if (${${var:S/USE_/MK/}} == "no")
-${var}:= no
-.else
-${var}?= yes
-.endif
-.endfor
+USE_WATCHDOG?= yes
+USE_ACPI?= yes
+USE_PAE?= yes
+USE_APIC?= yes
+USE_DEBUGREG?= yes
+USE_SYSDEBUG?= yes
+USE_LIVEUPDATE?= yes
+USE_PCI?= yes
+USE_BITCODE?= yes
+USE_MAGIC?= yes
+USE_ASR?= yes
 
 #
 # USE_* options which default to "yes".
