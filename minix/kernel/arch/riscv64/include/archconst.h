@@ -66,6 +66,11 @@
 #define SSTATUS_SPIE        (1UL << 5)   /* Previous Interrupt Enable */
 #define SSTATUS_SPP         (1UL << 8)   /* Previous Privilege (0=U, 1=S) */
 #define SSTATUS_FS          (3UL << 13)  /* FPU State */
+#define SSTATUS_FS_MASK     (3UL << 13)  /* FPU State mask */
+#define SSTATUS_FS_OFF      (0UL << 13)  /* FPU off */
+#define SSTATUS_FS_INITIAL  (1UL << 13)  /* FPU initial */
+#define SSTATUS_FS_CLEAN    (2UL << 13)  /* FPU clean */
+#define SSTATUS_FS_DIRTY    (3UL << 13)  /* FPU dirty */
 #define SSTATUS_SUM         (1UL << 18)  /* Supervisor User Memory access */
 
 /* sie/sip bits */

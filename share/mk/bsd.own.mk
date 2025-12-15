@@ -981,6 +981,10 @@ MKPROFILE.or1k=	no
 MKPROFILE.riscv32=no
 MKPROFILE.riscv64=no
 
+# RISC-V does not have PCI support yet
+MKPCI.riscv64=	no
+MKPCI.riscv32=	no
+
 #
 # The m68000 port is incomplete.
 #
@@ -1506,15 +1510,18 @@ ${var}?= yes
 .endfor
 
 #MINIX-specific vars
-.for var in \
-	USE_WATCHDOG USE_ACPI USE_PAE USE_APIC USE_DEBUGREG USE_SYSDEBUG \
-	USE_LIVEUPDATE USE_PCI USE_BITCODE USE_MAGIC USE_ASR
-.if (${${var:S/USE_/MK/}} == "no")
-${var}:= no
-.else
-${var}?= yes
-.endif
-.endfor
+# Note: Use direct variable references due to make compatibility issues
+USE_WATCHDOG?=	${MKWATCHDOG:Uno}
+USE_ACPI?=	${MKACPI:Uno}
+USE_PAE?=	${MKPAE:Uno}
+USE_APIC?=	${MKAPIC:Uno}
+USE_DEBUGREG?=	${MKDEBUGREG:Uno}
+USE_SYSDEBUG?=	${MKSYSDEBUG:Uyes}
+USE_LIVEUPDATE?=	${MKLIVEUPDATE:Uyes}
+USE_PCI?=	${MKPCI:Uno}
+USE_BITCODE?=	${MKBITCODE:Uno}
+USE_MAGIC?=	${MKMAGIC:Uno}
+USE_ASR?=	${MKASR:Uno}
 
 #
 # USE_* options which default to "yes".
