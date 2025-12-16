@@ -5780,3 +5780,1024 @@ cleandir ===> share/i18n
 cleandir ===> share/i18n/csmapper
 (cd /home/donz/minix/share/i18n/csmapper && rm -f mapper.dir.APPLE charset.pivot.APPLE CELTIC%UCS.mps UCS%CELTIC.mps CENTEURO%UCS.mps UCS%CENTEURO.mps CROATIAN%UCS.mps UCS%CROATIAN.mps CYRILLIC%UCS.mps UCS%CYRILLIC.mps DINGBATS%UCS.mps UCS%DINGBATS.mps GAELIC%UCS.mps UCS%GAELIC.mps GREEK%UCS.mps UCS%GREEK.mps ICELAND%UCS.mps UCS%ICELAND.mps INUIT%UCS.mps UCS%INUIT.mps ROMAN%UCS.mps UCS%ROMAN.mps ROMANIAN%UCS.mps UCS%ROMANIAN.mps THAI%UCS.mps UCS%THAI.mps TURKISH%UCS.mps UCS%TURKISH.mps mapper.dir.AST charset.pivot.AST ARMSCII-7%UCS.mps UCS%ARMSCII-7.mps ARMSCII-8%UCS.mps UCS%ARMSCII-8.mps ARMSCII-8A%UCS.mps UCS%ARMSCII-8A.mps mapper.dir.BIG5 charset.pivot.BIG5 Big5@1984%UCS.mps  Big5EXT@2003%UCS.mps  Big5EXT@E%UCS.mps  Big5EXT@IBM%UCS.mps  Big5EXT@Plus%UCS.mps  Big5UDA%UCS.mps  ETen%UCS@BMP.mps ETen%UCS@SIP.mps  HKSCS%UCS@BMP.mps HKSCS%UCS@SIP.mps  UCS%Big5@1984.mps  UCS%Big5EXT@2003.mps  UCS%Big5EXT@E.mps  UCS%Big5EXT@IBM.mps  UCS%Big5EXT@Plus.mps  UCS%Big5UDA.mps  UCS@BMP%ETen.mps UCS@SIP%ETen.mps  UCS@BMP%HKSCS.mps UCS@SIP%HKSCS.mps mapper.dir.CBM charset.pivot.CBM CBMINT%UCS.mps  UCS%CBMINT.mps mapper.dir.CNS charset.pivot.CNS CNS11643-1%UCS.mps  CNS11643-2%UCS.mps  CNS11643-3%UCS@BMP.mps CNS11643-3%UCS@SIP.mps  CNS11643-4%UCS@BMP.mps CNS11643-4%UCS@SIP.mps  CNS11643-5%UCS@BMP.mps CNS11643-5%UCS@SIP.mps  CNS11643-6%UCS@BMP.mps CNS11643-6%UCS@SIP.mps  CNS11643-7%UCS@BMP.mps CNS11643-7%UCS@SIP.mps  UCS%CNS11643-1.mps  UCS%CNS11643-2.mps  UCS@BMP%CNS11643-3.mps UCS@SIP%CNS11643-3.mps  UCS@BMP%CNS11643-4.mps UCS@SIP%CNS11643-4.mps  UCS@BMP%CNS11643-5.mps UCS@SIP%CNS11643-5.mps  UCS@BMP%CNS11643-6.mps UCS@SIP%CNS11643-6.mps  UCS@BMP%CNS11643-7.mps UCS@SIP%CNS11643-7.mps mapper.dir.CP charset.pivot.CP CP037%UCS.mps UCS%CP037.mps CP038%UCS.mps UCS%CP038.mps CP273%UCS.mps UCS%CP273.mps CP274%UCS.mps UCS%CP274.mps CP275%UCS.mps UCS%CP275.mps CP277%UCS.mps UCS%CP277.mps CP278%UCS.mps UCS%CP278.mps CP280%UCS.mps UCS%CP280.mps CP281%UCS.mps UCS%CP281.mps CP284%UCS.mps UCS%CP284.mps CP285%UCS.mps UCS%CP285.mps CP290%UCS.mps UCS%CP290.mps CP297%UCS.mps UCS%CP297.mps CP420%UCS.mps UCS%CP420.mps CP423%UCS.mps UCS%CP423.mps CP424%UCS.mps UCS%CP424.mps CP437%UCS.mps UCS%CP437.mps CP500%UCS.mps UCS%CP500.mps CP737%UCS.mps UCS%CP737.mps CP775%UCS.mps UCS%CP775.mps CP850%UCS.mps UCS%CP850.mps CP851%UCS.mps UCS%CP851.mps CP852%UCS.mps UCS%CP852.mps CP853%UCS.mps UCS%CP853.mps CP855%UCS.mps UCS%CP855.mps CP856%UCS.mps UCS%CP856.mps CP857%UCS.mps UCS%CP857.mps CP858%UCS.mps UCS%CP858.mps CP860%UCS.mps UCS%CP860.mps CP861%UCS.mps UCS%CP861.mps CP862%UCS.mps UCS%CP862.mps CP863%UCS.mps UCS%CP863.mps CP864%UCS.mps UCS%CP864.mps CP865%UCS.mps UCS%CP865.mps CP866%UCS.mps UCS%CP866.mps CP868%UCS.mps UCS%CP868.mps CP869%UCS.mps UCS%CP869.mps CP870%UCS.mps UCS%CP870.mps CP871%UCS.mps UCS%CP871.mps CP874%UCS.mps UCS%CP874.mps CP875%UCS.mps UCS%CP875.mps CP880%UCS.mps UCS%CP880.mps CP891%UCS.mps UCS%CP891.mps CP903%UCS.mps UCS%CP903.mps CP904%UCS.mps UCS%CP904.mps CP905%UCS.mps UCS%CP905.mps CP918%UCS.mps UCS%CP918.mps CP922%UCS.mps UCS%CP922.mps CP932UDA%UCS.mps UCS%CP932UDA.mps CP932VDC@IBM%UCS.mps UCS%CP932VDC@IBM.mps CP932VDC@NEC_IBM%UCS.mps UCS%CP932VDC@NEC_IBM.mps CP936EXT%UCS.mps UCS%CP936EXT.mps CP942EXT%UCS.mps UCS%CP942EXT.mps CP949EXT%UCS.mps UCS%CP949EXT.mps CP950%UCS.mps UCS%CP950.mps CP1006%UCS.mps UCS%CP1006.mps CP1026%UCS.mps UCS%CP1026.mps CP1046%UCS.mps UCS%CP1046.mps CP1124%UCS.mps UCS%CP1124.mps CP1125%UCS.mps UCS%CP1125.mps CP1129%UCS.mps UCS%CP1129.mps CP1131%UCS.mps UCS%CP1131.mps CP1133%UCS.mps UCS%CP1133.mps CP1140%UCS.mps UCS%CP1140.mps CP1141%UCS.mps UCS%CP1141.mps CP1142%UCS.mps UCS%CP1142.mps CP1143%UCS.mps UCS%CP1143.mps CP1144%UCS.mps UCS%CP1144.mps CP1145%UCS.mps UCS%CP1145.mps CP1146%UCS.mps UCS%CP1146.mps CP1147%UCS.mps UCS%CP1147.mps CP1148%UCS.mps UCS%CP1148.mps CP1149%UCS.mps UCS%CP1149.mps CP1161%UCS.mps UCS%CP1161.mps CP1162%UCS.mps UCS%CP1162.mps CP1163%UCS.mps UCS%CP1163.mps CP1250%UCS.mps UCS%CP1250.mps CP1251%UCS.mps UCS%CP1251.mps CP1252%UCS.mps UCS%CP1252.mps CP1253%UCS.mps UCS%CP1253.mps CP1254%UCS.mps UCS%CP1254.mps CP1255%UCS.mps UCS%CP1255.mps CP1256%UCS.mps UCS%CP1256.mps CP1257%UCS.mps UCS%CP1257.mps CP1258%UCS.mps UCS%CP1258.mps CP10000%UCS.mps UCS%CP10000.mps CP10006%UCS.mps UCS%CP10006.mps CP10007%UCS.mps UCS%CP10007.mps CP10029%UCS.mps UCS%CP10029.mps CP10079%UCS.mps UCS%CP10079.mps CP10081%UCS.mps UCS%CP10081.mps mapper.dir.EBCDIC charset.pivot.EBCDIC EBCDIC-AT-DE%UCS.mps UCS%EBCDIC-AT-DE.mps EBCDIC-AT-DE-A%UCS.mps UCS%EBCDIC-AT-DE-A.mps EBCDIC-CA-FR%UCS.mps UCS%EBCDIC-CA-FR.mps EBCDIC-DK-NO%UCS.mps UCS%EBCDIC-DK-NO.mps EBCDIC-DK-NO-A%UCS.mps UCS%EBCDIC-DK-NO-A.mps EBCDIC-ES%UCS.mps UCS%EBCDIC-ES.mps EBCDIC-ES-A%UCS.mps UCS%EBCDIC-ES-A.mps EBCDIC-ES-S%UCS.mps UCS%EBCDIC-ES-S.mps EBCDIC-FI-SE%UCS.mps UCS%EBCDIC-FI-SE.mps EBCDIC-FI-SE-A%UCS.mps UCS%EBCDIC-FI-SE-A.mps EBCDIC-FR%UCS.mps UCS%EBCDIC-FR.mps EBCDIC-IT%UCS.mps UCS%EBCDIC-IT.mps EBCDIC-PT%UCS.mps UCS%EBCDIC-PT.mps EBCDIC-UK%UCS.mps UCS%EBCDIC-UK.mps EBCDIC-US%UCS.mps UCS%EBCDIC-US.mps mapper.dir.GB charset.pivot.GB GB12345%UCS.mps  GB18030%UCS@BMP.mps  GB2312%UCS.mps  GB2312EXT%UCS.mps  GB2312UDA1%UCS.mps  GB2312UDA2%UCS.mps  GBKEXT%UCS.mps  GBKUDA%UCS.mps  ISO-IR-165EXT%UCS.mps  UCS@BMP%GB18030.mps  UCS%GB12345.mps  UCS%GB2312.mps  UCS%GB2312EXT.mps  UCS%GB2312UDA1.mps  UCS%GB2312UDA2.mps  UCS%GBKEXT.mps  UCS%GBKUDA.mps  UCS%ISO-IR-165EXT.mps mapper.dir.GEORGIAN charset.pivot.GEORGIAN GEORGIAN-ACADEMY%UCS.mps UCS%GEORGIAN-ACADEMY.mps GEORGIAN-ACADEMY@OldCapital%UCS.mps UCS%GEORGIAN-ACADEMY@OldCapital.mps GEORGIAN-PS%UCS.mps UCS%GEORGIAN-PS.mps GEORGIAN-PS@OldCapital%UCS.mps UCS%GEORGIAN-PS@OldCapital.mps mapper.dir.ISO646 charset.pivot.ISO646 mapper.dir.ISO-8859 charset.pivot.ISO-8859 ISO-8859-2%UCS.mps UCS%ISO-8859-2.mps ISO-8859-3%UCS.mps UCS%ISO-8859-3.mps ISO-8859-4%UCS.mps UCS%ISO-8859-4.mps ISO-8859-5%UCS.mps UCS%ISO-8859-5.mps ISO-8859-6%UCS.mps UCS%ISO-8859-6.mps ISO-8859-7%UCS.mps UCS%ISO-8859-7.mps ISO-8859-8%UCS.mps UCS%ISO-8859-8.mps ISO-8859-9%UCS.mps UCS%ISO-8859-9.mps ISO-8859-10%UCS.mps UCS%ISO-8859-10.mps ISO-8859-11%UCS.mps UCS%ISO-8859-11.mps ISO-8859-13%UCS.mps UCS%ISO-8859-13.mps ISO-8859-14%UCS.mps UCS%ISO-8859-14.mps ISO-8859-15%UCS.mps UCS%ISO-8859-15.mps ISO-8859-16%UCS.mps UCS%ISO-8859-16.mps mapper.dir.JIS charset.pivot.JIS JISX0201-KANA%UCS.mps  JISX0208@1978%UCS.mps  JISX0208@1990%UCS.mps  JISX0212%UCS.mps  JISX0208@MS%UCS.mps  JISX0208VDC@NEC%UCS.mps  JISX0208UDC%UCS.mps  JISX0212@MS%UCS.mps  JISX0212VDC@IBM%UCS.mps  JISX0212UDC%UCS.mps  JISX0213-1%UCS@BMP.mps JISX0213-1%UCS@SIP.mps  JISX0213-2%UCS@BMP.mps JISX0213-2%UCS@SIP.mps  UCS%JISX0201-KANA.mps  UCS%JISX0208@1978.mps  UCS%JISX0208@1990.mps  UCS%JISX0212.mps  UCS%JISX0208@MS.mps  UCS%JISX0208VDC@NEC.mps  UCS%JISX0208UDC.mps  UCS%JISX0212@MS.mps  UCS%JISX0212VDC@IBM.mps  UCS%JISX0212UDC.mps  UCS@BMP%JISX0213-1.mps UCS@SIP%JISX0213-1.mps  UCS@BMP%JISX0213-2.mps UCS@SIP%JISX0213-2.mps mapper.dir.KAZAKH charset.pivot.KAZAKH KZ1048%UCS.mps  PTCP154%UCS.mps  UCS%KZ1048.mps  UCS%PTCP154.mps mapper.dir.KOI charset.pivot.KOI GOST19768-74%UCS.mps	 UCS%GOST19768-74.mps	 ISO-5427%UCS.mps	 UCS%ISO-5427.mps	 KOI7%UCS.mps		 UCS%KOI7.mps KOI8%UCS.mps UCS%KOI8.mps KOI8-C%UCS.mps UCS%KOI8-C.mps KOI8-E%UCS.mps UCS%KOI8-E.mps KOI8-R%UCS.mps UCS%KOI8-R.mps KOI8-RU%UCS.mps UCS%KOI8-RU.mps KOI8-T%UCS.mps UCS%KOI8-T.mps KOI8-U%UCS.mps UCS%KOI8-U.mps mapper.dir.KS charset.pivot.KS JOHAB%UCS.mps  KSC5601HANGUL%UCS.mps  KSC5601HANJA%UCS.mps  UCS%JOHAB.mps  UCS%KSC5601HANGUL.mps  UCS%KSC5601HANJA.mps mapper.dir.MISC charset.pivot.MISC ATARIST%UCS.mps  DECMCS%UCS.mps  HP-ROMAN8%UCS.mps  MULELAO-1%UCS.mps  NEXTSTEP%UCS.mps  RISCOS-LATIN1%UCS.mps  TDS565%UCS.mps  UCS%ATARIST.mps  UCS%DECMCS.mps  UCS%HP-ROMAN8.mps  UCS%MULELAO-1.mps  UCS%NEXTSTEP.mps  UCS%RISCOS-LATIN1.mps  UCS%TDS565.mps mapper.dir.TCVN charset.pivot.TCVN TCVN5712-1%UCS.mps  VISCII%UCS.mps  UCS%TCVN5712-1.mps  UCS%VISCII.mps mapper.dir mapper.dir.db charset.pivot charset.pivot.pvdb *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
 cleandir ===> share/i18n/esdb
+(cd /home/donz/minix/share/i18n/esdb && rm -f MACCELTIC.esdb MACCENTEURO.esdb MACCROATIAN.esdb MACCYRILLIC.esdb MACDINGBATS.esdb MACGAELIC.esdb MACGREEK.esdb MACICELAND.esdb MACINUIT.esdb MACROMAN.esdb MACROMANIAN.esdb MACTHAI.esdb MACTURKISH.esdb esdb.dir.MAC esdb.alias.MAC MACCELTIC.src MACCENTEURO.src MACCROATIAN.src MACCYRILLIC.src MACDINGBATS.src MACGAELIC.src MACGREEK.src MACICELAND.src MACINUIT.src MACROMAN.src MACROMANIAN.src MACTHAI.src MACTURKISH.src ARMSCII-7.esdb ARMSCII-8.esdb ARMSCII-8A.esdb esdb.dir.ARMSCII esdb.alias.ARMSCII ARMSCII-8.src ARMSCII-8A.src Big5-2003.esdb Big5-E.esdb Big5-ETen.esdb Big5-HKSCS.esdb Big5-IBM.esdb Big5-Plus.esdb esdb.dir.Big5 esdb.alias.Big5 Big5-2003.src Big5-E.src Big5-ETen.src Big5-HKSCS.src Big5-IBM.src Big5-Plus.src CBMINT.esdb CP037.esdb CP038.esdb CP273.esdb CP274.esdb CP275.esdb CP277.esdb CP278.esdb CP280.esdb CP281.esdb CP284.esdb CP285.esdb CP290.esdb CP297.esdb CP420.esdb CP423.esdb CP424.esdb CP437.esdb CP500.esdb CP737.esdb CP775.esdb CP850.esdb CP851.esdb CP852.esdb CP853.esdb CP855.esdb CP856.esdb CP857.esdb CP858.esdb CP860.esdb CP861.esdb CP862.esdb CP863.esdb CP864.esdb CP865.esdb CP866.esdb CP868.esdb CP869.esdb CP870.esdb CP871.esdb CP874.esdb CP875.esdb CP880.esdb CP891.esdb CP903.esdb CP904.esdb CP905.esdb CP918.esdb CP922.esdb CP932.esdb CP936.esdb CP942.esdb CP942C.esdb CP943.esdb CP943C.esdb CP949.esdb CP950.esdb CP1006.esdb CP1026.esdb CP1046.esdb CP1124.esdb CP1125.esdb CP1129.esdb CP1131.esdb CP1133.esdb CP1140.esdb CP1141.esdb CP1142.esdb CP1143.esdb CP1144.esdb CP1145.esdb CP1146.esdb CP1147.esdb CP1148.esdb CP1149.esdb CP1161.esdb CP1162.esdb CP1163.esdb CP1250.esdb CP1251.esdb CP1252.esdb CP1253.esdb CP1254.esdb CP1255.esdb CP1256.esdb CP1257.esdb CP1258.esdb CP10000.esdb CP10006.esdb CP10007.esdb CP10029.esdb CP10079.esdb CP10081.esdb CP50220.esdb CP50221.esdb CP50222.esdb CP51932.esdb esdb.dir.CP esdb.alias.CP CP037.src CP038.src CP273.src CP274.src CP275.src CP277.src CP278.src CP280.src CP281.src CP284.src CP285.src CP290.src CP297.src CP420.src CP423.src CP424.src CP437.src CP500.src CP737.src CP775.src CP850.src CP851.src CP852.src CP853.src CP855.src CP856.src CP857.src CP858.src CP860.src CP861.src CP862.src CP863.src CP864.src CP865.src CP866.src CP868.src CP869.src CP870.src CP871.src CP874.src CP875.src CP880.src CP891.src CP903.src CP904.src CP905.src CP918.src CP922.src CP1006.src CP1026.src CP1046.src CP1124.src CP1125.src CP1129.src CP1131.src CP1133.src CP1140.src CP1141.src CP1142.src CP1143.src CP1144.src CP1145.src CP1146.src CP1147.src CP1148.src CP1149.src CP1161.src CP1162.src CP1163.src CP1250.src CP1251.src CP1252.src CP1253.src CP1254.src CP1255.src CP1256.src CP1257.src CP1258.src CP10000.src CP10006.src CP10007.src CP10029.src CP10079.src CP10081.src DECHanyu.esdb DECMCS.esdb esdb.dir.DEC esdb.alias.DEC DECMCS.src EUC-CN.esdb EUC-JP.esdb EUC-JP-MS.esdb EUC-JIS-2004.esdb EUC-KR.esdb EUC-TW.esdb esdb.dir.EUC esdb.alias.EUC EBCDIC-AT-DE.esdb EBCDIC-AT-DE-A.esdb EBCDIC-CA-FR.esdb EBCDIC-DK-NO.esdb EBCDIC-DK-NO-A.esdb EBCDIC-ES.esdb EBCDIC-ES-A.esdb EBCDIC-ES-S.esdb EBCDIC-FI-SE.esdb EBCDIC-FI-SE-A.esdb EBCDIC-FR.esdb EBCDIC-IT.esdb EBCDIC-PT.esdb EBCDIC-UK.esdb EBCDIC-US.esdb esdb.dir.EBCDIC esdb.alias.EBCDIC EBCDIC-AT-DE.src EBCDIC-AT-DE-A.src EBCDIC-CA-FR.src EBCDIC-DK-NO.src EBCDIC-DK-NO-A.src EBCDIC-ES.src EBCDIC-ES-A.src EBCDIC-ES-S.src EBCDIC-FI-SE.src EBCDIC-FI-SE-A.src EBCDIC-FR.src EBCDIC-IT.src EBCDIC-PT.src EBCDIC-UK.src EBCDIC-US.src GB12345.esdb GB18030.esdb GBK.esdb esdb.dir.GB esdb.alias.GB GEORGIAN-ACADEMY.esdb GEORGIAN-ACADEMY-OldCapital.esdb GEORGIAN-PS.esdb GEORGIAN-PS-OldCapital.esdb esdb.dir.GEORGIAN esdb.alias.GEORGIAN GEORGIAN-ACADEMY.src GEORGIAN-ACADEMY-OldCapital.src GEORGIAN-PS.src GEORGIAN-PS-OldCapital.src ISO-2022-CN.esdb ISO-2022-CN-EXT.esdb ISO-2022-JP.esdb ISO-2022-JP-1.esdb ISO-2022-JP-2.esdb ISO-2022-JP-2004.esdb ISO-2022-KR.esdb esdb.dir.ISO-2022 esdb.alias.ISO-2022 ISO-8859-1.esdb ISO-8859-2.esdb ISO-8859-3.esdb ISO-8859-4.esdb ISO-8859-5.esdb ISO-8859-6.esdb ISO-8859-7.esdb ISO-8859-8.esdb ISO-8859-9.esdb ISO-8859-10.esdb ISO-8859-11.esdb ISO-8859-13.esdb ISO-8859-14.esdb ISO-8859-15.esdb ISO-8859-16.esdb esdb.dir.ISO-8859 esdb.alias.ISO-8859 ISO-8859-1.src ISO-8859-2.src ISO-8859-3.src ISO-8859-4.src ISO-8859-5.src ISO-8859-6.src ISO-8859-7.src ISO-8859-8.src ISO-8859-9.src ISO-8859-10.src ISO-8859-11.src ISO-8859-13.src ISO-8859-14.src ISO-8859-15.src ISO-8859-16.src ISO646-BASIC@1983.esdb ISO646-IRV@1983.esdb ISO646-GB.esdb ISO646-US.esdb ISO646-SE.esdb ISO646-SE2.esdb ISO646-JP.esdb ISO646-IT.esdb ISO646-PT.esdb ISO646-ES.esdb ISO646-DE.esdb ISO646-FR1.esdb ISO646-CN.esdb ISO646-NO.esdb ISO646-NO2.esdb ISO646-FR.esdb ISO646-PT2.esdb ISO646-ES2.esdb ISO646-HU.esdb ISO646-JP-OCR-B.esdb ISO646-CA.esdb ISO646-CA2.esdb ISO646-YU.esdb ISO646-CU.esdb ISO646-DK.esdb ISO646-KR.esdb esdb.dir.ISO646 esdb.alias.ISO646 ISO646-BASIC@1983.src ISO646-IRV@1983.src ISO646-GB.src ISO646-US.src ISO646-SE.src ISO646-SE2.src ISO646-JP.src ISO646-IT.src ISO646-PT.src ISO646-ES.src ISO646-DE.src ISO646-FR1.src ISO646-CN.src ISO646-NO.src ISO646-NO2.src ISO646-FR.src ISO646-PT2.src ISO646-ES2.src ISO646-HU.src ISO646-JP-OCR-B.src ISO646-CA.src ISO646-CA2.src ISO646-YU.src ISO646-CU.src ISO646-DK.src ISO646-KR.src KZ1048.esdb PTCP154.esdb KOI7.esdb KOI7-switched.esdb KOI8.esdb KOI8-C.esdb KOI8-E.esdb KOI8-R.esdb KOI8-RU.esdb KOI8-T.esdb KOI8-U.esdb esdb.dir.KOI esdb.alias.KOI KOI8.src KOI8-C.src KOI8-E.src KOI8-R.src KOI8-RU.src KOI8-T.src KOI8-U.src ATARIST.esdb C99.esdb CTEXT.esdb HP-ROMAN8.esdb HZ.esdb HZ8.esdb JAVA.esdb JOHAB.esdb MULELAO-1.esdb NEXTSTEP.esdb RISCOS-LATIN1.esdb Shift_JIS.esdb Shift_JIS-2004.esdb TDS565.esdb ZW.esdb TCVN5712-1.esdb VISCII.esdb VIQR.esdb UTF-7.esdb UTF-8.esdb UTF-16.esdb UTF-16BE.esdb UTF-16LE.esdb UTF-32.esdb UTF-32BE.esdb UTF-32LE.esdb esdb.dir.UTF esdb.alias.UTF UTF-7.src UTF-8.src UTF-16.src UTF-16BE.src UTF-16LE.src UTF-32.src UTF-32BE.src UTF-32LE.src esdb.dir esdb.dir.db esdb.alias esdb.alias.db *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> share/i18n/iconv
+(cd /home/donz/minix/share/i18n/iconv && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> share/locale
+(cd /home/donz/minix/share/locale && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> share/locale/ctype
+(cd /home/donz/minix/share/locale/ctype && rm -f af_ZA.ISO8859-1.out af_ZA.ISO8859-15.out af_ZA.UTF-8.out be_BY.ISO8859-5.out be_BY.CP1251.out be_BY.UTF-8.out bg_BG.CP1251.out bg_BG.UTF-8.out ca_ES.ISO8859-1.out ca_ES.ISO8859-15.out ca_ES.UTF-8.out cs_CZ.ISO8859-2.out cs_CZ.UTF-8.out da_DK.ISO8859-1.out da_DK.ISO8859-15.out da_DK.UTF-8.out de_AT.ISO8859-1.out de_AT.ISO8859-15.out de_AT.UTF-8.out de_CH.ISO8859-1.out de_CH.ISO8859-15.out de_CH.UTF-8.out de_DE.ISO8859-1.out de_DE.ISO8859-15.out de_DE.UTF-8.out el_GR.ISO8859-7.out el_GR.UTF-8.out en_AU.ISO8859-1.out en_AU.ISO8859-15.out en_AU.UTF-8.out en_CA.ISO8859-1.out en_CA.ISO8859-15.out en_CA.UTF-8.out en_GB.ISO8859-1.out en_GB.ISO8859-15.out en_GB.UTF-8.out en_NZ.ISO8859-1.out en_NZ.ISO8859-15.out en_NZ.UTF-8.out en_US.US-ASCII.out en_US.UTF-8.out en_US.ISO8859-1.out en_US.ISO8859-15.out es_ES.ISO8859-1.out es_ES.ISO8859-15.out es_ES.UTF-8.out et_EE.ISO8859-15.out et_EE.UTF-8.out eu_ES.ISO8859-1.out eu_ES.ISO8859-15.out eu_ES.UTF-8.out fi_FI.ISO8859-1.out fi_FI.ISO8859-15.out fi_FI.UTF-8.out fr_BE.ISO8859-1.out fr_BE.ISO8859-15.out fr_BE.UTF-8.out fr_CA.ISO8859-1.out fr_CA.ISO8859-15.out fr_CA.UTF-8.out fr_CH.ISO8859-1.out fr_CH.ISO8859-15.out fr_CH.UTF-8.out fr_FR.ISO8859-1.out fr_FR.ISO8859-15.out fr_FR.UTF-8.out hr_HR.ISO8859-2.out hr_HR.UTF-8.out hu_HU.ISO8859-2.out hu_HU.UTF-8.out hy_AM.ARMSCII-8.out hy_AM.UTF-8.out is_IS.ISO8859-1.out is_IS.ISO8859-15.out is_IS.UTF-8.out it_CH.ISO8859-1.out it_CH.ISO8859-15.out it_CH.UTF-8.out it_IT.ISO8859-1.out it_IT.ISO8859-15.out it_IT.UTF-8.out ja_JP.ct.out ja_JP.eucJP.out ja_JP.SJIS.out ja_JP.ISO-2022-JP.out ja_JP.ISO-2022-JP-2.out ja_JP.UTF-8.out kk_KZ.PT154.out kk_KZ.UTF-8.out ko_KR.eucKR.out ko_KR.UTF-8.out lt_LT.ISO8859-4.out lt_LT.ISO8859-13.out lt_LT.UTF-8.out nb_NO.ISO8859-1.out nb_NO.ISO8859-15.out nb_NO.UTF-8.out nl_BE.ISO8859-1.out nl_BE.ISO8859-15.out nl_BE.UTF-8.out nl_NL.ISO8859-1.out nl_NL.ISO8859-15.out nl_NL.UTF-8.out nn_NO.ISO8859-1.out nn_NO.ISO8859-15.out nn_NO.UTF-8.out pt_BR.ISO8859-1.out pt_BR.UTF-8.out pt_PT.ISO8859-1.out pt_PT.ISO8859-15.out pt_PT.UTF-8.out pl_PL.ISO8859-2.out pl_PL.UTF-8.out ro_RO.ISO8859-2.out ro_RO.UTF-8.out ru_BY.CP1251.out ru_BY.UTF-8.out ru_RU.ISO8859-5.out ru_RU.CP866.out ru_RU.CP1251.out ru_RU.KOI8-R.out ru_RU.UTF-8.out sk_SK.ISO8859-2.out sk_SK.UTF-8.out sl_SI.ISO8859-2.out sl_SI.UTF-8.out sr_Cyrl_ME.ISO8859-5.out sr_Cyrl_ME.UTF-8.out sr_Cyrl_RS.ISO8859-5.out sr_Cyrl_RS.UTF-8.out sr_Latn_ME.ISO8859-2.out sr_Latn_ME.UTF-8.out sr_Latn_RS.ISO8859-2.out sr_Latn_RS.UTF-8.out sv_SE.ISO8859-1.out sv_SE.ISO8859-15.out sv_SE.UTF-8.out tr_TR.ISO8859-9.out tr_TR.UTF-8.out uk_UA.ISO8859-5.out uk_UA.CP1251.out uk_UA.KOI8-U.out uk_UA.UTF-8.out zh_CN.eucCN.out zh_CN.GB18030.out zh_CN.UTF-8.out zh_HK.Big5hkscs.out zh_HK.UTF-8.out zh_TW.Big5.out zh_TW.eucTW.out zh_TW.UTF-8.out *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> share/locale/monetary
+(cd /home/donz/minix/share/locale/monetary && rm -f af_ZA.ISO8859-1.out af_ZA.ISO8859-15.out af_ZA.UTF-8.out be_BY.ISO8859-5.out be_BY.CP1251.out be_BY.UTF-8.out bg_BG.CP1251.out bg_BG.UTF-8.out ca_ES.ISO8859-1.out ca_ES.ISO8859-15.out ca_ES.UTF-8.out cs_CZ.ISO8859-2.out cs_CZ.UTF-8.out da_DK.ISO8859-1.out da_DK.ISO8859-15.out da_DK.UTF-8.out de_AT.ISO8859-1.out de_AT.ISO8859-15.out de_AT.UTF-8.out de_CH.ISO8859-1.out de_CH.ISO8859-15.out de_CH.UTF-8.out de_DE.ISO8859-1.out de_DE.ISO8859-15.out de_DE.UTF-8.out el_GR.ISO8859-7.out el_GR.UTF-8.out en_AU.ISO8859-1.out en_AU.ISO8859-15.out en_AU.UTF-8.out en_CA.ISO8859-1.out en_CA.ISO8859-15.out en_CA.UTF-8.out en_GB.ISO8859-1.out en_GB.ISO8859-15.out en_GB.UTF-8.out en_NZ.ISO8859-1.out en_NZ.ISO8859-15.out en_NZ.UTF-8.out en_US.US-ASCII.out en_US.UTF-8.out en_US.ISO8859-1.out en_US.ISO8859-15.out es_ES.ISO8859-1.out es_ES.ISO8859-15.out es_ES.UTF-8.out et_EE.ISO8859-15.out et_EE.UTF-8.out eu_ES.ISO8859-1.out eu_ES.ISO8859-15.out eu_ES.UTF-8.out fi_FI.ISO8859-1.out fi_FI.ISO8859-15.out fi_FI.UTF-8.out fr_BE.ISO8859-1.out fr_BE.ISO8859-15.out fr_BE.UTF-8.out fr_CA.ISO8859-1.out fr_CA.ISO8859-15.out fr_CA.UTF-8.out fr_CH.ISO8859-1.out fr_CH.ISO8859-15.out fr_CH.UTF-8.out fr_FR.ISO8859-1.out fr_FR.ISO8859-15.out fr_FR.UTF-8.out hr_HR.ISO8859-2.out hr_HR.UTF-8.out hu_HU.ISO8859-2.out hu_HU.UTF-8.out hy_AM.ARMSCII-8.out hy_AM.UTF-8.out is_IS.ISO8859-1.out is_IS.ISO8859-15.out is_IS.UTF-8.out it_CH.ISO8859-1.out it_CH.ISO8859-15.out it_CH.UTF-8.out it_IT.ISO8859-1.out it_IT.ISO8859-15.out it_IT.UTF-8.out ja_JP.ct.out ja_JP.eucJP.out ja_JP.SJIS.out ja_JP.ISO-2022-JP.out ja_JP.ISO-2022-JP-2.out ja_JP.UTF-8.out kk_KZ.PT154.out kk_KZ.UTF-8.out ko_KR.eucKR.out ko_KR.UTF-8.out lt_LT.ISO8859-4.out lt_LT.ISO8859-13.out lt_LT.UTF-8.out nb_NO.ISO8859-1.out nb_NO.ISO8859-15.out nb_NO.UTF-8.out nl_BE.ISO8859-1.out nl_BE.ISO8859-15.out nl_BE.UTF-8.out nl_NL.ISO8859-1.out nl_NL.ISO8859-15.out nl_NL.UTF-8.out nn_NO.ISO8859-1.out nn_NO.ISO8859-15.out nn_NO.UTF-8.out pt_BR.ISO8859-1.out pt_BR.UTF-8.out pt_PT.ISO8859-1.out pt_PT.ISO8859-15.out pt_PT.UTF-8.out pl_PL.ISO8859-2.out pl_PL.UTF-8.out ro_RO.ISO8859-2.out ro_RO.UTF-8.out ru_BY.CP1251.out ru_BY.UTF-8.out ru_RU.ISO8859-5.out ru_RU.CP866.out ru_RU.CP1251.out ru_RU.KOI8-R.out ru_RU.UTF-8.out sk_SK.ISO8859-2.out sk_SK.UTF-8.out sl_SI.ISO8859-2.out sl_SI.UTF-8.out sr_Cyrl_ME.ISO8859-5.out sr_Cyrl_ME.UTF-8.out sr_Cyrl_RS.ISO8859-5.out sr_Cyrl_RS.UTF-8.out sr_Latn_ME.ISO8859-2.out sr_Latn_ME.UTF-8.out sr_Latn_RS.ISO8859-2.out sr_Latn_RS.UTF-8.out sv_SE.ISO8859-1.out sv_SE.ISO8859-15.out sv_SE.UTF-8.out tr_TR.ISO8859-9.out tr_TR.UTF-8.out uk_UA.ISO8859-5.out uk_UA.CP1251.out uk_UA.KOI8-U.out uk_UA.UTF-8.out zh_CN.eucCN.out zh_CN.GB18030.out zh_CN.UTF-8.out zh_HK.Big5hkscs.out zh_HK.UTF-8.out zh_TW.Big5.out zh_TW.eucTW.out zh_TW.UTF-8.out *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> share/locale/numeric
+(cd /home/donz/minix/share/locale/numeric && rm -f af_ZA.ISO8859-1.out af_ZA.ISO8859-15.out af_ZA.UTF-8.out be_BY.ISO8859-5.out be_BY.CP1251.out be_BY.UTF-8.out bg_BG.CP1251.out bg_BG.UTF-8.out ca_ES.ISO8859-1.out ca_ES.ISO8859-15.out ca_ES.UTF-8.out cs_CZ.ISO8859-2.out cs_CZ.UTF-8.out da_DK.ISO8859-1.out da_DK.ISO8859-15.out da_DK.UTF-8.out de_AT.ISO8859-1.out de_AT.ISO8859-15.out de_AT.UTF-8.out de_CH.ISO8859-1.out de_CH.ISO8859-15.out de_CH.UTF-8.out de_DE.ISO8859-1.out de_DE.ISO8859-15.out de_DE.UTF-8.out el_GR.ISO8859-7.out el_GR.UTF-8.out en_AU.ISO8859-1.out en_AU.ISO8859-15.out en_AU.UTF-8.out en_CA.ISO8859-1.out en_CA.ISO8859-15.out en_CA.UTF-8.out en_GB.ISO8859-1.out en_GB.ISO8859-15.out en_GB.UTF-8.out en_NZ.ISO8859-1.out en_NZ.ISO8859-15.out en_NZ.UTF-8.out en_US.US-ASCII.out en_US.UTF-8.out en_US.ISO8859-1.out en_US.ISO8859-15.out es_ES.ISO8859-1.out es_ES.ISO8859-15.out es_ES.UTF-8.out et_EE.ISO8859-15.out et_EE.UTF-8.out eu_ES.ISO8859-1.out eu_ES.ISO8859-15.out eu_ES.UTF-8.out fi_FI.ISO8859-1.out fi_FI.ISO8859-15.out fi_FI.UTF-8.out fr_BE.ISO8859-1.out fr_BE.ISO8859-15.out fr_BE.UTF-8.out fr_CA.ISO8859-1.out fr_CA.ISO8859-15.out fr_CA.UTF-8.out fr_CH.ISO8859-1.out fr_CH.ISO8859-15.out fr_CH.UTF-8.out fr_FR.ISO8859-1.out fr_FR.ISO8859-15.out fr_FR.UTF-8.out hr_HR.ISO8859-2.out hr_HR.UTF-8.out hu_HU.ISO8859-2.out hu_HU.UTF-8.out hy_AM.ARMSCII-8.out hy_AM.UTF-8.out is_IS.ISO8859-1.out is_IS.ISO8859-15.out is_IS.UTF-8.out it_CH.ISO8859-1.out it_CH.ISO8859-15.out it_CH.UTF-8.out it_IT.ISO8859-1.out it_IT.ISO8859-15.out it_IT.UTF-8.out ja_JP.ct.out ja_JP.eucJP.out ja_JP.SJIS.out ja_JP.ISO-2022-JP.out ja_JP.ISO-2022-JP-2.out ja_JP.UTF-8.out kk_KZ.PT154.out kk_KZ.UTF-8.out ko_KR.eucKR.out ko_KR.UTF-8.out lt_LT.ISO8859-4.out lt_LT.ISO8859-13.out lt_LT.UTF-8.out nb_NO.ISO8859-1.out nb_NO.ISO8859-15.out nb_NO.UTF-8.out nl_BE.ISO8859-1.out nl_BE.ISO8859-15.out nl_BE.UTF-8.out nl_NL.ISO8859-1.out nl_NL.ISO8859-15.out nl_NL.UTF-8.out nn_NO.ISO8859-1.out nn_NO.ISO8859-15.out nn_NO.UTF-8.out pt_BR.ISO8859-1.out pt_BR.UTF-8.out pt_PT.ISO8859-1.out pt_PT.ISO8859-15.out pt_PT.UTF-8.out pl_PL.ISO8859-2.out pl_PL.UTF-8.out ro_RO.ISO8859-2.out ro_RO.UTF-8.out ru_BY.CP1251.out ru_BY.UTF-8.out ru_RU.ISO8859-5.out ru_RU.CP866.out ru_RU.CP1251.out ru_RU.KOI8-R.out ru_RU.UTF-8.out sk_SK.ISO8859-2.out sk_SK.UTF-8.out sl_SI.ISO8859-2.out sl_SI.UTF-8.out sr_Cyrl_ME.ISO8859-5.out sr_Cyrl_ME.UTF-8.out sr_Cyrl_RS.ISO8859-5.out sr_Cyrl_RS.UTF-8.out sr_Latn_ME.ISO8859-2.out sr_Latn_ME.UTF-8.out sr_Latn_RS.ISO8859-2.out sr_Latn_RS.UTF-8.out sv_SE.ISO8859-1.out sv_SE.ISO8859-15.out sv_SE.UTF-8.out tr_TR.ISO8859-9.out tr_TR.UTF-8.out uk_UA.ISO8859-5.out uk_UA.CP1251.out uk_UA.KOI8-U.out uk_UA.UTF-8.out zh_CN.eucCN.out zh_CN.GB18030.out zh_CN.UTF-8.out zh_HK.Big5hkscs.out zh_HK.UTF-8.out zh_TW.Big5.out zh_TW.eucTW.out zh_TW.UTF-8.out *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> share/locale/time
+(cd /home/donz/minix/share/locale/time && rm -f af_ZA.ISO8859-1.out af_ZA.ISO8859-15.out af_ZA.UTF-8.out be_BY.ISO8859-5.out be_BY.CP1251.out be_BY.UTF-8.out bg_BG.CP1251.out bg_BG.UTF-8.out ca_ES.ISO8859-1.out ca_ES.ISO8859-15.out ca_ES.UTF-8.out cs_CZ.ISO8859-2.out cs_CZ.UTF-8.out da_DK.ISO8859-1.out da_DK.ISO8859-15.out da_DK.UTF-8.out de_AT.ISO8859-1.out de_AT.ISO8859-15.out de_AT.UTF-8.out de_CH.ISO8859-1.out de_CH.ISO8859-15.out de_CH.UTF-8.out de_DE.ISO8859-1.out de_DE.ISO8859-15.out de_DE.UTF-8.out el_GR.ISO8859-7.out el_GR.UTF-8.out en_AU.ISO8859-1.out en_AU.ISO8859-15.out en_AU.UTF-8.out en_CA.ISO8859-1.out en_CA.ISO8859-15.out en_CA.UTF-8.out en_GB.ISO8859-1.out en_GB.ISO8859-15.out en_GB.UTF-8.out en_NZ.ISO8859-1.out en_NZ.ISO8859-15.out en_NZ.UTF-8.out en_US.US-ASCII.out en_US.UTF-8.out en_US.ISO8859-1.out en_US.ISO8859-15.out es_ES.ISO8859-1.out es_ES.ISO8859-15.out es_ES.UTF-8.out et_EE.ISO8859-15.out et_EE.UTF-8.out eu_ES.ISO8859-1.out eu_ES.ISO8859-15.out eu_ES.UTF-8.out fi_FI.ISO8859-1.out fi_FI.ISO8859-15.out fi_FI.UTF-8.out fr_BE.ISO8859-1.out fr_BE.ISO8859-15.out fr_BE.UTF-8.out fr_CA.ISO8859-1.out fr_CA.ISO8859-15.out fr_CA.UTF-8.out fr_CH.ISO8859-1.out fr_CH.ISO8859-15.out fr_CH.UTF-8.out fr_FR.ISO8859-1.out fr_FR.ISO8859-15.out fr_FR.UTF-8.out hr_HR.ISO8859-2.out hr_HR.UTF-8.out hu_HU.ISO8859-2.out hu_HU.UTF-8.out hy_AM.ARMSCII-8.out hy_AM.UTF-8.out is_IS.ISO8859-1.out is_IS.ISO8859-15.out is_IS.UTF-8.out it_CH.ISO8859-1.out it_CH.ISO8859-15.out it_CH.UTF-8.out it_IT.ISO8859-1.out it_IT.ISO8859-15.out it_IT.UTF-8.out ja_JP.ct.out ja_JP.eucJP.out ja_JP.SJIS.out ja_JP.ISO-2022-JP.out ja_JP.ISO-2022-JP-2.out ja_JP.UTF-8.out kk_KZ.PT154.out kk_KZ.UTF-8.out ko_KR.eucKR.out ko_KR.UTF-8.out lt_LT.ISO8859-4.out lt_LT.ISO8859-13.out lt_LT.UTF-8.out nb_NO.ISO8859-1.out nb_NO.ISO8859-15.out nb_NO.UTF-8.out nl_BE.ISO8859-1.out nl_BE.ISO8859-15.out nl_BE.UTF-8.out nl_NL.ISO8859-1.out nl_NL.ISO8859-15.out nl_NL.UTF-8.out nn_NO.ISO8859-1.out nn_NO.ISO8859-15.out nn_NO.UTF-8.out pt_BR.ISO8859-1.out pt_BR.UTF-8.out pt_PT.ISO8859-1.out pt_PT.ISO8859-15.out pt_PT.UTF-8.out pl_PL.ISO8859-2.out pl_PL.UTF-8.out ro_RO.ISO8859-2.out ro_RO.UTF-8.out ru_BY.CP1251.out ru_BY.UTF-8.out ru_RU.ISO8859-5.out ru_RU.CP866.out ru_RU.CP1251.out ru_RU.KOI8-R.out ru_RU.UTF-8.out sk_SK.ISO8859-2.out sk_SK.UTF-8.out sl_SI.ISO8859-2.out sl_SI.UTF-8.out sr_Cyrl_ME.ISO8859-5.out sr_Cyrl_ME.UTF-8.out sr_Cyrl_RS.ISO8859-5.out sr_Cyrl_RS.UTF-8.out sr_Latn_ME.ISO8859-2.out sr_Latn_ME.UTF-8.out sr_Latn_RS.ISO8859-2.out sr_Latn_RS.UTF-8.out sv_SE.ISO8859-1.out sv_SE.ISO8859-15.out sv_SE.UTF-8.out tr_TR.ISO8859-9.out tr_TR.UTF-8.out uk_UA.ISO8859-5.out uk_UA.CP1251.out uk_UA.KOI8-U.out uk_UA.UTF-8.out zh_CN.eucCN.out zh_CN.GB18030.out zh_CN.UTF-8.out zh_HK.Big5hkscs.out zh_HK.UTF-8.out zh_TW.Big5.out zh_TW.eucTW.out zh_TW.UTF-8.out *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> share/locale/messages
+(cd /home/donz/minix/share/locale/messages && rm -f af_ZA.ISO8859-1.out af_ZA.ISO8859-15.out af_ZA.UTF-8.out be_BY.ISO8859-5.out be_BY.CP1251.out be_BY.UTF-8.out bg_BG.CP1251.out bg_BG.UTF-8.out ca_ES.ISO8859-1.out ca_ES.ISO8859-15.out ca_ES.UTF-8.out cs_CZ.ISO8859-2.out cs_CZ.UTF-8.out da_DK.ISO8859-1.out da_DK.ISO8859-15.out da_DK.UTF-8.out de_AT.ISO8859-1.out de_AT.ISO8859-15.out de_AT.UTF-8.out de_CH.ISO8859-1.out de_CH.ISO8859-15.out de_CH.UTF-8.out de_DE.ISO8859-1.out de_DE.ISO8859-15.out de_DE.UTF-8.out el_GR.ISO8859-7.out el_GR.UTF-8.out en_AU.ISO8859-1.out en_AU.ISO8859-15.out en_AU.UTF-8.out en_CA.ISO8859-1.out en_CA.ISO8859-15.out en_CA.UTF-8.out en_GB.ISO8859-1.out en_GB.ISO8859-15.out en_GB.UTF-8.out en_NZ.ISO8859-1.out en_NZ.ISO8859-15.out en_NZ.UTF-8.out en_US.US-ASCII.out en_US.UTF-8.out en_US.ISO8859-1.out en_US.ISO8859-15.out es_ES.ISO8859-1.out es_ES.ISO8859-15.out es_ES.UTF-8.out et_EE.ISO8859-15.out et_EE.UTF-8.out eu_ES.ISO8859-1.out eu_ES.ISO8859-15.out eu_ES.UTF-8.out fi_FI.ISO8859-1.out fi_FI.ISO8859-15.out fi_FI.UTF-8.out fr_BE.ISO8859-1.out fr_BE.ISO8859-15.out fr_BE.UTF-8.out fr_CA.ISO8859-1.out fr_CA.ISO8859-15.out fr_CA.UTF-8.out fr_CH.ISO8859-1.out fr_CH.ISO8859-15.out fr_CH.UTF-8.out fr_FR.ISO8859-1.out fr_FR.ISO8859-15.out fr_FR.UTF-8.out hr_HR.ISO8859-2.out hr_HR.UTF-8.out hu_HU.ISO8859-2.out hu_HU.UTF-8.out hy_AM.ARMSCII-8.out hy_AM.UTF-8.out is_IS.ISO8859-1.out is_IS.ISO8859-15.out is_IS.UTF-8.out it_CH.ISO8859-1.out it_CH.ISO8859-15.out it_CH.UTF-8.out it_IT.ISO8859-1.out it_IT.ISO8859-15.out it_IT.UTF-8.out ja_JP.ct.out ja_JP.eucJP.out ja_JP.SJIS.out ja_JP.ISO-2022-JP.out ja_JP.ISO-2022-JP-2.out ja_JP.UTF-8.out kk_KZ.PT154.out kk_KZ.UTF-8.out ko_KR.eucKR.out ko_KR.UTF-8.out lt_LT.ISO8859-4.out lt_LT.ISO8859-13.out lt_LT.UTF-8.out nb_NO.ISO8859-1.out nb_NO.ISO8859-15.out nb_NO.UTF-8.out nl_BE.ISO8859-1.out nl_BE.ISO8859-15.out nl_BE.UTF-8.out nl_NL.ISO8859-1.out nl_NL.ISO8859-15.out nl_NL.UTF-8.out nn_NO.ISO8859-1.out nn_NO.ISO8859-15.out nn_NO.UTF-8.out pt_BR.ISO8859-1.out pt_BR.UTF-8.out pt_PT.ISO8859-1.out pt_PT.ISO8859-15.out pt_PT.UTF-8.out pl_PL.ISO8859-2.out pl_PL.UTF-8.out ro_RO.ISO8859-2.out ro_RO.UTF-8.out ru_BY.CP1251.out ru_BY.UTF-8.out ru_RU.ISO8859-5.out ru_RU.CP866.out ru_RU.CP1251.out ru_RU.KOI8-R.out ru_RU.UTF-8.out sk_SK.ISO8859-2.out sk_SK.UTF-8.out sl_SI.ISO8859-2.out sl_SI.UTF-8.out sr_Cyrl_ME.ISO8859-5.out sr_Cyrl_ME.UTF-8.out sr_Cyrl_RS.ISO8859-5.out sr_Cyrl_RS.UTF-8.out sr_Latn_ME.ISO8859-2.out sr_Latn_ME.UTF-8.out sr_Latn_RS.ISO8859-2.out sr_Latn_RS.UTF-8.out sv_SE.ISO8859-1.out sv_SE.ISO8859-15.out sv_SE.UTF-8.out tr_TR.ISO8859-9.out tr_TR.UTF-8.out uk_UA.ISO8859-5.out uk_UA.CP1251.out uk_UA.KOI8-U.out uk_UA.UTF-8.out zh_CN.eucCN.out zh_CN.GB18030.out zh_CN.UTF-8.out zh_HK.Big5hkscs.out zh_HK.UTF-8.out zh_TW.Big5.out zh_TW.eucTW.out zh_TW.UTF-8.out *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> share/nls
+(cd /home/donz/minix/share/nls && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> sys
+cleandir ===> sys/altq
+cleandir ===> sys/arch
+cleandir ===> sys/arch/evbriscv64
+cleandir ===> sys/arch/evbriscv64/include
+cleandir ===> sys/arch/riscv
+cleandir ===> sys/arch/riscv/include
+cleandir ===> sys/dev
+cleandir ===> sys/dev/i2c
+cleandir ===> sys/dev/pci
+cleandir ===> sys/fs
+cleandir ===> sys/fs/cd9660
+cleandir ===> sys/fs/msdosfs
+cleandir ===> sys/fs/puffs
+cleandir ===> sys/fs/udf
+cleandir ===> sys/fs/v7fs
+cleandir ===> sys/net
+cleandir ===> sys/net80211
+cleandir ===> sys/netatalk
+cleandir ===> sys/netinet
+cleandir ===> sys/netinet6
+cleandir ===> sys/netmpls
+cleandir ===> sys/sys
+cleandir ===> sys/ufs
+cleandir ===> sys/ufs/ffs
+cleandir ===> sys/ufs/lfs
+cleandir ===> sys/ufs/mfs
+cleandir ===> sys/ufs/ufs
+cleandir ===> sys/ufs/ext2fs
+cleandir ===> sys/uvm
+cleandir ===> etc
+(cd /home/donz/minix/etc && rm -f MAKEDEV etc-release *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+rm -rf   /home/donz/minix/etc/obsolete.dir
+cleandir ===> etc/devmand
+cleandir ===> etc/devmand/scripts
+cleandir ===> etc/defaults
+(cd /home/donz/minix/etc/defaults && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit rc_conf || true) 
+cleandir ===> etc/mtree
+(cd /home/donz/minix/etc/mtree && rm -f NetBSD.dist NetBSD.dist.tmp NetBSD.dist.compat NetBSD.dist.tests.compat *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> tests
+cleandir ===> tests/bin
+cleandir ===> tests/bin/cat
+(cd /home/donz/minix/tests/bin/cat && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/bin/cat && rm -f t_cat t_cat.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/bin/cat/atf-run.fifo /home/donz/minix/tests/bin/cat/atf-run.log || true) 
+cleandir ===> tests/bin/cp
+(cd /home/donz/minix/tests/bin/cp && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/bin/cp && rm -f t_cp t_cp.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/bin/cp/atf-run.fifo /home/donz/minix/tests/bin/cp/atf-run.log || true) 
+cleandir ===> tests/bin/dd
+(cd /home/donz/minix/tests/bin/dd && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/bin/dd && rm -f t_dd t_dd.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/bin/dd/atf-run.fifo /home/donz/minix/tests/bin/dd/atf-run.log || true) 
+cleandir ===> tests/bin/df
+(cd /home/donz/minix/tests/bin/df && rm -f *.gcno *.gcda lcov.h_df a.out [Ee]rrs mklog core *.core .gdbinit   h_df  df.o getmntinfo.o  df.ln getmntinfo.ln || true) 
+(cd /home/donz/minix/tests/bin/df && rm -f t_df t_df.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend df.d getmntinfo.d  df.d.tmp getmntinfo.d.tmp /home/donz/minix/tests/bin/df/tags  /home/donz/minix/tests/bin/df/atf-run.fifo /home/donz/minix/tests/bin/df/atf-run.log || true) 
+cleandir ===> tests/bin/expr
+(cd /home/donz/minix/tests/bin/expr && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/bin/expr && rm -f t_expr t_expr.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/bin/expr/atf-run.fifo /home/donz/minix/tests/bin/expr/atf-run.log || true) 
+cleandir ===> tests/bin/pax
+(cd /home/donz/minix/tests/bin/pax && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/bin/pax && rm -f t_pax t_pax.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/bin/pax/atf-run.fifo /home/donz/minix/tests/bin/pax/atf-run.log || true) 
+cleandir ===> tests/bin/ps
+(cd /home/donz/minix/tests/bin/ps && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/bin/ps && rm -f t_ps t_ps.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/bin/ps/atf-run.fifo /home/donz/minix/tests/bin/ps/atf-run.log || true) 
+cleandir ===> tests/bin/sh
+(cd /home/donz/minix/tests/bin/sh && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> tests/bin/sh/dotcmd
+(cd /home/donz/minix/tests/bin/sh/dotcmd && rm -f break_case break_compound break_file break_for break_func break_subshell break_until break_while case_break_case case_break_compound case_break_file case_break_for case_break_func case_break_subshell case_break_until case_break_while case_continue_case case_continue_compound case_continue_file case_continue_for case_continue_func case_continue_subshell case_continue_until case_continue_while case_return_case case_return_compound case_return_file case_return_for case_return_func case_return_subshell case_return_until case_return_while compound_break_case compound_break_compound compound_break_file compound_break_for compound_break_func compound_break_subshell compound_break_until compound_break_while compound_continue_case compound_continue_compound compound_continue_file compound_continue_for compound_continue_func compound_continue_subshell compound_continue_until compound_continue_while compound_return_case compound_return_compound compound_return_file compound_return_for compound_return_func compound_return_subshell compound_return_until compound_return_while continue_case continue_compound continue_file continue_for continue_func continue_subshell continue_until continue_while file_break_case file_break_compound file_break_file file_break_for file_break_func file_break_subshell file_break_until file_break_while file_continue_case file_continue_compound file_continue_file file_continue_for file_continue_func file_continue_subshell file_continue_until file_continue_while file_return_case file_return_compound file_return_file file_return_for file_return_func file_return_subshell file_return_until file_return_while for_break_case for_break_compound for_break_file for_break_for for_break_func for_break_subshell for_break_until for_break_while for_continue_case for_continue_compound for_continue_file for_continue_for for_continue_func for_continue_subshell for_continue_until for_continue_while for_return_case for_return_compound for_return_file for_return_for for_return_func for_return_subshell for_return_until for_return_while func_break_case func_break_compound func_break_file func_break_for func_break_func func_break_subshell func_break_until func_break_while func_continue_case func_continue_compound func_continue_file func_continue_for func_continue_func func_continue_subshell func_continue_until func_continue_while func_return_case func_return_compound func_return_file func_return_for func_return_func func_return_subshell func_return_until func_return_while return_case return_compound return_file return_for return_func return_subshell return_until return_while subshell_break_case subshell_break_compound subshell_break_file subshell_break_for subshell_break_func subshell_break_subshell subshell_break_until subshell_break_while subshell_continue_case subshell_continue_compound subshell_continue_file subshell_continue_for subshell_continue_func subshell_continue_subshell subshell_continue_until subshell_continue_while subshell_return_case subshell_return_compound subshell_return_file subshell_return_for subshell_return_func subshell_return_subshell subshell_return_until subshell_return_while until_break_case until_break_compound until_break_file until_break_for until_break_func until_break_subshell until_break_until until_break_while until_continue_case until_continue_compound until_continue_file until_continue_for until_continue_func until_continue_subshell until_continue_until until_continue_while until_return_case until_return_compound until_return_file until_return_for until_return_func until_return_subshell until_return_until until_return_while while_break_case while_break_compound while_break_file while_break_for while_break_func while_break_subshell while_break_until while_break_while while_continue_case while_continue_compound while_continue_file while_continue_for while_continue_func while_continue_subshell while_continue_until while_continue_while while_return_case while_return_compound while_return_file while_return_for while_return_func while_return_subshell while_return_until while_return_while *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/bin/sh/dotcmd && rm -f t_dotcmd t_dotcmd.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/bin/sh/dotcmd/atf-run.fifo /home/donz/minix/tests/bin/sh/dotcmd/atf-run.log || true) 
+(cd /home/donz/minix/tests/bin/sh && rm -f t_compexit t_exit t_expand t_evaltested t_fsplit t_here t_set_e t_ulimit t_varquote t_wait t_compexit.tmp t_exit.tmp t_expand.tmp t_evaltested.tmp t_fsplit.tmp t_here.tmp t_set_e.tmp t_ulimit.tmp t_varquote.tmp t_wait.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/bin/sh/atf-run.fifo /home/donz/minix/tests/bin/sh/atf-run.log || true) 
+cleandir ===> tests/bin/sleep
+(cd /home/donz/minix/tests/bin/sleep && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/bin/sleep && rm -f t_sleep t_sleep.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/bin/sleep/atf-run.fifo /home/donz/minix/tests/bin/sleep/atf-run.log || true) 
+cleandir ===> tests/bin/tar
+(cd /home/donz/minix/tests/bin/tar && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/bin/tar && rm -f t_tar t_tar.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/bin/tar/atf-run.fifo /home/donz/minix/tests/bin/tar/atf-run.log || true) 
+(cd /home/donz/minix/tests/bin && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/bin/atf-run.fifo /home/donz/minix/tests/bin/atf-run.log || true) 
+cleandir ===> tests/dev
+cleandir ===> tests/dev/cgd
+(cd /home/donz/minix/tests/dev/cgd && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/dev/cgd && rm -f t_cgd t_cgd.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/dev/cgd/atf-run.fifo /home/donz/minix/tests/dev/cgd/atf-run.log || true) 
+cleandir ===> tests/dev/raidframe
+(cd /home/donz/minix/tests/dev/raidframe && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/dev/raidframe && rm -f t_raid t_raid.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/dev/raidframe/atf-run.fifo /home/donz/minix/tests/dev/raidframe/atf-run.log || true) 
+(cd /home/donz/minix/tests/dev && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/dev/atf-run.fifo /home/donz/minix/tests/dev/atf-run.log || true) 
+cleandir ===> tests/games
+(cd /home/donz/minix/tests/games && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/games && rm -f t_factor t_factor.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/games/atf-run.fifo /home/donz/minix/tests/games/atf-run.log || true) 
+cleandir ===> tests/include
+(cd /home/donz/minix/tests/include && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   t_bitstring  t_bitstring.o  t_bitstring.ln   t_errno  t_errno.o  t_errno.ln   t_glob  t_glob.o  t_glob.ln   t_inttypes  t_inttypes.o  t_inttypes.ln   t_limits  t_limits.o  t_limits.ln   t_netdb  t_netdb.o  t_netdb.ln   t_paths  t_paths.o  t_paths.ln   t_stdint  t_stdint.o  t_stdint.ln || true) 
+cleandir ===> tests/include/machine
+(cd /home/donz/minix/tests/include/machine && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   t_bswap  t_bswap.o  t_bswap.ln || true) 
+(cd /home/donz/minix/tests/include/machine && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend t_bswap.d  t_bswap.d.tmp /home/donz/minix/tests/include/machine/tags  /home/donz/minix/tests/include/machine/atf-run.fifo /home/donz/minix/tests/include/machine/atf-run.log || true) 
+cleandir ===> tests/include/sys
+(cd /home/donz/minix/tests/include/sys && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   t_bitops  t_bitops.o  t_bitops.ln   t_bootblock  t_bootblock.o  t_bootblock.ln   t_cdefs  t_cdefs.o  t_cdefs.ln   t_tree  t_tree.o  t_tree.ln   t_types  t_types.o  t_types.ln || true) 
+(cd /home/donz/minix/tests/include/sys && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend t_bitops.d t_bootblock.d t_cdefs.d t_tree.d t_types.d  t_bitops.d.tmp t_bootblock.d.tmp t_cdefs.d.tmp t_tree.d.tmp t_types.d.tmp /home/donz/minix/tests/include/sys/tags  /home/donz/minix/tests/include/sys/atf-run.fifo /home/donz/minix/tests/include/sys/atf-run.log || true) 
+(cd /home/donz/minix/tests/include && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend t_bitstring.d t_errno.d t_glob.d t_inttypes.d t_limits.d t_netdb.d t_paths.d t_stdint.d  t_bitstring.d.tmp t_errno.d.tmp t_glob.d.tmp t_inttypes.d.tmp t_limits.d.tmp t_netdb.d.tmp t_paths.d.tmp t_stdint.d.tmp /home/donz/minix/tests/include/tags  /home/donz/minix/tests/include/atf-run.fifo /home/donz/minix/tests/include/atf-run.log || true) 
+cleandir ===> tests/kernel
+(cd /home/donz/minix/tests/kernel && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   h_ps_strings1  h_ps_strings1.o  h_ps_strings1.ln   h_ps_strings2  h_ps_strings2.o  h_ps_strings2.ln   t_lock  t_lock.o  t_lock.ln   t_lockf  t_lockf.o  t_lockf.ln   t_pty  t_pty.o  t_pty.ln   t_kauth_pr_47598  t_kauth_pr_47598.o  t_kauth_pr_47598.ln   t_sysctl  t_sysctl.o  t_sysctl.ln || true) 
+(cd /home/donz/minix/tests/kernel && rm -f t_umount t_umountstress t_ps_strings t_umount.tmp t_umountstress.tmp t_ps_strings.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend h_ps_strings1.d h_ps_strings2.d t_kauth_pr_47598.d t_lock.d t_lockf.d t_pty.d t_sysctl.d  h_ps_strings1.d.tmp h_ps_strings2.d.tmp t_kauth_pr_47598.d.tmp t_lock.d.tmp t_lockf.d.tmp t_pty.d.tmp t_sysctl.d.tmp /home/donz/minix/tests/kernel/tags  /home/donz/minix/tests/kernel/atf-run.fifo /home/donz/minix/tests/kernel/atf-run.log || true) 
+cleandir ===> tests/lib
+cleandir ===> tests/lib/csu
+(cd /home/donz/minix/tests/lib/csu && rm -f *.gcno *.gcda lcov.h_initfini1 h_initfini2 h_initfini3 a.out [Ee]rrs mklog core *.core .gdbinit   h_initfini1  h_initfini1.o h_initfini_common.o     h_initfini2  h_initfini1.o h_initfini_common.o     h_initfini3  h_initfini3.o h_initfini_common.o   || true) 
+cleandir ===> tests/lib/csu/dso
+(cd /home/donz/minix/tests/lib/csu/dso && rm -f h_initfini3_dso.a   h_initfini3_dso.o h_initfini3_dso.o.tmp || true) 
+(cd /home/donz/minix/tests/lib/csu/dso && rm -f h_initfini3_dso_p.a    || true) 
+(cd /home/donz/minix/tests/lib/csu/dso && rm -f h_initfini3_dso_g.a    || true) 
+(cd /home/donz/minix/tests/lib/csu/dso && rm -f h_initfini3_dso_pic.a h_initfini3_dso.so.* h_initfini3_dso.so  h_initfini3_dso.pico h_initfini3_dso.pico.tmp || true) 
+(cd /home/donz/minix/tests/lib/csu/dso && rm -f llib-lh_initfini3_dso.ln   || true) 
+(cd /home/donz/minix/tests/lib/csu/dso && rm -f h_initfini3_dso.so.1.map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/tests/lib/csu/dso && rm -f .depend h_initfini3_dso.d  h_initfini3_dso.d.tmp /home/donz/minix/tests/lib/csu/dso/tags  || true) 
+(cd /home/donz/minix/tests/lib/csu && rm -f t_crt0 t_crt0.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend h_initfini1.d h_initfini3.d h_initfini_common.d  h_initfini1.d.tmp h_initfini3.d.tmp h_initfini_common.d.tmp /home/donz/minix/tests/lib/csu/tags  /home/donz/minix/tests/lib/csu/atf-run.fifo /home/donz/minix/tests/lib/csu/atf-run.log || true) 
+cleandir ===> tests/lib/libc
+(cd /home/donz/minix/tests/lib/libc && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   t_convfp  t_convfp.o  t_convfp.ln   t_gdtoa  t_gdtoa.o  t_gdtoa.ln   t_cdb  t_cdb.o  t_cdb.ln || true) 
+cleandir ===> tests/lib/libc/tls_dso
+(cd /home/donz/minix/tests/lib/libc/tls_dso && rm -f libh_tls_dynamic.a   h_tls_dynamic.o h_tls_dynamic.o.tmp || true) 
+(cd /home/donz/minix/tests/lib/libc/tls_dso && rm -f libh_tls_dynamic_p.a    || true) 
+(cd /home/donz/minix/tests/lib/libc/tls_dso && rm -f libh_tls_dynamic_g.a    || true) 
+(cd /home/donz/minix/tests/lib/libc/tls_dso && rm -f libh_tls_dynamic_pic.a libh_tls_dynamic.so.* libh_tls_dynamic.so  h_tls_dynamic.pico h_tls_dynamic.pico.tmp || true) 
+(cd /home/donz/minix/tests/lib/libc/tls_dso && rm -f llib-lh_tls_dynamic.ln  h_tls_dynamic.ln || true) 
+(cd /home/donz/minix/tests/lib/libc/tls_dso && rm -f libh_tls_dynamic.so.1.map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/tests/lib/libc/tls_dso && rm -f .depend h_tls_dynamic.d  h_tls_dynamic.d.tmp /home/donz/minix/tests/lib/libc/tls_dso/tags  || true) 
+cleandir ===> tests/lib/libc/db
+(cd /home/donz/minix/tests/lib/libc/db && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   h_db  h_db.o  h_db.ln   t_db_hash_seq  t_db_hash_seq.o  t_db_hash_seq.ln || true) 
+(cd /home/donz/minix/tests/lib/libc/db && rm -f t_db t_db.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend h_db.d t_db_hash_seq.d  h_db.d.tmp t_db_hash_seq.d.tmp /home/donz/minix/tests/lib/libc/db/tags  /home/donz/minix/tests/lib/libc/db/atf-run.fifo /home/donz/minix/tests/lib/libc/db/atf-run.log || true) 
+cleandir ===> tests/lib/libc/hash
+(cd /home/donz/minix/tests/lib/libc/hash && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   h_hash  h_hash.o  h_hash.ln   t_sha2  t_sha2.o  t_sha2.ln || true) 
+(cd /home/donz/minix/tests/lib/libc/hash && rm -f t_hash t_hash.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend h_hash.d t_sha2.d  h_hash.d.tmp t_sha2.d.tmp /home/donz/minix/tests/lib/libc/hash/tags  /home/donz/minix/tests/lib/libc/hash/atf-run.fifo /home/donz/minix/tests/lib/libc/hash/atf-run.log || true) 
+cleandir ===> tests/lib/libc/inet
+(cd /home/donz/minix/tests/lib/libc/inet && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   t_inet_addr  t_inet_addr.o  t_inet_addr.ln   t_inet_network  t_inet_network.o  t_inet_network.ln || true) 
+(cd /home/donz/minix/tests/lib/libc/inet && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend t_inet_addr.d t_inet_network.d  t_inet_addr.d.tmp t_inet_network.d.tmp /home/donz/minix/tests/lib/libc/inet/tags  /home/donz/minix/tests/lib/libc/inet/atf-run.fifo /home/donz/minix/tests/lib/libc/inet/atf-run.log || true) 
+cleandir ===> tests/lib/libc/locale
+(cd /home/donz/minix/tests/lib/libc/locale && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   t_mbrtowc  t_mbrtowc.o  t_mbrtowc.ln   t_mbstowcs  t_mbstowcs.o  t_mbstowcs.ln   t_mbsnrtowcs  t_mbsnrtowcs.o  t_mbsnrtowcs.ln   t_mbtowc  t_mbtowc.o  t_mbtowc.ln   t_wcscspn  t_wcscspn.o  t_wcscspn.ln   t_wcspbrk  t_wcspbrk.o  t_wcspbrk.ln   t_wcsspn  t_wcsspn.o  t_wcsspn.ln   t_wcstod  t_wcstod.o  t_wcstod.ln   t_wctomb  t_wctomb.o  t_wctomb.ln   t_io  t_io.o  t_io.ln || true) 
+(cd /home/donz/minix/tests/lib/libc/locale && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend t_io.d t_mbrtowc.d t_mbsnrtowcs.d t_mbstowcs.d t_mbtowc.d t_wcscspn.d t_wcspbrk.d t_wcsspn.d t_wcstod.d t_wctomb.d  t_io.d.tmp t_mbrtowc.d.tmp t_mbsnrtowcs.d.tmp t_mbstowcs.d.tmp t_mbtowc.d.tmp t_wcscspn.d.tmp t_wcspbrk.d.tmp t_wcsspn.d.tmp t_wcstod.d.tmp t_wctomb.d.tmp /home/donz/minix/tests/lib/libc/locale/tags  /home/donz/minix/tests/lib/libc/locale/atf-run.fifo /home/donz/minix/tests/lib/libc/locale/atf-run.log || true) 
+cleandir ===> tests/lib/libc/net
+(cd /home/donz/minix/tests/lib/libc/net && rm -f aton_ether_subr.c *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   h_protoent  h_protoent.o  h_protoent.ln   h_servent  h_servent.o  h_servent.ln   h_hostent  h_hostent.o  h_hostent.ln   h_dns_server  h_dns_server.o  h_dns_server.ln   t_getprotoent  t_getprotoent.o  t_getprotoent.ln || true) 
+(cd /home/donz/minix/tests/lib/libc/net && rm -f t_nsdispatch t_protoent t_servent t_hostent t_nsdispatch.tmp t_protoent.tmp t_servent.tmp t_hostent.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend h_dns_server.d h_hostent.d h_protoent.d h_servent.d t_getprotoent.d  h_dns_server.d.tmp h_hostent.d.tmp h_protoent.d.tmp h_servent.d.tmp t_getprotoent.d.tmp /home/donz/minix/tests/lib/libc/net/tags  /home/donz/minix/tests/lib/libc/net/atf-run.fifo /home/donz/minix/tests/lib/libc/net/atf-run.log || true) 
+cleandir ===> tests/lib/libc/regex
+(cd /home/donz/minix/tests/lib/libc/regex && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   h_regex  main.o split.o debug.o  main.ln split.ln debug.ln   t_exhaust  t_exhaust.o  t_exhaust.ln   t_regex_att  t_regex_att.o  t_regex_att.ln || true) 
+(cd /home/donz/minix/tests/lib/libc/regex && rm -f t_regex t_regex.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend debug.d main.d split.d t_exhaust.d t_regex_att.d  debug.d.tmp main.d.tmp split.d.tmp t_exhaust.d.tmp t_regex_att.d.tmp /home/donz/minix/tests/lib/libc/regex/tags  /home/donz/minix/tests/lib/libc/regex/atf-run.fifo /home/donz/minix/tests/lib/libc/regex/atf-run.log || true) 
+cleandir ===> tests/lib/libc/stdlib
+(cd /home/donz/minix/tests/lib/libc/stdlib && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   h_atexit  h_atexit.o  h_atexit.ln   h_getopt  h_getopt.o  h_getopt.ln   h_getopt_long  h_getopt_long.o  h_getopt_long.ln   t_abs  t_abs.o  t_abs.ln   t_atoi  t_atoi.o  t_atoi.ln   t_div  t_div.o  t_div.ln   t_getenv  t_getenv.o  t_getenv.ln   t_exit  t_exit.o  t_exit.ln   t_hsearch  t_hsearch.o  t_hsearch.ln   t_mi_vector_hash  t_mi_vector_hash.o  t_mi_vector_hash.ln   t_random  t_random.o  t_random.ln   t_strtod  t_strtod.o  t_strtod.ln   t_strtol  t_strtol.o  t_strtol.ln   t_strtoi  t_strtoi.o  t_strtoi.ln   t_system  t_system.o  t_system.ln || true) 
+(cd /home/donz/minix/tests/lib/libc/stdlib && rm -f t_atexit t_getopt t_atexit.tmp t_getopt.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend h_atexit.d h_getopt.d h_getopt_long.d t_abs.d t_atoi.d t_div.d t_exit.d t_getenv.d t_hsearch.d t_mi_vector_hash.d t_random.d t_strtod.d t_strtoi.d t_strtol.d t_system.d  h_atexit.d.tmp h_getopt.d.tmp h_getopt_long.d.tmp t_abs.d.tmp t_atoi.d.tmp t_div.d.tmp t_exit.d.tmp t_getenv.d.tmp t_hsearch.d.tmp t_mi_vector_hash.d.tmp t_random.d.tmp t_strtod.d.tmp t_strtoi.d.tmp t_strtol.d.tmp t_system.d.tmp /home/donz/minix/tests/lib/libc/stdlib/tags  /home/donz/minix/tests/lib/libc/stdlib/atf-run.fifo /home/donz/minix/tests/lib/libc/stdlib/atf-run.log || true) 
+cleandir ===> tests/lib/libc/stdio
+(cd /home/donz/minix/tests/lib/libc/stdio && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   t_clearerr  t_clearerr.o  t_clearerr.ln   t_fflush  t_fflush.o  t_fflush.ln   t_fmemopen  t_fmemopen.o  t_fmemopen.ln   t_fopen  t_fopen.o  t_fopen.ln   t_open_memstream  t_open_memstream.o  t_open_memstream.ln   t_fputc  t_fputc.o  t_fputc.ln   t_mktemp  t_mktemp.o  t_mktemp.ln   t_popen  t_popen.o  t_popen.ln   t_printf  t_printf.o  t_printf.ln   t_scanf  t_scanf.o  t_scanf.ln || true) 
+(cd /home/donz/minix/tests/lib/libc/stdio && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend t_clearerr.d t_fflush.d t_fmemopen.d t_fopen.d t_fputc.d t_mktemp.d t_open_memstream.d t_popen.d t_printf.d t_scanf.d  t_clearerr.d.tmp t_fflush.d.tmp t_fmemopen.d.tmp t_fopen.d.tmp t_fputc.d.tmp t_mktemp.d.tmp t_open_memstream.d.tmp t_popen.d.tmp t_printf.d.tmp t_scanf.d.tmp /home/donz/minix/tests/lib/libc/stdio/tags  /home/donz/minix/tests/lib/libc/stdio/atf-run.fifo /home/donz/minix/tests/lib/libc/stdio/atf-run.log || true) 
+cleandir ===> tests/lib/libc/string
+(cd /home/donz/minix/tests/lib/libc/string && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   t_bm  t_bm.o  t_bm.ln   t_memchr  t_memchr.o  t_memchr.ln   t_memcpy  t_memcpy.o  t_memcpy.ln   t_memmem  t_memmem.o  t_memmem.ln   t_memset  t_memset.o  t_memset.ln   t_popcount  t_popcount.o  t_popcount.ln   t_strcat  t_strcat.o  t_strcat.ln   t_strchr  t_strchr.o  t_strchr.ln   t_strcmp  t_strcmp.o  t_strcmp.ln   t_strcpy  t_strcpy.o  t_strcpy.ln   t_strcspn  t_strcspn.o  t_strcspn.ln   t_strerror  t_strerror.o  t_strerror.ln   t_stresep  t_stresep.o  t_stresep.ln   t_strlen  t_strlen.o  t_strlen.ln   t_strpbrk  t_strpbrk.o  t_strpbrk.ln   t_strrchr  t_strrchr.o  t_strrchr.ln   t_strspn  t_strspn.o  t_strspn.ln   t_swab  t_swab.o  t_swab.ln || true) 
+(cd /home/donz/minix/tests/lib/libc/string && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend t_bm.d t_memchr.d t_memcpy.d t_memmem.d t_memset.d t_popcount.d t_strcat.d t_strchr.d t_strcmp.d t_strcpy.d t_strcspn.d t_strerror.d t_stresep.d t_strlen.d t_strpbrk.d t_strrchr.d t_strspn.d t_swab.d  t_bm.d.tmp t_memchr.d.tmp t_memcpy.d.tmp t_memmem.d.tmp t_memset.d.tmp t_popcount.d.tmp t_strcat.d.tmp t_strchr.d.tmp t_strcmp.d.tmp t_strcpy.d.tmp t_strcspn.d.tmp t_strerror.d.tmp t_stresep.d.tmp t_strlen.d.tmp t_strpbrk.d.tmp t_strrchr.d.tmp t_strspn.d.tmp t_swab.d.tmp /home/donz/minix/tests/lib/libc/string/tags  /home/donz/minix/tests/lib/libc/string/atf-run.fifo /home/donz/minix/tests/lib/libc/string/atf-run.log || true) 
+cleandir ===> tests/lib/libc/termios
+(cd /home/donz/minix/tests/lib/libc/termios && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   t_tcsetpgrp  t_tcsetpgrp.o  t_tcsetpgrp.ln || true) 
+(cd /home/donz/minix/tests/lib/libc/termios && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend t_tcsetpgrp.d  t_tcsetpgrp.d.tmp /home/donz/minix/tests/lib/libc/termios/tags  /home/donz/minix/tests/lib/libc/termios/atf-run.fifo /home/donz/minix/tests/lib/libc/termios/atf-run.log || true) 
+cleandir ===> tests/lib/libc/time
+(cd /home/donz/minix/tests/lib/libc/time && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   t_mktime  t_mktime.o  t_mktime.ln   t_strptime  t_strptime.o  t_strptime.ln || true) 
+(cd /home/donz/minix/tests/lib/libc/time && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend t_mktime.d t_strptime.d  t_mktime.d.tmp t_strptime.d.tmp /home/donz/minix/tests/lib/libc/time/tags  /home/donz/minix/tests/lib/libc/time/atf-run.fifo /home/donz/minix/tests/lib/libc/time/atf-run.log || true) 
+(cd /home/donz/minix/tests/lib/libc && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend t_cdb.d t_convfp.d t_gdtoa.d  t_cdb.d.tmp t_convfp.d.tmp t_gdtoa.d.tmp /home/donz/minix/tests/lib/libc/tags  /home/donz/minix/tests/lib/libc/atf-run.fifo /home/donz/minix/tests/lib/libc/atf-run.log || true) 
+cleandir ===> tests/lib/libcrypt
+(cd /home/donz/minix/tests/lib/libcrypt && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   t_crypt  t_crypt.o  t_crypt.ln || true) 
+(cd /home/donz/minix/tests/lib/libcrypt && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend t_crypt.d  t_crypt.d.tmp /home/donz/minix/tests/lib/libcrypt/tags  /home/donz/minix/tests/lib/libcrypt/atf-run.fifo /home/donz/minix/tests/lib/libcrypt/atf-run.log || true) 
+cleandir ===> tests/lib/libcurses
+(cd /home/donz/minix/tests/lib/libcurses && rm -f terminfo.cdb *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> tests/lib/libcurses/director
+(cd /home/donz/minix/tests/lib/libcurses/director && rm -f *.gcno *.gcda lcov.director a.out [Ee]rrs mklog core *.core .gdbinit testlang_parse.c testlang_conf.c testlang_parse.h director  testlang_parse.o testlang_conf.o director.o  director.ln || true) 
+(cd /home/donz/minix/tests/lib/libcurses/director && rm -f .depend director.d testlang_conf.d testlang_parse.d  director.d.tmp testlang_conf.d.tmp testlang_parse.d.tmp /home/donz/minix/tests/lib/libcurses/director/tags  /home/donz/minix/tests/lib/libcurses/director/atf-run.fifo /home/donz/minix/tests/lib/libcurses/director/atf-run.log || true) 
+cleandir ===> tests/lib/libcurses/slave
+(cd /home/donz/minix/tests/lib/libcurses/slave && rm -f *.gcno *.gcda lcov.slave a.out [Ee]rrs mklog core *.core .gdbinit   slave  slave.o commands.o curses_commands.o  slave.ln commands.ln curses_commands.ln || true) 
+(cd /home/donz/minix/tests/lib/libcurses/slave && rm -f .depend commands.d curses_commands.d slave.d  commands.d.tmp curses_commands.d.tmp slave.d.tmp /home/donz/minix/tests/lib/libcurses/slave/tags  /home/donz/minix/tests/lib/libcurses/slave/atf-run.fifo /home/donz/minix/tests/lib/libcurses/slave/atf-run.log || true) 
+cleandir ===> tests/lib/libcurses/tests
+(cd /home/donz/minix/tests/lib/libcurses/tests && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/lib/libcurses/tests && rm -f /home/donz/minix/tests/lib/libcurses/tests/atf-run.fifo /home/donz/minix/tests/lib/libcurses/tests/atf-run.log || true) 
+cleandir ===> tests/lib/libcurses/check_files
+(cd /home/donz/minix/tests/lib/libcurses/check_files && rm -f  *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/lib/libcurses/check_files && rm -f /home/donz/minix/tests/lib/libcurses/check_files/atf-run.fifo /home/donz/minix/tests/lib/libcurses/check_files/atf-run.log || true) 
+(cd /home/donz/minix/tests/lib/libcurses && rm -f t_curses t_curses.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/lib/libcurses/atf-run.fifo /home/donz/minix/tests/lib/libcurses/atf-run.log || true) 
+cleandir ===> tests/lib/libevent
+(cd /home/donz/minix/tests/lib/libevent && rm -f *.gcno *.gcda lcov.h_event a.out [Ee]rrs mklog core *.core .gdbinit   h_event  regress.o regress.gen.o regress_dns.o regress_http.o regress_rpc.o regress_main.o tinytest.o regress_testutils.o regress_minheap.o regress_util.o regress_buffer.o regress_bufferevent.o regress_listener.o regress_zlib.o regress_et.o regress_ssl.o  regress.ln regress.gen.ln regress_dns.ln regress_http.ln regress_rpc.ln regress_main.ln tinytest.ln regress_testutils.ln regress_minheap.ln regress_util.ln regress_buffer.ln regress_bufferevent.ln regress_listener.ln regress_zlib.ln regress_et.ln regress_ssl.ln || true) 
+(cd /home/donz/minix/tests/lib/libevent && rm -f t_event t_event.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend regress.d regress.gen.d regress_buffer.d regress_bufferevent.d regress_dns.d regress_et.d regress_http.d regress_listener.d regress_main.d regress_minheap.d regress_rpc.d regress_ssl.d regress_testutils.d regress_util.d regress_zlib.d tinytest.d  regress.d.tmp regress.gen.d.tmp regress_buffer.d.tmp regress_bufferevent.d.tmp regress_dns.d.tmp regress_et.d.tmp regress_http.d.tmp regress_listener.d.tmp regress_main.d.tmp regress_minheap.d.tmp regress_rpc.d.tmp regress_ssl.d.tmp regress_testutils.d.tmp regress_util.d.tmp regress_zlib.d.tmp tinytest.d.tmp /home/donz/minix/tests/lib/libevent/tags  /home/donz/minix/tests/lib/libevent/atf-run.fifo /home/donz/minix/tests/lib/libevent/atf-run.log || true) 
+cleandir ===> tests/lib/libexecinfo
+(cd /home/donz/minix/tests/lib/libexecinfo && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   t_backtrace  t_backtrace.o  t_backtrace.ln || true) 
+(cd /home/donz/minix/tests/lib/libexecinfo && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend t_backtrace.d  t_backtrace.d.tmp /home/donz/minix/tests/lib/libexecinfo/tags  /home/donz/minix/tests/lib/libexecinfo/atf-run.fifo /home/donz/minix/tests/lib/libexecinfo/atf-run.log || true) 
+cleandir ===> tests/lib/libm
+(cd /home/donz/minix/tests/lib/libm && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   t_acos  t_acos.o  t_acos.ln   t_asin  t_asin.o  t_asin.ln   t_atan  t_atan.o  t_atan.ln   t_cbrt  t_cbrt.o  t_cbrt.ln   t_ceil  t_ceil.o  t_ceil.ln   t_cos  t_cos.o  t_cos.ln   t_cosh  t_cosh.o  t_cosh.ln   t_erf  t_erf.o  t_erf.ln   t_exp  t_exp.o  t_exp.ln   t_fenv  t_fenv.o  t_fenv.ln   t_infinity  t_infinity.o  t_infinity.ln   t_ldexp  t_ldexp.o  t_ldexp.ln   t_log  t_log.o  t_log.ln   t_modf  t_modf.o  t_modf.ln   t_pow  t_pow.o  t_pow.ln   t_precision  t_precision.o  t_precision.ln   t_round  t_round.o  t_round.ln   t_scalbn  t_scalbn.o  t_scalbn.ln   t_sin  t_sin.o  t_sin.ln   t_sinh  t_sinh.o  t_sinh.ln   t_sqrt  t_sqrt.o  t_sqrt.ln   t_tan  t_tan.o  t_tan.ln   t_tanh  t_tanh.o  t_tanh.ln || true) 
+(cd /home/donz/minix/tests/lib/libm && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend t_acos.d t_asin.d t_atan.d t_cbrt.d t_ceil.d t_cos.d t_cosh.d t_erf.d t_exp.d t_fenv.d t_infinity.d t_ldexp.d t_log.d t_modf.d t_pow.d t_precision.d t_round.d t_scalbn.d t_sin.d t_sinh.d t_sqrt.d t_tan.d t_tanh.d  t_acos.d.tmp t_asin.d.tmp t_atan.d.tmp t_cbrt.d.tmp t_ceil.d.tmp t_cos.d.tmp t_cosh.d.tmp t_erf.d.tmp t_exp.d.tmp t_fenv.d.tmp t_infinity.d.tmp t_ldexp.d.tmp t_log.d.tmp t_modf.d.tmp t_pow.d.tmp t_precision.d.tmp t_round.d.tmp t_scalbn.d.tmp t_sin.d.tmp t_sinh.d.tmp t_sqrt.d.tmp t_tan.d.tmp t_tanh.d.tmp /home/donz/minix/tests/lib/libm/tags  /home/donz/minix/tests/lib/libm/atf-run.fifo /home/donz/minix/tests/lib/libm/atf-run.log || true) 
+cleandir ===> tests/lib/libprop
+(cd /home/donz/minix/tests/lib/libprop && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   t_basic  t_basic.o  t_basic.ln || true) 
+(cd /home/donz/minix/tests/lib/libprop && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend t_basic.d  t_basic.d.tmp /home/donz/minix/tests/lib/libprop/tags  /home/donz/minix/tests/lib/libprop/atf-run.fifo /home/donz/minix/tests/lib/libprop/atf-run.log || true) 
+cleandir ===> tests/lib/libutil
+(cd /home/donz/minix/tests/lib/libutil && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   t_efun  t_efun.o  t_efun.ln   t_pidfile  t_pidfile.o  t_pidfile.ln   t_snprintb  t_snprintb.o  t_snprintb.ln || true) 
+(cd /home/donz/minix/tests/lib/libutil && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend t_efun.d t_pidfile.d t_snprintb.d  t_efun.d.tmp t_pidfile.d.tmp t_snprintb.d.tmp /home/donz/minix/tests/lib/libutil/tags  /home/donz/minix/tests/lib/libutil/atf-run.fifo /home/donz/minix/tests/lib/libutil/atf-run.log || true) 
+cleandir ===> tests/lib/libdes
+(cd /home/donz/minix/tests/lib/libdes && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   t_des  t_des.o  t_des.ln || true) 
+(cd /home/donz/minix/tests/lib/libdes && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend t_des.d  t_des.d.tmp /home/donz/minix/tests/lib/libdes/tags  /home/donz/minix/tests/lib/libdes/atf-run.fifo /home/donz/minix/tests/lib/libdes/atf-run.log || true) 
+(cd /home/donz/minix/tests/lib && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/lib/atf-run.fifo /home/donz/minix/tests/lib/atf-run.log || true) 
+cleandir ===> tests/libexec
+(cd /home/donz/minix/tests/libexec && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/libexec/atf-run.fifo /home/donz/minix/tests/libexec/atf-run.log || true) 
+cleandir ===> tests/sbin
+cleandir ===> tests/sbin/fsck_ffs
+(cd /home/donz/minix/tests/sbin/fsck_ffs && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/sbin/fsck_ffs && rm -f t_enable_quotas t_check_quotas t_enable_quotas.tmp t_check_quotas.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/sbin/fsck_ffs/atf-run.fifo /home/donz/minix/tests/sbin/fsck_ffs/atf-run.log || true) 
+cleandir ===> tests/sbin/ifconfig
+(cd /home/donz/minix/tests/sbin/ifconfig && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/sbin/ifconfig && rm -f t_nonexistent t_nonexistent.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/sbin/ifconfig/atf-run.fifo /home/donz/minix/tests/sbin/ifconfig/atf-run.log || true) 
+cleandir ===> tests/sbin/newfs
+(cd /home/donz/minix/tests/sbin/newfs && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/sbin/newfs && rm -f t_enable_quotas t_enable_quotas.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/sbin/newfs/atf-run.fifo /home/donz/minix/tests/sbin/newfs/atf-run.log || true) 
+cleandir ===> tests/sbin/newfs_msdos
+(cd /home/donz/minix/tests/sbin/newfs_msdos && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/sbin/newfs_msdos && rm -f t_create t_create.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/sbin/newfs_msdos/atf-run.fifo /home/donz/minix/tests/sbin/newfs_msdos/atf-run.log || true) 
+cleandir ===> tests/sbin/resize_ffs
+(cd /home/donz/minix/tests/sbin/resize_ffs && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/sbin/resize_ffs && rm -f t_check t_grow t_shrink t_grow_swapped t_shrink_swapped t_check.tmp t_grow.tmp t_shrink.tmp t_grow_swapped.tmp t_shrink_swapped.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/sbin/resize_ffs/atf-run.fifo /home/donz/minix/tests/sbin/resize_ffs/atf-run.log || true) 
+cleandir ===> tests/sbin/route
+(cd /home/donz/minix/tests/sbin/route && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/sbin/route && rm -f t_missing t_missing.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/sbin/route/atf-run.fifo /home/donz/minix/tests/sbin/route/atf-run.log || true) 
+cleandir ===> tests/sbin/sysctl
+(cd /home/donz/minix/tests/sbin/sysctl && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/sbin/sysctl && rm -f t_perm t_sysctl t_perm.tmp t_sysctl.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/sbin/sysctl/atf-run.fifo /home/donz/minix/tests/sbin/sysctl/atf-run.log || true) 
+(cd /home/donz/minix/tests/sbin && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/sbin/atf-run.fifo /home/donz/minix/tests/sbin/atf-run.log || true) 
+cleandir ===> tests/sys
+cleandir ===> tests/sys/rc
+(cd /home/donz/minix/tests/sys/rc && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/sys/rc && rm -f t_rc_d_cli t_rc_d_cli.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/sys/rc/atf-run.fifo /home/donz/minix/tests/sys/rc/atf-run.log || true) 
+(cd /home/donz/minix/tests/sys && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/sys/atf-run.fifo /home/donz/minix/tests/sys/atf-run.log || true) 
+cleandir ===> tests/usr.bin
+cleandir ===> tests/usr.bin/awk
+(cd /home/donz/minix/tests/usr.bin/awk && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/awk && rm -f t_awk t_awk.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/awk/atf-run.fifo /home/donz/minix/tests/usr.bin/awk/atf-run.log || true) 
+cleandir ===> tests/usr.bin/basename
+(cd /home/donz/minix/tests/usr.bin/basename && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/basename && rm -f t_basename t_basename.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/basename/atf-run.fifo /home/donz/minix/tests/usr.bin/basename/atf-run.log || true) 
+cleandir ===> tests/usr.bin/bzip2
+(cd /home/donz/minix/tests/usr.bin/bzip2 && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/bzip2 && rm -f t_bzip2 t_bzip2.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/bzip2/atf-run.fifo /home/donz/minix/tests/usr.bin/bzip2/atf-run.log || true) 
+cleandir ===> tests/usr.bin/cc
+(cd /home/donz/minix/tests/usr.bin/cc && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/cc && rm -f t_hello t_hello.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/cc/atf-run.fifo /home/donz/minix/tests/usr.bin/cc/atf-run.log || true) 
+cleandir ===> tests/usr.bin/cmp
+(cd /home/donz/minix/tests/usr.bin/cmp && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/cmp && rm -f t_cmp t_cmp.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/cmp/atf-run.fifo /home/donz/minix/tests/usr.bin/cmp/atf-run.log || true) 
+cleandir ===> tests/usr.bin/config
+(cd /home/donz/minix/tests/usr.bin/config && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> tests/usr.bin/config/support
+cleandir ===> tests/usr.bin/config/support/arch
+cleandir ===> tests/usr.bin/config/support/arch/regress
+cleandir ===> tests/usr.bin/config/support/arch/regress/conf
+(cd /home/donz/minix/tests/usr.bin/config/support/arch/regress/conf && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/config/support/arch/regress/conf && rm -f /home/donz/minix/tests/usr.bin/config/support/arch/regress/conf/atf-run.fifo /home/donz/minix/tests/usr.bin/config/support/arch/regress/conf/atf-run.log || true) 
+cleandir ===> tests/usr.bin/config/support/conf
+(cd /home/donz/minix/tests/usr.bin/config/support/conf && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/config/support/conf && rm -f /home/donz/minix/tests/usr.bin/config/support/conf/atf-run.fifo /home/donz/minix/tests/usr.bin/config/support/conf/atf-run.log || true) 
+(cd /home/donz/minix/tests/usr.bin/config && rm -f t_config t_config.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/config/atf-run.fifo /home/donz/minix/tests/usr.bin/config/atf-run.log || true) 
+cleandir ===> tests/usr.bin/cut
+(cd /home/donz/minix/tests/usr.bin/cut && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/cut && rm -f t_cut t_cut.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/cut/atf-run.fifo /home/donz/minix/tests/usr.bin/cut/atf-run.log || true) 
+cleandir ===> tests/usr.bin/diff
+(cd /home/donz/minix/tests/usr.bin/diff && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/diff && rm -f t_diff t_diff.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/diff/atf-run.fifo /home/donz/minix/tests/usr.bin/diff/atf-run.log || true) 
+cleandir ===> tests/usr.bin/dirname
+(cd /home/donz/minix/tests/usr.bin/dirname && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/dirname && rm -f t_dirname t_dirname.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/dirname/atf-run.fifo /home/donz/minix/tests/usr.bin/dirname/atf-run.log || true) 
+cleandir ===> tests/usr.bin/find
+(cd /home/donz/minix/tests/usr.bin/find && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/find && rm -f t_find t_find.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/find/atf-run.fifo /home/donz/minix/tests/usr.bin/find/atf-run.log || true) 
+cleandir ===> tests/usr.bin/grep
+(cd /home/donz/minix/tests/usr.bin/grep && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/grep && rm -f t_grep t_grep.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/grep/atf-run.fifo /home/donz/minix/tests/usr.bin/grep/atf-run.log || true) 
+cleandir ===> tests/usr.bin/gzip
+(cd /home/donz/minix/tests/usr.bin/gzip && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/gzip && rm -f t_gzip t_gzip.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/gzip/atf-run.fifo /home/donz/minix/tests/usr.bin/gzip/atf-run.log || true) 
+cleandir ===> tests/usr.bin/id
+(cd /home/donz/minix/tests/usr.bin/id && rm -f *.gcno *.gcda lcov.h_id a.out [Ee]rrs mklog core *.core .gdbinit   h_id  id.o pwgr.o  id.ln pwgr.ln || true) 
+(cd /home/donz/minix/tests/usr.bin/id && rm -f t_groups t_id t_whoami t_groups.tmp t_id.tmp t_whoami.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp .depend id.d pwgr.d  id.d.tmp pwgr.d.tmp /home/donz/minix/tests/usr.bin/id/tags  /home/donz/minix/tests/usr.bin/id/atf-run.fifo /home/donz/minix/tests/usr.bin/id/atf-run.log || true) 
+cleandir ===> tests/usr.bin/infocmp
+(cd /home/donz/minix/tests/usr.bin/infocmp && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/infocmp && rm -f t_terminfo t_terminfo.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/infocmp/atf-run.fifo /home/donz/minix/tests/usr.bin/infocmp/atf-run.log || true) 
+cleandir ===> tests/usr.bin/jot
+(cd /home/donz/minix/tests/usr.bin/jot && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/jot && rm -f t_jot t_jot.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/jot/atf-run.fifo /home/donz/minix/tests/usr.bin/jot/atf-run.log || true) 
+cleandir ===> tests/usr.bin/ld
+(cd /home/donz/minix/tests/usr.bin/ld && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/ld && rm -f t_script  t_section t_script.tmp t_section.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/ld/atf-run.fifo /home/donz/minix/tests/usr.bin/ld/atf-run.log || true) 
+cleandir ===> tests/usr.bin/m4
+(cd /home/donz/minix/tests/usr.bin/m4 && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/m4 && rm -f t_m4 t_m4.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/m4/atf-run.fifo /home/donz/minix/tests/usr.bin/m4/atf-run.log || true) 
+cleandir ===> tests/usr.bin/make
+(cd /home/donz/minix/tests/usr.bin/make && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/make && rm -f t_make t_make.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/make/atf-run.fifo /home/donz/minix/tests/usr.bin/make/atf-run.log || true) 
+cleandir ===> tests/usr.bin/mkdep
+(cd /home/donz/minix/tests/usr.bin/mkdep && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/mkdep && rm -f t_mkdep t_mkdep.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/mkdep/atf-run.fifo /home/donz/minix/tests/usr.bin/mkdep/atf-run.log || true) 
+cleandir ===> tests/usr.bin/nbperf
+(cd /home/donz/minix/tests/usr.bin/nbperf && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/nbperf && rm -f t_nbperf t_nbperf.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/nbperf/atf-run.fifo /home/donz/minix/tests/usr.bin/nbperf/atf-run.log || true) 
+cleandir ===> tests/usr.bin/netpgpverify
+(cd /home/donz/minix/tests/usr.bin/netpgpverify && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/netpgpverify && rm -f t_netpgpverify t_netpgpverify.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/netpgpverify/atf-run.fifo /home/donz/minix/tests/usr.bin/netpgpverify/atf-run.log || true) 
+cleandir ===> tests/usr.bin/pr
+(cd /home/donz/minix/tests/usr.bin/pr && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/pr && rm -f t_basic t_basic.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/pr/atf-run.fifo /home/donz/minix/tests/usr.bin/pr/atf-run.log || true) 
+cleandir ===> tests/usr.bin/rump_server
+(cd /home/donz/minix/tests/usr.bin/rump_server && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/rump_server && rm -f t_disk t_disk.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/rump_server/atf-run.fifo /home/donz/minix/tests/usr.bin/rump_server/atf-run.log || true) 
+cleandir ===> tests/usr.bin/shmif_dumpbus
+(cd /home/donz/minix/tests/usr.bin/shmif_dumpbus && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/shmif_dumpbus && rm -f t_basic t_basic.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/shmif_dumpbus/atf-run.fifo /home/donz/minix/tests/usr.bin/shmif_dumpbus/atf-run.log || true) 
+cleandir ===> tests/usr.bin/sdiff
+(cd /home/donz/minix/tests/usr.bin/sdiff && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/sdiff && rm -f t_sdiff t_sdiff.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/sdiff/atf-run.fifo /home/donz/minix/tests/usr.bin/sdiff/atf-run.log || true) 
+cleandir ===> tests/usr.bin/sed
+(cd /home/donz/minix/tests/usr.bin/sed && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/sed && rm -f t_sed t_sed.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/sed/atf-run.fifo /home/donz/minix/tests/usr.bin/sed/atf-run.log || true) 
+cleandir ===> tests/usr.bin/sort
+(cd /home/donz/minix/tests/usr.bin/sort && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/sort && rm -f t_sort t_sort.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/sort/atf-run.fifo /home/donz/minix/tests/usr.bin/sort/atf-run.log || true) 
+cleandir ===> tests/usr.bin/tmux
+(cd /home/donz/minix/tests/usr.bin/tmux && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/tmux && rm -f t_tmux t_tmux.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/tmux/atf-run.fifo /home/donz/minix/tests/usr.bin/tmux/atf-run.log || true) 
+cleandir ===> tests/usr.bin/tr
+(cd /home/donz/minix/tests/usr.bin/tr && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/tr && rm -f t_basic t_basic.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/tr/atf-run.fifo /home/donz/minix/tests/usr.bin/tr/atf-run.log || true) 
+cleandir ===> tests/usr.bin/unifdef
+(cd /home/donz/minix/tests/usr.bin/unifdef && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/unifdef && rm -f t_basic t_basic.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/unifdef/atf-run.fifo /home/donz/minix/tests/usr.bin/unifdef/atf-run.log || true) 
+cleandir ===> tests/usr.bin/vmstat
+(cd /home/donz/minix/tests/usr.bin/vmstat && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/vmstat && rm -f t_vmstat t_vmstat.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/vmstat/atf-run.fifo /home/donz/minix/tests/usr.bin/vmstat/atf-run.log || true) 
+cleandir ===> tests/usr.bin/xlint
+cleandir ===> tests/usr.bin/xlint/lint1
+(cd /home/donz/minix/tests/usr.bin/xlint/lint1 && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.bin/xlint/lint1 && rm -f t_integration t_integration.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/xlint/lint1/atf-run.fifo /home/donz/minix/tests/usr.bin/xlint/lint1/atf-run.log || true) 
+(cd /home/donz/minix/tests/usr.bin/xlint && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/xlint/atf-run.fifo /home/donz/minix/tests/usr.bin/xlint/atf-run.log || true) 
+(cd /home/donz/minix/tests/usr.bin && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.bin/atf-run.fifo /home/donz/minix/tests/usr.bin/atf-run.log || true) 
+cleandir ===> tests/usr.sbin
+cleandir ===> tests/usr.sbin/mtree
+(cd /home/donz/minix/tests/usr.sbin/mtree && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.sbin/mtree && rm -f t_mtree t_mtree.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.sbin/mtree/atf-run.fifo /home/donz/minix/tests/usr.sbin/mtree/atf-run.log || true) 
+cleandir ===> tests/usr.sbin/tcpdump
+(cd /home/donz/minix/tests/usr.sbin/tcpdump && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.sbin/tcpdump && rm -f t_tcpdump t_tcpdump.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.sbin/tcpdump/atf-run.fifo /home/donz/minix/tests/usr.sbin/tcpdump/atf-run.log || true) 
+cleandir ===> tests/usr.sbin/traceroute
+(cd /home/donz/minix/tests/usr.sbin/traceroute && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.sbin/traceroute && rm -f t_traceroute t_traceroute.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.sbin/traceroute/atf-run.fifo /home/donz/minix/tests/usr.sbin/traceroute/atf-run.log || true) 
+cleandir ===> tests/usr.sbin/useradd
+(cd /home/donz/minix/tests/usr.sbin/useradd && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/usr.sbin/useradd && rm -f t_useradd t_useradd.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.sbin/useradd/atf-run.fifo /home/donz/minix/tests/usr.sbin/useradd/atf-run.log || true) 
+(cd /home/donz/minix/tests/usr.sbin && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/usr.sbin/atf-run.fifo /home/donz/minix/tests/usr.sbin/atf-run.log || true) 
+cleandir ===> tests/crypto
+cleandir ===> tests/crypto/libcrypto
+(cd /home/donz/minix/tests/crypto/libcrypto && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> tests/crypto/libcrypto/bf
+(cd /home/donz/minix/tests/crypto/libcrypto/bf && rm -f *.gcno *.gcda lcov.h_bftest a.out [Ee]rrs mklog core *.core .gdbinit   h_bftest  bftest.o  bftest.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/bf && rm -f /home/donz/minix/tests/crypto/libcrypto/bf/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/bf/atf-run.log .depend bftest.d  bftest.d.tmp /home/donz/minix/tests/crypto/libcrypto/bf/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/bn
+cleandir ===> tests/crypto/libcrypto/bn/bn
+(cd /home/donz/minix/tests/crypto/libcrypto/bn/bn && rm -f *.gcno *.gcda lcov.h_bntest a.out [Ee]rrs mklog core *.core .gdbinit   h_bntest  bntest.o  bntest.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/bn/bn && rm -f /home/donz/minix/tests/crypto/libcrypto/bn/bn/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/bn/bn/atf-run.log .depend bntest.d  bntest.d.tmp /home/donz/minix/tests/crypto/libcrypto/bn/bn/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/bn/div
+(cd /home/donz/minix/tests/crypto/libcrypto/bn/div && rm -f *.gcno *.gcda lcov.h_divtest a.out [Ee]rrs mklog core *.core .gdbinit   h_divtest  divtest.o  divtest.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/bn/div && rm -f /home/donz/minix/tests/crypto/libcrypto/bn/div/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/bn/div/atf-run.log .depend divtest.d  divtest.d.tmp /home/donz/minix/tests/crypto/libcrypto/bn/div/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/bn/exp
+(cd /home/donz/minix/tests/crypto/libcrypto/bn/exp && rm -f *.gcno *.gcda lcov.h_exptest a.out [Ee]rrs mklog core *.core .gdbinit   h_exptest  exptest.o  exptest.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/bn/exp && rm -f /home/donz/minix/tests/crypto/libcrypto/bn/exp/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/bn/exp/atf-run.log .depend exptest.d  exptest.d.tmp /home/donz/minix/tests/crypto/libcrypto/bn/exp/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/cast
+(cd /home/donz/minix/tests/crypto/libcrypto/cast && rm -f *.gcno *.gcda lcov.h_casttest a.out [Ee]rrs mklog core *.core .gdbinit   h_casttest  casttest.o  casttest.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/cast && rm -f /home/donz/minix/tests/crypto/libcrypto/cast/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/cast/atf-run.log .depend casttest.d  casttest.d.tmp /home/donz/minix/tests/crypto/libcrypto/cast/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/conf
+(cd /home/donz/minix/tests/crypto/libcrypto/conf && rm -f *.gcno *.gcda lcov.h_conftest a.out [Ee]rrs mklog core *.core .gdbinit   h_conftest  test.o  test.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/conf && rm -f /home/donz/minix/tests/crypto/libcrypto/conf/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/conf/atf-run.log .depend test.d  test.d.tmp /home/donz/minix/tests/crypto/libcrypto/conf/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/des
+(cd /home/donz/minix/tests/crypto/libcrypto/des && rm -f *.gcno *.gcda lcov.h_destest a.out [Ee]rrs mklog core *.core .gdbinit   h_destest  destest.o  destest.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/des && rm -f /home/donz/minix/tests/crypto/libcrypto/des/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/des/atf-run.log .depend destest.d  destest.d.tmp /home/donz/minix/tests/crypto/libcrypto/des/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/dh
+(cd /home/donz/minix/tests/crypto/libcrypto/dh && rm -f *.gcno *.gcda lcov.h_dhtest a.out [Ee]rrs mklog core *.core .gdbinit   h_dhtest  dhtest.o  dhtest.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/dh && rm -f /home/donz/minix/tests/crypto/libcrypto/dh/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/dh/atf-run.log .depend dhtest.d  dhtest.d.tmp /home/donz/minix/tests/crypto/libcrypto/dh/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/dsa
+(cd /home/donz/minix/tests/crypto/libcrypto/dsa && rm -f *.gcno *.gcda lcov.h_dsatest a.out [Ee]rrs mklog core *.core .gdbinit   h_dsatest  dsatest.o  dsatest.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/dsa && rm -f /home/donz/minix/tests/crypto/libcrypto/dsa/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/dsa/atf-run.log .depend dsatest.d  dsatest.d.tmp /home/donz/minix/tests/crypto/libcrypto/dsa/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/ec
+(cd /home/donz/minix/tests/crypto/libcrypto/ec && rm -f *.gcno *.gcda lcov.h_ectest a.out [Ee]rrs mklog core *.core .gdbinit   h_ectest  ectest.o  ectest.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/ec && rm -f /home/donz/minix/tests/crypto/libcrypto/ec/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/ec/atf-run.log .depend ectest.d  ectest.d.tmp /home/donz/minix/tests/crypto/libcrypto/ec/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/ecdh
+(cd /home/donz/minix/tests/crypto/libcrypto/ecdh && rm -f *.gcno *.gcda lcov.h_ecdhtest a.out [Ee]rrs mklog core *.core .gdbinit   h_ecdhtest  ecdhtest.o  ecdhtest.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/ecdh && rm -f /home/donz/minix/tests/crypto/libcrypto/ecdh/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/ecdh/atf-run.log .depend ecdhtest.d  ecdhtest.d.tmp /home/donz/minix/tests/crypto/libcrypto/ecdh/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/ecdsa
+(cd /home/donz/minix/tests/crypto/libcrypto/ecdsa && rm -f *.gcno *.gcda lcov.h_ecdsatest a.out [Ee]rrs mklog core *.core .gdbinit   h_ecdsatest  ecdsatest.o  ecdsatest.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/ecdsa && rm -f /home/donz/minix/tests/crypto/libcrypto/ecdsa/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/ecdsa/atf-run.log .depend ecdsatest.d  ecdsatest.d.tmp /home/donz/minix/tests/crypto/libcrypto/ecdsa/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/engine
+(cd /home/donz/minix/tests/crypto/libcrypto/engine && rm -f *.gcno *.gcda lcov.h_enginetest a.out [Ee]rrs mklog core *.core .gdbinit   h_enginetest  enginetest.o  enginetest.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/engine && rm -f /home/donz/minix/tests/crypto/libcrypto/engine/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/engine/atf-run.log .depend enginetest.d  enginetest.d.tmp /home/donz/minix/tests/crypto/libcrypto/engine/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/evp
+(cd /home/donz/minix/tests/crypto/libcrypto/evp && rm -f *.gcno *.gcda lcov.h_evp_test a.out [Ee]rrs mklog core *.core .gdbinit   h_evp_test  evp_test.o  evp_test.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/evp && rm -f /home/donz/minix/tests/crypto/libcrypto/evp/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/evp/atf-run.log .depend evp_test.d  evp_test.d.tmp /home/donz/minix/tests/crypto/libcrypto/evp/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/hmac
+(cd /home/donz/minix/tests/crypto/libcrypto/hmac && rm -f *.gcno *.gcda lcov.h_hmactest a.out [Ee]rrs mklog core *.core .gdbinit   h_hmactest  hmactest.o  hmactest.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/hmac && rm -f /home/donz/minix/tests/crypto/libcrypto/hmac/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/hmac/atf-run.log .depend hmactest.d  hmactest.d.tmp /home/donz/minix/tests/crypto/libcrypto/hmac/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/lhash
+(cd /home/donz/minix/tests/crypto/libcrypto/lhash && rm -f *.gcno *.gcda lcov.h_lhashtest a.out [Ee]rrs mklog core *.core .gdbinit   h_lhashtest  lh_test.o  lh_test.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/lhash && rm -f /home/donz/minix/tests/crypto/libcrypto/lhash/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/lhash/atf-run.log .depend lh_test.d  lh_test.d.tmp /home/donz/minix/tests/crypto/libcrypto/lhash/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/md2
+(cd /home/donz/minix/tests/crypto/libcrypto/md2 && rm -f *.gcno *.gcda lcov.h_md2test a.out [Ee]rrs mklog core *.core .gdbinit   h_md2test  md2test.o  md2test.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/md2 && rm -f /home/donz/minix/tests/crypto/libcrypto/md2/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/md2/atf-run.log .depend md2test.d  md2test.d.tmp /home/donz/minix/tests/crypto/libcrypto/md2/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/md4
+(cd /home/donz/minix/tests/crypto/libcrypto/md4 && rm -f *.gcno *.gcda lcov.h_md4test a.out [Ee]rrs mklog core *.core .gdbinit   h_md4test  md4test.o  md4test.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/md4 && rm -f /home/donz/minix/tests/crypto/libcrypto/md4/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/md4/atf-run.log .depend md4test.d  md4test.d.tmp /home/donz/minix/tests/crypto/libcrypto/md4/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/md5
+(cd /home/donz/minix/tests/crypto/libcrypto/md5 && rm -f *.gcno *.gcda lcov.h_md5test a.out [Ee]rrs mklog core *.core .gdbinit   h_md5test  md5test.o  md5test.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/md5 && rm -f /home/donz/minix/tests/crypto/libcrypto/md5/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/md5/atf-run.log .depend md5test.d  md5test.d.tmp /home/donz/minix/tests/crypto/libcrypto/md5/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/rand
+(cd /home/donz/minix/tests/crypto/libcrypto/rand && rm -f *.gcno *.gcda lcov.h_randtest a.out [Ee]rrs mklog core *.core .gdbinit   h_randtest  randtest.o  randtest.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/rand && rm -f /home/donz/minix/tests/crypto/libcrypto/rand/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/rand/atf-run.log .depend randtest.d  randtest.d.tmp /home/donz/minix/tests/crypto/libcrypto/rand/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/rc2
+(cd /home/donz/minix/tests/crypto/libcrypto/rc2 && rm -f *.gcno *.gcda lcov.h_rc2test a.out [Ee]rrs mklog core *.core .gdbinit   h_rc2test  rc2test.o  rc2test.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/rc2 && rm -f /home/donz/minix/tests/crypto/libcrypto/rc2/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/rc2/atf-run.log .depend rc2test.d  rc2test.d.tmp /home/donz/minix/tests/crypto/libcrypto/rc2/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/rc4
+(cd /home/donz/minix/tests/crypto/libcrypto/rc4 && rm -f *.gcno *.gcda lcov.h_rc4test a.out [Ee]rrs mklog core *.core .gdbinit   h_rc4test  rc4test.o  rc4test.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/rc4 && rm -f /home/donz/minix/tests/crypto/libcrypto/rc4/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/rc4/atf-run.log .depend rc4test.d  rc4test.d.tmp /home/donz/minix/tests/crypto/libcrypto/rc4/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/ripemd
+(cd /home/donz/minix/tests/crypto/libcrypto/ripemd && rm -f *.gcno *.gcda lcov.h_ripemdtest a.out [Ee]rrs mklog core *.core .gdbinit   h_ripemdtest  rmdtest.o  rmdtest.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/ripemd && rm -f /home/donz/minix/tests/crypto/libcrypto/ripemd/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/ripemd/atf-run.log .depend rmdtest.d  rmdtest.d.tmp /home/donz/minix/tests/crypto/libcrypto/ripemd/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/rsa
+(cd /home/donz/minix/tests/crypto/libcrypto/rsa && rm -f *.gcno *.gcda lcov.h_rsatest a.out [Ee]rrs mklog core *.core .gdbinit   h_rsatest  rsa_test.o  rsa_test.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/rsa && rm -f /home/donz/minix/tests/crypto/libcrypto/rsa/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/rsa/atf-run.log .depend rsa_test.d  rsa_test.d.tmp /home/donz/minix/tests/crypto/libcrypto/rsa/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/sha
+(cd /home/donz/minix/tests/crypto/libcrypto/sha && rm -f *.gcno *.gcda lcov.h_shatest a.out [Ee]rrs mklog core *.core .gdbinit   h_shatest  shatest.o  shatest.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/sha && rm -f /home/donz/minix/tests/crypto/libcrypto/sha/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/sha/atf-run.log .depend shatest.d  shatest.d.tmp /home/donz/minix/tests/crypto/libcrypto/sha/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/sha1
+(cd /home/donz/minix/tests/crypto/libcrypto/sha1 && rm -f *.gcno *.gcda lcov.h_sha1test a.out [Ee]rrs mklog core *.core .gdbinit   h_sha1test  sha1test.o  sha1test.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/sha1 && rm -f /home/donz/minix/tests/crypto/libcrypto/sha1/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/sha1/atf-run.log .depend sha1test.d  sha1test.d.tmp /home/donz/minix/tests/crypto/libcrypto/sha1/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/srp
+(cd /home/donz/minix/tests/crypto/libcrypto/srp && rm -f *.gcno *.gcda lcov.h_srptest a.out [Ee]rrs mklog core *.core .gdbinit   h_srptest  srptest.o  srptest.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/srp && rm -f /home/donz/minix/tests/crypto/libcrypto/srp/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/srp/atf-run.log .depend srptest.d  srptest.d.tmp /home/donz/minix/tests/crypto/libcrypto/srp/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/x509v3
+(cd /home/donz/minix/tests/crypto/libcrypto/x509v3 && rm -f *.gcno *.gcda lcov.h_x509v3test a.out [Ee]rrs mklog core *.core .gdbinit   h_x509v3test  tabtest.o  tabtest.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/x509v3 && rm -f /home/donz/minix/tests/crypto/libcrypto/x509v3/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/x509v3/atf-run.log .depend tabtest.d  tabtest.d.tmp /home/donz/minix/tests/crypto/libcrypto/x509v3/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/idea
+(cd /home/donz/minix/tests/crypto/libcrypto/idea && rm -f *.gcno *.gcda lcov.h_ideatest a.out [Ee]rrs mklog core *.core .gdbinit   h_ideatest  ideatest.o  ideatest.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/idea && rm -f /home/donz/minix/tests/crypto/libcrypto/idea/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/idea/atf-run.log .depend ideatest.d  ideatest.d.tmp /home/donz/minix/tests/crypto/libcrypto/idea/tags  || true) 
+cleandir ===> tests/crypto/libcrypto/mdc2
+(cd /home/donz/minix/tests/crypto/libcrypto/mdc2 && rm -f *.gcno *.gcda lcov.h_mdc2test a.out [Ee]rrs mklog core *.core .gdbinit   h_mdc2test  mdc2test.o  mdc2test.ln || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto/mdc2 && rm -f /home/donz/minix/tests/crypto/libcrypto/mdc2/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/mdc2/atf-run.log .depend mdc2test.d  mdc2test.d.tmp /home/donz/minix/tests/crypto/libcrypto/mdc2/tags  || true) 
+(cd /home/donz/minix/tests/crypto/libcrypto && rm -f t_certs t_ciphers t_hashes t_libcrypto t_pubkey t_certs.tmp t_ciphers.tmp t_hashes.tmp t_libcrypto.tmp t_pubkey.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/crypto/libcrypto/atf-run.fifo /home/donz/minix/tests/crypto/libcrypto/atf-run.log || true) 
+(cd /home/donz/minix/tests/crypto && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/crypto/atf-run.fifo /home/donz/minix/tests/crypto/atf-run.log || true) 
+cleandir ===> tests/share
+cleandir ===> tests/share/examples
+(cd /home/donz/minix/tests/share/examples && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/share/examples && rm -f t_asm t_asm.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/share/examples/atf-run.fifo /home/donz/minix/tests/share/examples/atf-run.log || true) 
+cleandir ===> tests/share/mk
+(cd /home/donz/minix/tests/share/mk && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+(cd /home/donz/minix/tests/share/mk && rm -f t_lib t_own t_prog t_test t_lib.tmp t_own.tmp t_prog.tmp t_test.tmp Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/share/mk/atf-run.fifo /home/donz/minix/tests/share/mk/atf-run.log || true) 
+(cd /home/donz/minix/tests/share && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/share/atf-run.fifo /home/donz/minix/tests/share/atf-run.log || true) 
+(cd /home/donz/minix/tests && rm -f Atffile Atffile.tmp Kyuafile Kyuafile.tmp /home/donz/minix/tests/atf-run.fifo /home/donz/minix/tests/atf-run.log || true) 
+cleandir ===> distrib
+cleandir ===> minix
+cleandir ===> minix/include
+(cd /home/donz/minix/minix/include && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> minix/include/arch
+cleandir ===> minix/include/arch/riscv64
+cleandir ===> minix/include/arch/riscv64/include
+cleandir ===> minix/include/ddekit
+cleandir ===> minix/include/ddekit/minix
+cleandir ===> minix/include/libdde
+cleandir ===> minix/include/minix
+cleandir ===> minix/include/net
+cleandir ===> minix/include/net/gen
+cleandir ===> minix/include/sys
+cleandir ===> minix/bin
+cleandir ===> minix/commands
+cleandir ===> minix/commands/at
+(cd /home/donz/minix/minix/commands/at && rm -f *.gcno *.gcda lcov.at a.out [Ee]rrs mklog core *.core .gdbinit   at  at.o  at.ln || true) 
+(cd /home/donz/minix/minix/commands/at && rm -f .depend at.d  at.d.tmp /home/donz/minix/minix/commands/at/tags  || true) 
+cleandir ===> minix/commands/backup
+(cd /home/donz/minix/minix/commands/backup && rm -f *.gcno *.gcda lcov.backup a.out [Ee]rrs mklog core *.core .gdbinit   backup  backup.o  backup.ln || true) 
+(cd /home/donz/minix/minix/commands/backup && rm -f .depend backup.d  backup.d.tmp /home/donz/minix/minix/commands/backup/tags  || true) 
+cleandir ===> minix/commands/cawf
+(cd /home/donz/minix/minix/commands/cawf && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   bsfilt  bsfilt.o  bsfilt.ln   cawf  cawf.o device.o error.o expand.o expr.o getopt.o macsup.o nreq.o output.o pass2.o pass3.o regerror.o regexp.o store.o string.o  cawf.ln device.ln error.ln expand.ln expr.ln getopt.ln macsup.ln nreq.ln output.ln pass2.ln pass3.ln regerror.ln regexp.ln store.ln string.ln || true) 
+(cd /home/donz/minix/minix/commands/cawf && rm -f .depend bsfilt.d cawf.d device.d error.d expand.d expr.d getopt.d macsup.d nreq.d output.d pass2.d pass3.d regerror.d regexp.d store.d string.d  bsfilt.d.tmp cawf.d.tmp device.d.tmp error.d.tmp expand.d.tmp expr.d.tmp getopt.d.tmp macsup.d.tmp nreq.d.tmp output.d.tmp pass2.d.tmp pass3.d.tmp regerror.d.tmp regexp.d.tmp store.d.tmp string.d.tmp /home/donz/minix/minix/commands/cawf/tags  || true) 
+cleandir ===> minix/commands/cdprobe
+(cd /home/donz/minix/minix/commands/cdprobe && rm -f *.gcno *.gcda lcov.cdprobe a.out [Ee]rrs mklog core *.core .gdbinit   cdprobe  cdprobe.o  cdprobe.ln || true) 
+(cd /home/donz/minix/minix/commands/cdprobe && rm -f .depend cdprobe.d  cdprobe.d.tmp /home/donz/minix/minix/commands/cdprobe/tags  || true) 
+cleandir ===> minix/commands/cleantmp
+(cd /home/donz/minix/minix/commands/cleantmp && rm -f *.gcno *.gcda lcov.cleantmp a.out [Ee]rrs mklog core *.core .gdbinit   cleantmp  cleantmp.o  cleantmp.ln || true) 
+(cd /home/donz/minix/minix/commands/cleantmp && rm -f .depend cleantmp.d  cleantmp.d.tmp /home/donz/minix/minix/commands/cleantmp/tags  || true) 
+cleandir ===> minix/commands/compress
+(cd /home/donz/minix/minix/commands/compress && rm -f *.gcno *.gcda lcov.compress a.out [Ee]rrs mklog core *.core .gdbinit   compress  compress.o  compress.ln || true) 
+(cd /home/donz/minix/minix/commands/compress && rm -f .depend compress.d  compress.d.tmp /home/donz/minix/minix/commands/compress/tags  || true) 
+cleandir ===> minix/commands/crc
+(cd /home/donz/minix/minix/commands/crc && rm -f *.gcno *.gcda lcov.crc a.out [Ee]rrs mklog core *.core .gdbinit   crc  crc.o  crc.ln || true) 
+(cd /home/donz/minix/minix/commands/crc && rm -f .depend crc.d  crc.d.tmp /home/donz/minix/minix/commands/crc/tags  || true) 
+cleandir ===> minix/commands/cron
+(cd /home/donz/minix/minix/commands/cron && rm -f *.gcno *.gcda lcov.cron a.out [Ee]rrs mklog core *.core .gdbinit   cron  cron.o tab.o misc.o  cron.ln tab.ln misc.ln || true) 
+(cd /home/donz/minix/minix/commands/cron && rm -f .depend cron.d misc.d tab.d  cron.d.tmp misc.d.tmp tab.d.tmp /home/donz/minix/minix/commands/cron/tags  || true) 
+cleandir ===> minix/commands/crontab
+(cd /home/donz/minix/minix/commands/crontab && rm -f *.gcno *.gcda lcov.crontab a.out [Ee]rrs mklog core *.core .gdbinit   crontab  crontab.o tab.o misc.o  crontab.ln tab.ln misc.ln || true) 
+(cd /home/donz/minix/minix/commands/crontab && rm -f .depend crontab.d misc.d tab.d  crontab.d.tmp misc.d.tmp tab.d.tmp /home/donz/minix/minix/commands/crontab/tags  || true) 
+cleandir ===> minix/commands/DESCRIBE
+(cd /home/donz/minix/minix/commands/DESCRIBE && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> minix/commands/devmand
+(cd /home/donz/minix/minix/commands/devmand && rm -f y.tab.h *.gcno *.gcda lcov.devmand a.out [Ee]rrs mklog core *.core .gdbinit usb_scan.c usb.c  devmand  main.o usb_scan.o usb.o  main.ln || true) 
+(cd /home/donz/minix/minix/commands/devmand && rm -f .depend main.d usb.d usb_scan.d  main.d.tmp usb.d.tmp usb_scan.d.tmp /home/donz/minix/minix/commands/devmand/tags  || true) 
+cleandir ===> minix/commands/devsize
+(cd /home/donz/minix/minix/commands/devsize && rm -f *.gcno *.gcda lcov.devsize a.out [Ee]rrs mklog core *.core .gdbinit   devsize  devsize.o  devsize.ln || true) 
+(cd /home/donz/minix/minix/commands/devsize && rm -f .depend devsize.d  devsize.d.tmp /home/donz/minix/minix/commands/devsize/tags  || true) 
+cleandir ===> minix/commands/dhrystone
+(cd /home/donz/minix/minix/commands/dhrystone && rm -f *.gcno *.gcda lcov.dhrystone a.out [Ee]rrs mklog core *.core .gdbinit   dhrystone  dhrystone.o  dhrystone.ln || true) 
+(cd /home/donz/minix/minix/commands/dhrystone && rm -f .depend dhrystone.d  dhrystone.d.tmp /home/donz/minix/minix/commands/dhrystone/tags  || true) 
+cleandir ===> minix/commands/eject
+(cd /home/donz/minix/minix/commands/eject && rm -f *.gcno *.gcda lcov.eject a.out [Ee]rrs mklog core *.core .gdbinit   eject  eject.o  eject.ln || true) 
+(cd /home/donz/minix/minix/commands/eject && rm -f .depend eject.d  eject.d.tmp /home/donz/minix/minix/commands/eject/tags  || true) 
+cleandir ===> minix/commands/fix
+(cd /home/donz/minix/minix/commands/fix && rm -f *.gcno *.gcda lcov.fix a.out [Ee]rrs mklog core *.core .gdbinit   fix  fix.o  fix.ln || true) 
+(cd /home/donz/minix/minix/commands/fix && rm -f .depend fix.d  fix.d.tmp /home/donz/minix/minix/commands/fix/tags  || true) 
+cleandir ===> minix/commands/format
+(cd /home/donz/minix/minix/commands/format && rm -f *.gcno *.gcda lcov.format a.out [Ee]rrs mklog core *.core .gdbinit   format  format.o  format.ln || true) 
+(cd /home/donz/minix/minix/commands/format && rm -f .depend format.d  format.d.tmp /home/donz/minix/minix/commands/format/tags  || true) 
+cleandir ===> minix/commands/fsck.mfs
+(cd /home/donz/minix/minix/commands/fsck.mfs && rm -f *.gcno *.gcda lcov.fsck_mfs a.out [Ee]rrs mklog core *.core .gdbinit   fsck_mfs  fsck.o  fsck.ln || true) 
+(cd /home/donz/minix/minix/commands/fsck.mfs && rm -f .depend fsck.d  fsck.d.tmp /home/donz/minix/minix/commands/fsck.mfs/tags  || true) 
+cleandir ===> minix/commands/gcov-pull
+(cd /home/donz/minix/minix/commands/gcov-pull && rm -f *.gcno *.gcda lcov.gcov-pull a.out [Ee]rrs mklog core *.core .gdbinit   gcov-pull  gcov-pull.o  gcov-pull.ln || true) 
+(cd /home/donz/minix/minix/commands/gcov-pull && rm -f .depend gcov-pull.d  gcov-pull.d.tmp /home/donz/minix/minix/commands/gcov-pull/tags  || true) 
+cleandir ===> minix/commands/ifdef
+(cd /home/donz/minix/minix/commands/ifdef && rm -f *.gcno *.gcda lcov.ifdef a.out [Ee]rrs mklog core *.core .gdbinit   ifdef  ifdef.o  ifdef.ln || true) 
+(cd /home/donz/minix/minix/commands/ifdef && rm -f .depend ifdef.d  ifdef.d.tmp /home/donz/minix/minix/commands/ifdef/tags  || true) 
+cleandir ===> minix/commands/intr
+(cd /home/donz/minix/minix/commands/intr && rm -f *.gcno *.gcda lcov.intr a.out [Ee]rrs mklog core *.core .gdbinit   intr  intr.o  intr.ln || true) 
+(cd /home/donz/minix/minix/commands/intr && rm -f .depend intr.d  intr.d.tmp /home/donz/minix/minix/commands/intr/tags  || true) 
+cleandir ===> minix/commands/isoread
+(cd /home/donz/minix/minix/commands/isoread && rm -f *.gcno *.gcda lcov.isoread a.out [Ee]rrs mklog core *.core .gdbinit   isoread  isoread.o  isoread.ln || true) 
+(cd /home/donz/minix/minix/commands/isoread && rm -f .depend isoread.d  isoread.d.tmp /home/donz/minix/minix/commands/isoread/tags  || true) 
+cleandir ===> minix/commands/loadkeys
+(cd /home/donz/minix/minix/commands/loadkeys && rm -f *.gcno *.gcda lcov.loadkeys a.out [Ee]rrs mklog core *.core .gdbinit   loadkeys  loadkeys.o  loadkeys.ln || true) 
+(cd /home/donz/minix/minix/commands/loadkeys && rm -f .depend loadkeys.d  loadkeys.d.tmp /home/donz/minix/minix/commands/loadkeys/tags  || true) 
+cleandir ===> minix/commands/loadramdisk
+(cd /home/donz/minix/minix/commands/loadramdisk && rm -f *.gcno *.gcda lcov.loadramdisk a.out [Ee]rrs mklog core *.core .gdbinit   loadramdisk  loadramdisk.o  loadramdisk.ln || true) 
+(cd /home/donz/minix/minix/commands/loadramdisk && rm -f .depend loadramdisk.d  loadramdisk.d.tmp /home/donz/minix/minix/commands/loadramdisk/tags  || true) 
+cleandir ===> minix/commands/look
+(cd /home/donz/minix/minix/commands/look && rm -f *.gcno *.gcda lcov.look a.out [Ee]rrs mklog core *.core .gdbinit   look  look.o  look.ln || true) 
+(cd /home/donz/minix/minix/commands/look && rm -f .depend look.d  look.d.tmp /home/donz/minix/minix/commands/look/tags  || true) 
+cleandir ===> minix/commands/lp
+(cd /home/donz/minix/minix/commands/lp && rm -f *.gcno *.gcda lcov.lp a.out [Ee]rrs mklog core *.core .gdbinit   lp  lp.o  lp.ln || true) 
+(cd /home/donz/minix/minix/commands/lp && rm -f .depend lp.d  lp.d.tmp /home/donz/minix/minix/commands/lp/tags  || true) 
+cleandir ===> minix/commands/lpd
+(cd /home/donz/minix/minix/commands/lpd && rm -f *.gcno *.gcda lcov.lpd a.out [Ee]rrs mklog core *.core .gdbinit   lpd  lpd.o  lpd.ln || true) 
+(cd /home/donz/minix/minix/commands/lpd && rm -f .depend lpd.d  lpd.d.tmp /home/donz/minix/minix/commands/lpd/tags  || true) 
+cleandir ===> minix/commands/lspci
+(cd /home/donz/minix/minix/commands/lspci && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> minix/commands/mail
+(cd /home/donz/minix/minix/commands/mail && rm -f *.gcno *.gcda lcov.mail a.out [Ee]rrs mklog core *.core .gdbinit   mail  mail.o  mail.ln || true) 
+(cd /home/donz/minix/minix/commands/mail && rm -f .depend mail.d  mail.d.tmp /home/donz/minix/minix/commands/mail/tags  || true) 
+cleandir ===> minix/commands/MAKEDEV
+(cd /home/donz/minix/minix/commands/MAKEDEV && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> minix/commands/minix-service
+(cd /home/donz/minix/minix/commands/minix-service && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   minix-service  minix-service.o parse.o util.o  minix-service.ln parse.ln util.ln   printconfig  print.o parse.o util.o  print.ln parse.ln util.ln || true) 
+(cd /home/donz/minix/minix/commands/minix-service && rm -f .depend minix-service.d parse.d print.d util.d  minix-service.d.tmp parse.d.tmp print.d.tmp util.d.tmp /home/donz/minix/minix/commands/minix-service/tags  || true) 
+cleandir ===> minix/commands/mount
+(cd /home/donz/minix/minix/commands/mount && rm -f *.gcno *.gcda lcov.mount a.out [Ee]rrs mklog core *.core .gdbinit   mount  mount.o  mount.ln || true) 
+(cd /home/donz/minix/minix/commands/mount && rm -f .depend mount.d  mount.d.tmp /home/donz/minix/minix/commands/mount/tags  || true) 
+cleandir ===> minix/commands/mt
+(cd /home/donz/minix/minix/commands/mt && rm -f *.gcno *.gcda lcov.mt a.out [Ee]rrs mklog core *.core .gdbinit   mt  mt.o  mt.ln || true) 
+(cd /home/donz/minix/minix/commands/mt && rm -f .depend mt.d  mt.d.tmp /home/donz/minix/minix/commands/mt/tags  || true) 
+cleandir ===> minix/commands/netconf
+(cd /home/donz/minix/minix/commands/netconf && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> minix/commands/prep
+(cd /home/donz/minix/minix/commands/prep && rm -f *.gcno *.gcda lcov.prep a.out [Ee]rrs mklog core *.core .gdbinit   prep  prep.o  prep.ln || true) 
+(cd /home/donz/minix/minix/commands/prep && rm -f .depend prep.d  prep.d.tmp /home/donz/minix/minix/commands/prep/tags  || true) 
+cleandir ===> minix/commands/printroot
+(cd /home/donz/minix/minix/commands/printroot && rm -f *.gcno *.gcda lcov.printroot a.out [Ee]rrs mklog core *.core .gdbinit   printroot  printroot.o  printroot.ln || true) 
+(cd /home/donz/minix/minix/commands/printroot && rm -f .depend printroot.d  printroot.d.tmp /home/donz/minix/minix/commands/printroot/tags  || true) 
+cleandir ===> minix/commands/profile
+(cd /home/donz/minix/minix/commands/profile && rm -f *.gcno *.gcda lcov.profile a.out [Ee]rrs mklog core *.core .gdbinit   profile  profile.o  profile.ln || true) 
+(cd /home/donz/minix/minix/commands/profile && rm -f .depend profile.d  profile.d.tmp /home/donz/minix/minix/commands/profile/tags  || true) 
+cleandir ===> minix/commands/progressbar
+(cd /home/donz/minix/minix/commands/progressbar && rm -f *.gcno *.gcda lcov.progressbar a.out [Ee]rrs mklog core *.core .gdbinit   progressbar  progressbar.o  progressbar.ln || true) 
+(cd /home/donz/minix/minix/commands/progressbar && rm -f .depend progressbar.d  progressbar.d.tmp /home/donz/minix/minix/commands/progressbar/tags  || true) 
+cleandir ===> minix/commands/ramdisk
+(cd /home/donz/minix/minix/commands/ramdisk && rm -f *.gcno *.gcda lcov.ramdisk a.out [Ee]rrs mklog core *.core .gdbinit   ramdisk  ramdisk.o  ramdisk.ln || true) 
+(cd /home/donz/minix/minix/commands/ramdisk && rm -f .depend ramdisk.d  ramdisk.d.tmp /home/donz/minix/minix/commands/ramdisk/tags  || true) 
+cleandir ===> minix/commands/rawspeed
+(cd /home/donz/minix/minix/commands/rawspeed && rm -f *.gcno *.gcda lcov.rawspeed a.out [Ee]rrs mklog core *.core .gdbinit   rawspeed  rawspeed.o  rawspeed.ln || true) 
+(cd /home/donz/minix/minix/commands/rawspeed && rm -f .depend rawspeed.d  rawspeed.d.tmp /home/donz/minix/minix/commands/rawspeed/tags  || true) 
+cleandir ===> minix/commands/readclock
+(cd /home/donz/minix/minix/commands/readclock && rm -f *.gcno *.gcda lcov.readclock a.out [Ee]rrs mklog core *.core .gdbinit   readclock  readclock.o  readclock.ln || true) 
+(cd /home/donz/minix/minix/commands/readclock && rm -f .depend readclock.d  readclock.d.tmp /home/donz/minix/minix/commands/readclock/tags  || true) 
+cleandir ===> minix/commands/remsync
+(cd /home/donz/minix/minix/commands/remsync && rm -f *.gcno *.gcda lcov.remsync a.out [Ee]rrs mklog core *.core .gdbinit   remsync  remsync.o  remsync.ln || true) 
+(cd /home/donz/minix/minix/commands/remsync && rm -f .depend remsync.d  remsync.d.tmp /home/donz/minix/minix/commands/remsync/tags  || true) 
+cleandir ===> minix/commands/rotate
+(cd /home/donz/minix/minix/commands/rotate && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> minix/commands/setup
+(cd /home/donz/minix/minix/commands/setup && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> minix/commands/slip
+(cd /home/donz/minix/minix/commands/slip && rm -f *.gcno *.gcda lcov.slip a.out [Ee]rrs mklog core *.core .gdbinit   slip  slip.o  slip.ln || true) 
+(cd /home/donz/minix/minix/commands/slip && rm -f .depend slip.d  slip.d.tmp /home/donz/minix/minix/commands/slip/tags  || true) 
+cleandir ===> minix/commands/spell
+(cd /home/donz/minix/minix/commands/spell && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> minix/commands/sprofalyze
+(cd /home/donz/minix/minix/commands/sprofalyze && rm -f *.gcno *.gcda lcov.sprofalyze a.out [Ee]rrs mklog core *.core .gdbinit   sprofalyze  sprofalyze.o  sprofalyze.ln || true) 
+(cd /home/donz/minix/minix/commands/sprofalyze && rm -f .depend sprofalyze.d  sprofalyze.d.tmp /home/donz/minix/minix/commands/sprofalyze/tags  || true) 
+cleandir ===> minix/commands/sprofdiff
+(cd /home/donz/minix/minix/commands/sprofdiff && rm -f *.gcno *.gcda lcov.sprofdiff a.out [Ee]rrs mklog core *.core .gdbinit   sprofdiff  sprofdiff.o tdist.o  sprofdiff.ln tdist.ln || true) 
+(cd /home/donz/minix/minix/commands/sprofdiff && rm -f .depend sprofdiff.d tdist.d  sprofdiff.d.tmp tdist.d.tmp /home/donz/minix/minix/commands/sprofdiff/tags  || true) 
+cleandir ===> minix/commands/srccrc
+(cd /home/donz/minix/minix/commands/srccrc && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> minix/commands/svrctl
+(cd /home/donz/minix/minix/commands/svrctl && rm -f *.gcno *.gcda lcov.svrctl a.out [Ee]rrs mklog core *.core .gdbinit   svrctl  svrctl.o  svrctl.ln || true) 
+(cd /home/donz/minix/minix/commands/svrctl && rm -f .depend svrctl.d  svrctl.d.tmp /home/donz/minix/minix/commands/svrctl/tags  || true) 
+cleandir ===> minix/commands/swifi
+(cd /home/donz/minix/minix/commands/swifi && rm -f *.gcno *.gcda lcov.swifi a.out [Ee]rrs mklog core *.core .gdbinit   swifi  systest.o fault_model.o extra.o db_sym.o db_disasm.o db_access.o read_nlist.o  systest.ln fault_model.ln extra.ln db_sym.ln db_disasm.ln db_access.ln read_nlist.ln || true) 
+(cd /home/donz/minix/minix/commands/swifi && rm -f .depend db_access.d db_disasm.d db_sym.d extra.d fault_model.d read_nlist.d systest.d  db_access.d.tmp db_disasm.d.tmp db_sym.d.tmp extra.d.tmp fault_model.d.tmp read_nlist.d.tmp systest.d.tmp /home/donz/minix/minix/commands/swifi/tags  || true) 
+cleandir ===> minix/commands/synctree
+(cd /home/donz/minix/minix/commands/synctree && rm -f *.gcno *.gcda lcov.synctree a.out [Ee]rrs mklog core *.core .gdbinit   synctree  synctree.o  synctree.ln || true) 
+(cd /home/donz/minix/minix/commands/synctree && rm -f .depend synctree.d  synctree.d.tmp /home/donz/minix/minix/commands/synctree/tags  || true) 
+cleandir ===> minix/commands/sysenv
+(cd /home/donz/minix/minix/commands/sysenv && rm -f *.gcno *.gcda lcov.sysenv a.out [Ee]rrs mklog core *.core .gdbinit   sysenv  sysenv.o  sysenv.ln || true) 
+(cd /home/donz/minix/minix/commands/sysenv && rm -f .depend sysenv.d  sysenv.d.tmp /home/donz/minix/minix/commands/sysenv/tags  || true) 
+cleandir ===> minix/commands/term
+(cd /home/donz/minix/minix/commands/term && rm -f *.gcno *.gcda lcov.term a.out [Ee]rrs mklog core *.core .gdbinit   term  term.o  term.ln || true) 
+(cd /home/donz/minix/minix/commands/term && rm -f .depend term.d  term.d.tmp /home/donz/minix/minix/commands/term/tags  || true) 
+cleandir ===> minix/commands/termcap
+(cd /home/donz/minix/minix/commands/termcap && rm -f *.gcno *.gcda lcov.termcap a.out [Ee]rrs mklog core *.core .gdbinit   termcap  termcap.o  termcap.ln || true) 
+(cd /home/donz/minix/minix/commands/termcap && rm -f .depend termcap.d  termcap.d.tmp /home/donz/minix/minix/commands/termcap/tags  || true) 
+cleandir ===> minix/commands/tget
+(cd /home/donz/minix/minix/commands/tget && rm -f *.gcno *.gcda lcov.tget a.out [Ee]rrs mklog core *.core .gdbinit   tget  tget.o  tget.ln || true) 
+(cd /home/donz/minix/minix/commands/tget && rm -f .depend tget.d  tget.d.tmp /home/donz/minix/minix/commands/tget/tags  || true) 
+cleandir ===> minix/commands/truncate
+(cd /home/donz/minix/minix/commands/truncate && rm -f *.gcno *.gcda lcov.truncate a.out [Ee]rrs mklog core *.core .gdbinit   truncate  truncate.o  truncate.ln || true) 
+(cd /home/donz/minix/minix/commands/truncate && rm -f .depend truncate.d  truncate.d.tmp /home/donz/minix/minix/commands/truncate/tags  || true) 
+cleandir ===> minix/commands/umount
+(cd /home/donz/minix/minix/commands/umount && rm -f *.gcno *.gcda lcov.umount a.out [Ee]rrs mklog core *.core .gdbinit   umount  umount.o  umount.ln || true) 
+(cd /home/donz/minix/minix/commands/umount && rm -f .depend umount.d  umount.d.tmp /home/donz/minix/minix/commands/umount/tags  || true) 
+cleandir ===> minix/commands/update
+(cd /home/donz/minix/minix/commands/update && rm -f *.gcno *.gcda lcov.update a.out [Ee]rrs mklog core *.core .gdbinit   update  update.o  update.ln || true) 
+(cd /home/donz/minix/minix/commands/update && rm -f .depend update.d  update.d.tmp /home/donz/minix/minix/commands/update/tags  || true) 
+cleandir ===> minix/commands/version
+(cd /home/donz/minix/minix/commands/version && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> minix/commands/vol
+(cd /home/donz/minix/minix/commands/vol && rm -f *.gcno *.gcda lcov.vol a.out [Ee]rrs mklog core *.core .gdbinit   vol  vol.o  vol.ln || true) 
+(cd /home/donz/minix/minix/commands/vol && rm -f .depend vol.d  vol.d.tmp /home/donz/minix/minix/commands/vol/tags  || true) 
+cleandir ===> minix/commands/writeisofs
+(cd /home/donz/minix/minix/commands/writeisofs && rm -f *.gcno *.gcda lcov.writeisofs a.out [Ee]rrs mklog core *.core .gdbinit   writeisofs  writeisofs.o  writeisofs.ln || true) 
+(cd /home/donz/minix/minix/commands/writeisofs && rm -f .depend writeisofs.d  writeisofs.d.tmp /home/donz/minix/minix/commands/writeisofs/tags  || true) 
+cleandir ===> minix/commands/fetch
+(cd /home/donz/minix/minix/commands/fetch && rm -f *.gcno *.gcda lcov.fetch a.out [Ee]rrs mklog core *.core .gdbinit   fetch  fetch.o  fetch.ln || true) 
+(cd /home/donz/minix/minix/commands/fetch && rm -f .depend fetch.d  fetch.d.tmp /home/donz/minix/minix/commands/fetch/tags  || true) 
+cleandir ===> minix/commands/zmodem
+(cd /home/donz/minix/minix/commands/zmodem && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit   rz  rz.o  rz.ln   sz  sz.o  sz.ln || true) 
+(cd /home/donz/minix/minix/commands/zmodem && rm -f .depend rz.d sz.d  rz.d.tmp sz.d.tmp /home/donz/minix/minix/commands/zmodem/tags  || true) 
+cleandir ===> minix/commands/pkgin_cd
+(cd /home/donz/minix/minix/commands/pkgin_cd && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> minix/commands/pkgin_all
+(cd /home/donz/minix/minix/commands/pkgin_all && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> minix/commands/pkgin_sets
+(cd /home/donz/minix/minix/commands/pkgin_sets && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> minix/commands/worldstone
+(cd /home/donz/minix/minix/commands/worldstone && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> minix/commands/updateboot
+(cd /home/donz/minix/minix/commands/updateboot && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> minix/commands/update_asr
+(cd /home/donz/minix/minix/commands/update_asr && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> minix/commands/update_bootcfg
+(cd /home/donz/minix/minix/commands/update_bootcfg && rm -f *.gcno *.gcda lcov. a.out [Ee]rrs mklog core *.core .gdbinit || true) 
+cleandir ===> minix/commands/atnormalize
+(cd /home/donz/minix/minix/commands/atnormalize && rm -f *.gcno *.gcda lcov.atnormalize a.out [Ee]rrs mklog core *.core .gdbinit   atnormalize  atnormalize.o  atnormalize.ln || true) 
+(cd /home/donz/minix/minix/commands/atnormalize && rm -f .depend atnormalize.d  atnormalize.d.tmp /home/donz/minix/minix/commands/atnormalize/tags  || true) 
+cleandir ===> minix/commands/dosread
+(cd /home/donz/minix/minix/commands/dosread && rm -f *.gcno *.gcda lcov.dosread a.out [Ee]rrs mklog core *.core .gdbinit   dosread  dosread.o  dosread.ln || true) 
+(cd /home/donz/minix/minix/commands/dosread && rm -f .depend dosread.d  dosread.d.tmp /home/donz/minix/minix/commands/dosread/tags  || true) 
+cleandir ===> minix/commands/fdisk
+(cd /home/donz/minix/minix/commands/fdisk && rm -f *.gcno *.gcda lcov.fdisk a.out [Ee]rrs mklog core *.core .gdbinit   fdisk  fdisk.o  fdisk.ln || true) 
+(cd /home/donz/minix/minix/commands/fdisk && rm -f .depend fdisk.d  fdisk.d.tmp /home/donz/minix/minix/commands/fdisk/tags  || true) 
+cleandir ===> minix/commands/loadfont
+(cd /home/donz/minix/minix/commands/loadfont && rm -f *.gcno *.gcda lcov.loadfont a.out [Ee]rrs mklog core *.core .gdbinit   loadfont  loadfont.o  loadfont.ln || true) 
+(cd /home/donz/minix/minix/commands/loadfont && rm -f .depend loadfont.d  loadfont.d.tmp /home/donz/minix/minix/commands/loadfont/tags  || true) 
+cleandir ===> minix/commands/autopart
+(cd /home/donz/minix/minix/commands/autopart && rm -f *.gcno *.gcda lcov.autopart a.out [Ee]rrs mklog core *.core .gdbinit   autopart  autopart.o  autopart.ln || true) 
+(cd /home/donz/minix/minix/commands/autopart && rm -f .depend autopart.d  autopart.d.tmp /home/donz/minix/minix/commands/autopart/tags  || true) 
+cleandir ===> minix/commands/part
+(cd /home/donz/minix/minix/commands/part && rm -f *.gcno *.gcda lcov.part a.out [Ee]rrs mklog core *.core .gdbinit   part  part.o  part.ln || true) 
+(cd /home/donz/minix/minix/commands/part && rm -f .depend part.d  part.d.tmp /home/donz/minix/minix/commands/part/tags  || true) 
+cleandir ===> minix/commands/partition
+(cd /home/donz/minix/minix/commands/partition && rm -f *.gcno *.gcda lcov.partition a.out [Ee]rrs mklog core *.core .gdbinit   partition  partition.o  partition.ln || true) 
+(cd /home/donz/minix/minix/commands/partition && rm -f .depend partition.d  partition.d.tmp /home/donz/minix/minix/commands/partition/tags  || true) 
+cleandir ===> minix/commands/playwave
+(cd /home/donz/minix/minix/commands/playwave && rm -f *.gcno *.gcda lcov.playwave a.out [Ee]rrs mklog core *.core .gdbinit   playwave  playwave.o  playwave.ln || true) 
+(cd /home/donz/minix/minix/commands/playwave && rm -f .depend playwave.d  playwave.d.tmp /home/donz/minix/minix/commands/playwave/tags  || true) 
+cleandir ===> minix/commands/recwave
+(cd /home/donz/minix/minix/commands/recwave && rm -f *.gcno *.gcda lcov.recwave a.out [Ee]rrs mklog core *.core .gdbinit   recwave  recwave.o  recwave.ln || true) 
+(cd /home/donz/minix/minix/commands/recwave && rm -f .depend recwave.d  recwave.d.tmp /home/donz/minix/minix/commands/recwave/tags  || true) 
+cleandir ===> minix/commands/repartition
+(cd /home/donz/minix/minix/commands/repartition && rm -f *.gcno *.gcda lcov.repartition a.out [Ee]rrs mklog core *.core .gdbinit   repartition  repartition.o  repartition.ln || true) 
+(cd /home/donz/minix/minix/commands/repartition && rm -f .depend repartition.d  repartition.d.tmp /home/donz/minix/minix/commands/repartition/tags  || true) 
+cleandir ===> minix/commands/screendump
+(cd /home/donz/minix/minix/commands/screendump && rm -f *.gcno *.gcda lcov.screendump a.out [Ee]rrs mklog core *.core .gdbinit   screendump  screendump.o  screendump.ln || true) 
+(cd /home/donz/minix/minix/commands/screendump && rm -f .depend screendump.d  screendump.d.tmp /home/donz/minix/minix/commands/screendump/tags  || true) 
+cleandir ===> minix/fs
+cleandir ===> minix/fs/mfs
+(cd /home/donz/minix/minix/fs/mfs && rm -f *.gcno *.gcda lcov.mfs a.out [Ee]rrs mklog core *.core .gdbinit   mfs  cache.o link.o mount.o misc.o open.o protect.o read.o stadir.o stats.o table.o time.o utility.o write.o inode.o main.o path.o super.o  cache.ln link.ln mount.ln misc.ln open.ln protect.ln read.ln stadir.ln stats.ln table.ln time.ln utility.ln write.ln inode.ln main.ln path.ln super.ln || true) 
+(cd /home/donz/minix/minix/fs/mfs && rm -f .depend cache.d inode.d link.d main.d misc.d mount.d open.d path.d protect.d read.d stadir.d stats.d super.d table.d time.d utility.d write.d  cache.d.tmp inode.d.tmp link.d.tmp main.d.tmp misc.d.tmp mount.d.tmp open.d.tmp path.d.tmp protect.d.tmp read.d.tmp stadir.d.tmp stats.d.tmp super.d.tmp table.d.tmp time.d.tmp utility.d.tmp write.d.tmp /home/donz/minix/minix/fs/mfs/tags  || true) 
+cleandir ===> minix/fs/pfs
+(cd /home/donz/minix/minix/fs/pfs && rm -f *.gcno *.gcda lcov.pfs a.out [Ee]rrs mklog core *.core .gdbinit   pfs  pfs.o  pfs.ln || true) 
+(cd /home/donz/minix/minix/fs/pfs && rm -f .depend pfs.d  pfs.d.tmp /home/donz/minix/minix/fs/pfs/tags  || true) 
+cleandir ===> minix/fs/ext2
+(cd /home/donz/minix/minix/fs/ext2 && rm -f *.gcno *.gcda lcov.ext2 a.out [Ee]rrs mklog core *.core .gdbinit   ext2  balloc.o link.o mount.o misc.o open.o protect.o read.o stadir.o table.o time.o utility.o write.o ialloc.o inode.o main.o path.o super.o  balloc.ln link.ln mount.ln misc.ln open.ln protect.ln read.ln stadir.ln table.ln time.ln utility.ln write.ln ialloc.ln inode.ln main.ln path.ln super.ln || true) 
+(cd /home/donz/minix/minix/fs/ext2 && rm -f .depend balloc.d ialloc.d inode.d link.d main.d misc.d mount.d open.d path.d protect.d read.d stadir.d super.d table.d time.d utility.d write.d  balloc.d.tmp ialloc.d.tmp inode.d.tmp link.d.tmp main.d.tmp misc.d.tmp mount.d.tmp open.d.tmp path.d.tmp protect.d.tmp read.d.tmp stadir.d.tmp super.d.tmp table.d.tmp time.d.tmp utility.d.tmp write.d.tmp /home/donz/minix/minix/fs/ext2/tags  || true) 
+cleandir ===> minix/fs/isofs
+(cd /home/donz/minix/minix/fs/isofs && rm -f *.gcno *.gcda lcov.isofs a.out [Ee]rrs mklog core *.core .gdbinit   isofs  main.o table.o mount.o super.o inode.o link.o utility.o path.o read.o susp.o susp_rock_ridge.o stadir.o  main.ln table.ln mount.ln super.ln inode.ln link.ln utility.ln path.ln read.ln susp.ln susp_rock_ridge.ln stadir.ln || true) 
+(cd /home/donz/minix/minix/fs/isofs && rm -f .depend inode.d link.d main.d mount.d path.d read.d stadir.d super.d susp.d susp_rock_ridge.d table.d utility.d  inode.d.tmp link.d.tmp main.d.tmp mount.d.tmp path.d.tmp read.d.tmp stadir.d.tmp super.d.tmp susp.d.tmp susp_rock_ridge.d.tmp table.d.tmp utility.d.tmp /home/donz/minix/minix/fs/isofs/tags  || true) 
+cleandir ===> minix/fs/procfs
+(cd /home/donz/minix/minix/fs/procfs && rm -f *.gcno *.gcda lcov.procfs a.out [Ee]rrs mklog core *.core .gdbinit   procfs  buf.o cpuinfo.o main.o pid.o root.o service.o tree.o util.o  buf.ln cpuinfo.ln main.ln pid.ln root.ln service.ln tree.ln util.ln || true) 
+(cd /home/donz/minix/minix/fs/procfs && rm -f .depend buf.d cpuinfo.d main.d pid.d root.d service.d tree.d util.d  buf.d.tmp cpuinfo.d.tmp main.d.tmp pid.d.tmp root.d.tmp service.d.tmp tree.d.tmp util.d.tmp /home/donz/minix/minix/fs/procfs/tags  || true) 
+cleandir ===> minix/fs/ptyfs
+(cd /home/donz/minix/minix/fs/ptyfs && rm -f *.gcno *.gcda lcov.ptyfs a.out [Ee]rrs mklog core *.core .gdbinit   ptyfs  ptyfs.o node.o  ptyfs.ln node.ln || true) 
+(cd /home/donz/minix/minix/fs/ptyfs && rm -f .depend node.d ptyfs.d  node.d.tmp ptyfs.d.tmp /home/donz/minix/minix/fs/ptyfs/tags  || true) 
+cleandir ===> minix/kernel
+(cd /home/donz/minix/minix/kernel && rm -f head.o pre_init.o direct_tty_utils.o pg_utils.o klib.o utility.o arch_reset.o atoi.o printf.o subr_prf.o strcmp.o strcpy.o strlen.o strncmp.o memcpy.o memmove.o memset.o assert.o stacktrace.o bsp_serial.o bsp_init.o extracted-errno.h extracted-mfield.h extracted-mtype.h procoffsets.h *.gcno *.gcda lcov.kernel a.out [Ee]rrs mklog core *.core .gdbinit   kernel  unpaged_head.o unpaged_pre_init.o unpaged_direct_tty_utils.o unpaged_pg_utils.o unpaged_klib.o unpaged_utility.o unpaged_arch_reset.o unpaged_atoi.o unpaged_printf.o unpaged_subr_prf.o unpaged_strcmp.o unpaged_strcpy.o unpaged_strlen.o unpaged_strncmp.o unpaged_memcpy.o unpaged_memmove.o unpaged_memset.o unpaged_assert.o unpaged_stacktrace.o unpaged_bsp_serial.o unpaged_bsp_init.o bsp_init.o bsp_serial.o bsp_timer.o bsp_reset.o bsp_intr.o head.o mpx.o klib.o exc.o arch_clock.o arch_do_vmctl.o arch_system.o exception.o hw_intr.o memory.o protect.o direct_tty_utils.o arch_reset.o pg_utils.o phys_copy.o phys_memset.o sbi.o plic.o clock.o cpulocals.o interrupt.o main.o proc.o system.o table.o utility.o usermapped_data.o do_fork.o do_exec.o do_clear.o do_exit.o do_trace.o do_runctl.o do_update.o do_times.o do_setalarm.o do_stime.o do_settime.o do_vtimer.o do_irqctl.o do_copy.o do_umap.o do_umap_remote.o do_vumap.o do_memset.o do_setgrant.o do_privctl.o do_safecopy.o do_safememset.o do_diagctl.o do_getksig.o do_endksig.o do_kill.o do_sigsend.o do_sigreturn.o do_abort.o do_getinfo.o do_vmctl.o do_mcontext.o do_schedule.o do_schedctl.o do_statectl.o watchdog.o debug.o profile.o do_sprofile.o  bsp_init.ln bsp_serial.ln bsp_timer.ln bsp_reset.ln bsp_intr.ln arch_clock.ln arch_do_vmctl.ln arch_system.ln exception.ln hw_intr.ln memory.ln protect.ln direct_tty_utils.ln arch_reset.ln pg_utils.ln sbi.ln plic.ln clock.ln cpulocals.ln interrupt.ln main.ln proc.ln system.ln table.ln utility.ln usermapped_data.ln do_fork.ln do_exec.ln do_clear.ln do_exit.ln do_trace.ln do_runctl.ln do_update.ln do_times.ln do_setalarm.ln do_stime.ln do_settime.ln do_vtimer.ln do_irqctl.ln do_copy.ln do_umap.ln do_umap_remote.ln do_vumap.ln do_memset.ln do_setgrant.ln do_privctl.ln do_safecopy.ln do_safememset.ln do_diagctl.ln do_getksig.ln do_endksig.ln do_kill.ln do_sigsend.ln do_sigreturn.ln do_abort.ln do_getinfo.ln do_vmctl.ln do_mcontext.ln do_schedule.ln do_schedctl.ln do_statectl.ln watchdog.ln debug.ln profile.ln do_sprofile.ln || true) 
+(cd /home/donz/minix/minix/kernel && rm -f .depend arch_clock.d arch_do_vmctl.d arch_reset.d arch_system.d bsp_init.d bsp_intr.d bsp_reset.d bsp_serial.d bsp_timer.d clock.d cpulocals.d debug.d direct_tty_utils.d do_abort.d do_clear.d do_copy.d do_diagctl.d do_endksig.d do_exec.d do_exit.d do_fork.d do_getinfo.d do_getksig.d do_irqctl.d do_kill.d do_mcontext.d do_memset.d do_privctl.d do_runctl.d do_safecopy.d do_safememset.d do_schedctl.d do_schedule.d do_setalarm.d do_setgrant.d do_settime.d do_sigreturn.d do_sigsend.d do_sprofile.d do_statectl.d do_stime.d do_times.d do_trace.d do_umap.d do_umap_remote.d do_update.d do_vmctl.d do_vtimer.d do_vumap.d exc.d exception.d head.d hw_intr.d interrupt.d klib.d main.d memory.d mpx.d pg_utils.d phys_copy.d phys_memset.d plic.d proc.d profile.d protect.d sbi.d system.d table.d usermapped_data.d utility.d watchdog.d  arch_clock.d.tmp arch_do_vmctl.d.tmp arch_reset.d.tmp arch_system.d.tmp bsp_init.d.tmp bsp_intr.d.tmp bsp_reset.d.tmp bsp_serial.d.tmp bsp_timer.d.tmp clock.d.tmp cpulocals.d.tmp debug.d.tmp direct_tty_utils.d.tmp do_abort.d.tmp do_clear.d.tmp do_copy.d.tmp do_diagctl.d.tmp do_endksig.d.tmp do_exec.d.tmp do_exit.d.tmp do_fork.d.tmp do_getinfo.d.tmp do_getksig.d.tmp do_irqctl.d.tmp do_kill.d.tmp do_mcontext.d.tmp do_memset.d.tmp do_privctl.d.tmp do_runctl.d.tmp do_safecopy.d.tmp do_safememset.d.tmp do_schedctl.d.tmp do_schedule.d.tmp do_setalarm.d.tmp do_setgrant.d.tmp do_settime.d.tmp do_sigreturn.d.tmp do_sigsend.d.tmp do_sprofile.d.tmp do_statectl.d.tmp do_stime.d.tmp do_times.d.tmp do_trace.d.tmp do_umap.d.tmp do_umap_remote.d.tmp do_update.d.tmp do_vmctl.d.tmp do_vtimer.d.tmp do_vumap.d.tmp exc.d.tmp exception.d.tmp head.d.tmp hw_intr.d.tmp interrupt.d.tmp klib.d.tmp main.d.tmp memory.d.tmp mpx.d.tmp pg_utils.d.tmp phys_copy.d.tmp phys_memset.d.tmp plic.d.tmp proc.d.tmp profile.d.tmp protect.d.tmp sbi.d.tmp system.d.tmp table.d.tmp usermapped_data.d.tmp utility.d.tmp watchdog.d.tmp /home/donz/minix/minix/kernel/tags  || true) 
+cleandir ===> minix/lib
+cleandir ===> minix/lib/libsys
+(cd /home/donz/minix/minix/lib/libsys && rm -f libsys.a   get_randomness.o getidle.o ser_putc.o spin.o sys_sdevio.o sys_umap_remote.o tsc_util.o alloc_util.o assert.o asynsend.o clock_time.o closenb.o copyfd.o cpuavg.o ds.o env_get_prm.o env_panic.o env_parse.o fkey_ctl.o getepinfo.o getprocnr.o getticks.o getsysinfo.o getuptime.o kernel_call.o kprintf.o kputc.o kputs.o mapdriver.o optset.o panic.o proceventmask.o rmib.o safecopies.o sched_start.o sched_stop.o sef.o sef_fi.o sef_init.o sef_liveupdate.o sef_llvm.o sef_ping.o sef_signal.o sef_st.o socketpath.o sqrt_approx.o srv_fork.o srv_kill.o stacktrace.o sys_abort.o sys_clear.o sys_diagctl.o sys_endsig.o sys_exec.o sys_exit.o sys_fork.o sys_getinfo.o sys_getsig.o sys_hz.o sys_irqctl.o sys_kill.o sys_mcontext.o sys_memset.o sys_padconf.o sys_physcopy.o sys_privctl.o sys_runctl.o sys_safecopy.o sys_safememset.o sys_schedctl.o sys_schedule.o sys_setalarm.o sys_setgrant.o sys_settime.o sys_sigreturn.o sys_sigsend.o sys_sprof.o sys_statectl.o sys_stime.o sys_times.o sys_trace.o sys_umap.o sys_update.o sys_vircopy.o sys_vmctl.o sys_vsafecopy.o sys_vtimer.o sys_vumap.o taskcall.o tickdelay.o timers.o vm_cache.o vm_exit.o vm_fork.o vm_getrusage.o vm_info.o vm_map_phys.o vm_memctl.o vm_prepare.o vm_procctl.o vm_set_priv.o vm_update.o get_randomness.o.tmp getidle.o.tmp ser_putc.o.tmp spin.o.tmp sys_sdevio.o.tmp sys_umap_remote.o.tmp tsc_util.o.tmp alloc_util.o.tmp assert.o.tmp asynsend.o.tmp clock_time.o.tmp closenb.o.tmp copyfd.o.tmp cpuavg.o.tmp ds.o.tmp env_get_prm.o.tmp env_panic.o.tmp env_parse.o.tmp fkey_ctl.o.tmp getepinfo.o.tmp getprocnr.o.tmp getticks.o.tmp getsysinfo.o.tmp getuptime.o.tmp kernel_call.o.tmp kprintf.o.tmp kputc.o.tmp kputs.o.tmp mapdriver.o.tmp optset.o.tmp panic.o.tmp proceventmask.o.tmp rmib.o.tmp safecopies.o.tmp sched_start.o.tmp sched_stop.o.tmp sef.o.tmp sef_fi.o.tmp sef_init.o.tmp sef_liveupdate.o.tmp sef_llvm.o.tmp sef_ping.o.tmp sef_signal.o.tmp sef_st.o.tmp socketpath.o.tmp sqrt_approx.o.tmp srv_fork.o.tmp srv_kill.o.tmp stacktrace.o.tmp sys_abort.o.tmp sys_clear.o.tmp sys_diagctl.o.tmp sys_endsig.o.tmp sys_exec.o.tmp sys_exit.o.tmp sys_fork.o.tmp sys_getinfo.o.tmp sys_getsig.o.tmp sys_hz.o.tmp sys_irqctl.o.tmp sys_kill.o.tmp sys_mcontext.o.tmp sys_memset.o.tmp sys_padconf.o.tmp sys_physcopy.o.tmp sys_privctl.o.tmp sys_runctl.o.tmp sys_safecopy.o.tmp sys_safememset.o.tmp sys_schedctl.o.tmp sys_schedule.o.tmp sys_setalarm.o.tmp sys_setgrant.o.tmp sys_settime.o.tmp sys_sigreturn.o.tmp sys_sigsend.o.tmp sys_sprof.o.tmp sys_statectl.o.tmp sys_stime.o.tmp sys_times.o.tmp sys_trace.o.tmp sys_umap.o.tmp sys_update.o.tmp sys_vircopy.o.tmp sys_vmctl.o.tmp sys_vsafecopy.o.tmp sys_vtimer.o.tmp sys_vumap.o.tmp taskcall.o.tmp tickdelay.o.tmp timers.o.tmp vm_cache.o.tmp vm_exit.o.tmp vm_fork.o.tmp vm_getrusage.o.tmp vm_info.o.tmp vm_map_phys.o.tmp vm_memctl.o.tmp vm_prepare.o.tmp vm_procctl.o.tmp vm_set_priv.o.tmp vm_update.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libsys && rm -f libsys_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libsys && rm -f libsys_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libsys && rm -f libsys_pic.a libsys.so.* libsys.so  get_randomness.pico getidle.pico ser_putc.pico spin.pico sys_sdevio.pico sys_umap_remote.pico tsc_util.pico alloc_util.pico assert.pico asynsend.pico clock_time.pico closenb.pico copyfd.pico cpuavg.pico ds.pico env_get_prm.pico env_panic.pico env_parse.pico fkey_ctl.pico getepinfo.pico getprocnr.pico getticks.pico getsysinfo.pico getuptime.pico kernel_call.pico kprintf.pico kputc.pico kputs.pico mapdriver.pico optset.pico panic.pico proceventmask.pico rmib.pico safecopies.pico sched_start.pico sched_stop.pico sef.pico sef_fi.pico sef_init.pico sef_liveupdate.pico sef_llvm.pico sef_ping.pico sef_signal.pico sef_st.pico socketpath.pico sqrt_approx.pico srv_fork.pico srv_kill.pico stacktrace.pico sys_abort.pico sys_clear.pico sys_diagctl.pico sys_endsig.pico sys_exec.pico sys_exit.pico sys_fork.pico sys_getinfo.pico sys_getsig.pico sys_hz.pico sys_irqctl.pico sys_kill.pico sys_mcontext.pico sys_memset.pico sys_padconf.pico sys_physcopy.pico sys_privctl.pico sys_runctl.pico sys_safecopy.pico sys_safememset.pico sys_schedctl.pico sys_schedule.pico sys_setalarm.pico sys_setgrant.pico sys_settime.pico sys_sigreturn.pico sys_sigsend.pico sys_sprof.pico sys_statectl.pico sys_stime.pico sys_times.pico sys_trace.pico sys_umap.pico sys_update.pico sys_vircopy.pico sys_vmctl.pico sys_vsafecopy.pico sys_vtimer.pico sys_vumap.pico taskcall.pico tickdelay.pico timers.pico vm_cache.pico vm_exit.pico vm_fork.pico vm_getrusage.pico vm_info.pico vm_map_phys.pico vm_memctl.pico vm_prepare.pico vm_procctl.pico vm_set_priv.pico vm_update.pico get_randomness.pico.tmp getidle.pico.tmp ser_putc.pico.tmp spin.pico.tmp sys_sdevio.pico.tmp sys_umap_remote.pico.tmp tsc_util.pico.tmp alloc_util.pico.tmp assert.pico.tmp asynsend.pico.tmp clock_time.pico.tmp closenb.pico.tmp copyfd.pico.tmp cpuavg.pico.tmp ds.pico.tmp env_get_prm.pico.tmp env_panic.pico.tmp env_parse.pico.tmp fkey_ctl.pico.tmp getepinfo.pico.tmp getprocnr.pico.tmp getticks.pico.tmp getsysinfo.pico.tmp getuptime.pico.tmp kernel_call.pico.tmp kprintf.pico.tmp kputc.pico.tmp kputs.pico.tmp mapdriver.pico.tmp optset.pico.tmp panic.pico.tmp proceventmask.pico.tmp rmib.pico.tmp safecopies.pico.tmp sched_start.pico.tmp sched_stop.pico.tmp sef.pico.tmp sef_fi.pico.tmp sef_init.pico.tmp sef_liveupdate.pico.tmp sef_llvm.pico.tmp sef_ping.pico.tmp sef_signal.pico.tmp sef_st.pico.tmp socketpath.pico.tmp sqrt_approx.pico.tmp srv_fork.pico.tmp srv_kill.pico.tmp stacktrace.pico.tmp sys_abort.pico.tmp sys_clear.pico.tmp sys_diagctl.pico.tmp sys_endsig.pico.tmp sys_exec.pico.tmp sys_exit.pico.tmp sys_fork.pico.tmp sys_getinfo.pico.tmp sys_getsig.pico.tmp sys_hz.pico.tmp sys_irqctl.pico.tmp sys_kill.pico.tmp sys_mcontext.pico.tmp sys_memset.pico.tmp sys_padconf.pico.tmp sys_physcopy.pico.tmp sys_privctl.pico.tmp sys_runctl.pico.tmp sys_safecopy.pico.tmp sys_safememset.pico.tmp sys_schedctl.pico.tmp sys_schedule.pico.tmp sys_setalarm.pico.tmp sys_setgrant.pico.tmp sys_settime.pico.tmp sys_sigreturn.pico.tmp sys_sigsend.pico.tmp sys_sprof.pico.tmp sys_statectl.pico.tmp sys_stime.pico.tmp sys_times.pico.tmp sys_trace.pico.tmp sys_umap.pico.tmp sys_update.pico.tmp sys_vircopy.pico.tmp sys_vmctl.pico.tmp sys_vsafecopy.pico.tmp sys_vtimer.pico.tmp sys_vumap.pico.tmp taskcall.pico.tmp tickdelay.pico.tmp timers.pico.tmp vm_cache.pico.tmp vm_exit.pico.tmp vm_fork.pico.tmp vm_getrusage.pico.tmp vm_info.pico.tmp vm_map_phys.pico.tmp vm_memctl.pico.tmp vm_prepare.pico.tmp vm_procctl.pico.tmp vm_set_priv.pico.tmp vm_update.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/libsys && rm -f llib-lsys.ln  get_randomness.ln getidle.ln ser_putc.ln spin.ln sys_sdevio.ln sys_umap_remote.ln tsc_util.ln alloc_util.ln assert.ln asynsend.ln clock_time.ln closenb.ln copyfd.ln cpuavg.ln ds.ln env_get_prm.ln env_panic.ln env_parse.ln fkey_ctl.ln getepinfo.ln getprocnr.ln getticks.ln getsysinfo.ln getuptime.ln kernel_call.ln kprintf.ln kputc.ln kputs.ln mapdriver.ln optset.ln panic.ln proceventmask.ln rmib.ln safecopies.ln sched_start.ln sched_stop.ln sef.ln sef_fi.ln sef_init.ln sef_liveupdate.ln sef_llvm.ln sef_ping.ln sef_signal.ln sef_st.ln socketpath.ln sqrt_approx.ln srv_fork.ln srv_kill.ln stacktrace.ln sys_abort.ln sys_clear.ln sys_diagctl.ln sys_endsig.ln sys_exec.ln sys_exit.ln sys_fork.ln sys_getinfo.ln sys_getsig.ln sys_hz.ln sys_irqctl.ln sys_kill.ln sys_mcontext.ln sys_memset.ln sys_padconf.ln sys_physcopy.ln sys_privctl.ln sys_runctl.ln sys_safecopy.ln sys_safememset.ln sys_schedctl.ln sys_schedule.ln sys_setalarm.ln sys_setgrant.ln sys_settime.ln sys_sigreturn.ln sys_sigsend.ln sys_sprof.ln sys_statectl.ln sys_stime.ln sys_times.ln sys_trace.ln sys_umap.ln sys_update.ln sys_vircopy.ln sys_vmctl.ln sys_vsafecopy.ln sys_vtimer.ln sys_vumap.ln taskcall.ln tickdelay.ln timers.ln vm_cache.ln vm_exit.ln vm_fork.ln vm_getrusage.ln vm_info.ln vm_map_phys.ln vm_memctl.ln vm_prepare.ln vm_procctl.ln vm_set_priv.ln vm_update.ln || true) 
+(cd /home/donz/minix/minix/lib/libsys && rm -f libsys.so.0.map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libsys && rm -f .depend alloc_util.d assert.d asynsend.d clock_time.d closenb.d copyfd.d cpuavg.d ds.d env_get_prm.d env_panic.d env_parse.d fkey_ctl.d get_randomness.d getepinfo.d getidle.d getprocnr.d getsysinfo.d getticks.d getuptime.d kernel_call.d kprintf.d kputc.d kputs.d mapdriver.d optset.d panic.d proceventmask.d rmib.d safecopies.d sched_start.d sched_stop.d sef.d sef_fi.d sef_init.d sef_liveupdate.d sef_llvm.d sef_ping.d sef_signal.d sef_st.d ser_putc.d socketpath.d spin.d sqrt_approx.d srv_fork.d srv_kill.d stacktrace.d sys_abort.d sys_clear.d sys_diagctl.d sys_endsig.d sys_exec.d sys_exit.d sys_fork.d sys_getinfo.d sys_getsig.d sys_hz.d sys_irqctl.d sys_kill.d sys_mcontext.d sys_memset.d sys_padconf.d sys_physcopy.d sys_privctl.d sys_runctl.d sys_safecopy.d sys_safememset.d sys_schedctl.d sys_schedule.d sys_sdevio.d sys_setalarm.d sys_setgrant.d sys_settime.d sys_sigreturn.d sys_sigsend.d sys_sprof.d sys_statectl.d sys_stime.d sys_times.d sys_trace.d sys_umap.d sys_umap_remote.d sys_update.d sys_vircopy.d sys_vmctl.d sys_vsafecopy.d sys_vtimer.d sys_vumap.d taskcall.d tickdelay.d timers.d tsc_util.d vm_cache.d vm_exit.d vm_fork.d vm_getrusage.d vm_info.d vm_map_phys.d vm_memctl.d vm_prepare.d vm_procctl.d vm_set_priv.d vm_update.d  alloc_util.d.tmp assert.d.tmp asynsend.d.tmp clock_time.d.tmp closenb.d.tmp copyfd.d.tmp cpuavg.d.tmp ds.d.tmp env_get_prm.d.tmp env_panic.d.tmp env_parse.d.tmp fkey_ctl.d.tmp get_randomness.d.tmp getepinfo.d.tmp getidle.d.tmp getprocnr.d.tmp getsysinfo.d.tmp getticks.d.tmp getuptime.d.tmp kernel_call.d.tmp kprintf.d.tmp kputc.d.tmp kputs.d.tmp mapdriver.d.tmp optset.d.tmp panic.d.tmp proceventmask.d.tmp rmib.d.tmp safecopies.d.tmp sched_start.d.tmp sched_stop.d.tmp sef.d.tmp sef_fi.d.tmp sef_init.d.tmp sef_liveupdate.d.tmp sef_llvm.d.tmp sef_ping.d.tmp sef_signal.d.tmp sef_st.d.tmp ser_putc.d.tmp socketpath.d.tmp spin.d.tmp sqrt_approx.d.tmp srv_fork.d.tmp srv_kill.d.tmp stacktrace.d.tmp sys_abort.d.tmp sys_clear.d.tmp sys_diagctl.d.tmp sys_endsig.d.tmp sys_exec.d.tmp sys_exit.d.tmp sys_fork.d.tmp sys_getinfo.d.tmp sys_getsig.d.tmp sys_hz.d.tmp sys_irqctl.d.tmp sys_kill.d.tmp sys_mcontext.d.tmp sys_memset.d.tmp sys_padconf.d.tmp sys_physcopy.d.tmp sys_privctl.d.tmp sys_runctl.d.tmp sys_safecopy.d.tmp sys_safememset.d.tmp sys_schedctl.d.tmp sys_schedule.d.tmp sys_sdevio.d.tmp sys_setalarm.d.tmp sys_setgrant.d.tmp sys_settime.d.tmp sys_sigreturn.d.tmp sys_sigsend.d.tmp sys_sprof.d.tmp sys_statectl.d.tmp sys_stime.d.tmp sys_times.d.tmp sys_trace.d.tmp sys_umap.d.tmp sys_umap_remote.d.tmp sys_update.d.tmp sys_vircopy.d.tmp sys_vmctl.d.tmp sys_vsafecopy.d.tmp sys_vtimer.d.tmp sys_vumap.d.tmp taskcall.d.tmp tickdelay.d.tmp timers.d.tmp tsc_util.d.tmp vm_cache.d.tmp vm_exit.d.tmp vm_fork.d.tmp vm_getrusage.d.tmp vm_info.d.tmp vm_map_phys.d.tmp vm_memctl.d.tmp vm_prepare.d.tmp vm_procctl.d.tmp vm_set_priv.d.tmp vm_update.d.tmp /home/donz/minix/minix/lib/libsys/tags  || true) 
+cleandir ===> minix/lib/libmthread
+(cd /home/donz/minix/minix/lib/libmthread && rm -f libmthread.a   allocate.o attribute.o condition.o event.o key.o misc.o mutex.o pthread_compat.o queue.o rwlock.o scheduler.o allocate.o.tmp attribute.o.tmp condition.o.tmp event.o.tmp key.o.tmp misc.o.tmp mutex.o.tmp pthread_compat.o.tmp queue.o.tmp rwlock.o.tmp scheduler.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libmthread && rm -f libmthread_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libmthread && rm -f libmthread_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libmthread && rm -f libmthread_pic.a libmthread.so.* libmthread.so  allocate.pico attribute.pico condition.pico event.pico key.pico misc.pico mutex.pico pthread_compat.pico queue.pico rwlock.pico scheduler.pico allocate.pico.tmp attribute.pico.tmp condition.pico.tmp event.pico.tmp key.pico.tmp misc.pico.tmp mutex.pico.tmp pthread_compat.pico.tmp queue.pico.tmp rwlock.pico.tmp scheduler.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/libmthread && rm -f llib-lmthread.ln  allocate.ln attribute.ln condition.ln event.ln key.ln misc.ln mutex.ln pthread_compat.ln queue.ln rwlock.ln scheduler.ln || true) 
+(cd /home/donz/minix/minix/lib/libmthread && rm -f libmthread.so.0.map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libmthread && rm -f .depend allocate.d attribute.d condition.d event.d key.d misc.d mutex.d pthread_compat.d queue.d rwlock.d scheduler.d  allocate.d.tmp attribute.d.tmp condition.d.tmp event.d.tmp key.d.tmp misc.d.tmp mutex.d.tmp pthread_compat.d.tmp queue.d.tmp rwlock.d.tmp scheduler.d.tmp /home/donz/minix/minix/lib/libmthread/tags  || true) 
+cleandir ===> minix/lib/libasyn
+(cd /home/donz/minix/minix/lib/libasyn && rm -f libasyn.a   asyn_cancel.o asyn_close.o asyn_init.o asyn_pending.o asyn_read.o asyn_special.o asyn_synch.o asyn_wait.o asyn_write.o asyn_cancel.o.tmp asyn_close.o.tmp asyn_init.o.tmp asyn_pending.o.tmp asyn_read.o.tmp asyn_special.o.tmp asyn_synch.o.tmp asyn_wait.o.tmp asyn_write.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libasyn && rm -f libasyn_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libasyn && rm -f libasyn_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libasyn && rm -f libasyn_pic.a asyn_cancel.pico asyn_close.pico asyn_init.pico asyn_pending.pico asyn_read.pico asyn_special.pico asyn_synch.pico asyn_wait.pico asyn_write.pico asyn_cancel.pico.tmp asyn_close.pico.tmp asyn_init.pico.tmp asyn_pending.pico.tmp asyn_read.pico.tmp asyn_special.pico.tmp asyn_synch.pico.tmp asyn_wait.pico.tmp asyn_write.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/libasyn && rm -f llib-lasyn.ln  asyn_cancel.ln asyn_close.ln asyn_init.ln asyn_pending.ln asyn_read.ln asyn_special.ln asyn_synch.ln asyn_wait.ln asyn_write.ln || true) 
+(cd /home/donz/minix/minix/lib/libasyn && rm -f libasyn.so..map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libasyn && rm -f .depend asyn_cancel.d asyn_close.d asyn_init.d asyn_pending.d asyn_read.d asyn_special.d asyn_synch.d asyn_wait.d asyn_write.d  asyn_cancel.d.tmp asyn_close.d.tmp asyn_init.d.tmp asyn_pending.d.tmp asyn_read.d.tmp asyn_special.d.tmp asyn_synch.d.tmp asyn_wait.d.tmp asyn_write.d.tmp /home/donz/minix/minix/lib/libasyn/tags  || true) 
+cleandir ===> minix/lib/libaudiodriver
+(cd /home/donz/minix/minix/lib/libaudiodriver && rm -f libaudiodriver.a   audio_fw.o liveupdate.o audio_fw.o.tmp liveupdate.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libaudiodriver && rm -f libaudiodriver_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libaudiodriver && rm -f libaudiodriver_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libaudiodriver && rm -f libaudiodriver_pic.a audio_fw.pico liveupdate.pico audio_fw.pico.tmp liveupdate.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/libaudiodriver && rm -f llib-laudiodriver.ln  audio_fw.ln liveupdate.ln || true) 
+(cd /home/donz/minix/minix/lib/libaudiodriver && rm -f libaudiodriver.so..map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libaudiodriver && rm -f .depend audio_fw.d liveupdate.d  audio_fw.d.tmp liveupdate.d.tmp /home/donz/minix/minix/lib/libaudiodriver/tags  || true) 
+cleandir ===> minix/lib/libbdev
+(cd /home/donz/minix/minix/lib/libbdev && rm -f libbdev.a   bdev.o driver.o call.o ipc.o minor.o bdev.o.tmp driver.o.tmp call.o.tmp ipc.o.tmp minor.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libbdev && rm -f libbdev_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libbdev && rm -f libbdev_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libbdev && rm -f libbdev_pic.a bdev.pico driver.pico call.pico ipc.pico minor.pico bdev.pico.tmp driver.pico.tmp call.pico.tmp ipc.pico.tmp minor.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/libbdev && rm -f llib-lbdev.ln  bdev.ln driver.ln call.ln ipc.ln minor.ln || true) 
+(cd /home/donz/minix/minix/lib/libbdev && rm -f libbdev.so..map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libbdev && rm -f .depend bdev.d call.d driver.d ipc.d minor.d  bdev.d.tmp call.d.tmp driver.d.tmp ipc.d.tmp minor.d.tmp /home/donz/minix/minix/lib/libbdev/tags  || true) 
+cleandir ===> minix/lib/libblockdriver
+(cd /home/donz/minix/minix/lib/libblockdriver && rm -f libblockdriver.a   driver.o drvlib.o driver_st.o driver_mt.o liveupdate.o mq.o trace.o driver.o.tmp drvlib.o.tmp driver_st.o.tmp driver_mt.o.tmp liveupdate.o.tmp mq.o.tmp trace.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libblockdriver && rm -f libblockdriver_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libblockdriver && rm -f libblockdriver_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libblockdriver && rm -f libblockdriver_pic.a driver.pico drvlib.pico driver_st.pico driver_mt.pico liveupdate.pico mq.pico trace.pico driver.pico.tmp drvlib.pico.tmp driver_st.pico.tmp driver_mt.pico.tmp liveupdate.pico.tmp mq.pico.tmp trace.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/libblockdriver && rm -f llib-lblockdriver.ln  driver.ln drvlib.ln driver_st.ln driver_mt.ln liveupdate.ln mq.ln trace.ln || true) 
+(cd /home/donz/minix/minix/lib/libblockdriver && rm -f libblockdriver.so..map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libblockdriver && rm -f .depend driver.d driver_mt.d driver_st.d drvlib.d liveupdate.d mq.d trace.d  driver.d.tmp driver_mt.d.tmp driver_st.d.tmp drvlib.d.tmp liveupdate.d.tmp mq.d.tmp trace.d.tmp /home/donz/minix/minix/lib/libblockdriver/tags  || true) 
+cleandir ===> minix/lib/libchardriver
+(cd /home/donz/minix/minix/lib/libchardriver && rm -f libchardriver.a   chardriver.o chardriver.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libchardriver && rm -f libchardriver_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libchardriver && rm -f libchardriver_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libchardriver && rm -f libchardriver_pic.a chardriver.pico chardriver.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/libchardriver && rm -f llib-lchardriver.ln  chardriver.ln || true) 
+(cd /home/donz/minix/minix/lib/libchardriver && rm -f libchardriver.so..map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libchardriver && rm -f .depend chardriver.d  chardriver.d.tmp /home/donz/minix/minix/lib/libchardriver/tags  || true) 
+cleandir ===> minix/lib/libddekit
+cleandir ===> minix/lib/libddekit/build
+cleandir ===> minix/lib/libddekit/build/ddekit
+(cd /home/donz/minix/minix/lib/libddekit/build/ddekit && rm -f libddekit.a   pci.o printf.o mem.o pgtab.o dde.o initcall.o thread.o condvar.o lock.o semaphore.o timer.o panic.o irq.o resource.o msg_queue.o pci.o.tmp printf.o.tmp mem.o.tmp pgtab.o.tmp dde.o.tmp initcall.o.tmp thread.o.tmp condvar.o.tmp lock.o.tmp semaphore.o.tmp timer.o.tmp panic.o.tmp irq.o.tmp resource.o.tmp msg_queue.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libddekit/build/ddekit && rm -f libddekit_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libddekit/build/ddekit && rm -f libddekit_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libddekit/build/ddekit && rm -f libddekit_pic.a pci.pico printf.pico mem.pico pgtab.pico dde.pico initcall.pico thread.pico condvar.pico lock.pico semaphore.pico timer.pico panic.pico irq.pico resource.pico msg_queue.pico pci.pico.tmp printf.pico.tmp mem.pico.tmp pgtab.pico.tmp dde.pico.tmp initcall.pico.tmp thread.pico.tmp condvar.pico.tmp lock.pico.tmp semaphore.pico.tmp timer.pico.tmp panic.pico.tmp irq.pico.tmp resource.pico.tmp msg_queue.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/libddekit/build/ddekit && rm -f llib-lddekit.ln  pci.ln printf.ln mem.ln pgtab.ln dde.ln initcall.ln thread.ln condvar.ln lock.ln semaphore.ln timer.ln panic.ln irq.ln resource.ln msg_queue.ln || true) 
+(cd /home/donz/minix/minix/lib/libddekit/build/ddekit && rm -f libddekit.so..map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libddekit/build/ddekit && rm -f .depend condvar.d dde.d initcall.d irq.d lock.d mem.d msg_queue.d panic.d pci.d pgtab.d printf.d resource.d semaphore.d thread.d timer.d  condvar.d.tmp dde.d.tmp initcall.d.tmp irq.d.tmp lock.d.tmp mem.d.tmp msg_queue.d.tmp panic.d.tmp pci.d.tmp pgtab.d.tmp printf.d.tmp resource.d.tmp semaphore.d.tmp thread.d.tmp timer.d.tmp /home/donz/minix/minix/lib/libddekit/build/ddekit/tags  || true) 
+cleandir ===> minix/lib/libddekit/build/ddekit_usb_client
+(cd /home/donz/minix/minix/lib/libddekit/build/ddekit_usb_client && rm -f libddekit_usb_client.a   usb_client.o usb_client.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libddekit/build/ddekit_usb_client && rm -f libddekit_usb_client_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libddekit/build/ddekit_usb_client && rm -f libddekit_usb_client_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libddekit/build/ddekit_usb_client && rm -f libddekit_usb_client_pic.a usb_client.pico usb_client.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/libddekit/build/ddekit_usb_client && rm -f llib-lddekit_usb_client.ln  usb_client.ln || true) 
+(cd /home/donz/minix/minix/lib/libddekit/build/ddekit_usb_client && rm -f libddekit_usb_client.so..map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libddekit/build/ddekit_usb_client && rm -f .depend usb_client.d  usb_client.d.tmp /home/donz/minix/minix/lib/libddekit/build/ddekit_usb_client/tags  || true) 
+cleandir ===> minix/lib/libddekit/build/ddekit_usb_server
+(cd /home/donz/minix/minix/lib/libddekit/build/ddekit_usb_server && rm -f libddekit_usb_server.a   usb_server.o usb_server.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libddekit/build/ddekit_usb_server && rm -f libddekit_usb_server_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libddekit/build/ddekit_usb_server && rm -f libddekit_usb_server_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libddekit/build/ddekit_usb_server && rm -f libddekit_usb_server_pic.a usb_server.pico usb_server.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/libddekit/build/ddekit_usb_server && rm -f llib-lddekit_usb_server.ln  usb_server.ln || true) 
+(cd /home/donz/minix/minix/lib/libddekit/build/ddekit_usb_server && rm -f libddekit_usb_server.so..map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libddekit/build/ddekit_usb_server && rm -f .depend usb_server.d  usb_server.d.tmp /home/donz/minix/minix/lib/libddekit/build/ddekit_usb_server/tags  || true) 
+cleandir ===> minix/lib/libdevman
+(cd /home/donz/minix/minix/lib/libdevman && rm -f libdevman.a   generic.o usb.o generic.o.tmp usb.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libdevman && rm -f libdevman_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libdevman && rm -f libdevman_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libdevman && rm -f libdevman_pic.a generic.pico usb.pico generic.pico.tmp usb.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/libdevman && rm -f llib-ldevman.ln  generic.ln usb.ln || true) 
+(cd /home/donz/minix/minix/lib/libdevman && rm -f libdevman.so..map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libdevman && rm -f .depend generic.d usb.d  generic.d.tmp usb.d.tmp /home/donz/minix/minix/lib/libdevman/tags  || true) 
+cleandir ===> minix/lib/libexec
+(cd /home/donz/minix/minix/lib/libexec && rm -f libexec.a   exec_elf.o exec_general.o exec_elf.o.tmp exec_general.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libexec && rm -f libexec_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libexec && rm -f libexec_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libexec && rm -f libexec_pic.a exec_elf.pico exec_general.pico exec_elf.pico.tmp exec_general.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/libexec && rm -f llib-lexec.ln  exec_elf.ln exec_general.ln || true) 
+(cd /home/donz/minix/minix/lib/libexec && rm -f libexec.so..map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libexec && rm -f .depend exec_elf.d exec_general.d  exec_elf.d.tmp exec_general.d.tmp /home/donz/minix/minix/lib/libexec/tags  || true) 
+cleandir ===> minix/lib/libfsdriver
+(cd /home/donz/minix/minix/lib/libfsdriver && rm -f libfsdriver.a   call.o dentry.o fsdriver.o lookup.o table.o utility.o call.o.tmp dentry.o.tmp fsdriver.o.tmp lookup.o.tmp table.o.tmp utility.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libfsdriver && rm -f libfsdriver_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libfsdriver && rm -f libfsdriver_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libfsdriver && rm -f libfsdriver_pic.a call.pico dentry.pico fsdriver.pico lookup.pico table.pico utility.pico call.pico.tmp dentry.pico.tmp fsdriver.pico.tmp lookup.pico.tmp table.pico.tmp utility.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/libfsdriver && rm -f llib-lfsdriver.ln  call.ln dentry.ln fsdriver.ln lookup.ln table.ln utility.ln || true) 
+(cd /home/donz/minix/minix/lib/libfsdriver && rm -f libfsdriver.so..map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libfsdriver && rm -f .depend call.d dentry.d fsdriver.d lookup.d table.d utility.d  call.d.tmp dentry.d.tmp fsdriver.d.tmp lookup.d.tmp table.d.tmp utility.d.tmp /home/donz/minix/minix/lib/libfsdriver/tags  || true) 
+cleandir ===> minix/lib/libinputdriver
+(cd /home/donz/minix/minix/lib/libinputdriver && rm -f libinputdriver.a   inputdriver.o inputdriver.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libinputdriver && rm -f libinputdriver_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libinputdriver && rm -f libinputdriver_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libinputdriver && rm -f libinputdriver_pic.a inputdriver.pico inputdriver.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/libinputdriver && rm -f llib-linputdriver.ln  inputdriver.ln || true) 
+(cd /home/donz/minix/minix/lib/libinputdriver && rm -f libinputdriver.so..map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libinputdriver && rm -f .depend inputdriver.d  inputdriver.d.tmp /home/donz/minix/minix/lib/libinputdriver/tags  || true) 
+cleandir ===> minix/lib/liblwip
+cleandir ===> minix/lib/liblwip/lib
+(cd /home/donz/minix/minix/lib/liblwip/lib && rm -f liblwip.a   def.o ip.o inet_chksum.o init.o ip.o mem.o memp.o netif.o pbuf.o raw.o stats.o tcp.o tcp_in.o tcp_out.o timeouts.o udp.o icmp.o igmp.o ip4.o ip4_addr.o ip4_frag.o ethip6.o icmp6.o ip6.o ip6_addr.o ip6_frag.o mld6.o nd6.o etharp.o ethernet.o def.o.tmp ip.o.tmp inet_chksum.o.tmp init.o.tmp ip.o.tmp mem.o.tmp memp.o.tmp netif.o.tmp pbuf.o.tmp raw.o.tmp stats.o.tmp tcp.o.tmp tcp_in.o.tmp tcp_out.o.tmp timeouts.o.tmp udp.o.tmp icmp.o.tmp igmp.o.tmp ip4.o.tmp ip4_addr.o.tmp ip4_frag.o.tmp ethip6.o.tmp icmp6.o.tmp ip6.o.tmp ip6_addr.o.tmp ip6_frag.o.tmp mld6.o.tmp nd6.o.tmp etharp.o.tmp ethernet.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/liblwip/lib && rm -f liblwip_p.a    || true) 
+(cd /home/donz/minix/minix/lib/liblwip/lib && rm -f liblwip_g.a    || true) 
+(cd /home/donz/minix/minix/lib/liblwip/lib && rm -f liblwip_pic.a def.pico ip.pico inet_chksum.pico init.pico ip.pico mem.pico memp.pico netif.pico pbuf.pico raw.pico stats.pico tcp.pico tcp_in.pico tcp_out.pico timeouts.pico udp.pico icmp.pico igmp.pico ip4.pico ip4_addr.pico ip4_frag.pico ethip6.pico icmp6.pico ip6.pico ip6_addr.pico ip6_frag.pico mld6.pico nd6.pico etharp.pico ethernet.pico def.pico.tmp ip.pico.tmp inet_chksum.pico.tmp init.pico.tmp ip.pico.tmp mem.pico.tmp memp.pico.tmp netif.pico.tmp pbuf.pico.tmp raw.pico.tmp stats.pico.tmp tcp.pico.tmp tcp_in.pico.tmp tcp_out.pico.tmp timeouts.pico.tmp udp.pico.tmp icmp.pico.tmp igmp.pico.tmp ip4.pico.tmp ip4_addr.pico.tmp ip4_frag.pico.tmp ethip6.pico.tmp icmp6.pico.tmp ip6.pico.tmp ip6_addr.pico.tmp ip6_frag.pico.tmp mld6.pico.tmp nd6.pico.tmp etharp.pico.tmp ethernet.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/liblwip/lib && rm -f llib-llwip.ln  def.ln ip.ln inet_chksum.ln init.ln ip.ln mem.ln memp.ln netif.ln pbuf.ln raw.ln stats.ln tcp.ln tcp_in.ln tcp_out.ln timeouts.ln udp.ln icmp.ln igmp.ln ip4.ln ip4_addr.ln ip4_frag.ln ethip6.ln icmp6.ln ip6.ln ip6_addr.ln ip6_frag.ln mld6.ln nd6.ln etharp.ln ethernet.ln || true) 
+(cd /home/donz/minix/minix/lib/liblwip/lib && rm -f liblwip.so..map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/liblwip/lib && rm -f .depend def.d etharp.d ethernet.d ethip6.d icmp.d icmp6.d igmp.d inet_chksum.d init.d ip.d ip4.d ip4_addr.d ip4_frag.d ip6.d ip6_addr.d ip6_frag.d mem.d memp.d mld6.d nd6.d netif.d pbuf.d raw.d stats.d tcp.d tcp_in.d tcp_out.d timeouts.d udp.d  def.d.tmp etharp.d.tmp ethernet.d.tmp ethip6.d.tmp icmp.d.tmp icmp6.d.tmp igmp.d.tmp inet_chksum.d.tmp init.d.tmp ip.d.tmp ip4.d.tmp ip4_addr.d.tmp ip4_frag.d.tmp ip6.d.tmp ip6_addr.d.tmp ip6_frag.d.tmp mem.d.tmp memp.d.tmp mld6.d.tmp nd6.d.tmp netif.d.tmp pbuf.d.tmp raw.d.tmp stats.d.tmp tcp.d.tmp tcp_in.d.tmp tcp_out.d.tmp timeouts.d.tmp udp.d.tmp /home/donz/minix/minix/lib/liblwip/lib/tags  || true) 
+cleandir ===> minix/lib/libminc
+(cd /home/donz/minix/minix/lib/libminc && rm -f libminc.a   errno.o printf.o strerror.o subr_prf.o kputc.o sys_diagctl.o bswap64.o rb.o sha2.o ashrdi3.o divdi3.o lshrdi3.o moddi3.o udivdi3.o umoddi3.o umodsi3.o udivsi3.o udivmoddi4.o divsi3.o modsi3.o divmoddi4.o divmodsi4.o udivmodsi4.o random.o strtoul.o strcasecmp.o strcspn.o strncasecmp.o strnlen.o strlcat.o strlcpy.o strncpy.o byte_swap_2.o byte_swap_4.o memchr.o memcmp.o memcpy.o memmove.o memset.o strcat.o strchr.o strcmp.o strcpy.o strlen.o strrchr.o alloca.o strncmp.o _errno.o getprogname.o setprogname.o execle.o sleep.o time.o ctype_.o tolower_.o toupper_.o usleep.o waitpid.o sigsetops.o read_tsc_64.o fslib.o itoa.o initfini.o stack_protector.o regcomp.o regerror.o regexec.o regfree.o abort.o atexit.o _env.o exit.o getenv.o ldiv.o malloc.o setenv.o reallocarr.o _rand48.o lrand48.o srand48.o strdup.o access.o brk.o close.o environ.o execve.o fork.o fsync.o getgid.o getpid.o geteuid.o getuid.o gettimeofday.o getvfsstat.o init.o kernel_utils.o kill.o link.o loadname.o lseek.o _mcontext.o minix_rs.o mknod.o mmap.o nanosleep.o open.o pread.o pwrite.o read.o sbrk.o select.o setuid.o sigprocmask.o stack_utils.o stat.o stime.o svrctl.o syscall.o __sysctl.o _ucontext.o umask.o unlink.o wait4.o write.o brksize.o _do_kernel_call_intr.o ipc_minix_kerninfo.o _ipc.o ucontext.o localtime.o atoi.o fputs.o _snprintf.o strtol.o errlist.o _cpufeature.o get_bp.o read_tsc.o _ipc.o _do_kernel_call_intr.o ipc_minix_kerninfo.o __sigreturn.o ucontext.o brksize.o errno.o.tmp printf.o.tmp strerror.o.tmp subr_prf.o.tmp kputc.o.tmp sys_diagctl.o.tmp bswap64.o.tmp rb.o.tmp sha2.o.tmp ashrdi3.o.tmp divdi3.o.tmp lshrdi3.o.tmp moddi3.o.tmp udivdi3.o.tmp umoddi3.o.tmp umodsi3.o.tmp udivsi3.o.tmp udivmoddi4.o.tmp divsi3.o.tmp modsi3.o.tmp divmoddi4.o.tmp divmodsi4.o.tmp udivmodsi4.o.tmp random.o.tmp strtoul.o.tmp strcasecmp.o.tmp strcspn.o.tmp strncasecmp.o.tmp strnlen.o.tmp strlcat.o.tmp strlcpy.o.tmp strncpy.o.tmp byte_swap_2.o.tmp byte_swap_4.o.tmp memchr.o.tmp memcmp.o.tmp memcpy.o.tmp memmove.o.tmp memset.o.tmp strcat.o.tmp strchr.o.tmp strcmp.o.tmp strcpy.o.tmp strlen.o.tmp strrchr.o.tmp alloca.o.tmp strncmp.o.tmp _errno.o.tmp getprogname.o.tmp setprogname.o.tmp execle.o.tmp sleep.o.tmp time.o.tmp ctype_.o.tmp tolower_.o.tmp toupper_.o.tmp usleep.o.tmp waitpid.o.tmp sigsetops.o.tmp read_tsc_64.o.tmp fslib.o.tmp itoa.o.tmp initfini.o.tmp stack_protector.o.tmp regcomp.o.tmp regerror.o.tmp regexec.o.tmp regfree.o.tmp abort.o.tmp atexit.o.tmp _env.o.tmp exit.o.tmp getenv.o.tmp ldiv.o.tmp malloc.o.tmp setenv.o.tmp reallocarr.o.tmp _rand48.o.tmp lrand48.o.tmp srand48.o.tmp strdup.o.tmp access.o.tmp brk.o.tmp close.o.tmp environ.o.tmp execve.o.tmp fork.o.tmp fsync.o.tmp getgid.o.tmp getpid.o.tmp geteuid.o.tmp getuid.o.tmp gettimeofday.o.tmp getvfsstat.o.tmp init.o.tmp kernel_utils.o.tmp kill.o.tmp link.o.tmp loadname.o.tmp lseek.o.tmp _mcontext.o.tmp minix_rs.o.tmp mknod.o.tmp mmap.o.tmp nanosleep.o.tmp open.o.tmp pread.o.tmp pwrite.o.tmp read.o.tmp sbrk.o.tmp select.o.tmp setuid.o.tmp sigprocmask.o.tmp stack_utils.o.tmp stat.o.tmp stime.o.tmp svrctl.o.tmp syscall.o.tmp __sysctl.o.tmp _ucontext.o.tmp umask.o.tmp unlink.o.tmp wait4.o.tmp write.o.tmp brksize.o.tmp _do_kernel_call_intr.o.tmp ipc_minix_kerninfo.o.tmp _ipc.o.tmp ucontext.o.tmp localtime.o.tmp atoi.o.tmp fputs.o.tmp _snprintf.o.tmp strtol.o.tmp errlist.o.tmp _cpufeature.o.tmp get_bp.o.tmp read_tsc.o.tmp _ipc.o.tmp _do_kernel_call_intr.o.tmp ipc_minix_kerninfo.o.tmp __sigreturn.o.tmp ucontext.o.tmp brksize.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libminc && rm -f libminc_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libminc && rm -f libminc_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libminc && rm -f libminc_pic.a   || true) 
+(cd /home/donz/minix/minix/lib/libminc && rm -f llib-lminc.ln  atoi.ln fputs.ln _snprintf.ln strtol.ln errlist.ln _cpufeature.ln || true) 
+(cd /home/donz/minix/minix/lib/libminc && rm -f errno.o printf.o strerror.o subr_prf.o kputc.o sys_diagctl.o bswap64.o rb.o sha2.o ashrdi3.o divdi3.o lshrdi3.o moddi3.o udivdi3.o umoddi3.o umodsi3.o udivsi3.o udivmoddi4.o divsi3.o modsi3.o divmoddi4.o divmodsi4.o udivmodsi4.o random.o strtoul.o strcasecmp.o strcspn.o strncasecmp.o strnlen.o strlcat.o strlcpy.o strncpy.o byte_swap_2.o byte_swap_4.o memchr.o memcmp.o memcpy.o memmove.o memset.o strcat.o strchr.o strcmp.o strcpy.o strlen.o strrchr.o alloca.o strncmp.o errlist.c _errno.o getprogname.o setprogname.o execle.o sleep.o time.o ctype_.o tolower_.o toupper_.o usleep.o waitpid.o sigsetops.o read_tsc_64.o fslib.o itoa.o initfini.o stack_protector.o regcomp.o regerror.o regexec.o regfree.o abort.o atexit.o _env.o exit.o getenv.o ldiv.o malloc.o setenv.o reallocarr.o _rand48.o lrand48.o srand48.o strdup.o access.o brk.o close.o environ.o execve.o fork.o fsync.o getgid.o getpid.o geteuid.o getuid.o gettimeofday.o getvfsstat.o init.o kernel_utils.o kill.o link.o loadname.o lseek.o _mcontext.o minix_rs.o mknod.o mmap.o nanosleep.o open.o pread.o pwrite.o read.o sbrk.o select.o setuid.o sigprocmask.o stack_utils.o stat.o stime.o svrctl.o syscall.o __sysctl.o _ucontext.o umask.o unlink.o wait4.o write.o brksize.o _do_kernel_call_intr.o ipc_minix_kerninfo.o _ipc.o ucontext.o localtime.o libminc.so..map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libminc && rm -f .depend __sigreturn.d _cpufeature.d _do_kernel_call_intr.d _ipc.d _snprintf.d atoi.d brksize.d errlist.d fputs.d get_bp.d ipc_minix_kerninfo.d read_tsc.d strtol.d ucontext.d  __sigreturn.d.tmp _cpufeature.d.tmp _do_kernel_call_intr.d.tmp _ipc.d.tmp _snprintf.d.tmp atoi.d.tmp brksize.d.tmp errlist.d.tmp fputs.d.tmp get_bp.d.tmp ipc_minix_kerninfo.d.tmp read_tsc.d.tmp strtol.d.tmp ucontext.d.tmp /home/donz/minix/minix/lib/libminc/tags  || true) 
+cleandir ===> minix/lib/libminixfs
+(cd /home/donz/minix/minix/lib/libminixfs && rm -f libminixfs.a   cache.o bio.o cache.o.tmp bio.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libminixfs && rm -f libminixfs_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libminixfs && rm -f libminixfs_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libminixfs && rm -f libminixfs_pic.a cache.pico bio.pico cache.pico.tmp bio.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/libminixfs && rm -f llib-lminixfs.ln  cache.ln bio.ln || true) 
+(cd /home/donz/minix/minix/lib/libminixfs && rm -f libminixfs.so..map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libminixfs && rm -f .depend bio.d cache.d  bio.d.tmp cache.d.tmp /home/donz/minix/minix/lib/libminixfs/tags  || true) 
+cleandir ===> minix/lib/libnetdriver
+(cd /home/donz/minix/minix/lib/libnetdriver && rm -f libnetdriver.a   netdriver.o portio.o netdriver.o.tmp portio.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libnetdriver && rm -f libnetdriver_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libnetdriver && rm -f libnetdriver_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libnetdriver && rm -f libnetdriver_pic.a netdriver.pico portio.pico netdriver.pico.tmp portio.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/libnetdriver && rm -f llib-lnetdriver.ln  netdriver.ln portio.ln || true) 
+(cd /home/donz/minix/minix/lib/libnetdriver && rm -f libnetdriver.so..map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libnetdriver && rm -f .depend netdriver.d portio.d  netdriver.d.tmp portio.d.tmp /home/donz/minix/minix/lib/libnetdriver/tags  || true) 
+cleandir ===> minix/lib/libsffs
+(cd /home/donz/minix/minix/lib/libsffs && rm -f libsffs.a   dentry.o handle.o inode.o link.o lookup.o main.o misc.o mount.o name.o path.o read.o stat.o table.o verify.o write.o dentry.o.tmp handle.o.tmp inode.o.tmp link.o.tmp lookup.o.tmp main.o.tmp misc.o.tmp mount.o.tmp name.o.tmp path.o.tmp read.o.tmp stat.o.tmp table.o.tmp verify.o.tmp write.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libsffs && rm -f libsffs_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libsffs && rm -f libsffs_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libsffs && rm -f libsffs_pic.a dentry.pico handle.pico inode.pico link.pico lookup.pico main.pico misc.pico mount.pico name.pico path.pico read.pico stat.pico table.pico verify.pico write.pico dentry.pico.tmp handle.pico.tmp inode.pico.tmp link.pico.tmp lookup.pico.tmp main.pico.tmp misc.pico.tmp mount.pico.tmp name.pico.tmp path.pico.tmp read.pico.tmp stat.pico.tmp table.pico.tmp verify.pico.tmp write.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/libsffs && rm -f llib-lsffs.ln  dentry.ln handle.ln inode.ln link.ln lookup.ln main.ln misc.ln mount.ln name.ln path.ln read.ln stat.ln table.ln verify.ln write.ln || true) 
+(cd /home/donz/minix/minix/lib/libsffs && rm -f libsffs.so..map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libsffs && rm -f .depend dentry.d handle.d inode.d link.d lookup.d main.d misc.d mount.d name.d path.d read.d stat.d table.d verify.d write.d  dentry.d.tmp handle.d.tmp inode.d.tmp link.d.tmp lookup.d.tmp main.d.tmp misc.d.tmp mount.d.tmp name.d.tmp path.d.tmp read.d.tmp stat.d.tmp table.d.tmp verify.d.tmp write.d.tmp /home/donz/minix/minix/lib/libsffs/tags  || true) 
+cleandir ===> minix/lib/libsockdriver
+(cd /home/donz/minix/minix/lib/libsockdriver && rm -f libsockdriver.a   sockdriver.o sockdriver.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libsockdriver && rm -f libsockdriver_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libsockdriver && rm -f libsockdriver_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libsockdriver && rm -f libsockdriver_pic.a sockdriver.pico sockdriver.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/libsockdriver && rm -f llib-lsockdriver.ln  sockdriver.ln || true) 
+(cd /home/donz/minix/minix/lib/libsockdriver && rm -f libsockdriver.so..map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libsockdriver && rm -f .depend sockdriver.d  sockdriver.d.tmp /home/donz/minix/minix/lib/libsockdriver/tags  || true) 
+cleandir ===> minix/lib/libsockevent
+(cd /home/donz/minix/minix/lib/libsockevent && rm -f libsockevent.a   sockevent.o sockevent_proc.o sockevent.o.tmp sockevent_proc.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libsockevent && rm -f libsockevent_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libsockevent && rm -f libsockevent_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libsockevent && rm -f libsockevent_pic.a sockevent.pico sockevent_proc.pico sockevent.pico.tmp sockevent_proc.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/libsockevent && rm -f llib-lsockevent.ln  sockevent.ln sockevent_proc.ln || true) 
+(cd /home/donz/minix/minix/lib/libsockevent && rm -f libsockevent.so..map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libsockevent && rm -f .depend sockevent.d sockevent_proc.d  sockevent.d.tmp sockevent_proc.d.tmp /home/donz/minix/minix/lib/libsockevent/tags  || true) 
+cleandir ===> minix/lib/libtimers
+(cd /home/donz/minix/minix/lib/libtimers && rm -f libtimers.a   tmrs_set.o tmrs_clr.o tmrs_exp.o tmrs_set.o.tmp tmrs_clr.o.tmp tmrs_exp.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libtimers && rm -f libtimers_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libtimers && rm -f libtimers_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libtimers && rm -f libtimers_pic.a tmrs_set.pico tmrs_clr.pico tmrs_exp.pico tmrs_set.pico.tmp tmrs_clr.pico.tmp tmrs_exp.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/libtimers && rm -f llib-ltimers.ln  tmrs_set.ln tmrs_clr.ln tmrs_exp.ln || true) 
+(cd /home/donz/minix/minix/lib/libtimers && rm -f libtimers.so..map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libtimers && rm -f .depend tmrs_clr.d tmrs_exp.d tmrs_set.d  tmrs_clr.d.tmp tmrs_exp.d.tmp tmrs_set.d.tmp /home/donz/minix/minix/lib/libtimers/tags  || true) 
+cleandir ===> minix/lib/libusb
+(cd /home/donz/minix/minix/lib/libusb && rm -f libusb.a   usb.o usb.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libusb && rm -f libusb_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libusb && rm -f libusb_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libusb && rm -f libusb_pic.a usb.pico usb.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/libusb && rm -f llib-lusb.ln  usb.ln || true) 
+(cd /home/donz/minix/minix/lib/libusb && rm -f libusb.so..map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libusb && rm -f .depend usb.d  usb.d.tmp /home/donz/minix/minix/lib/libusb/tags  || true) 
+cleandir ===> minix/lib/libvtreefs
+(cd /home/donz/minix/minix/lib/libvtreefs && rm -f libvtreefs.a   extra.o file.o inode.o link.o mount.o path.o sdbm.o stadir.o table.o vtreefs.o extra.o.tmp file.o.tmp inode.o.tmp link.o.tmp mount.o.tmp path.o.tmp sdbm.o.tmp stadir.o.tmp table.o.tmp vtreefs.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libvtreefs && rm -f libvtreefs_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libvtreefs && rm -f libvtreefs_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libvtreefs && rm -f libvtreefs_pic.a extra.pico file.pico inode.pico link.pico mount.pico path.pico sdbm.pico stadir.pico table.pico vtreefs.pico extra.pico.tmp file.pico.tmp inode.pico.tmp link.pico.tmp mount.pico.tmp path.pico.tmp sdbm.pico.tmp stadir.pico.tmp table.pico.tmp vtreefs.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/libvtreefs && rm -f llib-lvtreefs.ln  extra.ln file.ln inode.ln link.ln mount.ln path.ln sdbm.ln stadir.ln table.ln vtreefs.ln || true) 
+(cd /home/donz/minix/minix/lib/libvtreefs && rm -f libvtreefs.so..map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libvtreefs && rm -f .depend extra.d file.d inode.d link.d mount.d path.d sdbm.d stadir.d table.d vtreefs.d  extra.d.tmp file.d.tmp inode.d.tmp link.d.tmp mount.d.tmp path.d.tmp sdbm.d.tmp stadir.d.tmp table.d.tmp vtreefs.d.tmp /home/donz/minix/minix/lib/libvtreefs/tags  || true) 
+cleandir ===> minix/lib/libgcc_s_empty
+(cd /home/donz/minix/minix/lib/libgcc_s_empty && rm -f libgcc_s.a   empty.o empty.o.tmp || true) 
+(cd /home/donz/minix/minix/lib/libgcc_s_empty && rm -f libgcc_s_p.a    || true) 
+(cd /home/donz/minix/minix/lib/libgcc_s_empty && rm -f libgcc_s_g.a    || true) 
+(cd /home/donz/minix/minix/lib/libgcc_s_empty && rm -f libgcc_s_pic.a libgcc_s.so.* libgcc_s.so  empty.pico empty.pico.tmp || true) 
+(cd /home/donz/minix/minix/lib/libgcc_s_empty && rm -f llib-lgcc_s.ln  empty.ln || true) 
+(cd /home/donz/minix/minix/lib/libgcc_s_empty && rm -f libgcc_s.so.1.map   a.out [Ee]rrs mklog *.core || true) 
+(cd /home/donz/minix/minix/lib/libgcc_s_empty && rm -f .depend empty.d  empty.d.tmp /home/donz/minix/minix/lib/libgcc_s_empty/tags  || true) 
+cleandir ===> minix/llvm
+cleandir ===> minix/man
+cleandir ===> minix/man/man2
+cleandir ===> minix/man/man4
+cleandir ===> minix/man/man5
+cleandir ===> minix/man/man7
+cleandir ===> minix/man/man8
+cleandir ===> minix/man/man9
+cleandir ===> minix/net
+cleandir ===> minix/net/lwip
+(cd /home/donz/minix/minix/net/lwip && rm -f *.gcno *.gcda lcov.lwip a.out [Ee]rrs mklog core *.core .gdbinit   lwip  lwip.o mempool.o pchain.o addr.o addrpol.o tcpisn.o mcast.o ipsock.o pktsock.o tcpsock.o udpsock.o rawsock.o ifdev.o ifaddr.o loopif.o ethif.o ndev.o rttree.o route.o rtsock.o lnksock.o lldata.o mibtree.o ifconf.o bpfdev.o bpf_filter.o util.o  lwip.ln mempool.ln pchain.ln addr.ln addrpol.ln tcpisn.ln mcast.ln ipsock.ln pktsock.ln tcpsock.ln udpsock.ln rawsock.ln ifdev.ln ifaddr.ln loopif.ln ethif.ln ndev.ln rttree.ln route.ln rtsock.ln lnksock.ln lldata.ln mibtree.ln ifconf.ln bpfdev.ln bpf_filter.ln util.ln || true) 
+(cd /home/donz/minix/minix/net/lwip && rm -f .depend addr.d addrpol.d bpf_filter.d bpfdev.d ethif.d ifaddr.d ifconf.d ifdev.d ipsock.d lldata.d lnksock.d loopif.d lwip.d mcast.d mempool.d mibtree.d ndev.d pchain.d pktsock.d rawsock.d route.d rtsock.d rttree.d tcpisn.d tcpsock.d udpsock.d util.d  addr.d.tmp addrpol.d.tmp bpf_filter.d.tmp bpfdev.d.tmp ethif.d.tmp ifaddr.d.tmp ifconf.d.tmp ifdev.d.tmp ipsock.d.tmp lldata.d.tmp lnksock.d.tmp loopif.d.tmp lwip.d.tmp mcast.d.tmp mempool.d.tmp mibtree.d.tmp ndev.d.tmp pchain.d.tmp pktsock.d.tmp rawsock.d.tmp route.d.tmp rtsock.d.tmp rttree.d.tmp tcpisn.d.tmp tcpsock.d.tmp udpsock.d.tmp util.d.tmp /home/donz/minix/minix/net/lwip/tags  || true) 
+cleandir ===> minix/net/uds
+(cd /home/donz/minix/minix/net/uds && rm -f *.gcno *.gcda lcov.uds a.out [Ee]rrs mklog core *.core .gdbinit   uds  uds.o io.o stat.o  uds.ln io.ln stat.ln || true) 
+(cd /home/donz/minix/minix/net/uds && rm -f .depend io.d stat.d uds.d  io.d.tmp stat.d.tmp uds.d.tmp /home/donz/minix/minix/net/uds/tags  || true) 
+cleandir ===> minix/sbin
+cleandir ===> minix/servers
+cleandir ===> minix/servers/ds
+(cd /home/donz/minix/minix/servers/ds && rm -f *.gcno *.gcda lcov.ds a.out [Ee]rrs mklog core *.core .gdbinit   ds  main.o store.o  main.ln store.ln || true) 
+(cd /home/donz/minix/minix/servers/ds && rm -f .depend main.d store.d  main.d.tmp store.d.tmp /home/donz/minix/minix/servers/ds/tags  || true) 
+cleandir ===> minix/servers/input
+(cd /home/donz/minix/minix/servers/input && rm -f *.gcno *.gcda lcov.input a.out [Ee]rrs mklog core *.core .gdbinit   input  input.o  input.ln || true) 
+(cd /home/donz/minix/minix/servers/input && rm -f .depend input.d  input.d.tmp /home/donz/minix/minix/servers/input/tags  || true) 
+cleandir ===> minix/servers/mib
+(cd /home/donz/minix/minix/servers/mib && rm -f *.gcno *.gcda lcov.mib a.out [Ee]rrs mklog core *.core .gdbinit   mib  main.o tree.o remote.o kern.o vm.o hw.o proc.o minix.o  main.ln tree.ln remote.ln kern.ln vm.ln hw.ln proc.ln minix.ln || true) 
+(cd /home/donz/minix/minix/servers/mib && rm -f .depend hw.d kern.d main.d minix.d proc.d remote.d tree.d vm.d  hw.d.tmp kern.d.tmp main.d.tmp minix.d.tmp proc.d.tmp remote.d.tmp tree.d.tmp vm.d.tmp /home/donz/minix/minix/servers/mib/tags  || true) 
+cleandir ===> minix/servers/pm
+(cd /home/donz/minix/minix/servers/pm && rm -f *.gcno *.gcda lcov.pm a.out [Ee]rrs mklog core *.core .gdbinit   pm  main.o forkexit.o exec.o time.o alarm.o signal.o utility.o table.o trace.o getset.o misc.o profile.o mcontext.o schedule.o event.o  main.ln forkexit.ln exec.ln time.ln alarm.ln signal.ln utility.ln table.ln trace.ln getset.ln misc.ln profile.ln mcontext.ln schedule.ln event.ln || true) 
+(cd /home/donz/minix/minix/servers/pm && rm -f .depend alarm.d event.d exec.d forkexit.d getset.d main.d mcontext.d misc.d profile.d schedule.d signal.d table.d time.d trace.d utility.d  alarm.d.tmp event.d.tmp exec.d.tmp forkexit.d.tmp getset.d.tmp main.d.tmp mcontext.d.tmp misc.d.tmp profile.d.tmp schedule.d.tmp signal.d.tmp table.d.tmp time.d.tmp trace.d.tmp utility.d.tmp /home/donz/minix/minix/servers/pm/tags  || true) 
+cleandir ===> minix/servers/rs
+(cd /home/donz/minix/minix/servers/rs && rm -f *.gcno *.gcda lcov.rs a.out [Ee]rrs mklog core *.core .gdbinit   rs  exec.o main.o request.o manager.o table.o utility.o error.o update.o  exec.ln main.ln request.ln manager.ln table.ln utility.ln error.ln update.ln || true) 
+(cd /home/donz/minix/minix/servers/rs && rm -f .depend error.d exec.d main.d manager.d request.d table.d update.d utility.d  error.d.tmp exec.d.tmp main.d.tmp manager.d.tmp request.d.tmp table.d.tmp update.d.tmp utility.d.tmp /home/donz/minix/minix/servers/rs/tags  || true) 
+cleandir ===> minix/servers/sched
+(cd /home/donz/minix/minix/servers/sched && rm -f *.gcno *.gcda lcov.sched a.out [Ee]rrs mklog core *.core .gdbinit   sched  main.o schedule.o utility.o  main.ln schedule.ln utility.ln || true) 
+(cd /home/donz/minix/minix/servers/sched && rm -f .depend main.d schedule.d utility.d  main.d.tmp schedule.d.tmp utility.d.tmp /home/donz/minix/minix/servers/sched/tags  || true) 
+cleandir ===> minix/servers/vfs
+(cd /home/donz/minix/minix/servers/vfs && rm -f *.gcno *.gcda lcov.vfs a.out [Ee]rrs mklog core *.core .gdbinit   vfs  main.o open.o read.o write.o pipe.o dmap.o path.o device.o mount.o link.o exec.o filedes.o stadir.o protect.o time.o lock.o misc.o utility.o select.o table.o vnode.o vmnt.o request.o tll.o comm.o worker.o coredump.o bdev.o cdev.o sdev.o smap.o socket.o  main.ln open.ln read.ln write.ln pipe.ln dmap.ln path.ln device.ln mount.ln link.ln exec.ln filedes.ln stadir.ln protect.ln time.ln lock.ln misc.ln utility.ln select.ln table.ln vnode.ln vmnt.ln request.ln tll.ln comm.ln worker.ln coredump.ln bdev.ln cdev.ln sdev.ln smap.ln socket.ln || true) 
+(cd /home/donz/minix/minix/servers/vfs && rm -f .depend bdev.d cdev.d comm.d coredump.d device.d dmap.d exec.d filedes.d link.d lock.d main.d misc.d mount.d open.d path.d pipe.d protect.d read.d request.d sdev.d select.d smap.d socket.d stadir.d table.d time.d tll.d utility.d vmnt.d vnode.d worker.d write.d  bdev.d.tmp cdev.d.tmp comm.d.tmp coredump.d.tmp device.d.tmp dmap.d.tmp exec.d.tmp filedes.d.tmp link.d.tmp lock.d.tmp main.d.tmp misc.d.tmp mount.d.tmp open.d.tmp path.d.tmp pipe.d.tmp protect.d.tmp read.d.tmp request.d.tmp sdev.d.tmp select.d.tmp smap.d.tmp socket.d.tmp stadir.d.tmp table.d.tmp time.d.tmp tll.d.tmp utility.d.tmp vmnt.d.tmp vnode.d.tmp worker.d.tmp write.d.tmp /home/donz/minix/minix/servers/vfs/tags  || true) 
+cleandir ===> minix/servers/vm
+(cd /home/donz/minix/minix/servers/vm && rm -f *.gcno *.gcda lcov.vm a.out [Ee]rrs mklog core *.core .gdbinit   vm  main.o alloc.o utility.o exit.o fork.o break.o mmap.o slaballoc.o region.o pagefaults.o pagetable.o rs.o pb.o regionavl.o mem_anon.o mem_directphys.o mem_anon_contig.o mem_shared.o mem_cache.o cache.o vfs.o mem_file.o fdref.o acl.o  main.ln alloc.ln utility.ln exit.ln fork.ln break.ln mmap.ln slaballoc.ln region.ln pagefaults.ln pagetable.ln rs.ln pb.ln regionavl.ln mem_anon.ln mem_directphys.ln mem_anon_contig.ln mem_shared.ln mem_cache.ln cache.ln vfs.ln mem_file.ln fdref.ln acl.ln || true) 
+(cd /home/donz/minix/minix/servers/vm && rm -f .depend acl.d alloc.d break.d cache.d exit.d fdref.d fork.d main.d mem_anon.d mem_anon_contig.d mem_cache.d mem_directphys.d mem_file.d mem_shared.d mmap.d pagefaults.d pagetable.d pb.d region.d regionavl.d rs.d slaballoc.d utility.d vfs.d  acl.d.tmp alloc.d.tmp break.d.tmp cache.d.tmp exit.d.tmp fdref.d.tmp fork.d.tmp main.d.tmp mem_anon.d.tmp mem_anon_contig.d.tmp mem_cache.d.tmp mem_directphys.d.tmp mem_file.d.tmp mem_shared.d.tmp mmap.d.tmp pagefaults.d.tmp pagetable.d.tmp pb.d.tmp region.d.tmp regionavl.d.tmp rs.d.tmp slaballoc.d.tmp utility.d.tmp vfs.d.tmp /home/donz/minix/minix/servers/vm/tags  || true) 
+cleandir ===> minix/servers/ipc
+(cd /home/donz/minix/minix/servers/ipc && rm -f *.gcno *.gcda lcov.ipc a.out [Ee]rrs mklog core *.core .gdbinit   ipc  main.o utility.o shm.o sem.o  main.ln utility.ln shm.ln sem.ln || true) 
+(cd /home/donz/minix/minix/servers/ipc && rm -f .depend main.d sem.d shm.d utility.d  main.d.tmp sem.d.tmp shm.d.tmp utility.d.tmp /home/donz/minix/minix/servers/ipc/tags  || true) 
+cleandir ===> minix/servers/is
+(cd /home/donz/minix/minix/servers/is && rm -f *.gcno *.gcda lcov.is a.out [Ee]rrs mklog core *.core .gdbinit   is  main.o dmp.o dmp_kernel.o dmp_pm.o dmp_fs.o dmp_rs.o dmp_ds.o dmp_vm.o  main.ln dmp.ln dmp_kernel.ln dmp_pm.ln dmp_fs.ln dmp_rs.ln dmp_ds.ln dmp_vm.ln || true) 
+(cd /home/donz/minix/minix/servers/is && rm -f .depend dmp.d dmp_ds.d dmp_fs.d dmp_kernel.d dmp_pm.d dmp_rs.d dmp_vm.d main.d  dmp.d.tmp dmp_ds.d.tmp dmp_fs.d.tmp dmp_kernel.d.tmp dmp_pm.d.tmp dmp_rs.d.tmp dmp_vm.d.tmp main.d.tmp /home/donz/minix/minix/servers/is/tags  || true) 
+cleandir ===> minix/servers/devman
+(cd /home/donz/minix/minix/servers/devman && rm -f *.gcno *.gcda lcov.devman a.out [Ee]rrs mklog core *.core .gdbinit   devman  main.o device.o buf.o bind.o  main.ln device.ln buf.ln bind.ln || true) 
+(cd /home/donz/minix/minix/servers/devman && rm -f .depend bind.d buf.d device.d main.d  bind.d.tmp buf.d.tmp device.d.tmp main.d.tmp /home/donz/minix/minix/servers/devman/tags  || true) 
+cleandir ===> minix/share
+cleandir ===> minix/tests
+nbmake[4]: "/home/donz/minix/minix/tests/Makefile" line 129: Could not find ./arch/riscv64/Makefile.inc
+nbmake[4]: Fatal errors encountered -- cannot continue
+nbmake[4]: stopped in /home/donz/minix/minix/tests
+
+*** Failed target:  cleandir-tests
+*** Failed command: _makedirtarget() { dir="$1"; shift; target="$1"; shift; case "${dir}" in /*) this="${dir}/"; real="${dir}" ;; .) this="minix/"; real="/home/donz/minix/minix" ;; *) this="minix/${dir}/"; real="/home/donz/minix/minix/${dir}" ;; esac; show=${this:-.}; echo "${target} ===> ${show%/}${1:+ (with: $@)}"; cd "${real}" && /home/donz/minix/obj/tooldir.Linux-6.6.99-09000-gd3ae1caecf39-x86_64/bin/nbmake _THISDIR_="${this}" "$@" ${target}; }; _makedirtarget tests cleandir
+*** Error code 1
+
+Stop.
+nbmake[3]: stopped in /home/donz/minix/minix
+
+*** Failed target:  cleandir-minix
+*** Failed command: _makedirtarget() { dir="$1"; shift; target="$1"; shift; case "${dir}" in /*) this="${dir}/"; real="${dir}" ;; .) this=""; real="/home/donz/minix" ;; *) this="${dir}/"; real="/home/donz/minix/${dir}" ;; esac; show=${this:-.}; echo "${target} ===> ${show%/}${1:+ (with: $@)}"; cd "${real}" && /home/donz/minix/obj/tooldir.Linux-6.6.99-09000-gd3ae1caecf39-x86_64/bin/nbmake _THISDIR_="${this}" "$@" ${target}; }; _makedirtarget minix cleandir
+*** Error code 1
+
+Stop.
+nbmake[2]: stopped in /home/donz/minix
+
+*** Failed target:  build
+*** Failed command: _makedirtarget() { dir="$1"; shift; target="$1"; shift; case "${dir}" in /*) this="${dir}/"; real="${dir}" ;; .) this=""; real="/home/donz/minix" ;; *) this="${dir}/"; real="/home/donz/minix/${dir}" ;; esac; show=${this:-.}; echo "${target} ===> ${show%/}${1:+ (with: $@)}"; cd "${real}" && /home/donz/minix/obj/tooldir.Linux-6.6.99-09000-gd3ae1caecf39-x86_64/bin/nbmake _THISDIR_="${this}" "$@" ${target}; }; _makedirtarget . cleandir
+*** Error code 1
+
+Stop.
+nbmake[1]: stopped in /home/donz/minix
+
+*** Failed target:  distribution
+*** Failed command: _makedirtarget() { dir="$1"; shift; target="$1"; shift; case "${dir}" in /*) this="${dir}/"; real="${dir}" ;; .) this=""; real="/home/donz/minix" ;; *) this="${dir}/"; real="/home/donz/minix/${dir}" ;; esac; show=${this:-.}; echo "${target} ===> ${show%/}${1:+ (with: $@)}"; cd "${real}" && /home/donz/minix/obj/tooldir.Linux-6.6.99-09000-gd3ae1caecf39-x86_64/bin/nbmake _THISDIR_="${this}" "$@" ${target}; }; _makedirtarget . build NOPOSTINSTALL=1
+*** Error code 1
+
+Stop.
+nbmake: stopped in /home/donz/minix
+
+ERROR: Failed to make distribution
+*** BUILD ABORTED ***
