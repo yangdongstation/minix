@@ -143,6 +143,12 @@ Drivers are typically standalone processes communicating with the kernel via spe
 cd minix/tests
 ./run               # Run all tests
 ./run <test_name>   # Run specific test
+
+# Run architecture-specific tests
+./minix/tests/riscv64/run_tests.sh all      # Run all RISC-V tests
+./minix/tests/riscv64/run_tests.sh kernel   # Run kernel tests only
+./minix/tests/riscv64/run_tests.sh user     # Run user-space tests only
+./minix/tests/riscv64/run_tests.sh build    # Run build system tests
 ```
 
 ### Common Test Categories
@@ -223,17 +229,41 @@ The RISC-V 64-bit port is a recent addition targeting the QEMU virt platform. Th
 ### Build Commands
 ```bash
 # Build cross-compilation tools for RISC-V 64-bit
-./build.sh -m evbriscv64 tools
+MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no ./build.sh -m evbriscv64 tools
 
 # Build complete distribution for RISC-V 64-bit
-./build.sh -m evbriscv64 distribution
+MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
+./build.sh -U -m evbriscv64 distribution
 
 # Check if architecture is recognized
 ./build.sh -m evbriscv64 list-arch
 
-# Build with specific options (useful for RISC-V port)
-HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no ./build.sh -m evbriscv64 tools
-MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no ./build.sh -m evbriscv64
+# Build with parallel jobs (faster on multi-core systems)
+MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
+./build.sh -j$(nproc) -m evbriscv64 distribution
+
+# Clean and rebuild from scratch
+./build.sh -c -m evbriscv64
+```
+
+### Known Build Issues & Solutions
+
+#### LLVM/Clang Issues
+- Use `HAVE_LLVM=no MKLLVM=no` to skip LLVM build (required for RISC-V)
+- LLVM compilation fails on RISC-V 64-bit architecture
+
+#### Missing Architecture Files
+The following files are needed for complete RISC-V 64-bit support:
+- `minix/lib/libminc/arch/riscv64/Makefile.libc.inc`
+- `minix/lib/libminc/arch/riscv64/sys/Makefile.inc`
+- `minix/tests/arch/riscv64/Makefile.inc`
+- Various driver Makefile.inc files in `minix/drivers/*/arch/riscv64/`
+
+#### C++ Library Directories
+Manual creation required during distribution build:
+```bash
+mkdir -p $DESTDIR/usr/include/g++/bits/riscv32
+mkdir -p $DESTDIR/usr/include/g++/bits/riscv64
 ```
 
 ### Running with QEMU
@@ -246,6 +276,9 @@ MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no ./build.sh -m evbriscv64
 
 # Connect GDB client to debug session
 ./minix/scripts/gdb-riscv64.sh /path/to/kernel
+
+# Run with specific memory and CPU configuration
+./minix/scripts/qemu-riscv64.sh -k /path/to/kernel -m 512M -smp 4
 ```
 
 ### RISC-V Architecture Files
@@ -277,12 +310,31 @@ The RISC-V port includes comprehensive test coverage:
 ./minix/tests/riscv64/run_tests.sh all
 
 # Individual test categories:
-./minix/tests/riscv64/run_tests.sh csr     # Control and Status Registers
-./minix/tests/riscv64/run_tests.sh atomic  # Atomic operations
-./minix/tests/riscv64/run_tests.sh sbi     # SBI interface calls
-./minix/tests/riscv64/run_tests.sh memory  # Memory management
-./minix/tests/riscv64/run_tests.sh trap    # Trap handling
-./minix/tests/riscv64/run_tests.sh timer   # Timer and CLINT
-./minix/tests/riscv64/run_tests.sh ipc     # Inter-process communication
-./minix/tests/riscv64/run_tests.sh vm      # Virtual memory
+./minix/tests/riscv64/run_tests.sh kernel   # Kernel boot and basic functionality
+./minix/tests/riscv64/run_tests.sh user     # User-space compilation tests
+./minix/tests/riscv64/run_tests.sh build    # Build system validation
+```
+
+The test runner automatically detects and tests:
+- Kernel boot with QEMU
+- SMP initialization (when implemented)
+- Timer interrupt functionality
+- Cross-compiler availability
+- Architecture-specific source files
+- VirtIO driver presence
+
+### Cross-Compiler Requirements
+
+The RISC-V 64-bit port requires a GCC cross-compiler toolchain:
+```bash
+# Ubuntu/Debian installation
+sudo apt-get install gcc-riscv64-unknown-elf
+
+# Alternative toolchains that work:
+- riscv64-linux-gnu-gcc
+- riscv64-elf-gcc
+
+# Compiler flags used:
+- -march=rv64gc    # RISC-V 64-bit with G and C extensions
+- -mabi=lp64d      # LP64 data model with double-precision floating point
 ```
