@@ -56,7 +56,7 @@ SRCS+=	arch_clock.c arch_do_vmctl.c arch_system.c
 SRCS+=	exception.c hw_intr.c memory.c
 SRCS+=	protect.c direct_tty_utils.c arch_reset.c
 SRCS+=	pg_utils.c phys_copy.S phys_memset.S
-SRCS+=	sbi.c plic.c
+SRCS+=	sbi.c plic.c console.c pre_init.c kernel.c
 
 OBJS.kernel+=	${UNPAGED_OBJS}
 

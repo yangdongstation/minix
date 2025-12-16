@@ -86,10 +86,19 @@ void phys_copy_fault(void);
 void phys_copy_fault_in_kernel(void);
 
 /* direct_tty_utils.c */
+void direct_init(void);
 void direct_cls(void);
 void direct_print(const char *str);
 void direct_print_char(int c);
 int  direct_read_char(void);
+void direct_print_hex(u64_t val);
+void direct_print_dec(u64_t val);
+void direct_printf(const char *fmt, ...);
+
+/* console.c - Early console support */
+void riscv_cons_init(void);
+void riscv_cons_putc(int c);
+int  riscv_cons_getc(void);
 
 /* arch_do_vmctl.c */
 int arch_do_vmctl(message *m_ptr, struct proc *p);

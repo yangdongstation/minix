@@ -1,12 +1,16 @@
 /*
  * Direct TTY utilities for early boot and debugging
  *
- * Uses SBI console for output (works before device drivers are up)
+ * Uses SBI console for early boot, switches to UART when available
  */
 
 #include "kernel/kernel.h"
 #include "archconst.h"
 #include "arch_proto.h"
+#include <stdarg.h>
+
+/* Flag to indicate if UART is available */
+static int uart_ready = 0;
 
 /*
  * Clear screen (not really possible via SBI, just print newlines)
@@ -30,23 +34,42 @@ void direct_print(const char *str)
 }
 
 /*
- * Print a single character via SBI
+ * Initialize direct output system
  */
-void direct_print_char(int c)
+void direct_init(void)
 {
-    if (c == '\n') {
-        sbi_console_putchar('\r');
-    }
-    sbi_console_putchar(c);
+    riscv_cons_init();
+    uart_ready = 1;
 }
 
 /*
- * Read a character via SBI
+ * Print a single character
+ */
+void direct_print_char(int c)
+{
+    if (uart_ready) {
+        /* Use UART for faster output */
+        riscv_cons_putc(c);
+    } else {
+        /* Fall back to SBI */
+        if (c == '\n') {
+            sbi_console_putchar('\r');
+        }
+        sbi_console_putchar(c);
+    }
+}
+
+/*
+ * Read a character
  * Returns character or -1 if none available
  */
 int direct_read_char(void)
 {
-    return sbi_console_getchar();
+    if (uart_ready) {
+        return riscv_cons_getc();
+    } else {
+        return sbi_console_getchar();
+    }
 }
 
 /*
