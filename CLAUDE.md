@@ -10,16 +10,26 @@ This is MINIX 3, a free open-source operating system with a microkernel architec
 - **IPC-based architecture**: Inter-process communication for all system calls and operations
 - **Modular servers**: Separate servers for process management (pm), virtual memory (vm), file system (vfs), and more
 - **Hybrid system**: Contains both NetBSD-derived utilities (bin, sbin) and MINIX-specific kernel and server code
+- **Multi-architecture support**: Supports i386, ARM (earm), and RISC-V 64-bit architectures
 
 ## Build System
 
-The project uses a make-based build system with `build.sh` as the primary entry point for building the entire system.
+The project uses a make-based build system derived from NetBSD with `build.sh` as the primary entry point for building the entire system. The build system supports cross-compilation to multiple architectures.
 
 ### Common Build Commands
 
 ```bash
 # Build the entire system (tools, kernel, libraries, utilities)
 ./build.sh
+
+# Build for specific architecture (e.g., RISC-V 64-bit)
+./build.sh -m evbriscv64
+
+# Build cross-compilation tools only
+./build.sh tools
+
+# Build complete system distribution
+./build.sh distribution
 
 # Build in a specific DESTDIR (typically for creating a distribution)
 ./build.sh -D /tmp/minix-build
@@ -36,6 +46,9 @@ make regression-tests
 
 # Run MINIX-specific tests
 ./minix/tests/run
+
+# Build with parallel jobs (faster on multi-core systems)
+./build.sh -j$(nproc)
 ```
 
 ### Build Variables (in /etc/mk.conf or via environment)
@@ -46,6 +59,16 @@ make regression-tests
 - **MKSHARE**: Set to "no" to skip building /usr/share content
 - **MKUPDATE**: Set to "yes" to skip cleandir during incremental builds
 - **MKATF**: Set to "yes" to include automated testing framework tests
+- **HAVE_GOLD**: Set to "no" to disable gold linker (sometimes needed for RISC-V)
+- **HOST_CFLAGS**: Additional flags for host compiler during bootstrap
+- **MKPCI**: Set to "no" to skip PCI subsystem (useful for embedded targets)
+
+### Build Process Overview
+
+1. **Tool Building**: `build.sh tools` builds cross-compilation tools in `obj/tooldir.*`
+2. **Library Building**: Builds both MINIX-specific and NetBSD-derived libraries
+3. **Component Building**: Builds kernel, servers, drivers, and utilities
+4. **Distribution Creation**: `build.sh distribution` creates installable system sets
 
 ## Directory Structure
 
@@ -154,11 +177,36 @@ This is set during the build process and ensures MINIX-specific servers and kern
 
 ## Recent Development Focus
 
-Recent commits show:
+Recent commits show active development on multiple fronts:
+- RISC-V 64-bit port progress (stage6 buildable, GAS compiling)
 - Synchronization with NetBSD-8 for utilities and manuals
 - Removal of NOCRYPTO build option
 - Updates to standard tools and protocols files
 - Focus on standards compliance and bug fixes
+
+## Common Development Patterns
+
+### Message Passing System Calls
+System calls in MINIX are implemented as messages to appropriate servers:
+```c
+// Example: File read operation sends message to VFS
+message m;
+m.m_type = READ;
+m.VFS_READ = *read_params;
+_sendrec(VFS_PROC_NR, &m);
+```
+
+### Driver Development
+Drivers are userspace processes that:
+1. Register with the device manager (devman)
+2. Receive I/O requests via messages
+3. Use kernel syscalls for hardware access (sys_inb, sys_outb, sys_irqmask)
+
+### Server Communication
+Servers communicate using:
+- Synchronous messaging: `_sendrec()`
+- Asynchronous messaging: `send()`, `receive()`
+- Notification: `sendnb()`, `notify()`
 
 ## Development Notes
 
@@ -170,52 +218,71 @@ Recent commits show:
 
 ## RISC-V 64-bit Port
 
-The RISC-V 64-bit port targets the QEMU virt platform. Key components:
+The RISC-V 64-bit port is a recent addition targeting the QEMU virt platform. The port is currently in active development (see recent commits: "stage6 buildable", "GAS is now compiling successfully!").
 
 ### Build Commands
 ```bash
-# Build for RISC-V 64-bit
+# Build cross-compilation tools for RISC-V 64-bit
 ./build.sh -m evbriscv64 tools
+
+# Build complete distribution for RISC-V 64-bit
 ./build.sh -m evbriscv64 distribution
 
-# Check architecture recognition
+# Check if architecture is recognized
 ./build.sh -m evbriscv64 list-arch
+
+# Build with specific options (useful for RISC-V port)
+HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no ./build.sh -m evbriscv64 tools
+MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no ./build.sh -m evbriscv64
 ```
 
 ### Running with QEMU
 ```bash
-# Basic run
+# Basic run with pre-built kernel
 ./minix/scripts/qemu-riscv64.sh -k /path/to/kernel
 
-# Debug mode (GDB)
+# Debug mode with GDB server
 ./minix/scripts/qemu-riscv64.sh -d -k /path/to/kernel
 
-# Connect debugger
+# Connect GDB client to debug session
 ./minix/scripts/gdb-riscv64.sh /path/to/kernel
 ```
 
 ### RISC-V Architecture Files
 - **minix/kernel/arch/riscv64/**: Kernel architecture support
-  - `sbi.c`: SBI firmware interface
-  - `plic.c`: PLIC interrupt controller (with `plic_irq_cpu_mask()` for SMP)
-  - `head.S`: Boot entry with Sv39 page table setup
-  - `exception.c`: Trap handling
-- **minix/lib/libc/arch/riscv64/**: C library stubs
-- **minix/lib/libsys/arch/riscv64/**: System library
-- **minix/drivers/storage/virtio_blk_mmio/**: VirtIO block driver
-- **minix/drivers/tty/ns16550/**: UART driver for QEMU
+  - `sbi.c`: SBI (Supervisor Binary Interface) firmware interface for boot/time/console
+  - `plic.c`: Platform-Level Interrupt Controller (with `plic_irq_cpu_mask()` for SMP support)
+  - `head.S`: Boot entry point with Sv39 page table setup and initial trap handling
+  - `exception.c`: Trap/interrupt handling and system call dispatch
+  - `arch_clock.c`: Timer and clock management using CLINT
+  - `memory.c`: Memory management and page table operations
+- **minix/lib/libc/arch/riscv64/**: C library architecture-specific stubs
+- **minix/lib/libsys/arch/riscv64/**: System library architecture-specific code
+- **minix/drivers/storage/virtio_blk_mmio/**: VirtIO block device driver for MMIO
+- **minix/drivers/tty/ns16550/**: UART driver for QEMU's NS16550 serial port
 
-### Memory Map (QEMU virt)
-| Address      | Device           |
-|--------------|------------------|
-| 0x02000000   | CLINT (timer)    |
-| 0x0C000000   | PLIC             |
-| 0x10000000   | UART (NS16550)   |
-| 0x10001000   | VirtIO MMIO      |
-| 0x80000000   | RAM start        |
+### Memory Map (QEMU virt platform)
+| Address      | Device           | Description                   |
+|--------------|------------------|-------------------------------|
+| 0x02000000   | CLINT            | Core Local Interrupter (timer)|
+| 0x0C000000   | PLIC             | Platform-Level Interrupt Ctrl |
+| 0x10000000   | UART             | NS16550 serial port           |
+| 0x10001000   | VirtIO MMIO      | VirtIO devices (block, net)   |
+| 0x80000000   | RAM start        | Physical memory start         |
 
-### Tests
+### RISC-V Specific Tests
+The RISC-V port includes comprehensive test coverage:
 ```bash
-# Run RISC-V specific tests
+# Run all RISC-V specific tests
 ./minix/tests/riscv64/run_tests.sh all
+
+# Individual test categories:
+./minix/tests/riscv64/run_tests.sh csr     # Control and Status Registers
+./minix/tests/riscv64/run_tests.sh atomic  # Atomic operations
+./minix/tests/riscv64/run_tests.sh sbi     # SBI interface calls
+./minix/tests/riscv64/run_tests.sh memory  # Memory management
+./minix/tests/riscv64/run_tests.sh trap    # Trap handling
+./minix/tests/riscv64/run_tests.sh timer   # Timer and CLINT
+./minix/tests/riscv64/run_tests.sh ipc     # Inter-process communication
+./minix/tests/riscv64/run_tests.sh vm      # Virtual memory
 ```
