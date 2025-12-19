@@ -119,6 +119,17 @@ make regression-tests
 - **games/**: Game utilities
 - **tools/**: Host tools for cross-compilation (gcc, clang, make, binutils, etc.)
 
+### External Components (external/)
+
+Third-party software organized by license:
+- **external/bsd/**: BSD-licensed software (OpenSSL, Heimdal, etc.)
+- **external/gpl3/**: GPL-3 licensed software (binutils, GCC)
+- **external/gpl2/**: GPL-2 licensed software
+- **external/mit/**: MIT-licensed software
+- **external/zlib/**: Zlib-licensed software
+
+Each package contains a `dist/` directory with upstream source and build files that reach into the dist directory.
+
 ## Key Architecture Concepts
 
 ### Message-Based IPC
@@ -338,3 +349,27 @@ sudo apt-get install gcc-riscv64-unknown-elf
 - -march=rv64gc    # RISC-V 64-bit with G and C extensions
 - -mabi=lp64d      # LP64 data model with double-precision floating point
 ```
+
+## Common Build Troubleshooting
+
+### Build Tools Issues
+```bash
+# Check if proper cross-compiler is available
+which riscv64-unknown-elf-gcc
+riscv64-unknown-elf-gcc --version
+
+# Build tools separately if distribution fails
+./build.sh -m evbriscv64 tools
+
+# Check for proper toolchain in PATH
+export PATH=$TOOLDIR/bin:$PATH
+```
+
+### Memory Issues During Build
+- Use `-j` flag to limit parallel jobs on memory-constrained systems
+- Clear object directories with `./build.sh -c` if build becomes inconsistent
+
+### Distribution Build Failures
+- Ensure C++ library directories exist (see above)
+- Check that all required tools are built before running distribution
+- Review build logs in `build-*.log` files for specific error details

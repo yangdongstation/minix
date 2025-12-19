@@ -3,6 +3,8 @@
 ./usr/include/c++
 ./usr/include/c++/backward
 ./usr/include/c++/bits
+./usr/include/c++/bits/riscv32
+./usr/include/c++/bits/riscv64
 ./usr/include/c++/debug
 ./usr/include/c++/decimal
 ./usr/include/c++/ext
@@ -10,3 +12,16 @@
 ./usr/include/c++/parallel
 ./usr/include/c++/tr1
 ./usr/include/c++/tr1_impl
+
+./usr/include/g++
+./usr/include/g++/backward
+./usr/include/g++/bits
+./usr/include/g++/bits/riscv32
+./usr/include/g++/bits/riscv64
+./usr/include/g++/debug
+./usr/include/g++/decimal
+./usr/include/g++/ext
+./usr/include/g++/experimental
+./usr/include/g++/parallel
+./usr/include/g++/tr1
+./usr/include/g++/tr1_impl
