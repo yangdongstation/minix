@@ -1,9 +1,6 @@
 #	$NetBSD$
 
-INCSDIR= /usr/include/evbriscv64
-
-# evbriscv64 inherits from riscv
-.PATH: ${.CURDIR}/../../riscv/include
+# Common makefile for riscv architecture include files
 
 INCS=	ansi.h asm.h bswap.h byte_swap.h cdefs.h \
 	elf_machdep.h endian.h endian_machdep.h \
