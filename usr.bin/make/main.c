@@ -189,6 +189,7 @@ static char objdir[MAXPATHLEN + 1];	/* where we chdir'ed to */
 char curdir[MAXPATHLEN + 1];		/* Startup directory */
 char *progname;				/* the program name */
 char *makeDependfile;
+FILE *debug_file;			/* Output written here - default stdout */
 pid_t myPid;
 int makelevel;
 
