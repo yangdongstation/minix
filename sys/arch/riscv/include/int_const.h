@@ -1,11 +1,11 @@
-/*	$NetBSD: fpurge.c,v 1.1 2009/06/16 22:35:34 christos Exp $	*/
+/* $NetBSD$ */
 
 /*-
- * Copyright (c) 2009 The NetBSD Foundation, Inc.
+ * Copyright (c) 2001 The NetBSD Foundation, Inc.
  * All rights reserved.
  *
  * This code is derived from software contributed to The NetBSD Foundation
- * by Christos Zoulas.
+ * by Klaus Klein.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,25 +29,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef _RISCV_INT_CONST_H_
+#define _RISCV_INT_CONST_H_
+
+#ifdef __INTMAX_C_SUFFIX__
+#include <sys/common_int_const.h>
+#else
 /*
- * Pretend...
+ * 7.18.4 Macros for integer constants
  */
 
-#include "nbtool_config.h"
+/* 7.18.4.1 Macros for minimum-width integer constants */
 
-#if !HAVE_FPURGE
-#include <stdio.h>
-#include <fcntl.h>
+#define	INT8_C(c)	c
+#define	INT16_C(c)	c
+#define	INT32_C(c)	c
+#define	INT64_C(c)	c ## LL
 
-#if HAVE___FPURGE
-void	 __fpurge(FILE *);
+#define	UINT8_C(c)	c
+#define	UINT16_C(c)	c
+#define	UINT32_C(c)	c ## U
+#define	UINT64_C(c)	c ## ULL
+
+/* 7.18.4.2 Macros for greatest-width integer constants */
+
+#define	INTMAX_C(c)	c ## LL
+#define	UINTMAX_C(c)	c ## ULL
 #endif
 
-void
-fpurge(FILE *fp)
-{
-#if HAVE___FPURGE
-	__fpurge(fp);
-#endif
-}
-#endif
+#endif /* !_RISCV_INT_CONST_H_ */

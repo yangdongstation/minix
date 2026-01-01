@@ -53,6 +53,7 @@ __RCSID("$NetBSD: pax.c,v 1.47 2011/08/29 14:47:48 joerg Exp $");
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/resource.h>
+#include <time.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include <signal.h>

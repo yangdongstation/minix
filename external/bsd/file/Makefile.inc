@@ -20,7 +20,7 @@ CPPFLAGS+=	-DMAGIC='"${MAGIC}"' -DHAVE_CONFIG_H -DQUICK -DBUILTIN_ELF \
 		-DELFCORE -DVERSION='"${VERSION}"'
 CPPFLAGS+=	-I${.CURDIR}/../include -I${DIST}/src
 
-.if ${ACTIVE_CC}=="gcc" && ${HAVE_GCC}=="48"
+.if "${ACTIVE_CC}" == "gcc" && "${HAVE_GCC:U}" == "48"
 CPPFLAGS.readelf.c	+= -Wno-error=maybe-uninitialized
 .endif
 

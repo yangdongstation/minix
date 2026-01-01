@@ -1,11 +1,11 @@
-/*	$NetBSD: fpurge.c,v 1.1 2009/06/16 22:35:34 christos Exp $	*/
+/*	$NetBSD: wchar_limits.h,v 1.4 2013/01/24 10:17:00 matt Exp $	*/
 
 /*-
- * Copyright (c) 2009 The NetBSD Foundation, Inc.
+ * Copyright (c) 2004 The NetBSD Foundation, Inc.
  * All rights reserved.
  *
  * This code is derived from software contributed to The NetBSD Foundation
- * by Christos Zoulas.
+ * by Klaus Klein.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,25 +29,47 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef _RISCV_WCHAR_LIMITS_H_
+#define _RISCV_WCHAR_LIMITS_H_
+
 /*
- * Pretend...
+ * 7.18.3 Limits of other integer types
  */
 
-#include "nbtool_config.h"
+/* limits of wchar_t */
 
-#if !HAVE_FPURGE
-#include <stdio.h>
-#include <fcntl.h>
-
-#if HAVE___FPURGE
-void	 __fpurge(FILE *);
+#ifdef __WCHAR_MIN__
+#define	WCHAR_MIN	__WCHAR_MIN__			/* wchar_t	  */
+#elif __WCHAR_UNSIGNED__
+#define	WCHAR_MIN	0U				/* wchar_t	  */
+#else
+#define	WCHAR_MIN	(-0x7fffffff-1)			/* wchar_t	  */
 #endif
 
-void
-fpurge(FILE *fp)
-{
-#if HAVE___FPURGE
-	__fpurge(fp);
+#ifdef __WCHAR_MAX__
+#define	WCHAR_MAX	__WCHAR_MAX__			/* wchar_t	  */
+#elif __WCHAR_UNSIGNED__
+#define	WCHAR_MAX	0xffffffffU			/* wchar_t	  */
+#else
+#define	WCHAR_MAX	0x7fffffff			/* wchar_t	  */
 #endif
-}
+
+/* limits of wint_t */
+
+#ifdef __WINT_MIN__
+#define	WINT_MIN	__WINT_MIN__			/* wint_t	  */
+#elif __WINT_UNSIGNED__
+#define	WINT_MIN	0U				/* wint_t	  */
+#else
+#define	WINT_MIN	(-0x7fffffff-1)			/* wint_t	  */
 #endif
+
+#ifdef __WINT_MAX__
+#define	WINT_MAX	__WINT_MAX__			/* wint_t	  */
+#elif __WINT_UNSIGNED__
+#define	WINT_MAX	0xffffffffU			/* wint_t	  */
+#else
+#define	WINT_MAX	0x7fffffff			/* wint_t	  */
+#endif
+
+#endif /* !_RISCV_WCHAR_LIMITS_H_ */

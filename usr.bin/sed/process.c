@@ -65,6 +65,10 @@ static const char sccsid[] = "@(#)process.c	8.6 (Berkeley) 4/20/94";
 #include <wchar.h>
 #include <wctype.h>
 
+#if HAVE_NBTOOL_CONFIG_H && !HAVE_DECL_WCWIDTH
+int wcwidth(wchar_t);
+#endif
+
 #include "defs.h"
 #include "extern.h"
 

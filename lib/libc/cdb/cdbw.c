@@ -49,6 +49,12 @@ __RCSID("$NetBSD: cdbw.c,v 1.5 2012/07/21 22:49:37 joerg Exp $");
 #include <string.h>
 #include <unistd.h>
 
+#if HAVE_NBTOOL_CONFIG_H
+/* nbtool builds may not define _NETBSD_SOURCE; declare mi_vector_hash. */
+void	 mi_vector_hash(const void * __restrict, size_t, uint32_t,
+	    uint32_t[3]);
+#endif
+
 #ifdef __weak_alias
 __weak_alias(cdbw_close,_cdbw_close)
 __weak_alias(cdbw_open,_cdbw_open)

@@ -97,6 +97,11 @@ cat <<EOF
 #include <string.h>
 #include <term_private.h>
 #include <term.h>
+
+#if HAVE_NBTOOL_CONFIG_H
+void	mi_vector_hash(const void * __restrict, size_t, uint32_t,
+	    uint32_t[3]);
+#endif
 EOF
 
 genent flag FLAG

@@ -47,7 +47,7 @@ SUBDIR+= rpc.yppasswdd ypbind yppoll ypserv ypset
 SUBDIR+= puffs
 .endif
 
-.if ${TOOLCHAIN_MISSING} != "no"
+.if ${TOOLCHAIN_MISSING} != "no" && ${MKBINUTILS} != "no"
 SUBDIR+= mdsetimage
 .endif
 

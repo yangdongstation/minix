@@ -42,6 +42,12 @@ __RCSID("$NetBSD: cdbr.c,v 1.1 2013/12/11 01:24:08 joerg Exp $");
 #include "namespace.h"
 #endif
 
+#if HAVE_NBTOOL_CONFIG_H && !defined(_KERNEL) && !defined(_STANDALONE)
+/* nbtool builds may not define _NETBSD_SOURCE; declare mi_vector_hash. */
+void	 mi_vector_hash(const void * __restrict, size_t, uint32_t,
+	    uint32_t[3]);
+#endif
+
 #if !HAVE_NBTOOL_CONFIG_H
 #include <sys/bitops.h>
 #endif

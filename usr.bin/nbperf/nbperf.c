@@ -49,6 +49,12 @@ __RCSID("$NetBSD: nbperf.c,v 1.5 2013/01/31 16:32:02 joerg Exp $");
 
 #include "nbperf.h"
 
+#if HAVE_NBTOOL_CONFIG_H
+/* nbtool builds may not define _NETBSD_SOURCE; declare mi_vector_hash. */
+void	mi_vector_hash(const void * __restrict, size_t, uint32_t,
+	    uint32_t[3]);
+#endif
+
 static int predictable;
 
 static __dead

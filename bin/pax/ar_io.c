@@ -60,6 +60,7 @@ __RCSID("$NetBSD: ar_io.c,v 1.56 2015/03/09 23:38:08 sevan Exp $");
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <time.h>
 #include <ctype.h>
 #include <errno.h>
 #include <stdlib.h>

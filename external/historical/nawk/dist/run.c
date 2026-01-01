@@ -41,6 +41,10 @@ THIS SOFTWARE.
 #include "awk.h"
 #include "awkgram.h"
 
+#if HAVE_NBTOOL_CONFIG_H
+int	fpurge(FILE *);
+#endif
+
 #define tempfree(x)	do { if (istemp(x)) tfree(x); } while (/*CONSTCOND*/0)
 
 void stdinit(void);

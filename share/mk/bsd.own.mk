@@ -430,6 +430,17 @@ TOOL_CXX.clang=		${EXTERNAL_TOOLCHAIN}/bin/${MACHINE_GNU_PLATFORM}-clang++
 TOOL_OBJC.clang=	${EXTERNAL_TOOLCHAIN}/bin/${MACHINE_GNU_PLATFORM}-clang
 TOOL_OPT.clang=		${EXTERNAL_TOOLCHAIN}/bin/opt
 TOOL_LLC.clang=		${EXTERNAL_TOOLCHAIN}/bin/llc
+
+.if !defined(HOSTPROG) && !defined(HOSTLIB)
+.  if ${DESTDIR} != ""
+CPPFLAGS+=	--sysroot=${DESTDIR}
+LDFLAGS+=	--sysroot=${DESTDIR}
+CPPFLAGS+=	-I${DESTDIR}/usr/include
+.  else
+CPPFLAGS+=	--sysroot=/
+LDFLAGS+=	--sysroot=/
+.  endif
+.endif
 .else									# } {
 # Define default locations for common tools.
 .if ${USETOOLS_BINUTILS:Uyes} == "yes"					#  {
