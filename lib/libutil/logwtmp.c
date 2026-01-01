@@ -64,9 +64,9 @@ logwtmp(const char *line, const char *name, const char *host)
 	if ((fd = open(_PATH_WTMP, O_WRONLY|O_APPEND, 0)) < 0)
 		return;
 	if (fstat(fd, &buf) == 0) {
-		(void) strncpy(ut.ut_line, line, sizeof(ut.ut_line));
-		(void) strncpy(ut.ut_name, name, sizeof(ut.ut_name));
-		(void) strncpy(ut.ut_host, host, sizeof(ut.ut_host));
+		(void) strlcpy(ut.ut_line, line, sizeof(ut.ut_line));
+		(void) strlcpy(ut.ut_name, name, sizeof(ut.ut_name));
+		(void) strlcpy(ut.ut_host, host, sizeof(ut.ut_host));
 		(void) time(&ut.ut_time);
 		if (write(fd, &ut, sizeof(struct utmp)) != sizeof(struct utmp))
 			(void) ftruncate(fd, buf.st_size);

@@ -2248,6 +2248,7 @@ read_ssh_file(pgpv_t *pgp, pgpv_primarykey_t *primary, const char *fmt, ...)
 	char		 	*buf;
 	char		 	*bin;
 	char			 f[1024];
+	size_t			 comment_len;
 	int			 ok;
 	int			 cc;
 
@@ -2353,13 +2354,20 @@ read_ssh_file(pgpv_t *pgp, pgpv_primarykey_t *primary, const char *fmt, ...)
 	if (ok) {
 		memset(&userid, 0x0, sizeof(userid));
 		(void) gethostname(hostname, sizeof(hostname));
-		if (strlen(space + 1) - 1 == 0) {
-			(void) snprintf(owner, sizeof(owner), "<root@%s>",
-					hostname);
+		comment_len = strlen(space + 1);
+		if (comment_len <= 1) {
+			strlcpy(owner, "<root@", sizeof(owner));
+			strlcat(owner, hostname, sizeof(owner));
+			strlcat(owner, ">", sizeof(owner));
 		} else {
-			(void) snprintf(owner, sizeof(owner), "<%.*s>",
-				(int)strlen(space + 1) - 1,
-				space + 1);
+			comment_len--;
+			if (comment_len > sizeof(owner) - 3) {
+				comment_len = sizeof(owner) - 3;
+			}
+			owner[0] = '<';
+			(void) memcpy(owner + 1, space + 1, comment_len);
+			owner[1 + comment_len] = '>';
+			owner[2 + comment_len] = '\0';
 		}
 		calc_keyid(pubkey, "sha1");
 		userid.userid.size = asprintf((char **)(void *)&userid.userid.data,

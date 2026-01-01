@@ -54,6 +54,11 @@ typedef	_BSD_WCTYPE_T_	wctype_t;
 #define	WEOF	((wint_t)-1)
 #endif
 
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wbuiltin-declaration-mismatch"
+#endif
+
 __BEGIN_DECLS
 int	iswalnum(wint_t);
 int	iswalpha(wint_t);
@@ -99,5 +104,9 @@ wctrans_t wctrans_l(const char *, locale_t);
 wctype_t wctype_l(const char *, locale_t);
 #endif
 __END_DECLS
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 #endif		/* _WCTYPE_H_ */

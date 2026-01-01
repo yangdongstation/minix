@@ -6,6 +6,7 @@
 #include <errno.h>
 #include <math.h>
 #include <stdlib.h>
+#include <inttypes.h>
 
 #include <machine/vmparam.h>
 
@@ -333,10 +334,10 @@ static int get_block_ino(struct buf **bpp, dev_t dev, block64_t block, int how,
 
   dev_off = block * fs_block_size;
 
-  if((ino_off % fs_block_size)) {
+ if((ino_off % fs_block_size)) {
 
-	printf("cache: unaligned lmfs_get_block_ino ino_off %llu\n",
-		ino_off);
+	printf("cache: unaligned lmfs_get_block_ino ino_off %" PRIu64 "\n",
+		(uint64_t)ino_off);
   	util_stacktrace();
   }
 
@@ -579,8 +580,9 @@ static void put_block(struct buf *bp, int put_flags)
 			 */
 			printf("libminixfs: no memory for cache block!\n");
 		} else {
-			panic("libminixfs: setblock of %p dev 0x%llx off "
-				"0x%llx failed\n", bp->data, dev, dev_off);
+			panic("libminixfs: setblock of %p dev 0x%" PRIx64 " "
+				"off 0x%" PRIx64 " failed\n", bp->data,
+				(uint64_t)dev, (uint64_t)dev_off);
 		}
 	}
   }
@@ -1263,12 +1265,12 @@ void lmfs_buf_pool(int new_nr_bufs)
   if(buf)
 	free(buf);
 
-  if(!(buf = calloc(sizeof(buf[0]), new_nr_bufs)))
+  if(!(buf = calloc(new_nr_bufs, sizeof(buf[0]))))
 	panic("couldn't allocate buf list (%d)", new_nr_bufs);
 
   if(buf_hash)
 	free(buf_hash);
-  if(!(buf_hash = calloc(sizeof(buf_hash[0]), new_nr_bufs)))
+  if(!(buf_hash = calloc(new_nr_bufs, sizeof(buf_hash[0]))))
 	panic("couldn't allocate buf hash list (%d)", new_nr_bufs);
 
   nr_bufs = new_nr_bufs;

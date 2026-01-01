@@ -31,11 +31,12 @@ ssize_t asyn_read(asynchio_t *asyn, int fd, void *buf, size_t len)
 	/* Try to read if I/O is pending. */
 	if (afd->afd_state[SEL_READ] == PENDING) {
 		sigset_t mask;
+		sigset_t oldmask;
 		ssize_t result;
 		int err;
 
 		sigemptyset(&mask);
-		if (sigprocmask(SIG_SETMASK, &mask, &mask) < 0) return -1;
+		if (sigprocmask(SIG_SETMASK, &mask, &oldmask) < 0) return -1;
 		(void) fcntl(fd, F_SETFL, afd->afd_flags | O_NONBLOCK);
 
 		/* Try the actual read. */
@@ -43,7 +44,7 @@ ssize_t asyn_read(asynchio_t *asyn, int fd, void *buf, size_t len)
 		err= errno;
 
 		(void) fcntl(fd, F_SETFL, afd->afd_flags);
-		(void) sigprocmask(SIG_SETMASK, &mask, nil);
+		(void) sigprocmask(SIG_SETMASK, &oldmask, nil);
 
 		errno= err;
 		if (result != -1 || errno != EAGAIN) {

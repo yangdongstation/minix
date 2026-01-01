@@ -193,7 +193,9 @@
 #endif
 
 /* minix-specific error codes */
+#ifndef ERESTART
 #define ERESTART     (_SIGN 200 )  /* service restarted */
+#endif
 #define ENOTREADY    (_SIGN 201 )  /* source or destination is not ready */
 #define EDEADSRCDST  (_SIGN 202 )  /* source or destination is not alive */
 #define EDONTREPLY   (_SIGN 203 )  /* pseudo-code: don't send a reply */

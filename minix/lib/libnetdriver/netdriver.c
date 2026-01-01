@@ -4,6 +4,7 @@
 #include <minix/netdriver.h>
 #include <minix/ds.h>
 #include <assert.h>
+#include <string.h>
 
 #include "netdriver.h"
 
@@ -66,7 +67,9 @@ netdriver_announce(void)
 	if ((r = ds_retrieve_label_name(label, sef_self())) != OK)
 		panic("netdriver: unable to get own label: %d", r);
 
-	snprintf(key, sizeof(key), "%s%s", driver_prefix, label);
+	if (strlcpy(key, driver_prefix, sizeof(key)) >= sizeof(key) ||
+	    strlcat(key, label, sizeof(key)) >= sizeof(key))
+		panic("netdriver: driver label too long");
 	if ((r = ds_publish_u32(key, DS_DRIVER_UP, DSF_OVERWRITE)) != OK)
 		panic("netdriver: unable to publish driver up event: %d", r);
 }
@@ -285,7 +288,7 @@ netdriver_recv(void)
 			break;
 
 		if (r < 0)
-			panic("netdriver: driver reported receive failure: %d",
+			panic("netdriver: driver reported receive failure: %zd",
 			    r);
 
 		assert(r >= NDEV_ETH_PACKET_MIN && (size_t)r <= data->size);

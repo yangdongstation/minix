@@ -27,7 +27,8 @@
 
 #if !defined(__aarch64__) && !defined(__arm__) && !defined(__i386__) \
     && !defined(__hppa__) \
-    && !defined(__or1k__) && !defined(__riscv__) && !defined(__sparc__) \
+    && !defined(__or1k__) && !defined(__riscv__) && !defined(__riscv) \
+    && !defined(__riscv64__) && !defined(__riscv64) && !defined(__sparc__) \
     && !defined(__x86_64__)
 #error	"fenv.h is currently not supported for this architecture"
 #endif

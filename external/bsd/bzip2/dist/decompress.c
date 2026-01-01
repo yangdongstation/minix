@@ -23,6 +23,11 @@
 
 #include "bzlib_private.h"
 
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#endif
+
 
 /*---------------------------------------------------*/
 static
@@ -36,7 +41,6 @@ void makeMaps_d ( DState* s )
          s->nInUse++;
       }
 }
-
 
 /*---------------------------------------------------*/
 #define RETURN(rrr)                               \
@@ -641,6 +645,10 @@ Int32 BZ2_decompress ( DState* s )
 
    return retVal;   
 }
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 
 /*-------------------------------------------------------------*/

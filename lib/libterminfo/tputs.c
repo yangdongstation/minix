@@ -49,6 +49,26 @@ static const short tmspc10[] = {
 short ospeed;
 char PC;
 
+struct ti_outc_ctx {
+	int (*outc)(int);
+};
+
+static int
+ti_putchar_thunk(int ch, void *arg)
+{
+
+	(void)arg;
+	return putchar(ch);
+}
+
+static int
+ti_outc_thunk(int ch, void *arg)
+{
+	struct ti_outc_ctx *ctx = arg;
+
+	return ctx->outc(ch);
+}
+
 static int
 _ti_calcdelay(const char **str, int affcnt, int *mand)
 {
@@ -156,17 +176,19 @@ ti_putp(const TERMINAL *term, const char *str)
 
 	_DIAGASSERT(term != NULL);
 	_DIAGASSERT(str != NULL);
-	return ti_puts(term, str, 1, (int (*)(int, void *))putchar, NULL);
+	return ti_puts(term, str, 1, ti_putchar_thunk, NULL);
 }
 
 int
 tputs(const char *str, int affcnt, int (*outc)(int))
 {
+	struct ti_outc_ctx ctx;
 
 	_DIAGASSERT(str != NULL);
 	_DIAGASSERT(outc != NULL);
+	ctx.outc = outc;
 	return _ti_puts(1, ospeed, PC, str, affcnt,
-	    (int (*)(int, void *))outc, NULL);
+	    ti_outc_thunk, &ctx);
 }
 
 int

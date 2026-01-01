@@ -44,7 +44,9 @@
 /* Generic file-descriptor ioctl's. */
 #define	FIOCLEX		 _IO('f', 1)		/* set close on exec on fd */
 #define	FIONCLEX	 _IO('f', 2)		/* remove close on exec */
+#if !defined(__minix)
 #define	FIONREAD	_IOR('f', 127, int)	/* get # bytes to read */
+#endif
 #define	FIONBIO		_IOW('f', 126, int)	/* set/clear non-blocking i/o */
 #define	FIOASYNC	_IOW('f', 125, int)	/* set/clear async i/o */
 #define	FIOSETOWN	_IOW('f', 124, int)	/* set owner */

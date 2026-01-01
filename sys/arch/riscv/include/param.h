@@ -65,10 +65,18 @@
  * This does not reflect the optimal alignment, just the possibility
  * (within reasonable limits).
  */
+#ifndef PGSHIFT
 #define PGSHIFT		12		/* LOG2(NBPG) */
+#endif
+#ifndef NBPG
 #define NBPG		(1 << PGSHIFT)	/* bytes/page */
+#endif
+#ifndef PGOFSET
 #define PGOFSET		(NBPG - 1)	/* byte offset into page */
+#endif
+#ifndef NPTEPG
 #define NPTEPG		(NBPG / sizeof(void *))
+#endif
 
 #define SSIZE		1		/* initial stack size/NBPG */
 #define SINCR		1		/* increment of stack/NBPG */

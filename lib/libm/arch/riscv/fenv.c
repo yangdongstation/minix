@@ -50,7 +50,7 @@ __RCSID("$NetBSD: fenv.c,v 1.1 2014/09/19 17:36:25 matt Exp $");
  * that manage the floating-point environment, namely fesetenv() and
  * feupdateenv().
  */
-fenv_t __fe_dfl_env = __SHIFTIN(FCSR_FRM_RNE, FCSR_FRM);
+const fenv_t __fe_dfl_env = __SHIFTIN(FCSR_FRM_RNE, FCSR_FRM);
 
 /*
  * The feclearexcept() function clears the supported floating-point exceptions

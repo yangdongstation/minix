@@ -467,7 +467,7 @@ _ti_compile(char *cap, int flags)
 	if (alias != NULL)
 		*alias++ = '\0';
 
-	tic = calloc(sizeof(*tic), 1);
+	tic = calloc(1, sizeof(*tic));
 	if (tic == NULL)
 		return NULL;
 

@@ -8,11 +8,13 @@ INCS=	aout_machdep.h ansi.h asm.h bswap.h byte_swap.h cdefs.h \
 	fenv.h float.h frame.h \
 	ieee.h ieeefp.h \
 	int_const.h int_fmtio.h int_limits.h int_mwgwtypes.h int_types.h \
-	limits.h math.h \
+	kcore.h limits.h lock.h math.h \
 	mcontext.h \
 	mutex.h \
 	multiboot.h \
 	param.h \
+	pcb.h \
+	proc.h \
 	profile.h \
 	reg.h \
 	sysreg.h \

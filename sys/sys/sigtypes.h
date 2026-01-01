@@ -64,7 +64,8 @@ typedef struct {
 /*
  * Macro for manipulating signal masks.
  */
-#define __sigmask(n)		(1 << (((unsigned int)(n) - 1) & 31))
+#define __sigmask(n)		((__uint32_t)1U << \
+				    (((unsigned int)(n) - 1) & 31))
 #define	__sigword(n)		(((unsigned int)(n) - 1) >> 5)
 #define	__sigaddset(s, n)	((s)->__bits[__sigword(n)] |= __sigmask(n))
 #define	__sigdelset(s, n)	((s)->__bits[__sigword(n)] &= ~__sigmask(n))

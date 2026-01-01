@@ -21,18 +21,19 @@ ssize_t asyn_write(asynchio_t *asyn, int fd, const void *buf, size_t len)
 
 	if (afd->afd_state[SEL_WRITE] == PENDING) {
 		sigset_t mask;
+		sigset_t oldmask;
 		ssize_t result;
 		int err;
 
 		sigemptyset(&mask);
-		if (sigprocmask(SIG_SETMASK, &mask, &mask) < 0) return -1;
+		if (sigprocmask(SIG_SETMASK, &mask, &oldmask) < 0) return -1;
 		(void) fcntl(fd, F_SETFL, afd->afd_flags | O_NONBLOCK);
 
 		result= write(fd, buf, len);
 		err= errno;
 
 		(void) fcntl(fd, F_SETFL, afd->afd_flags);
-		(void) sigprocmask(SIG_SETMASK, &mask, nil);
+		(void) sigprocmask(SIG_SETMASK, &oldmask, nil);
 
 		errno= err;
 		if (result != -1 || errno != EAGAIN) {

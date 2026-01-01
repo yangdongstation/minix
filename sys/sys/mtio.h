@@ -134,8 +134,12 @@ struct mtget {
  */
 
 /* mag tape io control commands */
+#ifndef MTIOCTOP
 #define	MTIOCTOP	_IOW('m', 1, struct mtop)	/* do a mag tape op */
+#endif
+#ifndef MTIOCGET
 #define	MTIOCGET	_IOR('m', 2, struct mtget)	/* get tape status */
+#endif
 #define	MTIOCIEOT	_IO('m', 3)			/* ignore EOT error */
 #define	MTIOCEEOT	_IO('m', 4)			/* enable EOT error */
 /*

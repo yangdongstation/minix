@@ -34,6 +34,10 @@
 
 #include "bzlib_private.h"
 
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#endif
 
 /*	$NetBSD: bzlib.c,v 1.3 2015/02/05 01:26:54 agc Exp $	*/
 
@@ -2037,3 +2041,7 @@ void BZ2_hbCreateDecodeTables ( Int32 *limit,
 /*-------------------------------------------------------------*/
 /*--- end                                         huffman.c ---*/
 /*-------------------------------------------------------------*/
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif

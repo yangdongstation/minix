@@ -14,7 +14,7 @@
 /*===========================================================================*
  *				verify_path				     *
  *===========================================================================*/
-int verify_path(char path[PATH_MAX], struct inode *ino,
+int verify_path(char *path, struct inode *ino,
 	struct sffs_attr *attr, int *stale)
 {
 /* Given a path, and the inode associated with that path, verify if the inode

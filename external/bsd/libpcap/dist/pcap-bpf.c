@@ -727,7 +727,7 @@ pcap_can_set_rfmon_bpf(pcap_t *p)
 	/*
 	 * Now bind to the device.
 	 */
-	(void)strncpy(ifr.ifr_name, p->opt.source, sizeof(ifr.ifr_name));
+	(void)strlcpy(ifr.ifr_name, p->opt.source, sizeof(ifr.ifr_name));
 	if (ioctl(fd, BIOCSETIF, (caddr_t)&ifr) < 0) {
 		switch (errno) {
 
@@ -1308,7 +1308,7 @@ pcap_cleanup_bpf(pcap_t *p)
 				    strerror(errno));
 			} else {
 				memset(&req, 0, sizeof(req));
-				strncpy(req.ifm_name, pb->device,
+				strlcpy(req.ifm_name, pb->device,
 				    sizeof(req.ifm_name));
 				if (ioctl(sock, SIOCGIFMEDIA, &req) < 0) {
 					fprintf(stderr,
@@ -1322,7 +1322,7 @@ pcap_cleanup_bpf(pcap_t *p)
 						 * turn it off.
 						 */
 						memset(&ifr, 0, sizeof(ifr));
-						(void)strncpy(ifr.ifr_name,
+						(void)strlcpy(ifr.ifr_name,
 						    pb->device,
 						    sizeof(ifr.ifr_name));
 						ifr.ifr_media =
@@ -1751,7 +1751,7 @@ pcap_activate_bpf(pcap_t *p)
 			status = PCAP_ERROR;
 			goto bad;
 		}
-		(void)strncpy(ifrname, p->opt.source, ifnamsiz);
+		(void)strlcpy(ifrname, p->opt.source, ifnamsiz);
 		if (ioctl(fd, BIOCSETIF, (caddr_t)&ifr) < 0) {
 			snprintf(p->errbuf, PCAP_ERRBUF_SIZE, "BIOCSETIF: %s: %s",
 			    p->opt.source, pcap_strerror(errno));
@@ -1782,7 +1782,7 @@ pcap_activate_bpf(pcap_t *p)
 			/*
 			 * Now bind to the device.
 			 */
-			(void)strncpy(ifrname, p->opt.source, ifnamsiz);
+			(void)strlcpy(ifrname, p->opt.source, ifnamsiz);
 #ifdef BIOCSETLIF
 			if (ioctl(fd, BIOCSETLIF, (caddr_t)&ifr) < 0)
 #else
@@ -1815,7 +1815,7 @@ pcap_activate_bpf(pcap_t *p)
 				 */
 				(void) ioctl(fd, BIOCSBLEN, (caddr_t)&v);
 
-				(void)strncpy(ifrname, p->opt.source, ifnamsiz);
+				(void)strlcpy(ifrname, p->opt.source, ifnamsiz);
 #ifdef BIOCSETLIF
 				if (ioctl(fd, BIOCSETLIF, (caddr_t)&ifr) >= 0)
 #else
@@ -2340,7 +2340,7 @@ monitor_mode(pcap_t *p, int set)
 	}
 
 	memset(&req, 0, sizeof req);
-	strncpy(req.ifm_name, p->opt.source, sizeof req.ifm_name);
+	strlcpy(req.ifm_name, p->opt.source, sizeof req.ifm_name);
 
 	/*
 	 * Find out how many media types we have.
@@ -2452,7 +2452,7 @@ monitor_mode(pcap_t *p, int set)
 				return (PCAP_ERROR);
 			}
 			memset(&ifr, 0, sizeof(ifr));
-			(void)strncpy(ifr.ifr_name, p->opt.source,
+			(void)strlcpy(ifr.ifr_name, p->opt.source,
 			    sizeof(ifr.ifr_name));
 			ifr.ifr_media = req.ifm_current | IFM_IEEE80211_MONITOR;
 			if (ioctl(sock, SIOCSIFMEDIA, &ifr) == -1) {

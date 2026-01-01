@@ -588,7 +588,7 @@ SHA224_256_Final(uint8_t digest[], SHA256_CTX *context, size_t len)
 }
 
 int
-SHA256_Final(uint8_t digest[], SHA256_CTX *context)
+SHA256_Final(uint8_t digest[SHA256_DIGEST_LENGTH], SHA256_CTX *context)
 {
 	return SHA224_256_Final(digest, context, SHA256_DIGEST_LENGTH);
 }
@@ -622,7 +622,7 @@ SHA224_Transform(SHA224_CTX *context, const uint32_t *data)
 }
 
 int
-SHA224_Final(uint8_t digest[], SHA224_CTX *context)
+SHA224_Final(uint8_t digest[SHA224_DIGEST_LENGTH], SHA224_CTX *context)
 {
 	return SHA224_256_Final(digest, (SHA256_CTX *)context,
 	    SHA224_DIGEST_LENGTH);
@@ -915,7 +915,7 @@ SHA512_Last(SHA512_CTX *context)
 }
 
 int
-SHA512_Final(uint8_t digest[], SHA512_CTX *context)
+SHA512_Final(uint8_t digest[SHA512_DIGEST_LENGTH], SHA512_CTX *context)
 {
 	size_t i;
 
@@ -962,7 +962,7 @@ SHA384_Transform(SHA512_CTX *context, const uint64_t *data)
 }
 
 int
-SHA384_Final(uint8_t digest[], SHA384_CTX *context)
+SHA384_Final(uint8_t digest[SHA384_DIGEST_LENGTH], SHA384_CTX *context)
 {
 	size_t i;
 

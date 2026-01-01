@@ -23,6 +23,10 @@
 /*
  * Virtual memory constants.
  */
+#define VM_MIN_ADDRESS		0UL
+#define VM_MAXUSER_ADDRESS	USRSTACK
+#define VM_MAX_ADDRESS		VM_MAXUSER_ADDRESS
+
 #ifndef NBPG
 #define NBPG		4096			/* page size */
 #endif

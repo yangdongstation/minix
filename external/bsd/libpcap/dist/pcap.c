@@ -120,6 +120,64 @@ pcap_not_initialized(pcap_t *pcap _U_)
 	return (PCAP_ERROR_NOT_ACTIVATED);
 }
 
+static int
+pcap_read_not_initialized(pcap_t *pcap, int cnt _U_, pcap_handler cb _U_,
+    u_char *user _U_)
+{
+
+	return (pcap_not_initialized(pcap));
+}
+
+static int
+pcap_inject_not_initialized(pcap_t *pcap, const void *buf _U_, size_t size _U_)
+{
+
+	return (pcap_not_initialized(pcap));
+}
+
+static int
+pcap_setfilter_not_initialized(pcap_t *pcap, struct bpf_program *fp _U_)
+{
+
+	return (pcap_not_initialized(pcap));
+}
+
+static int
+pcap_setdirection_not_initialized(pcap_t *pcap, pcap_direction_t dir _U_)
+{
+
+	return (pcap_not_initialized(pcap));
+}
+
+static int
+pcap_set_datalink_not_initialized(pcap_t *pcap, int dlt _U_)
+{
+
+	return (pcap_not_initialized(pcap));
+}
+
+static int
+pcap_getnonblock_not_initialized(pcap_t *pcap, char *errbuf _U_)
+{
+
+	return (pcap_not_initialized(pcap));
+}
+
+static int
+pcap_setnonblock_not_initialized(pcap_t *pcap, int nonblock _U_,
+    char *errbuf _U_)
+{
+
+	return (pcap_not_initialized(pcap));
+}
+
+static int
+pcap_stats_not_initialized(pcap_t *pcap, struct pcap_stat *ps _U_)
+{
+
+	return (pcap_not_initialized(pcap));
+}
+
 #ifdef WIN32
 Adapter *
 pcap_no_adapter(pcap_t *pcap _U_)
@@ -167,8 +225,8 @@ pcap_list_tstamp_types(pcap_t *p, int **tstamp_typesp)
 		 */
 		*tstamp_typesp = NULL;
 	} else {
-		*tstamp_typesp = (int*)calloc(sizeof(**tstamp_typesp),
-		    p->tstamp_type_count);
+		*tstamp_typesp = (int*)calloc(p->tstamp_type_count,
+		    sizeof(**tstamp_typesp));
 		if (*tstamp_typesp == NULL) {
 			(void)snprintf(p->errbuf, sizeof(p->errbuf),
 			    "malloc: %s", pcap_strerror(errno));
@@ -460,14 +518,14 @@ initialize_ops(pcap_t *p)
 	 * an activated pcap_t to point to a routine that returns
 	 * a "this isn't activated" error.
 	 */
-	p->read_op = (read_op_t)pcap_not_initialized;
-	p->inject_op = (inject_op_t)pcap_not_initialized;
-	p->setfilter_op = (setfilter_op_t)pcap_not_initialized;
-	p->setdirection_op = (setdirection_op_t)pcap_not_initialized;
-	p->set_datalink_op = (set_datalink_op_t)pcap_not_initialized;
-	p->getnonblock_op = (getnonblock_op_t)pcap_not_initialized;
-	p->setnonblock_op = (setnonblock_op_t)pcap_not_initialized;
-	p->stats_op = (stats_op_t)pcap_not_initialized;
+	p->read_op = pcap_read_not_initialized;
+	p->inject_op = pcap_inject_not_initialized;
+	p->setfilter_op = pcap_setfilter_not_initialized;
+	p->setdirection_op = pcap_setdirection_not_initialized;
+	p->set_datalink_op = pcap_set_datalink_not_initialized;
+	p->getnonblock_op = pcap_getnonblock_not_initialized;
+	p->setnonblock_op = pcap_setnonblock_not_initialized;
+	p->stats_op = pcap_stats_not_initialized;
 #ifdef WIN32
 	p->setbuff_op = (setbuff_op_t)pcap_not_initialized;
 	p->setmode_op = (setmode_op_t)pcap_not_initialized;
@@ -801,17 +859,24 @@ pcap_open_live(const char *source, int snaplen, int promisc, int to_ms, char *er
 		goto fail;
 	return (p);
 fail:
-	if (status == PCAP_ERROR)
-		snprintf(errbuf, PCAP_ERRBUF_SIZE, "%s: %s", source,
-		    p->errbuf);
-	else if (status == PCAP_ERROR_NO_SUCH_DEVICE ||
+	if (status == PCAP_ERROR) {
+		strlcpy(errbuf, source, PCAP_ERRBUF_SIZE);
+		strlcat(errbuf, ": ", PCAP_ERRBUF_SIZE);
+		strlcat(errbuf, p->errbuf, PCAP_ERRBUF_SIZE);
+	} else if (status == PCAP_ERROR_NO_SUCH_DEVICE ||
 	    status == PCAP_ERROR_PERM_DENIED ||
-	    status == PCAP_ERROR_PROMISC_PERM_DENIED)
-		snprintf(errbuf, PCAP_ERRBUF_SIZE, "%s: %s (%s)", source,
-		    pcap_statustostr(status), p->errbuf);
-	else
-		snprintf(errbuf, PCAP_ERRBUF_SIZE, "%s: %s", source,
-		    pcap_statustostr(status));
+	    status == PCAP_ERROR_PROMISC_PERM_DENIED) {
+		strlcpy(errbuf, source, PCAP_ERRBUF_SIZE);
+		strlcat(errbuf, ": ", PCAP_ERRBUF_SIZE);
+		strlcat(errbuf, pcap_statustostr(status), PCAP_ERRBUF_SIZE);
+		strlcat(errbuf, " (", PCAP_ERRBUF_SIZE);
+		strlcat(errbuf, p->errbuf, PCAP_ERRBUF_SIZE);
+		strlcat(errbuf, ")", PCAP_ERRBUF_SIZE);
+	} else {
+		strlcpy(errbuf, source, PCAP_ERRBUF_SIZE);
+		strlcat(errbuf, ": ", PCAP_ERRBUF_SIZE);
+		strlcat(errbuf, pcap_statustostr(status), PCAP_ERRBUF_SIZE);
+	}
 	pcap_close(p);
 	return (NULL);
 }
@@ -929,7 +994,8 @@ pcap_list_datalinks(pcap_t *p, int **dlt_buffer)
 		**dlt_buffer = p->linktype;
 		return (1);
 	} else {
-		*dlt_buffer = (int*)calloc(sizeof(**dlt_buffer), p->dlt_count);
+		*dlt_buffer = (int*)calloc(p->dlt_count,
+		    sizeof(**dlt_buffer));
 		if (*dlt_buffer == NULL) {
 			(void)snprintf(p->errbuf, sizeof(p->errbuf),
 			    "malloc: %s", pcap_strerror(errno));

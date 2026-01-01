@@ -8,6 +8,118 @@
 
 #include "netdriver.h"
 
+#if defined(__riscv64)
+#define NETDRIVER_PORTIO_BUFSIZE 256
+
+static int
+netdriver_safe_insb(long port, endpoint_t endpt, cp_grant_id_t grant,
+	size_t off, size_t count)
+{
+	uint8_t buf[NETDRIVER_PORTIO_BUFSIZE];
+	size_t done = 0;
+	int r;
+
+	while (done < count) {
+		size_t chunk = count - done;
+		if (chunk > sizeof(buf))
+			chunk = sizeof(buf);
+
+		if ((r = sys_insb((u32_t)port, endpt, buf,
+		    (int)chunk)) != OK)
+			return r;
+
+		if ((r = sys_safecopyto(endpt, grant, off + done,
+		    (vir_bytes)buf, chunk)) != OK)
+			return r;
+
+		done += chunk;
+	}
+
+	return OK;
+}
+
+static int
+netdriver_safe_outsb(long port, endpoint_t endpt, cp_grant_id_t grant,
+	size_t off, size_t count)
+{
+	uint8_t buf[NETDRIVER_PORTIO_BUFSIZE];
+	size_t done = 0;
+	int r;
+
+	while (done < count) {
+		size_t chunk = count - done;
+		if (chunk > sizeof(buf))
+			chunk = sizeof(buf);
+
+		if ((r = sys_safecopyfrom(endpt, grant, off + done,
+		    (vir_bytes)buf, chunk)) != OK)
+			return r;
+
+		if ((r = sys_outsb((u32_t)port, endpt, buf,
+		    (int)chunk)) != OK)
+			return r;
+
+		done += chunk;
+	}
+
+	return OK;
+}
+
+static int
+netdriver_safe_insw(long port, endpoint_t endpt, cp_grant_id_t grant,
+	size_t off, size_t count)
+{
+	uint16_t buf[NETDRIVER_PORTIO_BUFSIZE / sizeof(uint16_t)];
+	size_t done = 0;
+	int r;
+
+	while (done < count) {
+		size_t chunk = count - done;
+		if (chunk > sizeof(buf) * sizeof(buf[0]))
+			chunk = sizeof(buf) * sizeof(buf[0]);
+
+		if ((r = sys_insw((u32_t)port, endpt, buf,
+		    (int)(chunk / 2))) != OK)
+			return r;
+
+		if ((r = sys_safecopyto(endpt, grant, off + done,
+		    (vir_bytes)buf, chunk)) != OK)
+			return r;
+
+		done += chunk;
+	}
+
+	return OK;
+}
+
+static int
+netdriver_safe_outsw(long port, endpoint_t endpt, cp_grant_id_t grant,
+	size_t off, size_t count)
+{
+	uint16_t buf[NETDRIVER_PORTIO_BUFSIZE / sizeof(uint16_t)];
+	size_t done = 0;
+	int r;
+
+	while (done < count) {
+		size_t chunk = count - done;
+		if (chunk > sizeof(buf) * sizeof(buf[0]))
+			chunk = sizeof(buf) * sizeof(buf[0]);
+
+		if ((r = sys_safecopyfrom(endpt, grant, off + done,
+		    (vir_bytes)buf, chunk)) != OK)
+			return r;
+
+		if ((r = sys_outsw((u32_t)port, endpt, buf,
+		    (int)(chunk / 2))) != OK)
+			return r;
+
+		done += chunk;
+	}
+
+	return OK;
+}
+#endif /* defined(__riscv64) */
+
 /*
  * Port-based I/O byte sequence copy routine.
  */
@@ -17,11 +129,16 @@ netdriver_portb(struct netdriver_data * data, size_t off, long port,
 {
 	size_t chunk;
 	unsigned int i;
-	int r, req;
+	int r;
+#if !defined(__riscv64)
+	int req;
+#endif
 
 	off = netdriver_prepare_copy(data, off, size, &i);
 
+#if !defined(__riscv64)
 	req = portin ? DIO_SAFE_INPUT_BYTE : DIO_SAFE_OUTPUT_BYTE;
+#endif
 
 	while (size > 0) {
 		chunk = data->iovec[i].iov_size - off;
@@ -29,8 +146,18 @@ netdriver_portb(struct netdriver_data * data, size_t off, long port,
 			chunk = size;
 		assert(chunk > 0);
 
-		if ((r = sys_sdevio(req, port, data->endpt,
-		    (void *)data->iovec[i].iov_grant, chunk, off)) != OK)
+#if defined(__riscv64)
+		if (portin)
+			r = netdriver_safe_insb(port, data->endpt,
+			    data->iovec[i].iov_grant, off, chunk);
+		else
+			r = netdriver_safe_outsb(port, data->endpt,
+			    data->iovec[i].iov_grant, off, chunk);
+#else
+		r = sys_sdevio(req, port, data->endpt,
+		    (void *)data->iovec[i].iov_grant, chunk, off);
+#endif
+		if (r != OK)
 			panic("netdriver: port I/O failed: %d", r);
 
 		i++;
@@ -98,8 +225,14 @@ netdriver_portinw(struct netdriver_data * data, size_t off, long port,
 		chunk -= odd_byte;
 
 		if (chunk > 0) {
-			if ((r = sys_safe_insw(port, data->endpt,
-			    data->iovec[i].iov_grant, off, chunk)) != OK)
+#if defined(__riscv64)
+			r = netdriver_safe_insw(port, data->endpt,
+			    data->iovec[i].iov_grant, off, chunk);
+#else
+			r = sys_safe_insw(port, data->endpt,
+			    data->iovec[i].iov_grant, off, chunk);
+#endif
+			if (r != OK)
 				panic("netdriver: port input failed: %d", r);
 
 			off += chunk;
@@ -163,8 +296,14 @@ netdriver_portoutw(struct netdriver_data * data, size_t off, long port,
 		chunk -= odd_byte;
 
 		if (chunk > 0) {
-			if ((r = sys_safe_outsw(port, data->endpt,
-			    data->iovec[i].iov_grant, off, chunk)) != OK)
+#if defined(__riscv64)
+			r = netdriver_safe_outsw(port, data->endpt,
+			    data->iovec[i].iov_grant, off, chunk);
+#else
+			r = sys_safe_outsw(port, data->endpt,
+			    data->iovec[i].iov_grant, off, chunk);
+#endif
+			if (r != OK)
 				panic("netdriver: port output failed: %d", r);
 
 			off += chunk;

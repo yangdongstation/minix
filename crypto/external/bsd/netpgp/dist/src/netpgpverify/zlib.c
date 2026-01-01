@@ -89,6 +89,11 @@
 
 #include "zlib.h"
 
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#endif
+
 #ifdef MAKEFIXED
 #  ifndef BUILDFIXED
 #    define BUILDFIXED
@@ -2245,3 +2250,7 @@ inflateCopy(z_streamp dest, z_streamp source)
     dest->state = (struct internal_state FAR *)copy;
     return Z_OK;
 }
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif

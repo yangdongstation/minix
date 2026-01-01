@@ -59,13 +59,25 @@
 #endif
 #define WORD_BIT	32
 
+#ifndef DBL_DIG
 #define DBL_DIG		__DBL_DIG__
+#endif
+#ifndef DBL_MAX
 #define DBL_MAX		__DBL_MAX__
+#endif
+#ifndef DBL_MIN
 #define DBL_MIN		__DBL_MIN__
+#endif
 
+#ifndef FLT_DIG
 #define FLT_DIG		__FLT_DIG__
+#endif
+#ifndef FLT_MAX
 #define FLT_MAX		__FLT_MAX__
+#endif
+#ifndef FLT_MIN
 #define FLT_MIN		__FLT_MIN__
+#endif
 
 #endif /* _XOPEN_SOURCE || _NETBSD_SOURCE */
 

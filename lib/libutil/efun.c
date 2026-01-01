@@ -49,11 +49,19 @@ __RCSID("$NetBSD: efun.c,v 1.10 2015/07/26 02:20:30 kamil Exp $");
 
 static void (*efunc)(int, const char *, ...) = err;
 
+static void
+efunc_exit(int eval, const char *fmt, ...)
+{
+
+	(void)fmt;
+	exit(eval);
+}
+
 void (*
 esetfunc(void (*ef)(int, const char *, ...)))(int, const char *, ...)
 {
 	void (*of)(int, const char *, ...) = efunc;
-	efunc = ef == NULL ? (void (*)(int, const char *, ...))exit : ef;
+	efunc = ef == NULL ? efunc_exit : ef;
 	return of;
 }
 

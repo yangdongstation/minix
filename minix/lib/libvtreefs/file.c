@@ -201,7 +201,8 @@ fs_getdents(ino_t ino_nr, struct fsdriver_data * data, size_t bytes,
 	off_t pos;
 	int r, skip, get_next, indexed;
 
-	if (*posp >= ULONG_MAX)
+	if (*posp < 0 ||
+	    (unsigned long long)*posp >= (unsigned long long)ULONG_MAX)
 		return EIO;
 
 	if ((node = find_inode(ino_nr)) == NULL)

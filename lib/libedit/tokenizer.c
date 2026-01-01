@@ -190,7 +190,7 @@ FUN(tok,end)(TYPE(Tokenizer) *tok)
  */
 public int
 FUN(tok,line)(TYPE(Tokenizer) *tok, const TYPE(LineInfo) *line,
-    int *argc, const Char ***argv, int *cursorc, int *cursoro)
+    int *argc, const Char * const **argv, int *cursorc, int *cursoro)
 {
 	const Char *ptr;
 	int cc, co;
@@ -428,7 +428,7 @@ FUN(tok,line)(TYPE(Tokenizer) *tok, const TYPE(LineInfo) *line,
 	if (cursoro != NULL)
 		*cursoro = co;
 	FUN(tok,finish)(tok);
-	*argv = (const Char **)tok->argv;
+	*argv = (const Char * const *)tok->argv;
 	*argc = (int)tok->argc;
 	return 0;
 }
@@ -439,7 +439,7 @@ FUN(tok,line)(TYPE(Tokenizer) *tok, const TYPE(LineInfo) *line,
  */
 public int
 FUN(tok,str)(TYPE(Tokenizer) *tok, const Char *line, int *argc,
-    const Char ***argv)
+    const Char * const **argv)
 {
 	TYPE(LineInfo) li;
 

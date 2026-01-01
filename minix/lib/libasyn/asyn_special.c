@@ -61,8 +61,10 @@ int asyn_special(asynchio_t *asyn, int fd, int op)
 
 	/* Try to read if I/O is pending. */
 	if (!seen || afd->afd_state[op] == PENDING) {
-		sigemptyset(&mask);
-		if (sigprocmask(SIG_SETMASK, &mask, &mask) < 0) return -1;
+		sigset_t newmask;
+
+		sigemptyset(&newmask);
+		if (sigprocmask(SIG_SETMASK, &newmask, &mask) < 0) return -1;
 		(void) fcntl(fd, F_SETFL, afd->afd_flags | O_NONBLOCK);
 
 		/* Let the caller try the system call. */

@@ -63,9 +63,9 @@ logwtmpx(const char *line, const char *name, const char *host, int status,
 	_DIAGASSERT(host != NULL);
 
 	(void)memset(&ut, 0, sizeof(ut));
-	(void)strncpy(ut.ut_line, line, sizeof(ut.ut_line));
-	(void)strncpy(ut.ut_name, name, sizeof(ut.ut_name));
-	(void)strncpy(ut.ut_host, host, sizeof(ut.ut_host));
+	(void)strlcpy(ut.ut_line, line, sizeof(ut.ut_line));
+	(void)strlcpy(ut.ut_name, name, sizeof(ut.ut_name));
+	(void)strlcpy(ut.ut_host, host, sizeof(ut.ut_host));
 	ut.ut_type = type;
 	if (WIFEXITED(status))
 		ut.ut_exit.e_exit = (uint16_t)WEXITSTATUS(status);

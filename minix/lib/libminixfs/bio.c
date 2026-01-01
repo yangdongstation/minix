@@ -36,6 +36,7 @@
 #include <minix/partition.h>
 #include <sys/ioctl.h>
 #include <assert.h>
+#include <inttypes.h>
 
 #include "inc.h"
 
@@ -135,7 +136,9 @@ lmfs_bio(dev_t dev, struct fsdriver_data * data, size_t bytes, off_t pos,
 	if (bytes == 0)
 		return 0; /* just in case */
 
-	if (pos < 0 || bytes > SSIZE_MAX || pos > INT64_MAX - bytes + 1)
+	if (pos < 0 || bytes > SSIZE_MAX)
+		return EINVAL;
+	if (pos > (off_t)INT64_MAX - (off_t)bytes + 1)
 		return EINVAL;
 
 	/*
@@ -199,8 +202,9 @@ lmfs_bio(dev_t dev, struct fsdriver_data * data, size_t bytes, off_t pos,
 			r = lmfs_get_block(&bp, dev, block, how);
 
 		if (r != OK) {
-			printf("libminixfs: error getting block <%"PRIx64","
-			    "%"PRIu64"> for device I/O (%d)\n", dev, block, r);
+			printf("libminixfs: error getting block <%" PRIx64
+			    ",%" PRIu64 "> for device I/O (%d)\n",
+			    (uint64_t)dev, (uint64_t)block, r);
 
 			break;
 		}

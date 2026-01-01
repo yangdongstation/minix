@@ -266,26 +266,43 @@ fail:
 	if (m) {
 		if (t) {
 			if (c) {
-				snprintf(tmp, sizeof(tmp), "%s_%s.%s@%s",
-				    l, t, c, m);
+				strlcpy(tmp, l, sizeof(tmp));
+				strlcat(tmp, "_", sizeof(tmp));
+				strlcat(tmp, t, sizeof(tmp));
+				strlcat(tmp, ".", sizeof(tmp));
+				strlcat(tmp, c, sizeof(tmp));
+				strlcat(tmp, "@", sizeof(tmp));
+				strlcat(tmp, m, sizeof(tmp));
 				strlcat(result, tmp, sizeof(result));
 				strlcat(result, ":", sizeof(result));
 			}
-			snprintf(tmp, sizeof(tmp), "%s_%s@%s", l, t, m);
+			strlcpy(tmp, l, sizeof(tmp));
+			strlcat(tmp, "_", sizeof(tmp));
+			strlcat(tmp, t, sizeof(tmp));
+			strlcat(tmp, "@", sizeof(tmp));
+			strlcat(tmp, m, sizeof(tmp));
 			strlcat(result, tmp, sizeof(result));
 			strlcat(result, ":", sizeof(result));
 		}
-		snprintf(tmp, sizeof(tmp), "%s@%s", l, m);
+		strlcpy(tmp, l, sizeof(tmp));
+		strlcat(tmp, "@", sizeof(tmp));
+		strlcat(tmp, m, sizeof(tmp));
 		strlcat(result, tmp, sizeof(result));
 		strlcat(result, ":", sizeof(result));
 	}
 	if (t) {
 		if (c) {
-			snprintf(tmp, sizeof(tmp), "%s_%s.%s", l, t, c);
+			strlcpy(tmp, l, sizeof(tmp));
+			strlcat(tmp, "_", sizeof(tmp));
+			strlcat(tmp, t, sizeof(tmp));
+			strlcat(tmp, ".", sizeof(tmp));
+			strlcat(tmp, c, sizeof(tmp));
 			strlcat(result, tmp, sizeof(result));
 			strlcat(result, ":", sizeof(result));
 		}
-		snprintf(tmp, sizeof(tmp), "%s_%s", l, t);
+		strlcpy(tmp, l, sizeof(tmp));
+		strlcat(tmp, "_", sizeof(tmp));
+		strlcat(tmp, t, sizeof(tmp));
 		strlcat(result, tmp, sizeof(result));
 		strlcat(result, ":", sizeof(result));
 	}
@@ -329,8 +346,22 @@ lookup_mofile(char *buf, size_t len, const char *dir, const char *lpath,
 			continue;
 #endif
 
-		snprintf(buf, len, "%s/%s/%s/%s.mo", dir, p,
-		    category, domainname);
+		if (strlcpy(buf, dir, len) >= len)
+			continue;
+		if (strlcat(buf, "/", len) >= len)
+			continue;
+		if (strlcat(buf, p, len) >= len)
+			continue;
+		if (strlcat(buf, "/", len) >= len)
+			continue;
+		if (strlcat(buf, category, len) >= len)
+			continue;
+		if (strlcat(buf, "/", len) >= len)
+			continue;
+		if (strlcat(buf, domainname, len) >= len)
+			continue;
+		if (strlcat(buf, ".mo", len) >= len)
+			continue;
 		if (stat(buf, &st) < 0)
 			continue;
 		if ((st.st_mode & S_IFMT) != S_IFREG)

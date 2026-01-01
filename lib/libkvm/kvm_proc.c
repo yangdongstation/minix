@@ -91,6 +91,7 @@ __RCSID("$NetBSD: kvm_proc.c,v 1.90 2014/02/19 20:21:22 dsl Exp $");
 #include <sys/types.h>
 
 #include <errno.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
@@ -975,7 +976,7 @@ kvm_argv(kvm_t *kd, const struct miniproc *p, u_long addr, int narg,
 		if (len + cc > kd->argspc_len) {
 			ptrdiff_t off;
 			char **pp;
-			char *op = kd->argspc;
+			uintptr_t op = (uintptr_t)kd->argspc;
 
 			kd->argspc_len *= 2;
 			kd->argspc = _kvm_realloc(kd, kd->argspc,
@@ -986,7 +987,7 @@ kvm_argv(kvm_t *kd, const struct miniproc *p, u_long addr, int narg,
 			 * Adjust argv pointers in case realloc moved
 			 * the string space.
 			 */
-			off = kd->argspc - op;
+			off = (ptrdiff_t)((uintptr_t)kd->argspc - op);
 			for (pp = kd->argv; pp < argv; pp++)
 				*pp += off;
 			ap += off;

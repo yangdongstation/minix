@@ -329,6 +329,13 @@
 #define	CMASK	022		/* default file mask: S_IWGRP|S_IWOTH */
 #define	NODEV	(dev_t)(-1)	/* non-existent device */
 
+#ifndef DEV_BSIZE
+#define	DEV_BSIZE	512
+#endif
+#ifndef DEV_BSHIFT
+#define	DEV_BSHIFT	9
+#endif
+
 /*
  * File system parameters and macros.
  *

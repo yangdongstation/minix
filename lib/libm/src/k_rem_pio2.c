@@ -158,7 +158,7 @@ int
 __kernel_rem_pio2(double *x, double *y, int e0, int nx, int prec, const int32_t *ipio2)
 {
 	int32_t jz,jx,jv,jp,jk,carry,n,iq[20],i,j,k,m,q0,ih;
-	double z,fw,f[20],fq[20],q[20];
+	double z,fw,f[20],fq[20] = {0},q[20];
 
     /* initialize jk*/
 	jk = init_jk[prec];
@@ -175,7 +175,9 @@ __kernel_rem_pio2(double *x, double *y, int e0, int nx, int prec, const int32_t 
 
     /* compute q[0],q[1],...q[jk] */
 	for (i=0;i<=jk;i++) {
-	    for(j=0,fw=0.0;j<=jx;j++) fw += x[j]*f[jx+i-j]; q[i] = fw;
+	    for (j=0,fw=0.0;j<=jx;j++)
+		fw += x[j]*f[jx+i-j];
+	    q[i] = fw;
 	}
 
 	jz = jk;

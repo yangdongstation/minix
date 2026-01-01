@@ -190,6 +190,7 @@ retry:
 			return T_LOR;
 		}
 		/*NOTREACHED*/
+		return T_ILCHAR;
 	case '=': case '!': case '<': case '>':
 		prevch = ch;
 		ch = _memstream_getc(&tcx->memstream);

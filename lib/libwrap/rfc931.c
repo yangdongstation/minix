@@ -87,7 +87,6 @@ rfc931(struct sockaddr *rmt_sin, struct sockaddr *our_sin, char *dest)
     char    user[256];			/* XXX */
     char    buffer[512];		/* XXX */
     char   *cp;
-    char   *result = unknown;
     FILE   *fp;
     volatile int salen;
     u_short * volatile rmt_portp;
@@ -95,7 +94,7 @@ rfc931(struct sockaddr *rmt_sin, struct sockaddr *our_sin, char *dest)
 
     /* address family must be the same */
     if (rmt_sin->sa_family != our_sin->sa_family) {
-	strlcpy(dest, result, STRING_LENGTH);
+	strlcpy(dest, unknown, STRING_LENGTH);
 	return;
     }
     switch (rmt_sin->sa_family) {
@@ -110,7 +109,7 @@ rfc931(struct sockaddr *rmt_sin, struct sockaddr *our_sin, char *dest)
 	break;
 #endif
     default:
-	strlcpy(dest, result, STRING_LENGTH);
+	strlcpy(dest, unknown, STRING_LENGTH);
 	return;
     }
     switch (our_sin->sa_family) {
@@ -123,14 +122,9 @@ rfc931(struct sockaddr *rmt_sin, struct sockaddr *our_sin, char *dest)
 	break;
 #endif
     default:
-	strlcpy(dest, result, STRING_LENGTH);
+	strlcpy(dest, unknown, STRING_LENGTH);
 	return;
     }
-
-#ifdef __GNUC__
-    (void)&result; /* Avoid longjmp clobbering */
-    (void)&fp;	/* XXX gcc */
-#endif
 
     /*
      * Use one unbuffered stdio stream for writing to and for reading from
@@ -226,12 +220,15 @@ rfc931(struct sockaddr *rmt_sin, struct sockaddr *our_sin, char *dest)
 
 		    if ((cp = strchr(user, '\r')) != NULL)
 			*cp = '\0';
-		    result = user;
+		    strlcpy(dest, user, STRING_LENGTH);
+		    alarm(0);
+		    fclose(fp);
+		    return;
 		}
 	    }
 	    alarm(0);
 	}
 	fclose(fp);
     }
-    strlcpy(dest, result, STRING_LENGTH);
+    strlcpy(dest, unknown, STRING_LENGTH);
 }

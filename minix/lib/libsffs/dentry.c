@@ -122,7 +122,7 @@ void del_dentry(struct inode *ino)
  * delete all its children as well, fragmenting the deleted branch into single
  * inodes.
  */
-  LIST_HEAD(work_list, inode) work_list;
+  struct inode *work_list;
   struct inode *child;
 
   del_one_dentry(ino);
@@ -135,25 +135,30 @@ void del_dentry(struct inode *ino)
    * Iterative version: this is potentially 128 levels deep.
    */
 
-  LIST_INIT(&work_list);
-  LIST_INSERT_HEAD(&work_list, ino, i_next);
+  ino->i_next.le_next = NULL;
+  ino->i_next.le_prev = NULL;
+  work_list = ino;
 
   do {
-	ino = LIST_FIRST(&work_list);
-	LIST_REMOVE(ino, i_next);
+	ino = work_list;
+	work_list = ino->i_next.le_next;
 
 	assert(IS_DIR(ino));
 
 	while (!LIST_EMPTY(&ino->i_child)) {
 		child = LIST_FIRST(&ino->i_child);
 		LIST_REMOVE(child, i_next);
+		child->i_next.le_next = NULL;
+		child->i_next.le_prev = NULL;
 
 		del_one_dentry(child);
 
-		if (HAS_CHILDREN(child))
-			LIST_INSERT_HEAD(&work_list, child, i_next);
+		if (HAS_CHILDREN(child)) {
+			child->i_next.le_next = work_list;
+			work_list = child;
+		}
 	}
-  } while (!LIST_EMPTY(&work_list));
+  } while (work_list != NULL);
 }
 
 /*===========================================================================*

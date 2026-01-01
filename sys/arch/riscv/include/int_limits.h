@@ -106,12 +106,20 @@
 #endif
 
 /* limits of wchar_t */
+#ifndef WCHAR_MIN
 #define WCHAR_MIN	(-0x7fffffff-1)
+#endif
+#ifndef WCHAR_MAX
 #define WCHAR_MAX	0x7fffffff
+#endif
 
 /* limits of wint_t */
+#ifndef WINT_MIN
 #define WINT_MIN	(-0x7fffffff-1)
+#endif
+#ifndef WINT_MAX
 #define WINT_MAX	0x7fffffff
+#endif
 
 /* limits of sig_atomic_t */
 #define SIG_ATOMIC_MIN	(-0x7fffffff-1)

@@ -1141,6 +1141,7 @@ init_linktype(p)
 	case DLT_IEEE802_11_RADIO_AVS:
 	case DLT_IEEE802_11_RADIO:
 		off_linkhdr.is_variable = 1;
+		/* FALLTHROUGH */
 		/* Fall through, 802.11 doesn't have a variable link
 		 * prefix but is otherwise the same. */
 
@@ -8734,6 +8735,7 @@ gen_mtp3field_code(mtp3field, jvalue, jtype, reverse)
 
 	case MH_OPC:
 		newoff_opc+=3;
+		/* FALLTHROUGH */
         case M_OPC:
 	        if (off_opc == (u_int)-1)
 			bpf_error("'opc' supported only on SS7");
@@ -8778,6 +8780,7 @@ gen_mtp3field_code(mtp3field, jvalue, jtype, reverse)
 
 	case MH_SLS:
 	  newoff_sls+=3;
+		/* FALLTHROUGH */
 	case M_SLS:
 	        if (off_sls == (u_int)-1)
 			bpf_error("'sls' supported only on SS7");

@@ -37,6 +37,7 @@
 #include <minix/drivers.h>
 #include <minix/sockdriver.h>
 #include <sys/ioctl.h>
+#include <string.h>
 
 static int running;
 
@@ -54,7 +55,9 @@ sockdriver_announce(void)
 	if ((r = ds_retrieve_label_name(label, sef_self())) != OK)
 		panic("sockdriver: unable to get own label: %d", r);
 
-	snprintf(key, sizeof(key), "%s%s", sockdriver_prefix, label);
+	if (strlcpy(key, sockdriver_prefix, sizeof(key)) >= sizeof(key) ||
+	    strlcat(key, label, sizeof(key)) >= sizeof(key))
+		panic("sockdriver: label too long");
 	if ((r = ds_publish_u32(key, DS_DRIVER_UP, DSF_OVERWRITE)) != OK)
 		panic("sockdriver: unable to publish driver up event: %d", r);
 }
