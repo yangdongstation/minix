@@ -8,9 +8,8 @@ Copyright 1995 Philip Homburg
 
 #include <stdio.h>
 #include <string.h>
+#include <machine/stackframe.h>
 #include <minix/sysutil.h>
-
-typedef unsigned int reg_t;
 
 extern reg_t get_bp(void);
 
@@ -35,4 +34,3 @@ void util_stacktrace(void)
 	printf("\n");
 #endif /* USE_SYSDEBUG */
 }
-

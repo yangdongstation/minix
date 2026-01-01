@@ -4,7 +4,9 @@
 #include <sys/types.h>
 #include <sys/endian.h>
 
+#if defined(__i386__) || defined(__riscv)
 #include <machine/multiboot.h>
+#endif
 
 #ifndef _MINIX_SYS_CONFIG_H
 #include <minix/sys_config.h>

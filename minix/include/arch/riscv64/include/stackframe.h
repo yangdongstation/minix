@@ -7,6 +7,11 @@
 #ifndef _RISCV64_STACKFRAME_H
 #define _RISCV64_STACKFRAME_H
 
+#include <sys/types.h>
+
+typedef unsigned long reg_t;		/* machine register */
+typedef reg_t segdesc_t;
+
 /* Stack frame structure - matches trapframe in kernel */
 struct stackframe_s {
     /* General purpose registers (x0-x31) */

@@ -6,7 +6,7 @@ SRCS+=	flt_rounds.c
 SRCS+=  _lwp.c makecontext.c resumecontext.c swapcontext.S
 
 # Common ieee754 constants and functions
-SRCS+=	infinityf_ieee754.c infinity_ieee754.c infinityl_dbl_ieee754.c
+SRCS+=	infinityf_ieee754.c infinity_ieee754.c infinityl_ieee754.c
 SRCS+=	fpclassifyf_ieee754.c fpclassifyd_ieee754.c
 SRCS+=	isinff_ieee754.c isinfd_ieee754.c
 SRCS+=	isnanf_ieee754.c isnand_ieee754.c

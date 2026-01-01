@@ -12,6 +12,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <sys/exec_elf.h>
 #include <sys/exec.h>
 
@@ -134,7 +135,7 @@ void minix_stack_fill(const char *path, int argc, char * const *argv,
 
 	/* Fill in the frame now. */
 	fpw = (char **) frame;
-	*fpw++ = (char *) argc;
+	*fpw++ = (char *)(uintptr_t)argc;
 
 	/* The strings themselves are stored after the aux vectors,
 	 * cf. top comment. */

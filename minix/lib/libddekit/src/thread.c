@@ -145,7 +145,8 @@ ddekit_thread_create(void (*fun)(void *), void *arg, const char *name)
 	}
 	th->ctx.uc_stack.ss_sp = th->stack;/* makecontext will determine sp */
 	th->ctx.uc_stack.ss_size = DDEKIT_THREAD_STACKSIZE;
-	makecontext(&th->ctx,_ddekit_thread_start,1 /* argc */,th /* pass thread as argument */);
+	makecontext(&th->ctx, (void (*)(void))_ddekit_thread_start,
+	    1 /* argc */, th /* pass thread as argument */);
 	DDEBUG_MSG_VERBOSE("created thread %s, stack at: %p\n", name,
 	    th->stack + DDEKIT_THREAD_STACKSIZE);
 	_ddekit_thread_enqueue(th);

@@ -43,6 +43,7 @@ __RCSID("$NetBSD: compat_ns_addr.c,v 1.3 2012/10/15 22:22:01 msaitoh Exp $");
 
 #include "namespace.h"
 #include <sys/param.h>
+#include <sys/endian.h>
 #include <compat/include/ns.h>
 
 #include <assert.h>

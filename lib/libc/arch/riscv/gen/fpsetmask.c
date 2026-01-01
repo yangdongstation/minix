@@ -38,7 +38,7 @@ __RCSID("$NetBSD: fpsetmask.c,v 1.1 2014/09/19 17:36:25 matt Exp $");
 
 #include <sys/types.h>
 #include <ieeefp.h>
-#include <riscv/sysreg.h>
+#include <machine/sysreg.h>
 
 #ifdef __weak_alias
 __weak_alias(fpsetmask,_fpsetmask)

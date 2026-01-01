@@ -20,6 +20,13 @@ _GCC_CRTN!=		${CC} --print-file-name=crtn.o
 .endif
 _GCC_CRTDIR!=		dirname ${_GCC_CRTBEGIN}
 _GCC_LIBGCCDIR!=	dirname `${CC} --print-libgcc-file-name`
+
+.if !exists(${_GCC_CRTBEGINS})
+_GCC_CRTBEGINS:=	${_GCC_CRTBEGIN}
+.endif
+.if !exists(${_GCC_CRTENDS})
+_GCC_CRTENDS:=		${_GCC_CRTEND}
+.endif
 .else
 _GCC_CRTBEGIN?=		${DESTDIR}/usr/lib/${MLIBDIR:D${MLIBDIR}/}crtbegin.o
 _GCC_CRTBEGINS?=	${DESTDIR}/usr/lib/${MLIBDIR:D${MLIBDIR}/}crtbeginS.o

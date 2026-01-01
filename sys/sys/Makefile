@@ -54,7 +54,7 @@ INCSYMLINKS=\
 	sys/stdarg.h /usr/include/stdarg.h \
 	sys/stdbool.h /usr/include/stdbool.h \
 	sys/stdint.h /usr/include/stdint.h \
-	machine/endian_machdep.h /usr/include/sys/endian_machdep.h \
+	../machine/endian_machdep.h /usr/include/sys/endian_machdep.h \
 	sys/syslog.h /usr/include/syslog.h \
 	sys/termios.h /usr/include/termios.h \
 	sys/rmd160.h /usr/include/rmd160.h \

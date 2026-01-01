@@ -238,7 +238,7 @@ builtin_peek(const struct fsdriver * __restrict fdp, ino_t ino_nr,
 		return ENOMEM;
 
 	data.endpt = SELF;
-	data.grant = (cp_grant_id_t)buf;
+	data.ptr = buf;
 	data.size = nbytes;
 
 	r = fdp->fdr_read(ino_nr, &data, nbytes, pos, FSC_READ);
@@ -937,7 +937,7 @@ bread_bwrite(const struct fsdriver * __restrict fdp,
 /*
  * Process a BREAD request from VFS.
  */
-ssize_t
+int
 fsdriver_bread(const struct fsdriver * __restrict fdp,
 	const message * __restrict m_in, message * __restrict m_out)
 {
@@ -951,7 +951,7 @@ fsdriver_bread(const struct fsdriver * __restrict fdp,
 /*
  * Process a BWRITE request from VFS.
  */
-ssize_t
+int
 fsdriver_bwrite(const struct fsdriver * __restrict fdp,
 	const message * __restrict m_in, message * __restrict m_out)
 {

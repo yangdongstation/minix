@@ -298,12 +298,8 @@ cpf_getgrants(cp_grant_id_t *grant_ids, int n)
 }
 
 int
-cpf_setgrant_direct(gid, who, addr, bytes, access)
-cp_grant_id_t gid;
-endpoint_t who;
-vir_bytes addr;
-size_t bytes;
-int access;
+cpf_setgrant_direct(cp_grant_id_t gid, endpoint_t who, vir_bytes addr,
+	size_t bytes, int access)
 {
 	GID_CHECK(gid);
 	ACCESS_CHECK(access);
@@ -318,10 +314,8 @@ int access;
 }
 
 int
-cpf_setgrant_indirect(gid, who_to, who_from, his_gid)
-cp_grant_id_t gid;
-endpoint_t who_to, who_from;
-cp_grant_id_t his_gid;
+cpf_setgrant_indirect(cp_grant_id_t gid, endpoint_t who_to,
+	endpoint_t who_from, cp_grant_id_t his_gid)
 {
 	GID_CHECK(gid);
 
@@ -335,12 +329,8 @@ cp_grant_id_t his_gid;
 }
 
 int
-cpf_setgrant_magic(gid, who_to, who_from, addr, bytes, access)
-cp_grant_id_t gid;
-endpoint_t who_to, who_from;
-vir_bytes addr;
-size_t bytes;
-int access;
+cpf_setgrant_magic(cp_grant_id_t gid, endpoint_t who_to,
+	endpoint_t who_from, vir_bytes addr, size_t bytes, int access)
 {
 	GID_CHECK(gid);
 	ACCESS_CHECK(access);
@@ -356,8 +346,7 @@ int access;
 }
 
 int
-cpf_setgrant_disable(gid)
-cp_grant_id_t gid;
+cpf_setgrant_disable(cp_grant_id_t gid)
 {
 	GID_CHECK(gid);
 

@@ -59,7 +59,7 @@ int pthread_mutex_trylock(pthread_mutex_t *mutex)
 		mthread_mutex_init(mutex, NULL);	
 	}
 
-	return pthread_mutex_trylock(mutex);
+	return mthread_mutex_trylock(mutex);
 }
 
 /*===========================================================================*
@@ -142,4 +142,3 @@ int pthread_rwlock_init(pthread_rwlock_t *rwlock, pthread_rwlockattr_t *UNUSED(a
 #if !defined(__weak_alias)
 #error __weak_alias is required to compile the pthread compat library
 #endif
-

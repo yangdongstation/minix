@@ -4,6 +4,7 @@
 #define _RISCV_FRAME_H_
 
 #include <machine/types.h>
+#include <sys/signal.h>
 
 /*
  * RISC-V trap frame
@@ -45,5 +46,14 @@ struct trapframe {
 	register_t tf_scause;	/* trap cause */
 	register_t tf_stval;	/* trap value */
 };
+
+#if defined(_KERNEL) || defined(__minix)
+struct sigframe_sigcontext {
+#if defined(__minix)
+	struct	sigcontext *sf_scp;	/* Let sigreturn find sigcontext */
+#endif /* defined(__minix) */
+	struct	sigcontext sf_sc;
+};
+#endif
 
 #endif /* _RISCV_FRAME_H_ */

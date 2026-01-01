@@ -410,7 +410,8 @@ void *arg;
 	if (stackaddr == MAP_FAILED)
   		mthread_panic("Failed to allocate stack to thread");
 
-#if defined(__i386__) || defined(__arm__)
+#if defined(__i386__) || defined(__arm__) || defined(__riscv) || \
+    defined(__riscv64__)
 	guard_start = stackaddr;
 	guard_end = stackaddr + MTHREAD_GUARDSIZE;
 	guarded_stacksize = stackaddr + stacksize - guard_end;
@@ -473,7 +474,8 @@ mthread_thread_t thread;
 	if (rt->m_context.uc_stack.ss_sp) {
 		stacksize = rt->m_context.uc_stack.ss_size;
 		stackaddr = rt->m_context.uc_stack.ss_sp;
-#if defined(__i386__) || defined(__arm__)
+#if defined(__i386__) || defined(__arm__) || defined(__riscv) || \
+    defined(__riscv64__)
 		stacksize += MTHREAD_GUARDSIZE;
 		stackaddr -= MTHREAD_GUARDSIZE;
 #else
@@ -547,4 +549,3 @@ __weak_alias(pthread_exit, mthread_exit)
 __weak_alias(pthread_join, mthread_join)
 __weak_alias(pthread_once, mthread_once)
 __weak_alias(pthread_self, mthread_self)
-

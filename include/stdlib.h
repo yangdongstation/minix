@@ -95,7 +95,7 @@ extern size_t __mb_cur_max;
 __BEGIN_DECLS
 __dead	 void _Exit(int);
 __dead	 void abort(void);
-__pure	 int abs(int);
+__constfunc int abs(int);
 int	 atexit(void (*)(void));
 double	 atof(const char *);
 int	 atoi(const char *);
@@ -111,7 +111,7 @@ div_t	 div(int, int);
 __dead	 void exit(int);
 void	 free(void *);
 __aconst char *getenv(const char *);
-__pure long
+__constfunc long
 	 labs(long);
 ldiv_t	 ldiv(long, long);
 void	*malloc(size_t);

@@ -62,9 +62,13 @@
 #  define	NLIST_ELF32
 #elif defined(__hppa__)
 #  define	NLIST_ELF32
-#elif defined(__riscv__)
-#  define	NLIST_ELF32
-#  ifdef __riscv64
+#elif defined(__riscv) || defined(__riscv__)
+#  if (defined(__riscv_xlen) && __riscv_xlen == 32) || \
+    defined(__riscv32) || defined(__riscv32__)
+#    define	NLIST_ELF32
+#  endif
+#  if (defined(__riscv_xlen) && __riscv_xlen == 64) || \
+    defined(__riscv64) || defined(__riscv64__)
 #    define	NLIST_ELF64
 #  endif
 #elif defined(__aarch64__)

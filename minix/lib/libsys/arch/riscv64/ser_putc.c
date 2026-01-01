@@ -4,8 +4,7 @@
  * Uses SBI console for output
  */
 
-#include <lib.h>
-#include <minix/syslib.h>
+#include "sysutil.h"
 
 /*
  * SBI ecall for console output
@@ -26,18 +25,9 @@ static void sbi_putchar(int ch)
 /*
  * Output a character to serial console
  */
-void ser_putc(int c)
+void ser_putc(char c)
 {
     if (c == '\n')
         sbi_putchar('\r');
     sbi_putchar(c);
-}
-
-/*
- * Output a string to serial console
- */
-void ser_puts(const char *s)
-{
-    while (*s)
-        ser_putc(*s++);
 }

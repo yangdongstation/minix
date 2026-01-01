@@ -30,6 +30,64 @@
 #define PTR_SCALESHIFT	3
 #endif
 
+#if defined(__riscv_xlen)
+#if __riscv_xlen == 64
+#define	REG_S	sd
+#define	REG_L	ld
+#define	SZREG	8
+#define	PTR_L	ld
+#define	PTR_S	sd
+#define	PTR_WORD	.dword
+#elif __riscv_xlen == 32
+#define	REG_S	sw
+#define	REG_L	lw
+#define	SZREG	4
+#define	PTR_L	lw
+#define	PTR_S	sw
+#define	PTR_WORD	.word
+#else
+#define	REG_S	sd
+#define	REG_L	ld
+#define	SZREG	8
+#define	PTR_L	ld
+#define	PTR_S	sd
+#define	PTR_WORD	.dword
+#endif
+#elif defined(__riscv64) || defined(__riscv64__)
+#define	REG_S	sd
+#define	REG_L	ld
+#define	SZREG	8
+#define	PTR_L	ld
+#define	PTR_S	sd
+#define	PTR_WORD	.dword
+#elif defined(__riscv32) || defined(__riscv32__)
+#define	REG_S	sw
+#define	REG_L	lw
+#define	SZREG	4
+#define	PTR_L	lw
+#define	PTR_S	sw
+#define	PTR_WORD	.word
+#else
+#define	REG_S	sd
+#define	REG_L	ld
+#define	SZREG	8
+#define	PTR_L	ld
+#define	PTR_S	sd
+#define	PTR_WORD	.dword
+#endif
+
+#define	INT_S	sw
+#define	INT_L	lw
+
+#define	CALLFRAME_RA	(0 * SZREG)
+#define	CALLFRAME_S0	(1 * SZREG)
+#define	CALLFRAME_S1	(2 * SZREG)
+#define	CALLFRAME_SIZ	(4 * SZREG)
+
+#define	PLT(x)	x
+
+#define	__RCSID(x)	RCSID(x)
+
 /* let kernels and loaders use something like <machine/asm.h> */
 #ifndef _LOCORE
 #define _LOCORE

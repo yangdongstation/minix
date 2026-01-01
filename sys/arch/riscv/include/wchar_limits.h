@@ -38,6 +38,7 @@
 
 /* limits of wchar_t */
 
+#ifndef WCHAR_MIN
 #ifdef __WCHAR_MIN__
 #define	WCHAR_MIN	__WCHAR_MIN__			/* wchar_t	  */
 #elif __WCHAR_UNSIGNED__
@@ -45,7 +46,9 @@
 #else
 #define	WCHAR_MIN	(-0x7fffffff-1)			/* wchar_t	  */
 #endif
+#endif
 
+#ifndef WCHAR_MAX
 #ifdef __WCHAR_MAX__
 #define	WCHAR_MAX	__WCHAR_MAX__			/* wchar_t	  */
 #elif __WCHAR_UNSIGNED__
@@ -53,9 +56,11 @@
 #else
 #define	WCHAR_MAX	0x7fffffff			/* wchar_t	  */
 #endif
+#endif
 
 /* limits of wint_t */
 
+#ifndef WINT_MIN
 #ifdef __WINT_MIN__
 #define	WINT_MIN	__WINT_MIN__			/* wint_t	  */
 #elif __WINT_UNSIGNED__
@@ -63,13 +68,16 @@
 #else
 #define	WINT_MIN	(-0x7fffffff-1)			/* wint_t	  */
 #endif
+#endif
 
+#ifndef WINT_MAX
 #ifdef __WINT_MAX__
 #define	WINT_MAX	__WINT_MAX__			/* wint_t	  */
 #elif __WINT_UNSIGNED__
 #define	WINT_MAX	0xffffffffU			/* wint_t	  */
 #else
 #define	WINT_MAX	0x7fffffff			/* wint_t	  */
+#endif
 #endif
 
 #endif /* !_RISCV_WCHAR_LIMITS_H_ */

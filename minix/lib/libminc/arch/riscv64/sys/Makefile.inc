@@ -1,6 +1,6 @@
 # Makefile for RISC-V 64 libc system call stubs
 
-.PATH: ${.CURDIR}/sys
+.PATH: ${.PARSEDIR}
 
 SRCS+= \
 	_ipc.S \

@@ -37,7 +37,6 @@
 #include <machine/int_types.h>
 
 #if defined(_KERNEL) || defined(_KMEMUSER) || defined(_KERNTYPES)
-
 typedef unsigned long	paddr_t;
 typedef unsigned long	psize_t;
 typedef unsigned long	vaddr_t;
@@ -52,7 +51,21 @@ typedef unsigned long	vsize_t;
 typedef long int	register_t;
 typedef unsigned long	uregister_t;
 #define PRIxREGISTER	"lx"
+#elif defined(_NETBSD_SOURCE)
+typedef unsigned long	paddr_t;
+typedef unsigned long	psize_t;
+typedef unsigned long	vaddr_t;
+typedef unsigned long	vsize_t;
+#define PRIxPADDR	"lx"
+#define PRIxPSIZE	"lx"
+#define PRIuPSIZE	"lu"
+#define PRIxVADDR	"lx"
+#define PRIxVSIZE	"lx"
+#define PRIuVSIZE	"lu"
 
+typedef long int	register_t;
+typedef unsigned long	uregister_t;
+#define PRIxREGISTER	"lx"
 #endif /* _KERNEL || _KMEMUSER || _KERNTYPES */
 
 #if defined(_KERNEL)
@@ -80,5 +93,7 @@ typedef long		__register_t;
 #ifdef __riscv64
 #define __HAVE_ATOMIC64_OPS
 #endif
+
+#define TLS_TP_OFFSET	0
 
 #endif /* _RISCV_TYPES_H_ */

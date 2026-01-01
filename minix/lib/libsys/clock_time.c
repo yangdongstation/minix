@@ -1,6 +1,7 @@
 
 #include "sysutil.h"
 #include <sys/time.h>
+#include <stdint.h>
 
 /*
  * This routine returns the time in seconds since 1.1.1970.  MINIX is an
@@ -33,7 +34,7 @@ clock_time(struct timespec *tv)
 		 * We do not want to overflow, and system_hz can be as high as
 		 * 50kHz.
 		 */
-		if (system_hz < LONG_MAX / 40000)
+		if (system_hz < UINT32_MAX / 40000U)
 			tv->tv_nsec = (realtime % system_hz) * 40000 /
 			    system_hz * 25000;
 		else

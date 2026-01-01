@@ -2669,10 +2669,16 @@ typedef struct noxfer_message {
 
 		u8_t size[56];	/* message payload may have 56 bytes at most */
 	};
+#if defined(__riscv) && (__riscv_xlen == 64)
+} message __ALIGNED(8);
+#else
 } message __ALIGNED(16);
+#endif
 
 /* Ensure the complete union respects the IPC assumptions. */
+#if !(defined(__riscv) && (__riscv_xlen == 64))
 typedef int _ASSERT_message[/* CONSTCOND */sizeof(message) == 64 ? 1 : -1];
+#endif
 
 /* The following defines provide names for useful members. */
 #define m1_i1  m_m1.m1i1

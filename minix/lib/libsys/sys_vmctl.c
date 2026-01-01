@@ -59,7 +59,7 @@ int sys_vmctl_get_memreq(endpoint_t *who, vir_bytes *mem,
 	*wrflag = m.SVMCTL_MRG_FLAG;
 	*who_s = m.SVMCTL_MRG_EP2;
 	*mem_s = m.SVMCTL_MRG_ADDR2;
-	*requestor = (endpoint_t) m.SVMCTL_MRG_REQUESTOR;
+	*requestor = (endpoint_t)(uintptr_t) m.SVMCTL_MRG_REQUESTOR;
   }
   return r;
 }

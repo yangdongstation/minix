@@ -10,9 +10,14 @@ INCS=	ansi.h asm.h bswap.h byte_swap.h cdefs.h \
 	float.h frame.h \
 	int_const.h int_fmtio.h int_limits.h int_mwgwtypes.h int_types.h \
 	limits.h \
+	mcontext.h \
+	mutex.h \
+	multiboot.h \
 	param.h \
+	profile.h \
 	reg.h \
+	rwlock.h \
 	setjmp.h signal.h \
-	types.h wchar_limits.h
+	types.h vmparam.h wchar_limits.h
 
 .include <bsd.kinc.mk>

@@ -29,7 +29,8 @@ inputdriver_announce(unsigned int type)
 	if ((r = ds_retrieve_label_name(label, sef_self())) != OK)
 		panic("libinputdriver: unable to retrieve own label: %d", r);
 
-	snprintf(key, sizeof(key), "%s%s", driver_prefix, label);
+	strlcpy(key, driver_prefix, sizeof(key));
+	strlcat(key, label, sizeof(key));
 	if ((r = ds_publish_u32(key, type, DSF_OVERWRITE)) != OK)
 		panic("libinputdriver: unable to publish up event: %d", r);
 

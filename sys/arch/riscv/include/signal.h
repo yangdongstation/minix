@@ -26,7 +26,13 @@ struct sigcontext {
 	int		__sc_mask13;	/* saved signal mask (old style) */
 	struct reg	sc_regs;	/* saved registers */
 	struct fpreg	sc_fpregs;	/* saved FP registers */
-	long		sc_mask;	/* saved signal mask (new style) */
+	sigset_t	sc_mask;	/* saved signal mask (new style) */
+#ifdef __minix
+#define SC_MAGIC	0xc0ffee3
+	int		sc_magic;
+	int		sc_flags;
+	int		trap_style;
+#endif
 };
 
 #endif /* _NETBSD_SOURCE */

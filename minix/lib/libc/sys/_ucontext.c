@@ -73,7 +73,7 @@ int getuctx(ucontext_t *ucp)
 void makecontext(ucontext_t *ucp, void (*func)(void), int argc, ...)
 {
   va_list ap;
-  unsigned int *stack_top;
+  uintptr_t *stack_top;
 
   /* There are a number of situations that are erroneous, but we can't actually
      tell the caller something is wrong, because this is a void function.
@@ -209,6 +209,60 @@ void makecontext(ucontext_t *ucp, void (*func)(void), int argc, ...)
 	if (stack_top == ucp->uc_stack.ss_sp) {
 		_UC_MACHINE_SET_STACK(ucp, 0);
 	}
+#elif defined(__riscv) || defined(__riscv64)
+	/* The first eight arguments are passed in a0-a7, rest on the stack.
+	   When func returns, it jumps to ctx_start, which calls resumecontext.
+	   Store ucp in s1 (callee-saved) so ctx_start can retrieve it. */
+
+	/* Find the top of the stack from which we grow downwards. */
+	stack_top = (uintptr_t *)((uintptr_t)ucp->uc_stack.ss_sp +
+	    ucp->uc_stack.ss_size);
+
+	/* Align the arguments to 16 bytes (we might lose a few bytes of stack
+	   space here). */
+	stack_top = (uintptr_t *)((uintptr_t)stack_top & ~0xf);
+
+	/* Make room for `func' routine arguments that don't fit in a0-a7. */
+	if (argc > 8)
+		stack_top -= argc - 8;
+
+	/* Adjust the machine context to point to the top of this stack and the
+	   program counter to the 'func' entry point. Set ra to ctx_start and
+	   keep ucp in s1 for ctx_start. */
+	_UC_MACHINE_SET_FP(ucp, 0);
+	_UC_MACHINE_SET_STACK(ucp, (reg_t)stack_top);
+	_UC_MACHINE_SET_PC(ucp, (reg_t)func);
+	_UC_MACHINE_SET_LR(ucp, (reg_t)ctx_start);
+	_UC_MACHINE_SET_S1(ucp, (reg_t)ucp);
+
+	/* Copy arguments to a0-a7 and stack. */
+	va_start(ap, argc);
+	if (argc-- > 0)
+		_UC_MACHINE_SET_R0(ucp, va_arg(ap, uintptr_t));
+	if (argc-- > 0)
+		_UC_MACHINE_SET_R1(ucp, va_arg(ap, uintptr_t));
+	if (argc-- > 0)
+		_UC_MACHINE_SET_R2(ucp, va_arg(ap, uintptr_t));
+	if (argc-- > 0)
+		_UC_MACHINE_SET_R3(ucp, va_arg(ap, uintptr_t));
+	if (argc-- > 0)
+		_UC_MACHINE_SET_R4(ucp, va_arg(ap, uintptr_t));
+	if (argc-- > 0)
+		_UC_MACHINE_SET_R5(ucp, va_arg(ap, uintptr_t));
+	if (argc-- > 0)
+		_UC_MACHINE_SET_R6(ucp, va_arg(ap, uintptr_t));
+	if (argc-- > 0)
+		_UC_MACHINE_SET_R7(ucp, va_arg(ap, uintptr_t));
+	while (argc-- > 0) {
+		*stack_top++ = va_arg(ap, uintptr_t);
+	}
+	va_end(ap);
+
+	/* If we ran out of stack space, invalidate stack pointer. Eventually,
+	   swapcontext will choke on this and return ENOMEM. */
+	if (stack_top == ucp->uc_stack.ss_sp) {
+		_UC_MACHINE_SET_STACK(ucp, 0);
+	}
 #else
 # error "Unsupported platform"
 #endif
@@ -258,4 +312,3 @@ void resumecontext(ucontext_t *ucp)
 
   exit(1); /* Never reached */
 }
-

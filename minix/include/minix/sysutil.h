@@ -61,6 +61,8 @@ u32_t sys_hz(void);
 double getidle(void);
 void util_stacktrace(void);
 int micro_delay(u32_t micros);
+void read_tsc(u32_t *hi, u32_t *lo);
+void read_tsc_64(u64_t *t);
 u32_t tsc_64_to_micros(u64_t tsc);
 u32_t tsc_to_micros(u32_t low, u32_t high);
 u32_t tsc_get_khz(void);
@@ -76,6 +78,13 @@ u32_t frclock_64_to_micros(u64_t tsc);
 void ser_putc(char c);
 void get_randomness(struct k_randomness *, int);
 u32_t sqrt_approx(u32_t);
+
+#if defined(__riscv64)
+void tsc_init(void);
+u64_t tsc_get_freq(void);
+u64_t tsc_to_usec(u64_t ticks);
+u64_t usec_to_tsc(u64_t usec);
+#endif
 
 int stime(time_t *_top);
 
@@ -113,4 +122,3 @@ typedef struct util_timingdata util_timingdata_t;
 int gcov_flush(endpoint_t endpt, cp_grant_id_t grant, size_t bufsize);
 
 #endif /* _MINIX_SYSUTIL_H */
-

@@ -246,9 +246,10 @@ int libexec_load_elf(struct exec_info *execi)
 				vaddr, vaddr+fbytes, clearend);
 #endif
 
-			if(seg_membytes > fbytes) {
-				int rem_mem = seg_membytes - fbytes;;
-				vir_bytes remstart = vaddr + fbytes;
+			if (seg_membytes > (vir_bytes)fbytes) {
+				size_t rem_mem =
+				    seg_membytes - (vir_bytes)fbytes;
+				vir_bytes remstart = vaddr + (vir_bytes)fbytes;
 				if(execi->allocmem_ondemand(execi,
 					remstart, rem_mem) != OK) {
 					printf("libexec: mmap extra mem failed\n");
@@ -315,4 +316,3 @@ int libexec_load_elf(struct exec_info *execi)
 
 	return OK;
 }
-

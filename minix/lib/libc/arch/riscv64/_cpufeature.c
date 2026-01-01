@@ -34,16 +34,28 @@ int _cpufeature(int feature)
         /* RISC-V F/D extensions (floating point) */
         return 1;  /* Assume present on RV64GC */
 
+    case _CPUF_I386_HTT:
+        /* SMP is handled differently on RISC-V */
+        return 0;
+
+    case _CPUF_I386_PSE:
+    case _CPUF_I386_PGE:
+    case _CPUF_I386_APIC_ON_CHIP:
+    case _CPUF_I386_TSC:
+    case _CPUF_I386_SSE1234_12:
+    case _CPUF_I386_FXSR:
     case _CPUF_I386_SSE:
     case _CPUF_I386_SSE2:
     case _CPUF_I386_SSE3:
-    case _CPUF_I386_SSE4:
-    case _CPUF_I386_SSE4A:
-        /* No SSE on RISC-V */
-        return 0;
-
-    case _CPUF_I386_HTT:
-        /* SMP is handled differently on RISC-V */
+    case _CPUF_I386_SSSE3:
+    case _CPUF_I386_SSE4_1:
+    case _CPUF_I386_SSE4_2:
+    case _CPUF_I386_HTT_MAX_NUM:
+    case _CPUF_I386_MTRR:
+    case _CPUF_I386_SYSENTER:
+    case _CPUF_I386_SYSCALL:
+    case _CPUF_I386_PAE:
+        /* i386-specific features are not present on RISC-V. */
         return 0;
 
     default:

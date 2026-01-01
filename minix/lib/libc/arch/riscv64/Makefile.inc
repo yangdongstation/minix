@@ -1,6 +1,8 @@
 # Makefile for RISC-V 64 libc architecture support
 
-.PATH: ${.CURDIR}/arch/riscv64
+ARCHSUBDIR?= ${MACHINE_CPU}
+C_HERE=	${NETBSDSRCDIR}/minix/lib/libc/arch/${ARCHSUBDIR}
+.PATH: ${C_HERE}
 
 # Architecture-specific C sources
 SRCS+= \
@@ -12,4 +14,4 @@ SRCS+= \
 	read_tsc.S
 
 # Include system call stubs
-.include "${.CURDIR}/arch/riscv64/sys/Makefile.inc"
+.include "${C_HERE}/sys/Makefile.inc"

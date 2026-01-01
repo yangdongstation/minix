@@ -6,6 +6,8 @@
 SRCS+= \
 	_cpufeature.c
 
+SRCS+=	__sigaction14_sigtramp.c __sigtramp2.S
+
 # Architecture-specific assembly
 SRCS+= \
 	get_bp.S \

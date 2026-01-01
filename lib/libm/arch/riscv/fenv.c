@@ -39,7 +39,7 @@ __RCSID("$NetBSD: fenv.c,v 1.1 2014/09/19 17:36:25 matt Exp $");
 #include <stddef.h>
 #include <string.h>
 
-#include <riscv/sysreg.h>
+#include <machine/sysreg.h>
 
 /*
  * The following constant represents the default floating-point environment

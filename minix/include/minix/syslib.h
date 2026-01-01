@@ -75,6 +75,14 @@ int sys_vmctl_set_addrspace(endpoint_t who, phys_bytes ptroot, void
 
 
 /* Shorthands for sys_sdevio() system call. */
+#if defined(__riscv64)
+int sys_insb(u32_t port, endpoint_t proc_ep, void *buffer, int count);
+int sys_insw(u32_t port, endpoint_t proc_ep, void *buffer, int count);
+int sys_insl(u32_t port, endpoint_t proc_ep, void *buffer, int count);
+int sys_outsb(u32_t port, endpoint_t proc_ep, void *buffer, int count);
+int sys_outsw(u32_t port, endpoint_t proc_ep, void *buffer, int count);
+int sys_outsl(u32_t port, endpoint_t proc_ep, void *buffer, int count);
+#else
 #define sys_insb(port, proc_ep, buffer, count) \
   sys_sdevio(DIO_INPUT_BYTE, port, proc_ep, buffer, count, 0)
 #define sys_insw(port, proc_ep, buffer, count) \
@@ -93,6 +101,7 @@ int sys_vmctl_set_addrspace(endpoint_t who, phys_bytes ptroot, void
   sys_sdevio(DIO_SAFE_OUTPUT_WORD, port, ept, (void*)grant, count, offset)
 int sys_sdevio(int req, long port, endpoint_t proc_ep, void *buffer, int
 	count, vir_bytes offset);
+#endif
 void *alloc_contig(size_t len, int flags, phys_bytes *phys);
 int free_contig(void *addr, size_t len);
 
@@ -294,4 +303,3 @@ int closenb(int fd);
 int proceventmask(unsigned int mask);
 
 #endif /* _SYSLIB_H */
-

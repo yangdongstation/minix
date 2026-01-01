@@ -1606,11 +1606,11 @@ timesub(const time_t *timep, int_fast32_t offset,
 	int			y;
 	const int *		ip;
 	int_fast64_t		corr;
-	bool			hit;
+	int			hit;
 	int			i;
 
 	corr = 0;
-	hit = false;
+	hit = 0;
 	i = (sp == NULL) ? 0 : sp->leapcnt;
 	while (--i >= 0) {
 		lp = &sp->lsis[i];

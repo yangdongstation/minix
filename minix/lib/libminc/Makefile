@@ -187,6 +187,7 @@ CLEANFILES+= ${f:C/\.o/.bc/}
 #
 
 .include "${.CURDIR}/arch/${MACHINE_ARCH}/Makefile.libc.inc"
+.include "${.CURDIR}/arch/${MACHINE_ARCH}/sys/Makefile.inc"
 
 # This file is specifically generated
 SRCS+= errlist.c

@@ -4,12 +4,13 @@
 
 #include <lib.h>
 #include <minix/syslib.h>
+#include <string.h>
 
 /*
  * Map remote memory segment
  */
-int sys_umap_remote(endpoint_t ep, int seg, vir_bytes offset,
-                    vir_bytes len, phys_bytes *addr)
+int sys_umap_remote(endpoint_t ep, endpoint_t grantee, int seg,
+    vir_bytes offset, vir_bytes len, phys_bytes *addr)
 {
     message m;
     int r;
@@ -17,6 +18,7 @@ int sys_umap_remote(endpoint_t ep, int seg, vir_bytes offset,
     memset(&m, 0, sizeof(m));
     m.m_type = SYS_UMAP_REMOTE;
     m.m_lsys_krn_sys_umap.src_endpt = ep;
+    m.m_lsys_krn_sys_umap.dst_endpt = grantee;
     m.m_lsys_krn_sys_umap.segment = seg;
     m.m_lsys_krn_sys_umap.src_addr = offset;
     m.m_lsys_krn_sys_umap.nr_bytes = len;

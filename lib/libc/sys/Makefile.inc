@@ -2,7 +2,7 @@
 #	@(#)Makefile.inc	8.3 (Berkeley) 10/24/94
 
 .if defined(__MINIX)
-.PATH: ${.CURDIR}/sys
+.PATH: ${ARCHDIR}/sys ${.CURDIR}/sys
 .else
 # sys sources
 .PATH: ${ARCHDIR}/sys ${.CURDIR}/sys

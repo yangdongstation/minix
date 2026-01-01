@@ -1,4 +1,6 @@
-.PATH:	${NETBSDSRCDIR}/minix/lib/libc/sys
+.PATH:	${NETBSDSRCDIR}/minix/lib/libc/sys \
+	${NETBSDSRCDIR}/minix/lib/libc/arch/${ARCHSUBDIR} \
+	${NETBSDSRCDIR}/minix/lib/libc/arch/${ARCHSUBDIR}/sys
 
 SRCS+= 	accept.c access.c adjtime.c bind.c brk.c sbrk.c m_closefrom.c getsid.c \
 	chdir.c chmod.c fchmod.c chown.c fchown.c chroot.c close.c \

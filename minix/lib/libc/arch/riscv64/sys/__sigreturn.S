@@ -5,7 +5,6 @@
  */
 
 #include <machine/asm.h>
-#include <sys/syscall.h>
 
 /*
  * void __sigreturn(void)
@@ -13,10 +12,9 @@
  * Return from signal handler
  */
 ENTRY(__sigreturn)
-    /* Load sigreturn syscall number */
-    li      a7, SYS___sigreturn
-    ecall
-
+    REG_L   a0, 0(sp)
+    addi    sp, sp, SZREG
+    call    _C_LABEL(sigreturn)
     /* Should not return, but just in case */
 1:
     j       1b
@@ -37,9 +35,9 @@ ENTRY(__sigtramp)
 
     /* Handler returned, do sigreturn */
     /* sp still points to signal frame */
-    li      a7, SYS___sigreturn
-    ecall
-
+    REG_L   a0, 0(sp)
+    addi    sp, sp, SZREG
+    call    _C_LABEL(sigreturn)
     /* Should not return */
 1:
     j       1b

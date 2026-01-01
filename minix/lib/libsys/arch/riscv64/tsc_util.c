@@ -22,7 +22,7 @@ void tsc_init(void)
 /*
  * Read cycle counter
  */
-void read_tsc(u32_t *lo, u32_t *hi)
+void read_tsc(u32_t *hi, u32_t *lo)
 {
     u64_t val;
     __asm__ __volatile__("rdcycle %0" : "=r"(val));
@@ -33,11 +33,11 @@ void read_tsc(u32_t *lo, u32_t *hi)
 /*
  * Read 64-bit cycle counter
  */
-u64_t read_tsc_64(void)
+void read_tsc_64(u64_t *t)
 {
     u64_t val;
     __asm__ __volatile__("rdcycle %0" : "=r"(val));
-    return val;
+    *t = val;
 }
 
 /*

@@ -22,6 +22,11 @@ CPPFLAGS+= -DNDEBUG
 DBG=	-Os
 .endif
 
+CPPFLAGS+= -D__minix
+.if ${MACHINE_ARCH} == "riscv64"
+CPPFLAGS+= -D__riscv64 -D__riscv64__
+.endif
+
 .if ${MKMAGIC:Uno} == "yes" || ${MKASR:Uno} == "yes"
 CPPFLAGS+= -D_MINIX_MAGIC=1
 STRIPFLAG= -s

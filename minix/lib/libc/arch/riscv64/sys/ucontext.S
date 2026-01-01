@@ -111,11 +111,14 @@ ENTRY(setcontext)
     ld      ra, UC_GREGS+REG_RA(a0)
     ld      sp, UC_GREGS+REG_SP(a0)
 
+    /* Load target PC before clobbering a0 */
+    ld      t0, UC_GREGS+REG_PC(a0)
+
     /* Load return value into a0 */
     ld      a0, UC_GREGS+REG_A0(a0)
 
-    /* Jump to saved PC (which is in ra) */
-    ret
+    /* Jump to saved PC */
+    jr      t0
 END(setcontext)
 
 /*
@@ -168,7 +171,22 @@ ENTRY(swapcontext)
     ld      ra, UC_GREGS+REG_RA(a0)
     ld      sp, UC_GREGS+REG_SP(a0)
 
+    /* Load target PC before clobbering a0 */
+    ld      t0, UC_GREGS+REG_PC(a0)
+
     ld      a0, UC_GREGS+REG_A0(a0)
 
-    ret
+    jr      t0
 END(swapcontext)
+
+/*
+ * void ctx_start(void)
+ *
+ * Called when the context function returns. s1 holds the ucp.
+ */
+ENTRY(ctx_start)
+    mv      a0, s1
+    call    _C_LABEL(resumecontext)
+1:
+    j       1b
+END(ctx_start)

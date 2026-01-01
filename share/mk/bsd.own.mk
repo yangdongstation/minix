@@ -1100,7 +1100,13 @@ MACHINE_GNU_PLATFORM?=${MACHINE_GNU_ARCH}--netbsd
 
 .if defined(__MINIX)
 # We have a simpler toolchain naming scheme
+.  if defined(EXTERNAL_TOOLCHAIN)
+.    if !defined(MACHINE_GNU_PLATFORM) || ${MACHINE_GNU_PLATFORM:M*netbsd*} != ""
 MACHINE_GNU_PLATFORM:=${MACHINE_GNU_ARCH}-elf32-minix
+.    endif
+.  else
+MACHINE_GNU_PLATFORM:=${MACHINE_GNU_ARCH}-elf32-minix
+.  endif
 
 # We need to check for HAVE_GOLD after LD has been set
 .  if ${_HAVE_GOLD:U} == ""

@@ -3,9 +3,7 @@
 /*===========================================================================*
  *                                sys_sigreturn				     *
  *===========================================================================*/
-int sys_sigreturn(proc_ep, sig_ctxt)
-endpoint_t proc_ep;			/* for which process */
-struct sigmsg *sig_ctxt;		/* POSIX style handling */
+int sys_sigreturn(endpoint_t proc_ep, struct sigmsg *sig_ctxt)
 {
     message m;
     int result;
@@ -15,4 +13,3 @@ struct sigmsg *sig_ctxt;		/* POSIX style handling */
     result = _kernel_call(SYS_SIGRETURN, &m);
     return(result);
 }
-

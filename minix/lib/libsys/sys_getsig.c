@@ -3,9 +3,7 @@
 /*===========================================================================*
  *                                sys_getksig				     *
  *===========================================================================*/
-int sys_getksig(proc_ep, k_sig_map)
-endpoint_t *proc_ep;			/* return process number here */
-sigset_t *k_sig_map;			/* return signal map here */
+int sys_getksig(endpoint_t *proc_ep, sigset_t *k_sig_map)
 {
     message m;
     int result;
@@ -15,4 +13,3 @@ sigset_t *k_sig_map;			/* return signal map here */
     *k_sig_map = m.m_sigcalls.map;
     return(result);
 }
-

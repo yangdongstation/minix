@@ -39,6 +39,7 @@ __RCSID("$NetBSD: compat_ns_ntoa.c,v 1.2 2012/03/20 17:05:59 matt Exp $");
 #endif /* LIBC_SCCS and not lint */
 
 #include <sys/param.h>
+#include <sys/endian.h>
 #include <compat/include/ns.h>
 
 #include <assert.h>

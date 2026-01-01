@@ -43,6 +43,7 @@ __RCSID("$NetBSD: _lwp.c,v 1.1 2014/09/19 17:36:25 matt Exp $");
 #include "namespace.h"
 #include <sys/param.h>
 #include <sys/types.h>
+#include <sys/tls.h>
 #include <ucontext.h>
 #include <lwp.h>
 #include <stdlib.h>

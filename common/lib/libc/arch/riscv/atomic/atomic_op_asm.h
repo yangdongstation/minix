@@ -34,6 +34,34 @@
 
 #include <machine/asm.h>
 
+#if defined(__riscv_xlen)
+#if __riscv_xlen == 64
+#define	INT_ADD	addw
+#define	INT_SUB	subw
+#define	LONG_ADD	add
+#elif __riscv_xlen == 32
+#define	INT_ADD	add
+#define	INT_SUB	sub
+#define	LONG_ADD	add
+#else
+#define	INT_ADD	addw
+#define	INT_SUB	subw
+#define	LONG_ADD	add
+#endif
+#elif defined(__riscv64)
+#define	INT_ADD	addw
+#define	INT_SUB	subw
+#define	LONG_ADD	add
+#elif defined(__riscv32)
+#define	INT_ADD	add
+#define	INT_SUB	sub
+#define	LONG_ADD	add
+#else
+#define	INT_ADD	addw
+#define	INT_SUB	subw
+#define	LONG_ADD	add
+#endif
+
 #if defined(_KERNEL) || defined(_STANDALONE)
 
 #define	ATOMIC_OP_ALIAS(a,s)	STRONG_ALIAS(a,s)

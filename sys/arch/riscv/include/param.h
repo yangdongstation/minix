@@ -53,6 +53,8 @@
 #define ALIGNBYTES32	(sizeof(int) - 1)
 #define ALIGN32(p)	(((uintptr_t)(p) + ALIGNBYTES32) & ~ALIGNBYTES32)
 
+#define STACK_ALIGNBYTES	(16 - 1)
+
 /*
  * Round p (pointer or byte index) up to a correctly-aligned value
  * for all data types (int, long, ...).   The result is u_int and
@@ -63,10 +65,6 @@
  * This does not reflect the optimal alignment, just the possibility
  * (within reasonable limits).
  */
-#define ALIGNBYTES	(sizeof(long) - 1)
-#define ALIGN(p)	(((uintptr_t)(p) + ALIGNBYTES) & ~ALIGNBYTES)
-#define ALIGNED_POINTER(p,t)	((((uintptr_t)(p)) & (sizeof(t)-1)) == 0)
-
 #define PGSHIFT		12		/* LOG2(NBPG) */
 #define NBPG		(1 << PGSHIFT)	/* bytes/page */
 #define PGOFSET		(NBPG - 1)	/* byte offset into page */

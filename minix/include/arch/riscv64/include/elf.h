@@ -8,6 +8,9 @@
 /* ELF machine type */
 #define EM_RISCV        243
 
+/* Define "machine" characteristics */
+#define ELF_TARG_VER    1
+
 /* RISC-V specific ELF flags */
 #define EF_RISCV_RVC                0x0001  /* Uses compressed instructions */
 #define EF_RISCV_FLOAT_ABI_MASK     0x0006  /* Floating point ABI */
