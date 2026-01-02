@@ -223,8 +223,10 @@ void arch_boot_proc(struct boot_image *ip, struct proc *rp)
 		vir_bytes stack_high = kinfo.user_sp;
 		vir_bytes stack_size = 64 * 1024;
 
+		direct_print("rv64: arch_boot_proc VM\n");
 		if (load_vm_elf(mod, stack_high, stack_size, &pc) != OK)
 			panic("VM loading failed");
+		direct_print("rv64: VM loaded\n");
 
 		stack_high = rounddown(stack_high, RISCV_PAGE_SIZE);
 		sp = (char *)(vir_bytes)stack_high;

@@ -210,7 +210,7 @@ void pg_identity_map(phys_bytes start, phys_bytes end)
  */
 void pg_flush_tlb(void)
 {
-    __asm__ __volatile__("sfence.vma" ::: "memory");
+    sfence_vma_all();
 }
 
 /*
@@ -218,7 +218,8 @@ void pg_flush_tlb(void)
  */
 void pg_flush_tlb_addr(vir_bytes addr)
 {
-    __asm__ __volatile__("sfence.vma %0" :: "r"(addr) : "memory");
+    (void)addr;
+    sfence_vma_all();
 }
 
 /*
@@ -226,7 +227,8 @@ void pg_flush_tlb_addr(vir_bytes addr)
  */
 void pg_flush_tlb_asid(int asid)
 {
-    __asm__ __volatile__("sfence.vma zero, %0" :: "r"(asid) : "memory");
+    (void)asid;
+    sfence_vma_all();
 }
 
 /*

@@ -10,6 +10,7 @@
 
 #include "kernel/kernel.h"
 #include "archconst.h"
+#include "arch_proto.h"
 
 /* SBI legacy extension IDs (v0.1) */
 #define SBI_EXT_0_1_SET_TIMER           0x00
@@ -192,7 +193,7 @@ void sbi_system_reset(u32_t reset_type, u32_t reset_reason)
 
     /* Should not reach here */
     for (;;) {
-        __asm__ __volatile__("wfi");
+        wfi();
     }
 }
 

@@ -14,6 +14,13 @@
 #define IPCNO_HIGHEST	SENDA
 /* Check that the message payload type doesn't grow past the maximum IPC payload size.
  * This is a compile time check. */
+#if defined(__riscv) && !defined(__riscv_xlen)
+#if defined(__riscv64)
+#define __riscv_xlen 64
+#elif defined(__riscv32)
+#define __riscv_xlen 32
+#endif
+#endif
 #if defined(__riscv) && (__riscv_xlen == 64)
 #define _ASSERT_MSG_SIZE(msg_type) /* no size assert on riscv64 yet */
 #else

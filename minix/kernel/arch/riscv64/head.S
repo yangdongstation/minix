@@ -22,8 +22,8 @@
 
 _start:
     /* Disable interrupts */
-    csrw    sie, zero
-    csrw    sip, zero
+    csrw    CSR_SIE, zero
+    csrw    CSR_SIP, zero
 
     /* Save hart ID in tp register for later use */
     mv      tp, a0
@@ -50,10 +50,10 @@ _start:
 
     /* Set up trap vector (direct mode) */
     la      t0, trap_entry
-    csrw    stvec, t0
+    csrw    CSR_STVEC, t0
 
     /* Set sscratch to 0 (kernel mode indicator) */
-    csrw    sscratch, zero
+    csrw    CSR_SSCRATCH, zero
 
     /* Call early init to set up page tables */
     call    pg_early_init
@@ -63,8 +63,8 @@ _start:
     srli    t0, t0, 12              /* PPN = physical addr >> 12 */
     li      t1, SATP_MODE_SV39
     or      t0, t0, t1
-    csrw    satp, t0
-    sfence.vma                      /* Flush TLB */
+    csrw    CSR_SATP, t0
+    .word   RISCV_SFENCE_VMA_INSN   /* Flush TLB */
 
     /* Jump to high address (virtual) */
     la      t0, kernel_main_high
@@ -79,7 +79,7 @@ kernel_main_high:
 
     /* Should not return */
 halt:
-    wfi
+    .word   RISCV_WFI_INSN
     j       halt
 
 /*
@@ -89,12 +89,12 @@ halt:
 secondary_hart_wait:
     /* Enable software interrupts */
     li      t0, SIE_SSIE
-    csrs    sie, t0
-    csrsi   sstatus, SSTATUS_SIE
+    csrs    CSR_SIE, t0
+    csrsi   CSR_SSTATUS, SSTATUS_SIE
 
     /* Wait for interrupt */
 1:
-    wfi
+    .word   RISCV_WFI_INSN
 
     /* Check if we should start */
     la      t0, _secondary_start_flag
@@ -102,8 +102,8 @@ secondary_hart_wait:
     beqz    t0, 1b
 
     /* Disable interrupts again */
-    csrci   sstatus, SSTATUS_SIE
-    csrw    sie, zero
+    csrci   CSR_SSTATUS, SSTATUS_SIE
+    csrw    CSR_SIE, zero
 
     /* Jump to secondary hart entry */
     j       secondary_hart_entry
@@ -126,18 +126,18 @@ secondary_hart_entry:
 
     /* Set up trap vector */
     la      t0, trap_entry
-    csrw    stvec, t0
+    csrw    CSR_STVEC, t0
 
     /* Set sscratch to 0 */
-    csrw    sscratch, zero
+    csrw    CSR_SSCRATCH, zero
 
     /* Load page table */
     la      t0, _boot_pgdir
     srli    t0, t0, 12
     li      t1, SATP_MODE_SV39
     or      t0, t0, t1
-    csrw    satp, t0
-    sfence.vma
+    csrw    CSR_SATP, t0
+    .word   RISCV_SFENCE_VMA_INSN
 
     /* Call secondary hart C entry */
 #ifdef CONFIG_SMP
@@ -158,11 +158,11 @@ secondary_hart_entry:
     .align 4
 trap_entry:
     /* Check if we came from user mode */
-    csrrw   sp, sscratch, sp        /* Swap sp and sscratch */
+    csrrw   sp, CSR_SSCRATCH, sp    /* Swap sp and sscratch */
     bnez    sp, trap_from_user      /* If sscratch was 0, we're from kernel */
 
     /* From kernel mode - restore sp */
-    csrr    sp, sscratch
+    csrr    sp, CSR_SSCRATCH
 
 trap_from_kernel:
     /* Save registers on kernel stack */
@@ -204,13 +204,13 @@ trap_from_kernel:
     sd      t0, TF_SP(sp)
 
     /* Save CSRs */
-    csrr    t0, sepc
+    csrr    t0, CSR_SEPC
     sd      t0, TF_SEPC(sp)
-    csrr    t0, sstatus
+    csrr    t0, CSR_SSTATUS
     sd      t0, TF_SSTATUS(sp)
-    csrr    t0, scause
+    csrr    t0, CSR_SCAUSE
     sd      t0, TF_SCAUSE(sp)
-    csrr    t0, stval
+    csrr    t0, CSR_STVAL
     sd      t0, TF_STVAL(sp)
 
     /* Call C handler */
@@ -259,21 +259,21 @@ trap_from_user:
     sd      t6, TF_T6(sp)
 
     /* Save user sp */
-    csrr    t0, sscratch
+    csrr    t0, CSR_SSCRATCH
     sd      t0, TF_SP(sp)
 
     /* Save CSRs */
-    csrr    t0, sepc
+    csrr    t0, CSR_SEPC
     sd      t0, TF_SEPC(sp)
-    csrr    t0, sstatus
+    csrr    t0, CSR_SSTATUS
     sd      t0, TF_SSTATUS(sp)
-    csrr    t0, scause
+    csrr    t0, CSR_SCAUSE
     sd      t0, TF_SCAUSE(sp)
-    csrr    t0, stval
+    csrr    t0, CSR_STVAL
     sd      t0, TF_STVAL(sp)
 
     /* Clear sscratch (we're in kernel mode now) */
-    csrw    sscratch, zero
+    csrw    CSR_SSCRATCH, zero
 
     /* Call C handler */
     mv      a0, sp
@@ -290,9 +290,9 @@ trap_from_user:
 trap_return:
     /* Restore CSRs */
     ld      t0, TF_SEPC(sp)
-    csrw    sepc, t0
+    csrw    CSR_SEPC, t0
     ld      t0, TF_SSTATUS(sp)
-    csrw    sstatus, t0
+    csrw    CSR_SSTATUS, t0
 
     /* Check if returning to user mode */
     andi    t0, t0, SSTATUS_SPP
@@ -301,7 +301,7 @@ trap_return:
 return_to_user:
     /* Save kernel sp in sscratch for next trap */
     addi    t0, sp, TRAPFRAME_SIZE
-    csrw    sscratch, t0
+    csrw    CSR_SSCRATCH, t0
 
     /* Restore user sp */
     ld      sp, TF_SP(sp)

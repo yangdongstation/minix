@@ -123,14 +123,37 @@ void kmain(kinfo_t *local_cbi)
   /* bss sanity check */
   assert(bss_test == 0);
   bss_test = 1;
+#ifdef __riscv64
+  direct_print("rv64: kmain entry\n");
+#endif
 
   /* save a global copy of the boot parameters */
+#ifdef __riscv64
+  direct_print("rv64: kinfo copy\n");
+#endif
   memcpy(&kinfo, local_cbi, sizeof(kinfo));
+#ifdef __riscv64
+  direct_print("rv64: kmess copy\n");
+#endif
   memcpy(&kmess, kinfo.kmess, sizeof(kmess));
 
-   /* We have done this exercise in pre_init so we expect this code
-      to simply work! */
-   machine.board_id = get_board_id_by_name(env_get(BOARDVARNAME));
+  /* We have done this exercise in pre_init so we expect this code
+     to simply work! */
+#ifdef __riscv64
+  {
+	const char *board_name = env_get(BOARDVARNAME);
+
+	if (board_name != NULL)
+		machine.board_id = get_board_id_by_name(board_name);
+	else
+		machine.board_id = 0;
+  }
+#else
+  machine.board_id = get_board_id_by_name(env_get(BOARDVARNAME));
+#endif
+#ifdef __riscv64
+  direct_print("rv64: board_id\n");
+#endif
 #ifdef __arm__
   /* We want to initialize serial before we do any output */
   arch_ser_init();
@@ -140,13 +163,25 @@ void kmain(kinfo_t *local_cbi)
 
   /* Kernel may use bits of main memory before VM is started */
   kernel_may_alloc = 1;
+#ifdef __riscv64
+  direct_print("rv64: may_alloc\n");
+#endif
 
   assert(sizeof(kinfo.boot_procs) == sizeof(image));
   memcpy(kinfo.boot_procs, image, sizeof(kinfo.boot_procs));
+#ifdef __riscv64
+  direct_print("rv64: boot_procs\n");
+#endif
 
   cstart();
+#ifdef __riscv64
+  direct_print("rv64: after cstart\n");
+#endif
 
   BKL_LOCK();
+#ifdef __riscv64
+  direct_print("rv64: after BKL\n");
+#endif
  
    DEBUGEXTRA(("main()\n"));
 
@@ -155,7 +190,19 @@ void kmain(kinfo_t *local_cbi)
    * privilege structures for the system processes and the ipc filter pool.
    */
   proc_init();
+#ifdef __riscv64
+  direct_print("rv64: proc_init\n");
+#endif
   IPCF_POOL_INIT();
+#ifdef __riscv64
+  direct_print("rv64: ipcf_init\n");
+#endif
+
+#ifdef __riscv64
+  direct_print("rv64: mods_count=");
+  direct_print_dec(kinfo.mbi.mi_mods_count);
+  direct_print("\n");
+#endif
 
    if(NR_BOOT_MODULES != kinfo.mbi.mi_mods_count)
    	panic("expecting %d boot processes/modules, found %d",
@@ -281,6 +328,9 @@ void kmain(kinfo_t *local_cbi)
 }
 
   arch_post_init();
+#ifdef __riscv64
+  direct_print("rv64: arch_post_init\n");
+#endif
 
   IPCNAME(SEND);
   IPCNAME(RECEIVE);
@@ -291,6 +341,9 @@ void kmain(kinfo_t *local_cbi)
 
   /* System and processes initialization */
   memory_init();
+#ifdef __riscv64
+  direct_print("rv64: memory_init\n");
+#endif
   DEBUGEXTRA(("system_init()... "));
   system_init();
   DEBUGEXTRA(("done\n"));
@@ -409,6 +462,9 @@ void cstart(void)
 
   /* low-level initialization */
   prot_init();
+#ifdef __riscv64
+  direct_print("rv64: cstart\n");
+#endif
 
   /* determine verbosity */
   if ((value = env_get(VERBOSEBOOTVARNAME)))
@@ -416,6 +472,9 @@ void cstart(void)
 
   /* Initialize clock variables. */
   init_clock();
+#ifdef __riscv64
+  direct_print("rv64: init_clock\n");
+#endif
 
   /* Get memory parameters. */
   value = env_get("ac_layout");
@@ -519,4 +578,3 @@ int is_fpu(void)
 {
         return get_cpulocal_var(fpu_presence);
 }
-

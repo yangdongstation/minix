@@ -25,7 +25,9 @@
 
 #if defined(__GNUC__)
 #pragma GCC diagnostic push
+#if defined(__clang__) || (defined(__GNUC__) && (__GNUC__ >= 5))
 #pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#endif
 #endif
 
 

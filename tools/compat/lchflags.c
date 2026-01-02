@@ -39,6 +39,7 @@
 #endif /* !defined(__minix) && !defined(_LIBC) */
 
 #if !HAVE_LCHFLAGS && HAVE_STRUCT_STAT_ST_FLAGS
+#include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
 #include <unistd.h>

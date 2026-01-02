@@ -28,7 +28,7 @@ poll.c \
 select.c \
 signal.c
 
-.if ${ACTIVE_CC} == "gcc"
+.if ${ACTIVE_CC} == "gcc" && ${HAVE_GCC:U48} != 48
 CFLAGS+=	-Wno-error=builtin-declaration-mismatch -Wno-error=dangling-pointer \
 		-Wno-error=implicit-fallthrough -Wno-error=array-parameter
 .endif

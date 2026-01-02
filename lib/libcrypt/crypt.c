@@ -862,12 +862,12 @@ init_des(void)
 	prtab("ietab", perm, 8);
 #endif
 	/* IE3264 is intentionally half-sized; suppress GCC false positive. */
-#if defined(__GNUC__) && !defined(__clang__)
+#if defined(__GNUC__) && !defined(__clang__) && (__GNUC__ >= 7)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstringop-overflow"
 #endif
 	init_perm(IE3264, perm, 4, 8);
-#if defined(__GNUC__) && !defined(__clang__)
+#if defined(__GNUC__) && !defined(__clang__) && (__GNUC__ >= 7)
 #pragma GCC diagnostic pop
 #endif
 

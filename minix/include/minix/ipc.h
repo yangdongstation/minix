@@ -2669,6 +2669,14 @@ typedef struct noxfer_message {
 
 		u8_t size[56];	/* message payload may have 56 bytes at most */
 	};
+/* Old GCC may not define __riscv_xlen. */
+#if defined(__riscv) && !defined(__riscv_xlen)
+#if defined(__riscv64)
+#define __riscv_xlen 64
+#elif defined(__riscv32)
+#define __riscv_xlen 32
+#endif
+#endif
 #if defined(__riscv) && (__riscv_xlen == 64)
 } message __ALIGNED(8);
 #else

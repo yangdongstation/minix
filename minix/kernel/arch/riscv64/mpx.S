@@ -117,8 +117,8 @@ switch_address_space:
     srli    a0, a0, 12          /* PPN = addr >> 12 */
     li      t0, SATP_MODE_SV39
     or      a0, a0, t0
-    csrw    satp, a0
-    sfence.vma                  /* Flush TLB */
+    csrw    CSR_SATP, a0
+    .word   RISCV_SFENCE_VMA_INSN   /* Flush TLB */
     ret
 
 /*
@@ -127,7 +127,7 @@ switch_address_space:
     .globl flush_tlb
     .type flush_tlb, @function
 flush_tlb:
-    sfence.vma
+    .word   RISCV_SFENCE_VMA_INSN
     ret
 
 /*
@@ -136,7 +136,7 @@ flush_tlb:
     .globl flush_tlb_addr
     .type flush_tlb_addr, @function
 flush_tlb_addr:
-    sfence.vma a0
+    .word   RISCV_SFENCE_VMA_INSN
     ret
 
 /*
@@ -145,7 +145,7 @@ flush_tlb_addr:
     .globl enable_interrupts
     .type enable_interrupts, @function
 enable_interrupts:
-    csrsi   sstatus, SSTATUS_SIE
+    csrsi   CSR_SSTATUS, SSTATUS_SIE
     ret
 
 /*
@@ -154,7 +154,7 @@ enable_interrupts:
     .globl disable_interrupts
     .type disable_interrupts, @function
 disable_interrupts:
-    csrci   sstatus, SSTATUS_SIE
+    csrci   CSR_SSTATUS, SSTATUS_SIE
     ret
 
 /*
@@ -163,7 +163,7 @@ disable_interrupts:
     .globl interrupts_enabled
     .type interrupts_enabled, @function
 interrupts_enabled:
-    csrr    t0, sstatus
+    csrr    t0, CSR_SSTATUS
     andi    a0, t0, SSTATUS_SIE
     snez    a0, a0
     ret
@@ -176,7 +176,7 @@ interrupts_enabled:
     .globl disable_and_save_interrupts
     .type disable_and_save_interrupts, @function
 disable_and_save_interrupts:
-    csrrci  a0, sstatus, SSTATUS_SIE
+    csrrci  a0, CSR_SSTATUS, SSTATUS_SIE
     andi    a0, a0, SSTATUS_SIE
     ret
 
@@ -189,7 +189,7 @@ disable_and_save_interrupts:
     .type restore_interrupts, @function
 restore_interrupts:
     beqz    a0, 1f
-    csrsi   sstatus, SSTATUS_SIE
+    csrsi   CSR_SSTATUS, SSTATUS_SIE
     ret
 1:
     ret

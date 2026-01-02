@@ -22,16 +22,16 @@
 restore_user_context:
     /* Set sscratch to kernel stack for next trap */
     /* TODO: Calculate proper kernel stack from proc */
-    csrw    sscratch, sp
+    csrw    CSR_SSCRATCH, sp
 
     /* Load trapframe pointer */
     mv      sp, a0
 
     /* Restore CSRs */
     ld      t0, TF_SEPC(sp)
-    csrw    sepc, t0
+    csrw    CSR_SEPC, t0
     ld      t0, TF_SSTATUS(sp)
-    csrw    sstatus, t0
+    csrw    CSR_SSTATUS, t0
 
     /* Restore general registers */
     ld      ra, TF_RA(sp)
@@ -79,7 +79,7 @@ restore_user_context:
     .type save_fpu, @function
 save_fpu:
     /* Check if FPU is enabled */
-    csrr    t0, sstatus
+    csrr    t0, CSR_SSTATUS
     li      t1, SSTATUS_FS_MASK
     and     t0, t0, t1
     beqz    t0, .Lsave_fpu_done
@@ -100,7 +100,7 @@ save_fpu:
 restore_fpu:
     /* Enable FPU */
     li      t0, SSTATUS_FS_INITIAL
-    csrs    sstatus, t0
+    csrs    CSR_SSTATUS, t0
 
     /* TODO: Restore F registers */
     /* fld f0-f31 from proc structure */
@@ -141,7 +141,7 @@ cpu_number:
     .globl halt_cpu
     .type halt_cpu, @function
 halt_cpu:
-    csrci   sstatus, SSTATUS_SIE  /* Disable interrupts */
+    csrci   CSR_SSTATUS, SSTATUS_SIE  /* Disable interrupts */
 .Lhalt_loop:
-    wfi
+    .word   RISCV_WFI_INSN
     j       .Lhalt_loop

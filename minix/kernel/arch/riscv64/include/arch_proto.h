@@ -8,6 +8,9 @@
 #include <machine/types.h>
 #include "archconst.h"
 
+#define RISCV64_STRINGIFY_1(x) #x
+#define RISCV64_STRINGIFY(x) RISCV64_STRINGIFY_1(x)
+
 struct exec;
 struct proc;
 struct trapframe;
@@ -141,89 +144,112 @@ int cpu_number(void);
 /* CSR operations (inline assembly) */
 static inline u64_t csr_read_sstatus(void) {
     u64_t val;
-    __asm__ __volatile__("csrr %0, sstatus" : "=r"(val));
+    __asm__ __volatile__("csrr %0, " RISCV64_STRINGIFY(CSR_SSTATUS)
+        : "=r"(val));
     return val;
 }
 
 static inline void csr_write_sstatus(u64_t val) {
-    __asm__ __volatile__("csrw sstatus, %0" :: "r"(val));
+    __asm__ __volatile__("csrw " RISCV64_STRINGIFY(CSR_SSTATUS) ", %0"
+        :: "r"(val));
 }
 
 static inline void csr_set_sstatus(u64_t bits) {
-    __asm__ __volatile__("csrs sstatus, %0" :: "r"(bits));
+    __asm__ __volatile__("csrs " RISCV64_STRINGIFY(CSR_SSTATUS) ", %0"
+        :: "r"(bits));
 }
 
 static inline void csr_clear_sstatus(u64_t bits) {
-    __asm__ __volatile__("csrc sstatus, %0" :: "r"(bits));
+    __asm__ __volatile__("csrc " RISCV64_STRINGIFY(CSR_SSTATUS) ", %0"
+        :: "r"(bits));
 }
 
 static inline u64_t csr_read_sie(void) {
     u64_t val;
-    __asm__ __volatile__("csrr %0, sie" : "=r"(val));
+    __asm__ __volatile__("csrr %0, " RISCV64_STRINGIFY(CSR_SIE)
+        : "=r"(val));
     return val;
 }
 
 static inline void csr_write_sie(u64_t val) {
-    __asm__ __volatile__("csrw sie, %0" :: "r"(val));
+    __asm__ __volatile__("csrw " RISCV64_STRINGIFY(CSR_SIE) ", %0"
+        :: "r"(val));
 }
 
 static inline void csr_set_sie(u64_t bits) {
-    __asm__ __volatile__("csrs sie, %0" :: "r"(bits));
+    __asm__ __volatile__("csrs " RISCV64_STRINGIFY(CSR_SIE) ", %0"
+        :: "r"(bits));
 }
 
 static inline void csr_clear_sie(u64_t bits) {
-    __asm__ __volatile__("csrc sie, %0" :: "r"(bits));
+    __asm__ __volatile__("csrc " RISCV64_STRINGIFY(CSR_SIE) ", %0"
+        :: "r"(bits));
 }
 
 static inline u64_t csr_read_sip(void) {
     u64_t val;
-    __asm__ __volatile__("csrr %0, sip" : "=r"(val));
+    __asm__ __volatile__("csrr %0, " RISCV64_STRINGIFY(CSR_SIP)
+        : "=r"(val));
     return val;
 }
 
 static inline void csr_clear_sip(u64_t bits) {
-    __asm__ __volatile__("csrc sip, %0" :: "r"(bits));
+    __asm__ __volatile__("csrc " RISCV64_STRINGIFY(CSR_SIP) ", %0"
+        :: "r"(bits));
 }
 
 static inline u64_t csr_read_scause(void) {
     u64_t val;
-    __asm__ __volatile__("csrr %0, scause" : "=r"(val));
+    __asm__ __volatile__("csrr %0, " RISCV64_STRINGIFY(CSR_SCAUSE)
+        : "=r"(val));
     return val;
 }
 
 static inline u64_t csr_read_stval(void) {
     u64_t val;
-    __asm__ __volatile__("csrr %0, stval" : "=r"(val));
+    __asm__ __volatile__("csrr %0, " RISCV64_STRINGIFY(CSR_STVAL)
+        : "=r"(val));
     return val;
 }
 
 static inline u64_t csr_read_sepc(void) {
     u64_t val;
-    __asm__ __volatile__("csrr %0, sepc" : "=r"(val));
+    __asm__ __volatile__("csrr %0, " RISCV64_STRINGIFY(CSR_SEPC)
+        : "=r"(val));
     return val;
 }
 
 static inline void csr_write_sepc(u64_t val) {
-    __asm__ __volatile__("csrw sepc, %0" :: "r"(val));
+    __asm__ __volatile__("csrw " RISCV64_STRINGIFY(CSR_SEPC) ", %0"
+        :: "r"(val));
 }
 
 static inline void csr_write_stvec(u64_t val) {
-    __asm__ __volatile__("csrw stvec, %0" :: "r"(val));
+    __asm__ __volatile__("csrw " RISCV64_STRINGIFY(CSR_STVEC) ", %0"
+        :: "r"(val));
 }
 
 static inline void csr_write_sscratch(u64_t val) {
-    __asm__ __volatile__("csrw sscratch, %0" :: "r"(val));
+    __asm__ __volatile__("csrw " RISCV64_STRINGIFY(CSR_SSCRATCH) ", %0"
+        :: "r"(val));
 }
 
 static inline u64_t csr_read_satp(void) {
     u64_t val;
-    __asm__ __volatile__("csrr %0, satp" : "=r"(val));
+    __asm__ __volatile__("csrr %0, " RISCV64_STRINGIFY(CSR_SATP)
+        : "=r"(val));
     return val;
 }
 
+static inline void sfence_vma_all(void) {
+    __asm__ __volatile__(".word " RISCV64_STRINGIFY(RISCV_SFENCE_VMA_INSN)
+        ::: "memory");
+}
+
 static inline void csr_write_satp(u64_t val) {
-    __asm__ __volatile__("csrw satp, %0" :: "r"(val));
-    __asm__ __volatile__("sfence.vma" ::: "memory");
+    __asm__ __volatile__("csrw " RISCV64_STRINGIFY(CSR_SATP) ", %0"
+        :: "r"(val));
+    sfence_vma_all();
 }
 
 static inline u64_t csr_read_time(void) {
@@ -277,7 +303,7 @@ static inline int intr_disabled(void) {
 
 /* WFI (Wait For Interrupt) */
 static inline void wfi(void) {
-    __asm__ __volatile__("wfi");
+    __asm__ __volatile__(".word " RISCV64_STRINGIFY(RISCV_WFI_INSN));
 }
 
 #endif /* _RISCV64_ARCH_PROTO_H */

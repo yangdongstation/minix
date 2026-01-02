@@ -89,9 +89,11 @@ CFLAGS+= -mno-unaligned-access
 
 # RISC-V 64 编译标志
 .if ${MACHINE_ARCH} == "riscv64"
-CFLAGS+= -march=rv64gc -mabi=lp64d
+RISCV_ARCH_FLAGS?= -march=rv64gc -mabi=lp64d
+CFLAGS+= ${RISCV_ARCH_FLAGS}
 .elif ${MACHINE_ARCH} == "riscv32"
-CFLAGS+= -march=rv32gc -mabi=ilp32d
+RISCV_ARCH_FLAGS?= -march=rv32gc -mabi=ilp32d
+CFLAGS+= ${RISCV_ARCH_FLAGS}
 .endif
 
 __uname_s!= uname -s
@@ -432,7 +434,7 @@ TOOL_OPT.clang=		${EXTERNAL_TOOLCHAIN}/bin/opt
 TOOL_LLC.clang=		${EXTERNAL_TOOLCHAIN}/bin/llc
 
 .if !defined(HOSTPROG) && !defined(HOSTLIB)
-.  if ${DESTDIR} != ""
+.  if ${DESTDIR:U} != ""
 CPPFLAGS+=	--sysroot=${DESTDIR}
 LDFLAGS+=	--sysroot=${DESTDIR}
 CPPFLAGS+=	-I${DESTDIR}/usr/include
@@ -488,6 +490,7 @@ DESTDIR?=
 .  if ${DESTDIR} != ""
 CPPFLAGS+=	--sysroot=${DESTDIR}
 LDFLAGS+=	--sysroot=${DESTDIR}
+CPPFLAGS+=	-I${DESTDIR}/usr/include
 .  else
 CPPFLAGS+=	--sysroot=/
 LDFLAGS+=	--sysroot=/
