@@ -38,7 +38,7 @@ CFLAGS+=	-fno-builtin
 #
 # Customized versions of libc functions.
 #
-SRCS+= atoi.c fputs.c _snprintf.c strtol.c
+SRCS+= atoi.c fputs.c _snprintf.c strtol.c tls_stub.c
 CPPFLAGS._snprintf.c+=	-I${LIBSADIR}
 
 CPPFLAGS.strtol.c+=	-D_STANDALONE
@@ -169,7 +169,7 @@ CPPFLAGS.strtoul.c+=	-D_STANDALONE
 CPPFLAGS.strtoul.c+=	-I${NETBSDSRCDIR}/sys
 
 .for f in \
-	strcasecmp.o strcspn.o strncasecmp.o strnlen.o strlcat.o
+	strcasecmp.o strcspn.o strspn.o strncasecmp.o strnlen.o strlcat.o
 ${f} ${f:C/\.o/.bc/}:	${LIBCOMMONCDIR}/string/${f:C/\.o/.c/}
 ${f} ${f:C/\.o/.go/}:	${LIBCOMMONCDIR}/string/${f:C/\.o/.c/}
 OBJS+=	${f}
