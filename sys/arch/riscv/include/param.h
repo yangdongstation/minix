@@ -91,6 +91,10 @@
 #define MSGBUFSIZE	(8 * NBPG)	/* default message buffer size */
 #endif
 
+#ifndef MAXPHYS
+#define MAXPHYS		(64 * 1024)	/* max raw I/O transfer size */
+#endif
+
 /*
  * Constants related to network buffer management.
  * MCLBYTES must be no larger than NBPG (the software page size), and,

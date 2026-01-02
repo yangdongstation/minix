@@ -5,19 +5,21 @@
 
 #if defined(__riscv64) || defined(__riscv64__)
 #define ARCH_ELFSIZE		64	/* MD://arch-specific as "riscv64" */
-#define ELF64_MACHDEP_ENDIANNESS	ELFDATA2LSB
-#define ELF64_MACHDEP_ID_CASES		\
-		case EM_RISCV:		\
-			break;
-#define ELF64_MACHDEP_ID	EM_RISCV
 #else
 #define ARCH_ELFSIZE		32	/* MD://arch-specific as "riscv32" */
+#endif
+
 #define ELF32_MACHDEP_ENDIANNESS	ELFDATA2LSB
 #define ELF32_MACHDEP_ID_CASES		\
 		case EM_RISCV:		\
 			break;
 #define ELF32_MACHDEP_ID	EM_RISCV
-#endif
+
+#define ELF64_MACHDEP_ENDIANNESS	ELFDATA2LSB
+#define ELF64_MACHDEP_ID_CASES		\
+		case EM_RISCV:		\
+			break;
+#define ELF64_MACHDEP_ID	EM_RISCV
 
 #define ELF_TARG_CLASS		ELFCLASS64
 #define ELF_TARG_DATA		ELFDATA2LSB

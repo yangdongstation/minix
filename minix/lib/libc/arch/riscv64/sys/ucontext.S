@@ -50,6 +50,7 @@
  * Save current context
  */
 ENTRY(getcontext)
+ENTRY(_getcontext)
     /* a0 = ucp */
 
     /* Save return address as PC */
@@ -120,64 +121,6 @@ ENTRY(setcontext)
     /* Jump to saved PC */
     jr      t0
 END(setcontext)
-
-/*
- * int swapcontext(ucontext_t *oucp, const ucontext_t *ucp)
- *
- * Save current context and switch to new one
- */
-ENTRY(swapcontext)
-    /* a0 = oucp, a1 = ucp */
-
-    /* Save current context to oucp */
-    sd      ra, UC_GREGS+REG_PC(a0)
-    sd      ra, UC_GREGS+REG_RA(a0)
-    sd      sp, UC_GREGS+REG_SP(a0)
-    sd      gp, UC_GREGS+REG_GP(a0)
-    sd      tp, UC_GREGS+REG_TP(a0)
-    sd      s0, UC_GREGS+REG_S0(a0)
-    sd      s1, UC_GREGS+REG_S1(a0)
-    sd      s2, UC_GREGS+REG_S2(a0)
-    sd      s3, UC_GREGS+REG_S3(a0)
-    sd      s4, UC_GREGS+REG_S4(a0)
-    sd      s5, UC_GREGS+REG_S5(a0)
-    sd      s6, UC_GREGS+REG_S6(a0)
-    sd      s7, UC_GREGS+REG_S7(a0)
-    sd      s8, UC_GREGS+REG_S8(a0)
-    sd      s9, UC_GREGS+REG_S9(a0)
-    sd      s10, UC_GREGS+REG_S10(a0)
-    sd      s11, UC_GREGS+REG_S11(a0)
-    sd      zero, UC_GREGS+REG_A0(a0)  /* Return 0 when restored */
-
-    /* Now restore from ucp (a1) */
-    mv      a0, a1
-
-    /* Restore callee-saved registers */
-    ld      s0, UC_GREGS+REG_S0(a0)
-    ld      s1, UC_GREGS+REG_S1(a0)
-    ld      s2, UC_GREGS+REG_S2(a0)
-    ld      s3, UC_GREGS+REG_S3(a0)
-    ld      s4, UC_GREGS+REG_S4(a0)
-    ld      s5, UC_GREGS+REG_S5(a0)
-    ld      s6, UC_GREGS+REG_S6(a0)
-    ld      s7, UC_GREGS+REG_S7(a0)
-    ld      s8, UC_GREGS+REG_S8(a0)
-    ld      s9, UC_GREGS+REG_S9(a0)
-    ld      s10, UC_GREGS+REG_S10(a0)
-    ld      s11, UC_GREGS+REG_S11(a0)
-
-    ld      gp, UC_GREGS+REG_GP(a0)
-    ld      tp, UC_GREGS+REG_TP(a0)
-    ld      ra, UC_GREGS+REG_RA(a0)
-    ld      sp, UC_GREGS+REG_SP(a0)
-
-    /* Load target PC before clobbering a0 */
-    ld      t0, UC_GREGS+REG_PC(a0)
-
-    ld      a0, UC_GREGS+REG_A0(a0)
-
-    jr      t0
-END(swapcontext)
 
 /*
  * void ctx_start(void)

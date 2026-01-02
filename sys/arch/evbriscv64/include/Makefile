@@ -6,6 +6,7 @@ INCSDIR= /usr/include/evbriscv64
 .PATH: ${.CURDIR}/../../riscv/include
 
 INCS=	ansi.h asm.h bswap.h byte_swap.h cdefs.h \
+	disklabel.h \
 	elf_machdep.h endian.h endian_machdep.h \
 	float.h frame.h \
 	int_const.h int_fmtio.h int_limits.h int_mwgwtypes.h int_types.h \

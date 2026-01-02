@@ -5,8 +5,9 @@
 #include <machine/asm.h>
 
     .data
-    .globl  __brksize
-    .type   __brksize, @object
+    .globl  _end
+    .globl  _brksize
+    .type   _brksize, @object
     .align  3
-__brksize:
-    .quad   0
+_brksize:
+    .quad   _end

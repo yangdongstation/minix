@@ -1,0 +1,1 @@
+/root/minix/external/gpl3/gcc/dist/libgcc/enable-execute-stack-mprotect.c

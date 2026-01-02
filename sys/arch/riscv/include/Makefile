@@ -4,6 +4,7 @@
 
 INCS=	aout_machdep.h ansi.h asm.h bswap.h byte_swap.h cdefs.h \
 	cpu.h \
+	disklabel.h \
 	elf_machdep.h endian.h endian_machdep.h \
 	fenv.h float.h frame.h \
 	ieee.h ieeefp.h \

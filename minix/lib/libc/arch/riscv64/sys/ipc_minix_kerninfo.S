@@ -6,12 +6,12 @@
 #include <machine/asm.h>
 
 /*
- * int _minix_kerninfo(struct minix_kerninfo **kinfoptr)
+ * int ipc_minix_kerninfo(struct minix_kerninfo **kinfoptr)
  *
- * Get pointer to kernel info structure
+ * Get pointer to kernel info structure.
  */
-ENTRY(_minix_kerninfo)
-    /* Save argument */
+ENTRY(ipc_minix_kerninfo)
+    /* Save argument. */
     mv      t0, a0              /* t0 = pointer to store result */
 
     /* Call kernel to get info */
@@ -24,11 +24,4 @@ ENTRY(_minix_kerninfo)
     sd      a1, 0(t0)           /* *kinfoptr = a1 */
 1:
     ret                         /* a0 = return value */
-END(_minix_kerninfo)
-
-/*
- * Alternative entry point for compatibility
- */
-ENTRY(ipc_minix_kerninfo)
-    j       _minix_kerninfo
 END(ipc_minix_kerninfo)

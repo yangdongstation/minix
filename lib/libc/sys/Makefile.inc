@@ -2,7 +2,12 @@
 #	@(#)Makefile.inc	8.3 (Berkeley) 10/24/94
 
 .if defined(__MINIX)
+# Avoid pulling in NetBSD RISC-V syscall stubs; MINIX provides its own.
+.if ${MACHINE_ARCH} == "riscv64"
+.PATH: ${NETBSDSRCDIR}/lib/libc/arch/riscv64/sys ${.CURDIR}/sys
+.else
 .PATH: ${ARCHDIR}/sys ${.CURDIR}/sys
+.endif
 .else
 # sys sources
 .PATH: ${ARCHDIR}/sys ${.CURDIR}/sys

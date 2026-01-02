@@ -3,7 +3,9 @@
 SRCS+=	__setjmp14.S __sigsetjmp14.S _setjmp.S
 SRCS+=	bswap16.c bswap32.c bswap64.c
 SRCS+=	flt_rounds.c
+.if ${RUMPRUN} != "yes" && !defined(__MINIX)
 SRCS+=  _lwp.c makecontext.c resumecontext.c swapcontext.S
+.endif
 
 # Common ieee754 constants and functions
 SRCS+=	infinityf_ieee754.c infinity_ieee754.c infinityl_ieee754.c

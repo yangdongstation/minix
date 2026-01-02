@@ -8,7 +8,10 @@
 CPPFLAGS.fslib.c+= -I${NETBSDSRCDIR}/minix/fs
 CPPFLAGS.fsversion.c+= -I${NETBSDSRCDIR}/minix/fs
 
-SRCS+= fsversion.c gcov.c itoa.c read_tsc_64.c fslib.c
+SRCS+= fsversion.c gcov.c itoa.c fslib.c
+.if !defined(__MINIX) || ${MACHINE_ARCH} != "riscv64"
+SRCS+= read_tsc_64.c
+.endif
 
 .endif # defined(__MINIX)
 .PATH: ${ARCHDIR}/gen ${.CURDIR}/gen
