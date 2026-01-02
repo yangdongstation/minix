@@ -1037,7 +1037,9 @@ void select_cdev_reply1(endpoint_t driver_e, devminor_t minor, int status)
 		 * For now we assume that the reply we want will arrive later..
 		 */
 		printf("VFS (%s:%d): expected reply from dev %llx not %llx\n",
-			__FILE__, __LINE__, f->filp_select_dev, dev);
+			__FILE__, __LINE__,
+			(unsigned long long)f->filp_select_dev,
+			(unsigned long long)dev);
 		return;
 	}
   }
@@ -1088,7 +1090,8 @@ void select_sdev_reply1(dev_t dev, int status)
 		 * For now we assume that the reply we want will arrive later..
 		 */
 		printf("VFS: expected reply from sock dev %llx, not %llx\n",
-		    f->filp_select_dev, dev);
+		    (unsigned long long)f->filp_select_dev,
+		    (unsigned long long)dev);
 		return;
 	}
   }
@@ -1370,9 +1373,10 @@ select_dump(void)
 			continue;
 
 		printf("select %d: endpt %d nfds %d nreadyfds %d error %d "
-		    "block %d starting %d expiry %u is_deferred %d\n",
+		    "block %d starting %d expiry %lld is_deferred %d\n",
 		    s, se->req_endpt, se->nfds, se->nreadyfds, se->error,
-		    se->block, se->starting, se->expiry, is_deferred(se));
+		    se->block, se->starting, (long long)se->expiry,
+		    is_deferred(se));
 
 		for (fd = 0; !se->starting && fd < se->nfds; fd++) {
 			/* Save on output: do not print NULL filps at all. */

@@ -351,7 +351,9 @@ int dupvm(struct fproc *rfp, int pfd, int *vmfd, struct filp **newfilp)
 
 	if (!S_ISREG(f->filp_vno->v_mode) && !S_ISBLK(f->filp_vno->v_mode)) {
 		printf("VFS: mmap regular/blockdev only; dev 0x%llx ino %llu has mode 0%o\n",
-			f->filp_vno->v_dev, f->filp_vno->v_inode_nr, f->filp_vno->v_mode);
+			(unsigned long long)f->filp_vno->v_dev,
+			(unsigned long long)f->filp_vno->v_inode_nr,
+			f->filp_vno->v_mode);
 		unlock_filp(f);
 		return EINVAL;
 	}

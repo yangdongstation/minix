@@ -451,7 +451,7 @@ int vm_addrok(void *vir, int writeflag)
 		return 0;
 	}
 
-#if defined(__i386__)
+#if defined(__i386__) || defined(__riscv64__)
 	if(writeflag &&
 		!(pt->pt_dir[pde] & ARCH_VM_PTE_RW)) {
 		printf("addr not ok: pde %d present but pde unwritable\n", pde);
@@ -471,7 +471,7 @@ int vm_addrok(void *vir, int writeflag)
 		return 0;
 	}
 
-#if defined(__i386__)
+#if defined(__i386__) || defined(__riscv64__)
 	if(writeflag &&
 		!(pt->pt_pt[pde][pte] & ARCH_VM_PTE_RW)) {
 		printf("addr not ok: pde %d / pte %d present but unwritable\n",
@@ -528,7 +528,7 @@ static int pt_ptalloc(pt_t *pt, int pde, u32_t flags)
 	 * The PDE is always 'present,' 'writable,' and 'user accessible,'
 	 * relying on the PTE for protection.
 	 */
-#if defined(__i386__)
+#if defined(__i386__) || defined(__riscv64__)
 	pt->pt_dir[pde] = (pt_phys & ARCH_VM_ADDR_MASK) | flags
 		| ARCH_VM_PDE_PRESENT | ARCH_VM_PTE_USER | ARCH_VM_PTE_RW;
 #elif defined(__arm__)
@@ -595,7 +595,7 @@ static const char *ptestr(u32_t pte)
 		return "not present";
 	}
 	str[0] = '\0';
-#if defined(__i386__)
+#if defined(__i386__) || defined(__riscv64__)
 	FLAG(ARCH_VM_PTE_RW, "W");
 #elif defined(__arm__)
 	if(pte & ARCH_VM_PTE_RO) {
@@ -702,7 +702,7 @@ int pt_ptmap(struct vmproc *src_vmp, struct vmproc *dst_vmp)
 	/* Transfer mapping to the page directory. */
 	viraddr = (vir_bytes) pt->pt_dir;
 	physaddr = pt->pt_dir_phys & ARCH_VM_ADDR_MASK;
-#if defined(__i386__)
+#if defined(__i386__) || defined(__riscv64__)
 	if((r=pt_writemap(dst_vmp, &dst_vmp->vm_pt, viraddr, physaddr, VM_PAGE_SIZE,
 		ARCH_VM_PTE_PRESENT | ARCH_VM_PTE_USER | ARCH_VM_PTE_RW,
 #elif defined(__arm__)
@@ -728,8 +728,8 @@ int pt_ptmap(struct vmproc *src_vmp, struct vmproc *dst_vmp)
 
 		/* Transfer mapping to the page table. */
 		viraddr = (vir_bytes) pt->pt_pt[pde];
-#if defined(__i386__)
-		physaddr = pt->pt_dir[pde] & ARCH_VM_ADDR_MASK;
+#if defined(__i386__) || defined(__riscv64__)
+	physaddr = pt->pt_dir[pde] & ARCH_VM_ADDR_MASK;
 #elif defined(__arm__)
 		physaddr = pt->pt_dir[pde] & ARCH_VM_PDE_MASK;
 #endif
@@ -771,7 +771,7 @@ int pt_writable(struct vmproc *vmp, vir_bytes v)
 
 	entry = pt->pt_pt[pde][pte];
 
-#if defined(__i386__)
+#if defined(__i386__) || defined(__riscv64__)
 	return((entry & PTF_WRITE) ? 1 : 0);
 #elif defined(__arm__)
 	return((entry & ARCH_VM_PTE_RO) ? 0 : 1);
@@ -856,8 +856,8 @@ int pt_writemap(struct vmproc * vmp,
 		assert(pt->pt_pt[pde]);
 
 		if(writemapflags & (WMF_WRITEFLAGSONLY|WMF_FREE)) {
-#if defined(__i386__)
-			physaddr = pt->pt_pt[pde][pte] & ARCH_VM_ADDR_MASK;
+#if defined(__i386__) || defined(__riscv64__)
+		physaddr = pt->pt_pt[pde][pte] & ARCH_VM_ADDR_MASK;
 #elif defined(__arm__)
 			physaddr = pt->pt_pt[pde][pte] & ARM_VM_PTE_MASK;
 #endif
@@ -868,7 +868,7 @@ int pt_writemap(struct vmproc * vmp,
 		}
 
 		/* Entry we will write. */
-#if defined(__i386__)
+#if defined(__i386__) || defined(__riscv64__)
 		entry = (physaddr & ARCH_VM_ADDR_MASK) | flags;
 #elif defined(__arm__)
 		entry = (physaddr & ARM_VM_PTE_MASK) | flags;
@@ -881,8 +881,8 @@ int pt_writemap(struct vmproc * vmp,
 			maskedentry &= ~(I386_VM_ACC|I386_VM_DIRTY);
 #endif
 			/* Verify pagetable entry. */
-#if defined(__i386__)
-			if(entry & ARCH_VM_PTE_RW) {
+#if defined(__i386__) || defined(__riscv64__)
+		if(entry & ARCH_VM_PTE_RW) {
 				/* If we expect a writable page, allow a readonly page. */
 				maskedentry |= ARCH_VM_PTE_RW;
 			}
@@ -895,9 +895,9 @@ int pt_writemap(struct vmproc * vmp,
 #endif
 			if(maskedentry != entry) {
 				printf("pt_writemap: mismatch: ");
-#if defined(__i386__)
-				if((entry & ARCH_VM_ADDR_MASK) !=
-					(maskedentry & ARCH_VM_ADDR_MASK)) {
+#if defined(__i386__) || defined(__riscv64__)
+		if((entry & ARCH_VM_ADDR_MASK) !=
+			(maskedentry & ARCH_VM_ADDR_MASK)) {
 #elif defined(__arm__)
 				if((entry & ARM_VM_PTE_MASK) !=
 					(maskedentry & ARM_VM_PTE_MASK)) {
@@ -970,8 +970,8 @@ int pt_checkrange(pt_t *pt, vir_bytes v,  size_t bytes,
 			return EFAULT;
 		}
 
-#if defined(__i386__)
-		if(write && !(pt->pt_pt[pde][pte] & ARCH_VM_PTE_RW)) {
+#if defined(__i386__) || defined(__riscv64__)
+	if(write && !(pt->pt_pt[pde][pte] & ARCH_VM_PTE_RW)) {
 #elif defined(__arm__)
 		if(write && (pt->pt_pt[pde][pte] & ARCH_VM_PTE_RO)) {
 #endif
@@ -1054,9 +1054,9 @@ void pt_allocate_kernel_mapped_pagetables(void)
 		memset(pdm->page_directories, 0, VM_PAGE_SIZE);
 		pdm->phys = ph;
 
-#if defined(__i386__)
-		pdm->val = (ph & ARCH_VM_ADDR_MASK) |
-			ARCH_VM_PDE_PRESENT | ARCH_VM_PTE_RW;
+#if defined(__i386__) || defined(__riscv64__)
+	pdm->val = (ph & ARCH_VM_ADDR_MASK) |
+		ARCH_VM_PDE_PRESENT | ARCH_VM_PTE_RW;
 #elif defined(__arm__)
 		pdm->val = (ph & ARCH_VM_PDE_MASK)
 			| ARCH_VM_PDE_PRESENT

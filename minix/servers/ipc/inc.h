@@ -49,7 +49,7 @@ int do_shmget(message *);
 int do_shmat(message *);
 int do_shmdt(message *);
 int do_shmctl(message *);
-int get_shm_mib_info(struct rmib_oldp *);
+ssize_t get_shm_mib_info(struct rmib_oldp *);
 int is_shm_nil(void);
 void update_refcount_and_destroy(void);
 

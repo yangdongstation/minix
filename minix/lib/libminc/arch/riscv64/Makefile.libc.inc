@@ -65,6 +65,9 @@ CLEANFILES+= ${f:C/\.o/.bc/}
 .endif # ${USE_BITCODE:Uno} == "yes"
 .endfor
 .endif
+.if !exists(${LIBCARCHDIR}/gen/alloca.S)
+SRCS+=	alloca.c
+.endif
 
 .for f in \
 	strncmp.o

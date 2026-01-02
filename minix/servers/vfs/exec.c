@@ -623,11 +623,11 @@ static int insert_arg(char stack[ARG_MAX], size_t *stk_bytes, char *arg,
 	int const arg_len = strlen(arg) + 1;
 
 	/* Offset to argv[0][0] in the stack frame. */
-	int const a0 = (int)(((char **)stack)[1] - *vsp);
+	ssize_t a0 = (ssize_t)((vir_bytes)((char **)stack)[1] - *vsp);
 
 	/* Check that argv[0] points within the stack frame. */
 	if ((a0 < 0) || (a0 >= old_bytes)) {
-		printf("vfs:: argv[0][] not within stack range!! %i\n", a0);
+		printf("vfs:: argv[0][] not within stack range!! %zd\n", a0);
 		return FALSE;
 	}
 
@@ -666,7 +666,7 @@ static int insert_arg(char stack[ARG_MAX], size_t *stk_bytes, char *arg,
 	}
 
 	/* set argv[0] correctly */
-	((char **) stack)[1] = (char *) a0 - arg_len + *vsp;
+	((char **) stack)[1] = (char *)(*vsp + (vir_bytes)a0 - arg_len);
 
 	/* Update stack pointer in the process address space. */
 	*vsp -= offset;

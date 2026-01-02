@@ -174,7 +174,8 @@ int read_write(struct fproc *rfp, int rw_flag, int fd, struct filp *f,
 	r = cdev_io(op, dev, for_e, buf, position, size, f->filp_flags);
 	if (r >= 0) {
 		/* This should no longer happen: all calls are asynchronous. */
-		printf("VFS: I/O to device %llx succeeded immediately!?\n", dev);
+		printf("VFS: I/O to device %llx succeeded immediately!?\n",
+		    (unsigned long long)dev);
 		cum_io = r;
 		position += r;
 		r = OK;
