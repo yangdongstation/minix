@@ -28,6 +28,14 @@ void arch_reset(void)
     }
 }
 
+__dead void reset(void)
+{
+    arch_reset();
+    for (;;) {
+        wfi();
+    }
+}
+
 /*
  * Halt the system
  */
@@ -64,4 +72,9 @@ void arch_poweroff(void)
     for (;;) {
         wfi();
     }
+}
+
+void ser_putc(char c)
+{
+    riscv_cons_putc(c);
 }

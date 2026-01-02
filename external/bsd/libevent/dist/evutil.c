@@ -183,7 +183,7 @@ evutil_read_file(const char *filename, char **content_out, size_t *len_out,
 }
 
 int
-evutil_socketpair(int family, int type, int protocol, evutil_socket_t fd[2])
+evutil_socketpair(int family, int type, int protocol, evutil_socket_t fd[])
 {
 #ifndef WIN32
 	return socketpair(family, type, protocol, fd);
@@ -194,7 +194,7 @@ evutil_socketpair(int family, int type, int protocol, evutil_socket_t fd[2])
 
 int
 evutil_ersatz_socketpair(int family, int type, int protocol,
-    evutil_socket_t fd[2])
+    evutil_socket_t fd[])
 {
 	/* This code is originally from Tor.  Used with permission. */
 
@@ -2190,4 +2190,3 @@ evutil_load_windows_system_library(const TCHAR *library_name)
   return LoadLibrary(path);
 }
 #endif
-

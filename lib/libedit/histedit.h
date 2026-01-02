@@ -242,9 +242,9 @@ Tokenizer	*tok_init(const char *);
 void		 tok_end(Tokenizer *);
 void		 tok_reset(Tokenizer *);
 int		 tok_line(Tokenizer *, const LineInfo *,
-		    int *, const char * const **, int *, int *);
+		    int *, const char ***, int *, int *);
 int		 tok_str(Tokenizer *, const char *,
-		    int *, const char * const **);
+		    int *, const char ***);
 
 /*
  * Begin Wide Character Support
@@ -311,9 +311,9 @@ TokenizerW	*tok_winit(const wchar_t *);
 void		 tok_wend(TokenizerW *);
 void		 tok_wreset(TokenizerW *);
 int		 tok_wline(TokenizerW *, const LineInfoW *,
-		    int *, const wchar_t * const **, int *, int *);
+		    int *, const wchar_t ***, int *, int *);
 int		 tok_wstr(TokenizerW *, const wchar_t *,
-		    int *, const wchar_t * const **);
+		    int *, const wchar_t ***);
 
 #ifdef __cplusplus
 }

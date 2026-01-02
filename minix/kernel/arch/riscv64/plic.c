@@ -25,8 +25,8 @@ static volatile u32_t *plic_base;
 #define PLIC_MAX_SOURCES    1024
 #define PLIC_MAX_CONTEXTS   15872
 
-/* Number of interrupt sources (QEMU virt has ~96) */
-#define PLIC_NUM_SOURCES    128
+void plic_set_priority(int irq, int priority);
+void plic_set_threshold(int cpu, int threshold);
 
 /* Per-IRQ CPU mask for SMP routing (key new code ~20 lines) */
 static u32_t irq_cpu_mask[PLIC_NUM_SOURCES];
@@ -64,7 +64,7 @@ void plic_init(void)
     int i;
 
     /* Map PLIC base address */
-    plic_base = (volatile u32_t *)PLIC_BASE;
+    plic_base = (volatile u32_t *)VIRT_PLIC_BASE;
 
     /* Set all priorities to 0 (disabled) */
     for (i = 1; i < PLIC_NUM_SOURCES; i++) {

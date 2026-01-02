@@ -10,7 +10,8 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 
-/* Kernel information structure */
+#ifndef _MINIX_SYSTEM
+/* Kernel information structure (userland view only). */
 struct kinfo {
     phys_bytes code_base;       /* Kernel code start */
     phys_bytes code_size;       /* Kernel code size */
@@ -22,6 +23,7 @@ struct kinfo {
     phys_bytes bootmod_base;    /* Boot modules start */
     phys_bytes bootmod_size;    /* Boot modules size */
 };
+#endif /* _MINIX_SYSTEM */
 
 /* Machine context for signals/coroutines */
 struct mcontext {

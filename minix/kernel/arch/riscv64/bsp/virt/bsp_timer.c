@@ -21,7 +21,7 @@ static u64_t ticks_per_hz;
 void bsp_timer_init(u64_t freq)
 {
     timer_freq = freq;
-    ticks_per_hz = timer_freq / HZ;
+    ticks_per_hz = timer_freq / system_hz;
 
     /* Set first timer interrupt */
     u64_t now = csr_read_time();

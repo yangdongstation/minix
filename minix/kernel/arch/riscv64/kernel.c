@@ -7,7 +7,7 @@
 #include "arch_proto.h"
 
 /* External functions from other kernel modules */
-extern void main(void);
+extern void kmain(kinfo_t *cbi);
 
 /*===========================================================================*
  *				kernel_main			     *
@@ -18,5 +18,5 @@ void kernel_main(void)
     direct_init();
 
     /* Call generic kernel main */
-    main();
+    kmain(&kinfo);
 }

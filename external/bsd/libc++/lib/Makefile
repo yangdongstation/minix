@@ -35,7 +35,9 @@ CLEANFILES+=	rt_${src}
 
 .include <bsd.own.mk>
 
-CPPFLAGS+=	-nostdinc++ -cxx-isystem ${LIBCXX_SRCDIR}/include -I${LIBCXXRT_SRCDIR}/src
+CPPFLAGS+=	-nostdinc++ ${${ACTIVE_CC} == "clang":? -cxx-isystem : -isystem} \
+		${LIBCXX_SRCDIR}/include -iquote ${LIBCXXRT_SRCDIR}/src \
+		-I${LIBCXXRT_SRCDIR}/src
 CPPFLAGS+=	-DLIBCXXRT
 CXXFLAGS+=	-std=c++11
 

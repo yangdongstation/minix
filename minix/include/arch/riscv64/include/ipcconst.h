@@ -9,4 +9,6 @@
 #define IPCVEC_INTR     8       /* ecall from U-mode */
 #define KERVEC_INTR     9       /* ecall from S-mode */
 
+#define IPC_STATUS_REG  a1
+
 #endif /* _RISCV64_IPCCONST_H */

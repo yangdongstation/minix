@@ -513,7 +513,7 @@ print_width(const char *v, const struct mdoc_node *child, size_t defsz)
 void
 print_count(int *count)
 {
-	char		  buf[12];
+	char		  buf[16];
 
 	snprintf(buf, sizeof(buf), "%d.", ++*count);
 	print_word(buf);

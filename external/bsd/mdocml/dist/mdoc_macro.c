@@ -714,6 +714,7 @@ blk_exp_close(MACRO_PROT_ARGS)
 		break;
 	case (MDOC_Ek):
 		mdoc->flags &= ~MDOC_KEEP;
+		/* FALLTHROUGH */
 	default:
 		maxargs = 0;
 		break;

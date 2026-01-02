@@ -17,6 +17,11 @@ LIBDPLIBS+=     m	${.CURDIR}/../../../../../lib/libm
 
 WARNS?=		2
 
+.if ${ACTIVE_CC} == "gcc"
+CXXFLAGS+=	-Wno-error=array-bounds -Wno-error=maybe-uninitialized \
+		-Wno-error=shadow
+.endif
+
 SRCS=		application.cpp \
 		build.cpp \
 		check.cpp \

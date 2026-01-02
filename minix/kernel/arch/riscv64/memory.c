@@ -8,6 +8,11 @@
 #include "kernel/kernel.h"
 #include "archconst.h"
 #include "arch_proto.h"
+#include "kernel/vm.h"
+#include <assert.h>
+#include <string.h>
+
+#define PAGE_SIZE RISCV_PAGE_SIZE
 
 /* Page table entry flags */
 #define PTE_V       (1UL << 0)  /* Valid */
@@ -48,9 +53,13 @@ static phys_bytes free_page_list;
  */
 void mem_init(phys_bytes usedlimit)
 {
+    phys_bytes mem_start, mem_size;
+
+    bsp_get_memory(&mem_start, &mem_size);
+
     /* Set up memory bounds */
     mem_low = usedlimit;
-    mem_high = PHYS_MEM_END;  /* From device tree or default */
+    mem_high = mem_start + mem_size;
 
     /* Initialize page allocator */
     free_page_list = 0;
@@ -152,16 +161,14 @@ int vm_map_range(struct proc *p, phys_bytes phys, vir_bytes vir,
         pgdir = _boot_pgdir;
     }
 
-    /* Convert MINIX flags to RISC-V PTE flags */
-    pte_flags = PTE_V | PTE_A | PTE_D;
-    if (flags & VM_READ)
-        pte_flags |= PTE_R;
-    if (flags & VM_WRITE)
+    /* Convert MINIX VMMF_* flags to RISC-V PTE flags */
+    pte_flags = PTE_V | PTE_A | PTE_D | PTE_R | PTE_X;
+    if (flags & VMMF_WRITE)
         pte_flags |= PTE_W;
-    if (flags & VM_EXEC)
-        pte_flags |= PTE_X;
-    if (flags & VM_USER)
+    if (flags & VMMF_USER)
         pte_flags |= PTE_U;
+    if (flags & VMMF_GLO)
+        pte_flags |= PTE_G;
 
     /* Map pages */
     for (offset = 0; offset < bytes; offset += PAGE_SIZE) {
@@ -233,4 +240,406 @@ phys_bytes umap_local(struct proc *p, int seg, vir_bytes vir, vir_bytes bytes)
         return 0;
 
     return PTE_TO_PA(*pte) | (vir & (PAGE_SIZE - 1));
+}
+
+/*===========================================================================*
+ *                              vm_lookup                                    *
+ *===========================================================================*/
+int vm_lookup(const struct proc *proc, const vir_bytes virtual,
+	phys_bytes *physical, u32_t *ptent)
+{
+	phys_bytes phys;
+
+	if (!proc || !physical)
+		return EFAULT;
+
+	phys = umap_local((struct proc *)proc, 0, virtual, 1);
+	if (!phys)
+		return EFAULT;
+
+	*physical = phys;
+	if (ptent)
+		*ptent = 0;
+
+	return OK;
+}
+
+/*===========================================================================*
+ *				vm_lookup_range				     *
+ *===========================================================================*/
+size_t vm_lookup_range(const struct proc *proc, vir_bytes vir_addr,
+	phys_bytes *phys_addr, size_t bytes)
+{
+	phys_bytes phys, next_phys;
+	size_t len;
+
+	if (!proc || bytes == 0)
+		return 0;
+
+	if (vm_lookup(proc, vir_addr, &phys, NULL) != OK)
+		return 0;
+
+	if (phys_addr != NULL)
+		*phys_addr = phys;
+
+	len = PAGE_SIZE - (vir_addr % PAGE_SIZE);
+	vir_addr += len;
+	next_phys = phys + len;
+
+	while (len < bytes) {
+		if (vm_lookup(proc, vir_addr, &phys, NULL) != OK)
+			break;
+		if (next_phys != phys)
+			break;
+
+		len += PAGE_SIZE;
+		vir_addr += PAGE_SIZE;
+		next_phys += PAGE_SIZE;
+	}
+
+	return MIN(bytes, len);
+}
+
+/*===========================================================================*
+ *				vm_check_range				     *
+ *===========================================================================*/
+int vm_check_range(struct proc *caller, struct proc *target,
+	vir_bytes vir_addr, size_t bytes, int writeflag)
+{
+	int r;
+
+	if ((caller->p_misc_flags & MF_KCALL_RESUME) &&
+		(r = caller->p_vmrequest.vmresult) != OK)
+		return r;
+
+	vm_suspend(caller, target, vir_addr, bytes, VMSTYPE_KERNELCALL,
+		writeflag);
+
+	return VMSUSPEND;
+}
+
+/*===========================================================================*
+ *                           check_resumed_caller                            *
+ *===========================================================================*/
+static int check_resumed_caller(struct proc *caller)
+{
+    if (caller && (caller->p_misc_flags & MF_KCALL_RESUME)) {
+        assert(caller->p_vmrequest.vmresult != VMSUSPEND);
+        return caller->p_vmrequest.vmresult;
+    }
+
+    return OK;
+}
+
+/*===========================================================================*
+ *                              vm_memset                                    *
+ *===========================================================================*/
+int vm_memset(struct proc *caller, endpoint_t who, phys_bytes ph, int c,
+    phys_bytes count)
+{
+    struct proc *whoptr = NULL;
+    phys_bytes cur_ph = ph;
+    phys_bytes left = count;
+    phys_bytes phys;
+    phys_bytes chunk;
+    int r;
+
+    if ((r = check_resumed_caller(caller)) != OK)
+        return r;
+
+    /* NONE means physical address, otherwise virtual in target process. */
+    if (who != NONE && !(whoptr = endpoint_lookup(who)))
+        return ESRCH;
+
+    c &= 0xFF;
+
+    while (left > 0) {
+        chunk = left;
+        if (whoptr) {
+            chunk = MIN(chunk, PAGE_SIZE - (cur_ph & (PAGE_SIZE - 1)));
+            phys = umap_local(whoptr, 0, cur_ph, chunk);
+            if (!phys) {
+                if (caller) {
+                    vm_suspend(caller, whoptr, cur_ph, count,
+                        VMSTYPE_KERNELCALL, 1);
+                    return VMSUSPEND;
+                }
+                return EFAULT;
+            }
+        } else {
+            phys = cur_ph;
+        }
+
+        phys_memset(phys, (unsigned long)c, chunk);
+        cur_ph += chunk;
+        left -= chunk;
+    }
+
+    return OK;
+}
+
+/*===========================================================================*
+ *				virtual_copy_f				     *
+ *===========================================================================*/
+int virtual_copy_f(struct proc *caller, struct vir_addr *src_addr,
+    struct vir_addr *dst_addr, vir_bytes bytes, int vmcheck)
+{
+    struct proc *procs[2];
+    struct vir_addr *vir_addr[2];
+    int i, r;
+
+    if (bytes <= 0)
+        return EDOM;
+
+    vir_addr[_SRC_] = src_addr;
+    vir_addr[_DST_] = dst_addr;
+
+    for (i = _SRC_; i <= _DST_; i++) {
+        endpoint_t proc_e = vir_addr[i]->proc_nr_e;
+        int proc_nr;
+        struct proc *p;
+
+        if (proc_e == NONE) {
+            p = NULL;
+        } else {
+            if (!isokendpt(proc_e, &proc_nr))
+                return ESRCH;
+            p = proc_addr(proc_nr);
+        }
+        procs[i] = p;
+    }
+
+    if ((r = check_resumed_caller(caller)) != OK)
+        return r;
+
+    vir_bytes src_off = src_addr->offset;
+    vir_bytes dst_off = dst_addr->offset;
+    vir_bytes left = bytes;
+
+    while (left > 0) {
+        phys_bytes src_phys, dst_phys;
+        vir_bytes chunk = left;
+
+        if (procs[_SRC_])
+            chunk = MIN(chunk, PAGE_SIZE - (src_off & (PAGE_SIZE - 1)));
+        if (procs[_DST_])
+            chunk = MIN(chunk, PAGE_SIZE - (dst_off & (PAGE_SIZE - 1)));
+
+        src_phys = procs[_SRC_] ?
+            umap_local(procs[_SRC_], 0, src_off, chunk) : src_off;
+        if (!src_phys) {
+            if (vmcheck && caller) {
+                vm_suspend(caller, procs[_SRC_], src_off, bytes,
+                    VMSTYPE_KERNELCALL, 0);
+                return VMSUSPEND;
+            }
+            return EFAULT_SRC;
+        }
+
+        dst_phys = procs[_DST_] ?
+            umap_local(procs[_DST_], 0, dst_off, chunk) : dst_off;
+        if (!dst_phys) {
+            if (vmcheck && caller) {
+                vm_suspend(caller, procs[_DST_], dst_off, bytes,
+                    VMSTYPE_KERNELCALL, 1);
+                return VMSUSPEND;
+            }
+            return EFAULT_DST;
+        }
+
+        if (phys_copy(src_phys, dst_phys, chunk) != 0) {
+            if (vmcheck && caller) {
+                vm_suspend(caller, procs[_DST_], dst_off, bytes,
+                    VMSTYPE_KERNELCALL, 1);
+                return VMSUSPEND;
+            }
+            return EFAULT;
+        }
+
+        left -= chunk;
+        src_off += chunk;
+        dst_off += chunk;
+    }
+
+    return OK;
+}
+
+/*===========================================================================*
+ *				data_copy				     *
+ *===========================================================================*/
+int data_copy(const endpoint_t from_proc, const vir_bytes from_addr,
+    const endpoint_t to_proc, const vir_bytes to_addr, size_t bytes)
+{
+    struct vir_addr src, dst;
+
+    src.offset = from_addr;
+    dst.offset = to_addr;
+    src.proc_nr_e = from_proc;
+    dst.proc_nr_e = to_proc;
+
+    return virtual_copy(&src, &dst, bytes);
+}
+
+/*===========================================================================*
+ *				data_copy_vmcheck			     *
+ *===========================================================================*/
+int data_copy_vmcheck(struct proc *caller, const endpoint_t from_proc,
+    const vir_bytes from_addr, const endpoint_t to_proc,
+    const vir_bytes to_addr, size_t bytes)
+{
+    struct vir_addr src, dst;
+
+    src.offset = from_addr;
+    dst.offset = to_addr;
+    src.proc_nr_e = from_proc;
+    dst.proc_nr_e = to_proc;
+
+    return virtual_copy_vmcheck(caller, &src, &dst, bytes);
+}
+
+void memory_init(void)
+{
+}
+
+/*===========================================================================*
+ *				arch_proc_init				     *
+ *===========================================================================*/
+void arch_proc_init(struct proc *pr, const u32_t ip, const u32_t sp,
+	const u32_t ps_str, char *name)
+{
+	arch_proc_reset(pr);
+	strlcpy(pr->p_name, name, sizeof(pr->p_name));
+
+	pr->p_reg.pc = ip;
+	pr->p_reg.sp = sp;
+	pr->p_reg.retreg = ps_str;
+}
+
+static int usermapped_glo_index = -1,
+	usermapped_index = -1, first_um_idx = -1;
+
+extern char usermapped_start, usermapped_end, usermapped_nonglo_start;
+
+int arch_phys_map(const int index, phys_bytes *addr, phys_bytes *len,
+	int *flags)
+{
+	static int first = 1;
+	phys_bytes glo_len;
+	phys_bytes phys;
+	int freeidx = 0;
+
+	glo_len = (phys_bytes)((vir_bytes)&usermapped_nonglo_start -
+		(vir_bytes)&usermapped_start);
+
+	if (first) {
+		memset(&minix_kerninfo, 0, sizeof(minix_kerninfo));
+		if (glo_len > 0)
+			usermapped_glo_index = freeidx++;
+
+		usermapped_index = freeidx++;
+		first_um_idx = usermapped_index;
+		if (usermapped_glo_index != -1)
+			first_um_idx = usermapped_glo_index;
+		first = 0;
+	}
+
+	if (index == usermapped_glo_index) {
+		phys = umap_local(NULL, 0, (vir_bytes)&usermapped_start, 1);
+		if (!phys)
+			return EFAULT;
+		*addr = phys;
+		*len = glo_len;
+		*flags = VMMF_USER | VMMF_GLO;
+		return OK;
+	} else if (index == usermapped_index) {
+		phys = umap_local(NULL, 0, (vir_bytes)&usermapped_nonglo_start, 1);
+		if (!phys)
+			return EFAULT;
+		*addr = phys;
+		*len = (phys_bytes)((vir_bytes)&usermapped_end -
+			(vir_bytes)&usermapped_nonglo_start);
+		*flags = VMMF_USER;
+		return OK;
+	}
+
+	return EINVAL;
+}
+
+int arch_phys_map_reply(const int index, const vir_bytes addr)
+{
+	if (index == first_um_idx) {
+		vir_bytes usermapped_offset;
+
+		assert(addr > (vir_bytes)&usermapped_start);
+		usermapped_offset = addr - (vir_bytes)&usermapped_start;
+#define FIXEDPTR(ptr) (void *)((vir_bytes)(ptr) + usermapped_offset)
+#define ASSIGN(minixstruct) minix_kerninfo.minixstruct = FIXEDPTR(&minixstruct)
+		ASSIGN(kinfo);
+		ASSIGN(machine);
+		ASSIGN(kmessages);
+		ASSIGN(loadinfo);
+		ASSIGN(kuserinfo);
+		ASSIGN(arm_frclock);
+		ASSIGN(kclockinfo);
+
+		minix_kerninfo.kerninfo_magic = KERNINFO_MAGIC;
+		minix_kerninfo.minix_feature_flags = minix_feature_flags;
+		minix_kerninfo_user = (vir_bytes)FIXEDPTR(&minix_kerninfo);
+
+		minix_kerninfo.ki_flags |= MINIX_KIF_USERINFO;
+
+		return OK;
+	}
+
+	if (index == usermapped_index)
+		return OK;
+
+	return EINVAL;
+}
+
+void mem_clear_mapcache(void)
+{
+}
+
+void release_address_space(struct proc *pr)
+{
+	if (!pr)
+		return;
+
+	pr->p_seg.p_satp = 0;
+	pr->p_seg.p_satp_v = NULL;
+}
+
+int copy_msg_from_user(message *user_mbuf, message *dst)
+{
+	struct proc *caller;
+	struct vir_addr src, dst_addr;
+
+	caller = get_cpulocal_var(proc_ptr);
+	if (caller == NULL)
+		return 1;
+
+	src.proc_nr_e = caller->p_endpoint;
+	src.offset = (vir_bytes)user_mbuf;
+	dst_addr.proc_nr_e = KERNEL;
+	dst_addr.offset = (vir_bytes)dst;
+
+	return (virtual_copy(&src, &dst_addr, sizeof(message)) != OK);
+}
+
+int copy_msg_to_user(message *src, message *user_mbuf)
+{
+	struct proc *caller;
+	struct vir_addr src_addr, dst;
+
+	caller = get_cpulocal_var(proc_ptr);
+	if (caller == NULL)
+		return 1;
+
+	src_addr.proc_nr_e = KERNEL;
+	src_addr.offset = (vir_bytes)src;
+	dst.proc_nr_e = caller->p_endpoint;
+	dst.offset = (vir_bytes)user_mbuf;
+
+	return (virtual_copy(&src_addr, &dst, sizeof(message)) != OK);
 }

@@ -20,6 +20,10 @@ CPPFLAGS+=	-DHAVE_CONFIG_H
 
 WARNS?=		4
 
+.if ${ACTIVE_CC} == "gcc"
+CXXFLAGS+=	-Wno-error=abi -Wno-error=old-style-cast -Wno-error=shadow
+.endif
+
 .if defined(__MINIX)
 NOCLANGERROR:= yes
 .endif # defined(__MINIX)

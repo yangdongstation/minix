@@ -140,7 +140,11 @@ secondary_hart_entry:
     sfence.vma
 
     /* Call secondary hart C entry */
+#ifdef CONFIG_SMP
     call    smp_ap_entry
+#else
+    j       halt
+#endif
 
     /* Should not return */
     j       halt
@@ -342,29 +346,6 @@ restore_regs:
     ld      sp, TF_SP(sp)
 
     sret
-
-/*
- * Switch to user context
- * Called from C code to start/resume a user process
- */
-    .globl switch_to_user
-    .type switch_to_user, @function
-switch_to_user:
-    /* a0 = pointer to proc structure */
-    /* Load trapframe from proc */
-    /* TODO: offset to trapframe in proc structure */
-    mv      sp, a0
-    j       trap_return
-
-/*
- * Restore user context
- */
-    .globl restore_user_context
-    .type restore_user_context, @function
-restore_user_context:
-    /* a0 = pointer to proc structure */
-    mv      sp, a0
-    j       trap_return
 
     .section .data
     .align 3

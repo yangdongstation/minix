@@ -1,12 +1,11 @@
 # Process structure offset definitions for assembly code
 # This file is processed by genassym to create procoffsets.h
 
-include <minix/kernel.h>
-include <kernel/proc.h>
+include "kernel/kernel.h"
+include "kernel/proc.h"
 
 # Process structure offsets
 define P_REG			offsetof(struct proc, p_reg)
-define P_LDT_SEL		offsetof(struct proc, p_seg.p_ldt_sel)
 define PSWFRAME			sizeof(struct stackframe_s)
 
 # Trapframe/stackframe register offsets
@@ -20,4 +19,3 @@ define P_MISC_FLAGS		offsetof(struct proc, p_misc_flags)
 define MF_CONTEXT_SET		MF_CONTEXT_SET
 
 # Kernel stack
-define K_STACK_SIZE		K_STACK_SIZE

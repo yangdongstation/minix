@@ -53,7 +53,7 @@
 #define IER_ETBEI   0x02    /* Enable Transmit Holding Register Empty Interrupt */
 
 /* UART base address */
-static volatile u8_t *uart_base = (volatile u8_t *)UART0_BASE;
+static volatile u8_t *uart_base = (volatile u8_t *)VIRT_UART0_BASE;
 
 /* UART initialized flag */
 static int uart_initialized = 0;

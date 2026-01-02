@@ -8,15 +8,6 @@
 #include "archconst.h"
 #include "arch_proto.h"
 
-/* VMCTL request codes (from MINIX IPC) */
-#define VMCTL_GET_PAGEFAULT     1
-#define VMCTL_CLEAR_PAGEFAULT   2
-#define VMCTL_SET_ADDRSPACE     3
-#define VMCTL_GET_PDBR          4
-#define VMCTL_FLUSHTLB          5
-#define VMCTL_MEMREQ_GET        6
-#define VMCTL_MEMREQ_REPLY      7
-
 /*
  * Architecture-specific VM control
  */
@@ -35,7 +26,7 @@ int arch_do_vmctl(message *m_ptr, struct proc *p)
         pg_flush_tlb();
         break;
 
-    case VMCTL_SET_ADDRSPACE:
+    case VMCTL_SETADDRSPACE:
         /* Set address space for process */
         /* TODO: Update process page table */
         break;

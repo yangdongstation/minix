@@ -112,14 +112,16 @@ default_callback(const char *file, int line, isc_assertiontype_t type,
 	int i, nframes;
 	const char *logsuffix = ".";
 	const char *fname;
+	const char *safecond;
 	isc_result_t result;
 
 	result = isc_backtrace_gettrace(tracebuf, BACKTRACE_MAXFRAME, &nframes);
 		if (result == ISC_R_SUCCESS && nframes > 0)
 			logsuffix = ", back trace";
 
+	safecond = (cond == NULL) ? "(null)" : cond;
 	fprintf(stderr, "%s:%d: %s(%s) %s%s\n",
-		file, line, isc_assertion_typetotext(type), cond,
+		file, line, isc_assertion_typetotext(type), safecond,
 		isc_msgcat_get(isc_msgcat, ISC_MSGSET_GENERAL,
 			       ISC_MSG_FAILED, "failed"), logsuffix);
 	if (result == ISC_R_SUCCESS) {

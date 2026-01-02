@@ -100,7 +100,8 @@ isc_sha224_update(isc_sha224_t *context, const isc_uint8_t* data, size_t len) {
 }
 
 void
-isc_sha224_final(isc_uint8_t digest[], isc_sha224_t *context) {
+isc_sha224_final(isc_uint8_t digest[ISC_SHA224_DIGESTLENGTH],
+    isc_sha224_t *context) {
 	/* Sanity check: */
 	REQUIRE(context != (isc_sha224_t *)0);
 
@@ -140,7 +141,8 @@ isc_sha256_update(isc_sha256_t *context, const isc_uint8_t *data, size_t len) {
 }
 
 void
-isc_sha256_final(isc_uint8_t digest[], isc_sha256_t *context) {
+isc_sha256_final(isc_uint8_t digest[ISC_SHA256_DIGESTLENGTH],
+    isc_sha256_t *context) {
 	/* Sanity check: */
 	REQUIRE(context != (isc_sha256_t *)0);
 
@@ -178,7 +180,8 @@ void isc_sha512_update(isc_sha512_t *context, const isc_uint8_t *data, size_t le
 				       (const void *) data, len) == 1);
 }
 
-void isc_sha512_final(isc_uint8_t digest[], isc_sha512_t *context) {
+void isc_sha512_final(isc_uint8_t digest[ISC_SHA512_DIGESTLENGTH],
+    isc_sha512_t *context) {
 	/* Sanity check: */
 	REQUIRE(context != (isc_sha512_t *)0);
 
@@ -218,7 +221,8 @@ isc_sha384_update(isc_sha384_t *context, const isc_uint8_t* data, size_t len) {
 }
 
 void
-isc_sha384_final(isc_uint8_t digest[], isc_sha384_t *context) {
+isc_sha384_final(isc_uint8_t digest[ISC_SHA384_DIGESTLENGTH],
+    isc_sha384_t *context) {
 	/* Sanity check: */
 	REQUIRE(context != (isc_sha384_t *)0);
 
@@ -276,7 +280,7 @@ isc_sha224_update(isc_sha224_t *context, const isc_uint8_t* data, size_t len) {
 }
 
 void
-isc_sha224_final(isc_uint8_t digest[], isc_sha224_t *context) {
+isc_sha224_final(isc_uint8_t digest[ISC_SHA224_DIGESTLENGTH], isc_sha224_t *context) {
 	CK_RV rv;
 	CK_ULONG len = ISC_SHA224_DIGESTLENGTH;
 
@@ -342,7 +346,7 @@ isc_sha256_update(isc_sha256_t *context, const isc_uint8_t* data, size_t len) {
 }
 
 void
-isc_sha256_final(isc_uint8_t digest[], isc_sha256_t *context) {
+isc_sha256_final(isc_uint8_t digest[ISC_SHA256_DIGESTLENGTH], isc_sha256_t *context) {
 	CK_RV rv;
 	CK_ULONG len = ISC_SHA256_DIGESTLENGTH;
 
@@ -474,7 +478,7 @@ isc_sha384_update(isc_sha384_t *context, const isc_uint8_t* data, size_t len) {
 }
 
 void
-isc_sha384_final(isc_uint8_t digest[], isc_sha384_t *context) {
+isc_sha384_final(isc_uint8_t digest[ISC_SHA384_DIGESTLENGTH], isc_sha384_t *context) {
 	CK_RV rv;
 	CK_ULONG len = ISC_SHA384_DIGESTLENGTH;
 
@@ -854,7 +858,7 @@ isc_sha224_update(isc_sha224_t *context, const isc_uint8_t* data, size_t len) {
 }
 
 void
-isc_sha224_final(isc_uint8_t digest[], isc_sha224_t *context) {
+isc_sha224_final(isc_uint8_t digest[ISC_SHA224_DIGESTLENGTH], isc_sha224_t *context) {
 	isc_uint8_t sha256_digest[ISC_SHA256_DIGESTLENGTH];
 	isc_sha256_final(sha256_digest, (isc_sha256_t *)context);
 	memmove(digest, sha256_digest, ISC_SHA224_DIGESTLENGTH);
@@ -1117,7 +1121,7 @@ isc_sha256_update(isc_sha256_t *context, const isc_uint8_t *data, size_t len) {
 }
 
 void
-isc_sha256_final(isc_uint8_t digest[], isc_sha256_t *context) {
+isc_sha256_final(isc_uint8_t digest[ISC_SHA256_DIGESTLENGTH], isc_sha256_t *context) {
 	isc_uint32_t	*d = (isc_uint32_t*)digest;
 	unsigned int	usedspace;
 
@@ -1481,7 +1485,7 @@ void isc_sha512_last(isc_sha512_t *context) {
 	isc_sha512_transform(context, (isc_uint64_t*)context->buffer);
 }
 
-void isc_sha512_final(isc_uint8_t digest[], isc_sha512_t *context) {
+void isc_sha512_final(isc_uint8_t digest[ISC_SHA512_DIGESTLENGTH], isc_sha512_t *context) {
 	isc_uint64_t	*d = (isc_uint64_t*)digest;
 
 	/* Sanity check: */
@@ -1534,7 +1538,7 @@ isc_sha384_update(isc_sha384_t *context, const isc_uint8_t* data, size_t len) {
 }
 
 void
-isc_sha384_final(isc_uint8_t digest[], isc_sha384_t *context) {
+isc_sha384_final(isc_uint8_t digest[ISC_SHA384_DIGESTLENGTH], isc_sha384_t *context) {
 	isc_uint64_t	*d = (isc_uint64_t*)digest;
 
 	/* Sanity check: */
@@ -1571,7 +1575,8 @@ isc_sha384_final(isc_uint8_t digest[], isc_sha384_t *context) {
 static const char *sha2_hex_digits = "0123456789abcdef";
 
 char *
-isc_sha224_end(isc_sha224_t *context, char buffer[]) {
+isc_sha224_end(isc_sha224_t *context,
+    char buffer[ISC_SHA224_DIGESTSTRINGLENGTH]) {
 	isc_uint8_t	digest[ISC_SHA224_DIGESTLENGTH], *d = digest;
 	unsigned int	i;
 
@@ -1612,7 +1617,8 @@ isc_sha224_data(const isc_uint8_t *data, size_t len,
 }
 
 char *
-isc_sha256_end(isc_sha256_t *context, char buffer[]) {
+isc_sha256_end(isc_sha256_t *context,
+    char buffer[ISC_SHA256_DIGESTSTRINGLENGTH]) {
 	isc_uint8_t	digest[ISC_SHA256_DIGESTLENGTH], *d = digest;
 	unsigned int	i;
 
@@ -1653,7 +1659,8 @@ isc_sha256_data(const isc_uint8_t* data, size_t len,
 }
 
 char *
-isc_sha512_end(isc_sha512_t *context, char buffer[]) {
+isc_sha512_end(isc_sha512_t *context,
+    char buffer[ISC_SHA512_DIGESTSTRINGLENGTH]) {
 	isc_uint8_t	digest[ISC_SHA512_DIGESTLENGTH], *d = digest;
 	unsigned int	i;
 
@@ -1694,7 +1701,8 @@ isc_sha512_data(const isc_uint8_t *data, size_t len,
 }
 
 char *
-isc_sha384_end(isc_sha384_t *context, char buffer[]) {
+isc_sha384_end(isc_sha384_t *context,
+    char buffer[ISC_SHA384_DIGESTSTRINGLENGTH]) {
 	isc_uint8_t	digest[ISC_SHA384_DIGESTLENGTH], *d = digest;
 	unsigned int	i;
 

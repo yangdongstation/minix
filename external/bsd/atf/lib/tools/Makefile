@@ -16,6 +16,11 @@ CPPFLAGS+=	-I${SRCDIR}/tools
 
 WARNS?=		2
 
+.if ${ACTIVE_CC} == "gcc"
+CXXFLAGS+=	-Wno-error=array-bounds -Wno-error=maybe-uninitialized \
+		-Wno-error=shadow
+.endif
+
 SRCS=		application.cpp \
 		atffile.cpp \
 		config.cpp \

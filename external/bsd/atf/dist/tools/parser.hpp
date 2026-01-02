@@ -225,7 +225,7 @@ tokenizer< IS >::next(void)
         return t;
     }
 
-    char ch;
+    char ch = '\0';
     std::string text;
 
     bool done = false, quoted = false;
@@ -324,7 +324,7 @@ class parser {
 
 public:
     parser(TKZ& tkz);
-    ~parser(void);
+    ~parser(void) noexcept(false);
 
     bool good(void) const;
     void add_error(const parse_error&);
@@ -386,7 +386,7 @@ parser< TKZ >::parser(TKZ& tkz) :
 }
 
 template< class TKZ >
-parser< TKZ >::~parser(void)
+parser< TKZ >::~parser(void) noexcept(false)
 {
     if (!m_errors.empty() && !m_thrown)
         throw m_errors;

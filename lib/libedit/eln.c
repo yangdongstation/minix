@@ -97,8 +97,15 @@ el_parse(EditLine *el, int argc, const char *argv[])
 	int ret;
 	const wchar_t **wargv;
 
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-qual"
+#endif
 	wargv = (const wchar_t **)
 	    ct_decode_argv(argc, argv, &el->el_lgcyconv);
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 	if (!wargv)
 		return -1;
 	ret = el_wparse(el, argc, wargv);
@@ -177,8 +184,15 @@ el_set(EditLine *el, int op, ...)
 			if ((argv[i] = va_arg(ap, const char *)) == NULL)
 			    break;
 		argv[0] = argv[i] = NULL;
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-qual"
+#endif
 		wargv = (const wchar_t **)
 		    ct_decode_argv(i + 1, argv, &el->el_lgcyconv);
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 		if (!wargv) {
 		    ret = -1;
 		    goto out;

@@ -11,18 +11,6 @@
     .align 2
 
 /*
- * void switch_to_user(void)
- *
- * Switch from kernel mode to user mode.
- * Called after setting up process context.
- */
-    .globl switch_to_user
-    .type switch_to_user, @function
-switch_to_user:
-    /* Context is already set up, just do sret */
-    sret
-
-/*
  * void restore_user_context(struct proc *p)
  *
  * Restore user context from process structure and return to user mode.
@@ -103,7 +91,7 @@ save_fpu:
     ret
 
 /*
- * void restore_fpu(struct proc *p)
+ * int restore_fpu(struct proc *p)
  *
  * Restore FPU state from process structure
  */
@@ -117,19 +105,8 @@ restore_fpu:
     /* TODO: Restore F registers */
     /* fld f0-f31 from proc structure */
 
-    ret
-
-/*
- * void idle(void)
- *
- * Idle loop - wait for interrupt
- */
-    .globl idle
-    .type idle, @function
-idle:
-    /* Enable interrupts and wait */
-    csrsi   sstatus, SSTATUS_SIE
-    wfi
+    /* Return OK */
+    li      a0, 0
     ret
 
 /*
@@ -142,40 +119,6 @@ idle:
     .type level0, @function
 level0:
     jalr    a0
-    ret
-
-/*
- * void read_tsc_64(u64_t *t)
- *
- * Read cycle counter
- */
-    .globl read_tsc_64
-    .type read_tsc_64, @function
-read_tsc_64:
-    rdcycle t0
-    sd      t0, 0(a0)
-    ret
-
-/*
- * u32_t read_cpu_flags(void)
- *
- * Read CPU flags (sstatus)
- */
-    .globl read_cpu_flags
-    .type read_cpu_flags, @function
-read_cpu_flags:
-    csrr    a0, sstatus
-    ret
-
-/*
- * void write_cpu_flags(u32_t flags)
- *
- * Write CPU flags (sstatus)
- */
-    .globl write_cpu_flags
-    .type write_cpu_flags, @function
-write_cpu_flags:
-    csrw    sstatus, a0
     ret
 
 /*
@@ -202,62 +145,3 @@ halt_cpu:
 .Lhalt_loop:
     wfi
     j       .Lhalt_loop
-
-/*
- * String functions
- */
-
-/*
- * size_t strlen(const char *s)
- */
-    .globl strlen
-    .type strlen, @function
-strlen:
-    mv      t0, a0
-.Lstrlen_loop:
-    lbu     t1, 0(t0)
-    beqz    t1, .Lstrlen_done
-    addi    t0, t0, 1
-    j       .Lstrlen_loop
-.Lstrlen_done:
-    sub     a0, t0, a0
-    ret
-
-/*
- * char *strcpy(char *dst, const char *src)
- */
-    .globl strcpy
-    .type strcpy, @function
-strcpy:
-    mv      t2, a0
-.Lstrcpy_loop:
-    lbu     t0, 0(a1)
-    sb      t0, 0(a0)
-    beqz    t0, .Lstrcpy_done
-    addi    a0, a0, 1
-    addi    a1, a1, 1
-    j       .Lstrcpy_loop
-.Lstrcpy_done:
-    mv      a0, t2
-    ret
-
-/*
- * int strcmp(const char *s1, const char *s2)
- */
-    .globl strcmp
-    .type strcmp, @function
-strcmp:
-.Lstrcmp_loop:
-    lbu     t0, 0(a0)
-    lbu     t1, 0(a1)
-    bne     t0, t1, .Lstrcmp_diff
-    beqz    t0, .Lstrcmp_equal
-    addi    a0, a0, 1
-    addi    a1, a1, 1
-    j       .Lstrcmp_loop
-.Lstrcmp_equal:
-    li      a0, 0
-    ret
-.Lstrcmp_diff:
-    sub     a0, t0, t1
-    ret

@@ -65,8 +65,8 @@ int do_vmctl(struct proc * caller, message * m_ptr)
 				rp->p_vmrequest.params.check.length;
 			m_ptr->SVMCTL_MRG_FLAG		=
 				rp->p_vmrequest.params.check.writeflag;
-			m_ptr->SVMCTL_MRG_REQUESTOR	=
-				(void *) rp->p_endpoint;
+			m_ptr->SVMCTL_MRG_REQUESTOR =
+				(void *) (vir_bytes) rp->p_endpoint;
 
 			rp->p_vmrequest.vmresult = VMSUSPEND;
 

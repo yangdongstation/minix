@@ -2068,7 +2068,7 @@ rl_read_init_file(const char *s)
 int
 rl_parse_and_bind(const char *line)
 {
-	const char * const *argv;
+	const char **argv;
 	int argc;
 	Tokenizer *tok;
 

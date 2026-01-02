@@ -5,6 +5,8 @@
 #ifndef _RISCV64_HW_INTR_H
 #define _RISCV64_HW_INTR_H
 
+#include "kernel/kernel.h"
+
 /* Interrupt types */
 #define INTR_TYPE_PLIC      0   /* External interrupt via PLIC */
 #define INTR_TYPE_TIMER     1   /* Timer interrupt */
@@ -28,5 +30,14 @@
 /* IRQ to PLIC source mapping for QEMU virt */
 #define PLIC_IRQ_UART0          10
 #define PLIC_IRQ_VIRTIO(n)      (1 + (n))  /* VirtIO devices: IRQ 1-8 */
+
+void irq_handle(int irq);
+
+void hw_intr_mask(int irq);
+void hw_intr_unmask(int irq);
+void hw_intr_ack(int irq);
+void hw_intr_used(int irq);
+void hw_intr_not_used(int irq);
+void hw_intr_disable_all(void);
 
 #endif /* _RISCV64_HW_INTR_H */

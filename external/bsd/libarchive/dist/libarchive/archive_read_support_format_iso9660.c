@@ -2042,6 +2042,7 @@ parse_rockridge(struct archive_read *a, struct file_info *file,
 				iso9660->seenRockridge = 0;
 				return (ARCHIVE_OK);
 			}
+			/* FALLTHROUGH */
 		case 'T':
 			if (p[0] == 'T' && p[1] == 'F') {
 				if (version == 1) {

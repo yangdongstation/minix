@@ -6,7 +6,9 @@
 #define _RISCV64_ARCH_PROTO_H
 
 #include <machine/types.h>
+#include "archconst.h"
 
+struct exec;
 struct proc;
 struct trapframe;
 
@@ -53,6 +55,7 @@ void arch_init_clock(void);
 void arch_stop_clock(void);
 int  arch_clock_handler(void);
 u64_t arch_get_timestamp(void);
+void arch_set_timer_freq(u64_t freq);
 
 /* arch_system.c */
 void arch_system_init(void);
@@ -78,9 +81,10 @@ void pg_identity_map(phys_bytes start, phys_bytes end);
 void pg_flush_tlb(void);
 void pg_load(struct proc *p);
 phys_bytes pg_create(void);
+void add_memmap(kinfo_t *cbi, u64_t addr, u64_t len);
 
 /* phys_copy.S */
-int  phys_copy(phys_bytes src, phys_bytes dst, phys_bytes size);
+phys_bytes phys_copy(phys_bytes src, phys_bytes dst, phys_bytes size);
 void phys_memset(phys_bytes dst, unsigned long c, phys_bytes size);
 void phys_copy_fault(void);
 void phys_copy_fault_in_kernel(void);
@@ -100,18 +104,22 @@ void riscv_cons_init(void);
 void riscv_cons_putc(int c);
 int  riscv_cons_getc(void);
 
+/* bsp/virt */
+void bsp_serial_init(void);
+void bsp_get_memory(phys_bytes *start, phys_bytes *size);
+
 /* arch_do_vmctl.c */
 int arch_do_vmctl(message *m_ptr, struct proc *p);
 
 /* arch_reset.c */
 void arch_reset(void);
+__dead void reset(void);
 
 /* klib.S */
 void switch_to_user(void);
 void restore_user_context(struct proc *p);
 void save_fpu(struct proc *p);
-void restore_fpu(struct proc *p);
-void idle(void);
+int restore_fpu(struct proc *p);
 
 /* mpx.S */
 void level0(void (*func)(void));

@@ -2,11 +2,13 @@
  * RISC-V 64 architecture constants for MINIX kernel
  */
 
-#ifndef _RISCV64_ARCHCONST_H
-#define _RISCV64_ARCHCONST_H
+#ifndef _RISCV64_KERNEL_ARCHCONST_H
+#define _RISCV64_KERNEL_ARCHCONST_H
 
 /* System clock frequency */
+#ifndef DEFAULT_HZ
 #define DEFAULT_HZ          1000
+#endif
 
 /* Page size */
 #define RISCV_PAGE_SIZE     4096
@@ -31,6 +33,7 @@
 /* Sv39 SATP mode */
 #define SATP_MODE_SV39      (8UL << 60)
 #define SATP_MODE_SV48      (9UL << 60)
+#define SATP_PPN_MASK       ((1ULL << 44) - 1)
 
 /* Virtual address space layout for Sv39 */
 #define KERNEL_BASE         0xFFFFFFC000000000UL  /* -256GB */
@@ -66,6 +69,11 @@
 #define SSTATUS_SPIE        (1UL << 5)   /* Previous Interrupt Enable */
 #define SSTATUS_SPP         (1UL << 8)   /* Previous Privilege (0=U, 1=S) */
 #define SSTATUS_FS          (3UL << 13)  /* FPU State */
+#define SSTATUS_FS_MASK     SSTATUS_FS
+#define SSTATUS_FS_OFF      (0UL << 13)
+#define SSTATUS_FS_INITIAL  (1UL << 13)
+#define SSTATUS_FS_CLEAN    (2UL << 13)
+#define SSTATUS_FS_DIRTY    (3UL << 13)
 #define SSTATUS_SUM         (1UL << 18)  /* Supervisor User Memory access */
 
 /* sie/sip bits */
@@ -103,7 +111,9 @@
 #define IRQ_S_EXT               9
 
 /* Clock frequency for QEMU virt (10 MHz) */
+#ifndef CLOCK_FREQ
 #define CLOCK_FREQ              10000000UL
+#endif
 
 /* Maximum number of CPUs supported */
 #ifndef CONFIG_MAX_CPUS
@@ -114,4 +124,6 @@
 #define K_STACK_SIZE            4096
 #define K_STACK_GUARD           4096
 
-#endif /* _RISCV64_ARCHCONST_H */
+#define PG_ALLOCATEME           ((phys_bytes)-1)
+
+#endif /* _RISCV64_KERNEL_ARCHCONST_H */

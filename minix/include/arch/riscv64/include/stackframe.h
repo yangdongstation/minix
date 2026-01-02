@@ -54,6 +54,8 @@ struct stackframe_s {
     reg_t tval;         /* stval: Trap value (fault address, etc.) */
 };
 
+#define retreg a0
+
 /* Offsets for assembly code */
 #define SF_RA       (0 * 8)
 #define SF_SP       (1 * 8)

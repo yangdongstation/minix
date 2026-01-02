@@ -253,7 +253,7 @@ lafe_cleanup_exclusions(struct lafe_matching **matching)
 static void
 initialize_matching(struct lafe_matching **matching)
 {
-	*matching = calloc(sizeof(**matching), 1);
+	*matching = calloc(1, sizeof(**matching));
 	if (*matching == NULL)
 		lafe_errc(1, errno, "No memory");
 }

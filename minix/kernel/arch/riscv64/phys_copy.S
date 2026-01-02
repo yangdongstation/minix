@@ -11,7 +11,7 @@
     .align 2
 
 /*
- * int phys_copy(phys_bytes src, phys_bytes dst, phys_bytes size)
+ * phys_bytes phys_copy(phys_bytes src, phys_bytes dst, phys_bytes size)
  *
  * Copy size bytes from src to dst.
  * Returns 0 on success, non-zero on failure (page fault).

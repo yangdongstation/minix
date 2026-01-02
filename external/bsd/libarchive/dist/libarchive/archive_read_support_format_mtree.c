@@ -819,17 +819,20 @@ parse_keyword(struct archive_read *a, struct mtree *mtree,
 		}
 		if (strcmp(key, "cksum") == 0)
 			break;
+		/* FALLTHROUGH */
 	case 'd':
 		if (strcmp(key, "device") == 0) {
 			*parsed_kws |= MTREE_HAS_DEVICE;
 			return parse_device(&a->archive, entry, val);
 		}
+		/* FALLTHROUGH */
 	case 'f':
 		if (strcmp(key, "flags") == 0) {
 			*parsed_kws |= MTREE_HAS_FFLAGS;
 			archive_entry_copy_fflags_text(entry, val);
 			break;
 		}
+		/* FALLTHROUGH */
 	case 'g':
 		if (strcmp(key, "gid") == 0) {
 			*parsed_kws |= MTREE_HAS_GID;
@@ -841,11 +844,13 @@ parse_keyword(struct archive_read *a, struct mtree *mtree,
 			archive_entry_copy_gname(entry, val);
 			break;
 		}
+		/* FALLTHROUGH */
 	case 'l':
 		if (strcmp(key, "link") == 0) {
 			archive_entry_copy_symlink(entry, val);
 			break;
 		}
+		/* FALLTHROUGH */
 	case 'm':
 		if (strcmp(key, "md5") == 0 || strcmp(key, "md5digest") == 0)
 			break;
@@ -862,16 +867,19 @@ parse_keyword(struct archive_read *a, struct mtree *mtree,
 			}
 			break;
 		}
+		/* FALLTHROUGH */
 	case 'n':
 		if (strcmp(key, "nlink") == 0) {
 			*parsed_kws |= MTREE_HAS_NLINK;
 			archive_entry_set_nlink(entry, mtree_atol10(&val));
 			break;
 		}
+		/* FALLTHROUGH */
 	case 'r':
 		if (strcmp(key, "rmd160") == 0 ||
 		    strcmp(key, "rmd160digest") == 0)
 			break;
+		/* FALLTHROUGH */
 	case 's':
 		if (strcmp(key, "sha1") == 0 || strcmp(key, "sha1digest") == 0)
 			break;
@@ -888,6 +896,7 @@ parse_keyword(struct archive_read *a, struct mtree *mtree,
 			archive_entry_set_size(entry, mtree_atol10(&val));
 			break;
 		}
+		/* FALLTHROUGH */
 	case 't':
 		if (strcmp(key, "tags") == 0) {
 			/*
@@ -919,16 +928,19 @@ parse_keyword(struct archive_read *a, struct mtree *mtree,
 					mtree->filetype = AE_IFBLK;
 					break;
 				}
+				/* FALLTHROUGH */
 			case 'c':
 				if (strcmp(val, "char") == 0) {
 					mtree->filetype = AE_IFCHR;
 					break;
 				}
+				/* FALLTHROUGH */
 			case 'd':
 				if (strcmp(val, "dir") == 0) {
 					mtree->filetype = AE_IFDIR;
 					break;
 				}
+				/* FALLTHROUGH */
 			case 'f':
 				if (strcmp(val, "fifo") == 0) {
 					mtree->filetype = AE_IFIFO;
@@ -938,11 +950,13 @@ parse_keyword(struct archive_read *a, struct mtree *mtree,
 					mtree->filetype = AE_IFREG;
 					break;
 				}
+				/* FALLTHROUGH */
 			case 'l':
 				if (strcmp(val, "link") == 0) {
 					mtree->filetype = AE_IFLNK;
 					break;
 				}
+				/* FALLTHROUGH */
 			default:
 				archive_set_error(&a->archive,
 				    ARCHIVE_ERRNO_FILE_FORMAT,
@@ -952,6 +966,7 @@ parse_keyword(struct archive_read *a, struct mtree *mtree,
 			archive_entry_set_filetype(entry, mtree->filetype);
 			break;
 		}
+		/* FALLTHROUGH */
 	case 'u':
 		if (strcmp(key, "uid") == 0) {
 			*parsed_kws |= MTREE_HAS_UID;
@@ -963,6 +978,7 @@ parse_keyword(struct archive_read *a, struct mtree *mtree,
 			archive_entry_copy_uname(entry, val);
 			break;
 		}
+		/* FALLTHROUGH */
 	default:
 		archive_set_error(&a->archive, ARCHIVE_ERRNO_FILE_FORMAT,
 		    "Unrecognized key %s=%s", key, val);

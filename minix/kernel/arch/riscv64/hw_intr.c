@@ -7,13 +7,6 @@
 #include "arch_proto.h"
 #include "hw_intr.h"
 
-/* Interrupt handler table */
-typedef void (*irq_handler_t)(int irq);
-static irq_handler_t irq_handlers[NR_IRQ_VECTORS];
-
-/* IRQ enable/disable state */
-static int irq_enabled[NR_IRQ_VECTORS];
-
 /* Current CPU (for SMP) */
 #ifdef CONFIG_SMP
 #define CURRENT_CPU cpu_number()
@@ -26,16 +19,8 @@ static int irq_enabled[NR_IRQ_VECTORS];
  */
 void hw_intr_init(void)
 {
-    int i;
-
     /* Initialize PLIC */
     plic_init();
-
-    /* Clear handler table */
-    for (i = 0; i < NR_IRQ_VECTORS; i++) {
-        irq_handlers[i] = NULL;
-        irq_enabled[i] = 0;
-    }
 
     /* Enable external interrupts in SIE */
     csr_set_sie(SIE_SEIE);
@@ -49,7 +34,6 @@ void hw_intr_mask(int irq)
     if (irq < 0 || irq >= NR_IRQ_VECTORS)
         return;
 
-    irq_enabled[irq] = 0;
     plic_disable_irq(irq);
 }
 
@@ -61,7 +45,6 @@ void hw_intr_unmask(int irq)
     if (irq < 0 || irq >= NR_IRQ_VECTORS)
         return;
 
-    irq_enabled[irq] = 1;
     plic_enable_irq(irq, CURRENT_CPU);
 }
 
@@ -89,53 +72,20 @@ void hw_intr_handler(struct trapframe *tf)
         return;
     }
 
-    /* Call registered handler */
-    if (irq > 0 && irq < NR_IRQ_VECTORS && irq_handlers[irq] != NULL) {
-        irq_handlers[irq](irq);
-    }
-
-    /* Complete interrupt */
-    plic_complete(CURRENT_CPU, irq);
+    irq_handle(irq);
 }
 
-/*
- * Register an IRQ handler
- */
-int hw_intr_register(int irq, irq_handler_t handler)
+void hw_intr_used(int irq)
 {
-    if (irq < 0 || irq >= NR_IRQ_VECTORS)
-        return -1;
-
-    irq_handlers[irq] = handler;
-    return 0;
+    (void)irq;
 }
 
-/*
- * Unregister an IRQ handler
- */
-void hw_intr_unregister(int irq)
+void hw_intr_not_used(int irq)
 {
-    if (irq < 0 || irq >= NR_IRQ_VECTORS)
-        return;
-
-    hw_intr_mask(irq);
-    irq_handlers[irq] = NULL;
+    (void)irq;
 }
 
-/*
- * Set IRQ priority
- */
-void hw_intr_set_priority(int irq, int priority)
+void hw_intr_disable_all(void)
 {
-    plic_set_priority(irq, priority);
+    csr_clear_sie(SIE_SEIE);
 }
-
-#ifdef CONFIG_SMP
-/*
- * Set CPU affinity for an IRQ
- */
-void hw_intr_set_affinity(int irq, u32_t cpu_mask)
-{
-    plic_irq_cpu_mask(irq, cpu_mask);
-}
-#endif

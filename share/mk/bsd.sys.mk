@@ -39,6 +39,10 @@ CFLAGS+=	${${ACTIVE_CC} == "clang":? -std=gnu99 :}
 CFLAGS+=	${${ACTIVE_CC} == "gcc":? -std=gnu99 :}
 CFLAGS+=	${${ACTIVE_CC} == "pcc":? -std=gnu99 :}
 
+.if ${MKLIBCXX:Uno} == "yes"
+CXXFLAGS+=	-I${DESTDIR}/usr/include/c++
+.endif
+
 .if defined(WARNS)
 CFLAGS+=	${${ACTIVE_CC} == "clang":? -Wno-sign-compare -Wno-pointer-sign :}
 .if ${WARNS} > 0

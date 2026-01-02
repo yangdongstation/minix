@@ -2248,6 +2248,7 @@ evdns_request_transmit(struct request *req) {
 	case 2:
 		/* failed to transmit the request entirely. */
 		retcode = 1;
+		/* FALLTHROUGH */
 		/* fall through: we'll set a timeout, which will time out,
 		 * and make us retransmit the request anyway. */
 	default:

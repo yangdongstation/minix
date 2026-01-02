@@ -84,6 +84,10 @@
 #include <stdint.h>
 #endif
 
+#if HAVE_LIMITS_H
+#include <limits.h>
+#endif
+
 /* Borland warns about its own constants!  */
 #if defined(__BORLANDC__)
 # if HAVE_DECL_UINT64_MAX
@@ -108,7 +112,7 @@
 #if !HAVE_DECL_SIZE_MAX
 #define	SIZE_MAX (~(size_t)0)
 #endif
-#if !HAVE_DECL_SSIZE_MAX
+#if !HAVE_DECL_SSIZE_MAX && !defined(SSIZE_MAX)
 #define	SSIZE_MAX ((ssize_t)(SIZE_MAX >> 1))
 #endif
 #if !HAVE_DECL_UINT32_MAX

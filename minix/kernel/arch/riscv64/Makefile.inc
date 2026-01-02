@@ -1,6 +1,8 @@
 # Makefile for arch-dependent kernel code (RISC-V 64)
 .include <bsd.own.mk>
 
+USE_WATCHDOG=	no
+
 HERE=${.CURDIR}/arch/${MACHINE_ARCH}
 .PATH:	${HERE}
 
@@ -9,12 +11,18 @@ SYS_OBJS_UNPAGED=assert.o stacktrace.o
 assert.o:	${NETBSDSRCDIR}/minix/lib/libsys/assert.c
 stacktrace.o:	${NETBSDSRCDIR}/minix/lib/libsys/stacktrace.c
 
+# Build kernel-local copies to avoid pulling medlow libs.
+LIBSYS_OBJS= assert.o stacktrace.o cpuavg.o
+LIBMINC_OBJS= subr_prf.o
+cpuavg.o:	${NETBSDSRCDIR}/minix/lib/libsys/cpuavg.c
+
 # objects we want unpaged from -lminc
-MINC_OBJS_UNPAGED= atoi.o \
+MINC_OBJS_UNPAGED= atoi.o get_bp.o \
 	printf.o subr_prf.o \
 	strcmp.o strcpy.o strlen.o strncmp.o \
 	memcpy.o memmove.o memset.o
 atoi.o:		${NETBSDSRCDIR}/minix/lib/libminc/atoi.c
+get_bp.o:	${NETBSDSRCDIR}/minix/lib/libc/arch/${MACHINE_ARCH}/get_bp.S
 printf.o:	${NETBSDSRCDIR}/sys/lib/libsa/printf.c
 subr_prf.o:	${NETBSDSRCDIR}/sys/lib/libsa/subr_prf.c
 
@@ -32,6 +40,9 @@ CPPFLAGS.subr_prf.c+= -Dputchar=kputc
 
 # Activate optional support, may be deactivated.
 CPPFLAGS.subr_prf.c+= -DLIBSA_PRINTF_LONGLONG_SUPPORT -DLIBSA_PRINTF_WIDTH_SUPPORT
+
+# RISC-V kernel needs PC-relative addressing for high RAM placement.
+CFLAGS+= -mcmodel=medany
 
 # Board Support Package for QEMU virt platform
 .include "bsp/virt/Makefile.inc"
@@ -59,6 +70,7 @@ SRCS+=	pg_utils.c phys_copy.S phys_memset.S
 SRCS+=	sbi.c plic.c console.c pre_init.c kernel.c
 
 OBJS.kernel+=	${UNPAGED_OBJS}
+OBJS.kernel+=	${LIBSYS_OBJS} ${LIBMINC_OBJS}
 
 klib.o mpx.o head.o: procoffsets.h
 

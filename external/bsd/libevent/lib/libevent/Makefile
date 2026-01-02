@@ -28,6 +28,11 @@ poll.c \
 select.c \
 signal.c
 
+.if ${ACTIVE_CC} == "gcc"
+CFLAGS+=	-Wno-error=builtin-declaration-mismatch -Wno-error=dangling-pointer \
+		-Wno-error=implicit-fallthrough -Wno-error=array-parameter
+.endif
+
 .if defined(HAVE_GCC) && ${HAVE_GCC} == 48
 .if ${MACHINE_ARCH} == "sh3el"
 COPTS.evdns.c=	-O0

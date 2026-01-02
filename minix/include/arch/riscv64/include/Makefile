@@ -3,7 +3,7 @@
 INCSDIR= /usr/include/riscv64
 
 INCS=	archconst.h archtypes.h cpu.h elf.h fpu.h interrupt.h \
-	ipcconst.h memory.h partition.h stackframe.h vm.h
+	ipcconst.h memory.h partition.h ptrace.h stackframe.h vm.h
 
 INCSYMLINKS+= \
 	../riscv64/archconst.h /usr/include/evbriscv64/archconst.h \
@@ -15,6 +15,7 @@ INCSYMLINKS+= \
 	../riscv64/ipcconst.h /usr/include/evbriscv64/ipcconst.h \
 	../riscv64/memory.h /usr/include/evbriscv64/memory.h \
 	../riscv64/partition.h /usr/include/evbriscv64/partition.h \
+	../riscv64/ptrace.h /usr/include/evbriscv64/ptrace.h \
 	../riscv64/stackframe.h /usr/include/evbriscv64/stackframe.h \
 	../riscv64/vm.h /usr/include/evbriscv64/vm.h
 

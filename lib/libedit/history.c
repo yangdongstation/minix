@@ -375,20 +375,24 @@ history_def_add(void *p, TYPE(HistEvent) *ev, const Char *str)
 {
 	history_t *h = (history_t *) p;
 	size_t len;
+	size_t old_len;
+	size_t add_len;
 	Char *s;
 	HistEventPrivate *evp = (void *)&h->cursor->ev;
 
 	if (h->cursor == &h->list)
 		return history_def_enter(p, ev, str);
-	len = Strlen(evp->str) + Strlen(str) + 1;
+	old_len = Strlen(evp->str);
+	add_len = Strlen(str);
+	len = old_len + add_len + 1;
 	s = h_malloc(len * sizeof(*s));
 	if (s == NULL) {
 		he_seterrev(ev, _HE_MALLOC_FAILED);
 		return -1;
 	}
-	(void) Strncpy(s, h->cursor->ev.str, len);
-        s[len - 1] = '\0';
-	(void) Strncat(s, str, len - Strlen(s) - 1);
+	(void) memcpy(s, evp->str, old_len * sizeof(*s));
+	(void) memcpy(s + old_len, str, add_len * sizeof(*s));
+	s[old_len + add_len] = '\0';
 	h_free(evp->str);
 	evp->str = s;
 	*ev = h->cursor->ev;
