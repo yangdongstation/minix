@@ -343,14 +343,17 @@ void proctab_dmp(void)
 	printf("\n");
   }
 }
-#endif				/* defined(__i386__) */
-
-#if defined(__arm__)
+#elif defined(__arm__)
 void proctab_dmp(void)
 {
     /* LSC FIXME: Not implemented for arm */
 }
-#endif				/* defined(__arm__) */
+#elif defined(__riscv64__)
+void proctab_dmp(void)
+{
+    /* Not implemented for riscv64 yet. */
+}
+#endif				/* defined(__i386__) */
 
 /*===========================================================================*
  *				procstack_dmp  				     *
@@ -393,4 +396,3 @@ proc_name(int proc_nr)
   if (isemptyp(p)) return "EMPTY";	/* bogus */
   return p->p_name;
 }
-

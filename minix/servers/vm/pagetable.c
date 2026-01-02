@@ -1381,7 +1381,7 @@ int pt_bind(pt_t *pt, struct vmproc *who)
 	assert(pdeslot < ARCH_VM_PT_ENTRIES / pages_per_pagedir);
 	assert(pagedir_pde >= 0);
 
-#if defined(__i386__)
+#if defined(__i386__) || defined(__riscv64__)
 	phys = pt->pt_dir_phys & ARCH_VM_ADDR_MASK;
 #elif defined(__arm__)
 	phys = pt->pt_dir_phys & ARM_VM_PTE_MASK;
@@ -1390,7 +1390,7 @@ int pt_bind(pt_t *pt, struct vmproc *who)
 	assert(!(pt->pt_dir_phys % ARCH_PAGEDIR_SIZE));
 
 	/* Update "page directory pagetable." */
-#if defined(__i386__)
+#if defined(__i386__) || defined(__riscv64__)
 	pdm->page_directories[pdeslot] =
 		phys | ARCH_VM_PDE_PRESENT|ARCH_VM_PTE_RW;
 #elif defined(__arm__)
@@ -1411,7 +1411,7 @@ int pt_bind(pt_t *pt, struct vmproc *who)
 	 * in its address space.
 	 */
 	pdes = (void *) (pagedir_pde*ARCH_BIG_PAGE_SIZE + 
-#if defined(__i386__)
+#if defined(__i386__) || defined(__riscv64__)
 			pdeslot * VM_PAGE_SIZE);
 #elif defined(__arm__)
 			pdeslot * ARCH_PAGEDIR_SIZE);

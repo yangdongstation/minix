@@ -50,7 +50,9 @@ check_vmnt_locks(void)
   for (vmp = &vmnt[0]; vmp < &vmnt[NR_MNTS]; vmp++)
 	if (is_vmnt_locked(vmp)) {
 		count++;
-		printf("vmnt %p is %s, fs_e=%d dev=%llx\n", vmp, (tll_islocked(&vmp->m_lock) ? "locked":"pending locked"), vmp->m_fs_e, vmp->m_dev);
+		printf("vmnt %p is %s, fs_e=%d dev=%llx\n", vmp,
+		    (tll_islocked(&vmp->m_lock) ? "locked" : "pending locked"),
+		    vmp->m_fs_e, (unsigned long long)vmp->m_dev);
 	}
 
   if (count) panic("%d locked vmnts\n", count);

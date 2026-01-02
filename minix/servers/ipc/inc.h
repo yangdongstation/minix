@@ -57,7 +57,7 @@ void update_refcount_and_destroy(void);
 int do_semget(message *);
 int do_semctl(message *);
 int do_semop(message *);
-int get_sem_mib_info(struct rmib_oldp *);
+ssize_t get_sem_mib_info(struct rmib_oldp *);
 int is_sem_nil(void);
 void sem_process_event(endpoint_t, int);
 
