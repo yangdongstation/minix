@@ -120,7 +120,13 @@ CLEANFILES += ${.OBJDIR}/etc/*
 TOOL_PWD_MKDB?= ${NETBSDSRCDIR}/usr.sbin/pwd_mkdb/pwd_mkdb
 
 # Remove "drivers/storage/ramdisk" component from path
+.if ${.OBJDIR:M*/obj}
+PROGROOT:= ${.OBJDIR:S,/minix/drivers/storage/ramdisk/obj,,}
+PROGSUFFIX:= /obj
+.else
 PROGROOT:= ${.OBJDIR:S,/minix/drivers/storage/ramdisk,,}
+PROGSUFFIX:=
+.endif
 
 # Generate dependencies rules for config files
 .for etc in ${ETC}
@@ -169,7 +175,7 @@ ${lib}.so.0:${PROGROOT}/minix/lib/${lib}/${lib}.so.0
 
 # Generate dependencies rules for binaries
 .for prog in ${PROGRAMS}
-${prog}: ${PROGROOT}/${dir.${prog}}/${prog}
+${prog}: ${PROGROOT}/${dir.${prog}}${PROGSUFFIX}/${prog}
 	${INSTALL} $> $@
 
 # BJG - don't invoke parallel Makes
