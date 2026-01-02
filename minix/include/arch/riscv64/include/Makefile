@@ -5,6 +5,10 @@ INCSDIR= /usr/include/riscv64
 INCS=	archconst.h archtypes.h cpu.h diskparm.h elf.h fpu.h interrupt.h \
 	ipcconst.h memory.h partition.h ptrace.h stackframe.h vm.h
 
+incinstall::
+	${INSTALL_DIR} -o ${BINOWN} -g ${BINGRP} -m 755 \
+		${DESTDIR}/usr/include/evbriscv64
+
 INCSYMLINKS+= \
 	../riscv64/archconst.h /usr/include/evbriscv64/archconst.h \
 	../riscv64/archtypes.h /usr/include/evbriscv64/archtypes.h \

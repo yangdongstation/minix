@@ -104,7 +104,7 @@
 ./etc/hosts                                             minix-base
 ./etc/inet.conf                                         minix-base      obsolete
 ./etc/inetd.conf                                        minix-base
-./etc/kyua                                              minix-tests     kyua
+./etc/kyua                                              minix-tests
 ./etc/man.conf                                          minix-base
 ./etc/master.passwd                                     minix-base
 ./etc/mk.conf                                           minix-base
@@ -680,10 +680,10 @@
 ./usr/lib/crontab                                       minix-base
 ./usr/lib/crt0.o                                        minix-base
 ./usr/lib/crtbegin.o                                    minix-base
-./usr/lib/crtbeginS.o                                   minix-base
-./usr/lib/crtbeginT.o                                   minix-base
+./usr/lib/crtbeginS.o                                   minix-base		pic
+./usr/lib/crtbeginT.o                                   minix-base		pic
 ./usr/lib/crtend.o                                      minix-base
-./usr/lib/crtendS.o                                     minix-base
+./usr/lib/crtendS.o                                     minix-base		pic
 ./usr/lib/crti.o                                        minix-base
 ./usr/lib/crtn.o                                        minix-base
 ./usr/lib/dict                                          minix-base      obsolete
@@ -700,75 +700,75 @@
 ./usr/lib/fonts/polish.fnt                              minix-base
 ./usr/lib/gcrt0.o                                       minix-base
 ./usr/lib/i18n                                          minix-base
-./usr/lib/i18n/libBIG5.so                               minix-base
-./usr/lib/i18n/libBIG5.so.5                             minix-base
-./usr/lib/i18n/libBIG5.so.5.0                           minix-base
-./usr/lib/i18n/libDECHanyu.so                           minix-base
-./usr/lib/i18n/libDECHanyu.so.5                         minix-base
-./usr/lib/i18n/libDECHanyu.so.5.0                       minix-base
-./usr/lib/i18n/libEUC.so                                minix-base
-./usr/lib/i18n/libEUC.so.5                              minix-base
-./usr/lib/i18n/libEUC.so.5.0                            minix-base
-./usr/lib/i18n/libEUCTW.so                              minix-base
-./usr/lib/i18n/libEUCTW.so.5                            minix-base
-./usr/lib/i18n/libEUCTW.so.5.0                          minix-base
-./usr/lib/i18n/libGBK2K.so                              minix-base
-./usr/lib/i18n/libGBK2K.so.5                            minix-base
-./usr/lib/i18n/libGBK2K.so.5.0                          minix-base
-./usr/lib/i18n/libHZ.so                                 minix-base
-./usr/lib/i18n/libHZ.so.5                               minix-base
-./usr/lib/i18n/libHZ.so.5.0                             minix-base
-./usr/lib/i18n/libISO2022.so                            minix-base
-./usr/lib/i18n/libISO2022.so.5                          minix-base
-./usr/lib/i18n/libISO2022.so.5.0                        minix-base
-./usr/lib/i18n/libJOHAB.so                              minix-base
-./usr/lib/i18n/libJOHAB.so.5                            minix-base
-./usr/lib/i18n/libJOHAB.so.5.0                          minix-base
-./usr/lib/i18n/libMSKanji.so                            minix-base
-./usr/lib/i18n/libMSKanji.so.5                          minix-base
-./usr/lib/i18n/libMSKanji.so.5.0                        minix-base
-./usr/lib/i18n/libUES.so                                minix-base
-./usr/lib/i18n/libUES.so.5                              minix-base
-./usr/lib/i18n/libUES.so.5.0                            minix-base
-./usr/lib/i18n/libUTF1632.so                            minix-base
-./usr/lib/i18n/libUTF1632.so.5                          minix-base
-./usr/lib/i18n/libUTF1632.so.5.0                        minix-base
-./usr/lib/i18n/libUTF7.so                               minix-base
-./usr/lib/i18n/libUTF7.so.5                             minix-base
-./usr/lib/i18n/libUTF7.so.5.0                           minix-base
-./usr/lib/i18n/libUTF8.so                               minix-base
-./usr/lib/i18n/libUTF8.so.5                             minix-base
-./usr/lib/i18n/libUTF8.so.5.0                           minix-base
-./usr/lib/i18n/libVIQR.so                               minix-base
-./usr/lib/i18n/libVIQR.so.5                             minix-base
-./usr/lib/i18n/libVIQR.so.5.0                           minix-base
-./usr/lib/i18n/libZW.so                                 minix-base
-./usr/lib/i18n/libZW.so.5                               minix-base
-./usr/lib/i18n/libZW.so.5.0                             minix-base
-./usr/lib/i18n/libiconv_none.so                         minix-base
-./usr/lib/i18n/libiconv_none.so.5                       minix-base
-./usr/lib/i18n/libiconv_none.so.5.0                     minix-base
-./usr/lib/i18n/libiconv_std.so                          minix-base
-./usr/lib/i18n/libiconv_std.so.5                        minix-base
-./usr/lib/i18n/libiconv_std.so.5.0                      minix-base
-./usr/lib/i18n/libmapper_646.so                         minix-base
-./usr/lib/i18n/libmapper_646.so.5                       minix-base
-./usr/lib/i18n/libmapper_646.so.5.0                     minix-base
-./usr/lib/i18n/libmapper_none.so                        minix-base
-./usr/lib/i18n/libmapper_none.so.5                      minix-base
-./usr/lib/i18n/libmapper_none.so.5.0                    minix-base
-./usr/lib/i18n/libmapper_parallel.so                    minix-base
-./usr/lib/i18n/libmapper_parallel.so.5                  minix-base
-./usr/lib/i18n/libmapper_parallel.so.5.0                minix-base
-./usr/lib/i18n/libmapper_serial.so                      minix-base
-./usr/lib/i18n/libmapper_serial.so.5                    minix-base
-./usr/lib/i18n/libmapper_serial.so.5.0                  minix-base
-./usr/lib/i18n/libmapper_std.so                         minix-base
-./usr/lib/i18n/libmapper_std.so.5                       minix-base
-./usr/lib/i18n/libmapper_std.so.5.0                     minix-base
-./usr/lib/i18n/libmapper_zone.so                        minix-base
-./usr/lib/i18n/libmapper_zone.so.5                      minix-base
-./usr/lib/i18n/libmapper_zone.so.5.0                    minix-base
+./usr/lib/i18n/libBIG5.so                               minix-base		pic
+./usr/lib/i18n/libBIG5.so.5                             minix-base		pic
+./usr/lib/i18n/libBIG5.so.5.0                           minix-base		pic
+./usr/lib/i18n/libDECHanyu.so                           minix-base		pic
+./usr/lib/i18n/libDECHanyu.so.5                         minix-base		pic
+./usr/lib/i18n/libDECHanyu.so.5.0                       minix-base		pic
+./usr/lib/i18n/libEUC.so                                minix-base		pic
+./usr/lib/i18n/libEUC.so.5                              minix-base		pic
+./usr/lib/i18n/libEUC.so.5.0                            minix-base		pic
+./usr/lib/i18n/libEUCTW.so                              minix-base		pic
+./usr/lib/i18n/libEUCTW.so.5                            minix-base		pic
+./usr/lib/i18n/libEUCTW.so.5.0                          minix-base		pic
+./usr/lib/i18n/libGBK2K.so                              minix-base		pic
+./usr/lib/i18n/libGBK2K.so.5                            minix-base		pic
+./usr/lib/i18n/libGBK2K.so.5.0                          minix-base		pic
+./usr/lib/i18n/libHZ.so                                 minix-base		pic
+./usr/lib/i18n/libHZ.so.5                               minix-base		pic
+./usr/lib/i18n/libHZ.so.5.0                             minix-base		pic
+./usr/lib/i18n/libISO2022.so                            minix-base		pic
+./usr/lib/i18n/libISO2022.so.5                          minix-base		pic
+./usr/lib/i18n/libISO2022.so.5.0                        minix-base		pic
+./usr/lib/i18n/libJOHAB.so                              minix-base		pic
+./usr/lib/i18n/libJOHAB.so.5                            minix-base		pic
+./usr/lib/i18n/libJOHAB.so.5.0                          minix-base		pic
+./usr/lib/i18n/libMSKanji.so                            minix-base		pic
+./usr/lib/i18n/libMSKanji.so.5                          minix-base		pic
+./usr/lib/i18n/libMSKanji.so.5.0                        minix-base		pic
+./usr/lib/i18n/libUES.so                                minix-base		pic
+./usr/lib/i18n/libUES.so.5                              minix-base		pic
+./usr/lib/i18n/libUES.so.5.0                            minix-base		pic
+./usr/lib/i18n/libUTF1632.so                            minix-base		pic
+./usr/lib/i18n/libUTF1632.so.5                          minix-base		pic
+./usr/lib/i18n/libUTF1632.so.5.0                        minix-base		pic
+./usr/lib/i18n/libUTF7.so                               minix-base		pic
+./usr/lib/i18n/libUTF7.so.5                             minix-base		pic
+./usr/lib/i18n/libUTF7.so.5.0                           minix-base		pic
+./usr/lib/i18n/libUTF8.so                               minix-base		pic
+./usr/lib/i18n/libUTF8.so.5                             minix-base		pic
+./usr/lib/i18n/libUTF8.so.5.0                           minix-base		pic
+./usr/lib/i18n/libVIQR.so                               minix-base		pic
+./usr/lib/i18n/libVIQR.so.5                             minix-base		pic
+./usr/lib/i18n/libVIQR.so.5.0                           minix-base		pic
+./usr/lib/i18n/libZW.so                                 minix-base		pic
+./usr/lib/i18n/libZW.so.5                               minix-base		pic
+./usr/lib/i18n/libZW.so.5.0                             minix-base		pic
+./usr/lib/i18n/libiconv_none.so                         minix-base		pic
+./usr/lib/i18n/libiconv_none.so.5                       minix-base		pic
+./usr/lib/i18n/libiconv_none.so.5.0                     minix-base		pic
+./usr/lib/i18n/libiconv_std.so                          minix-base		pic
+./usr/lib/i18n/libiconv_std.so.5                        minix-base		pic
+./usr/lib/i18n/libiconv_std.so.5.0                      minix-base		pic
+./usr/lib/i18n/libmapper_646.so                         minix-base		pic
+./usr/lib/i18n/libmapper_646.so.5                       minix-base		pic
+./usr/lib/i18n/libmapper_646.so.5.0                     minix-base		pic
+./usr/lib/i18n/libmapper_none.so                        minix-base		pic
+./usr/lib/i18n/libmapper_none.so.5                      minix-base		pic
+./usr/lib/i18n/libmapper_none.so.5.0                    minix-base		pic
+./usr/lib/i18n/libmapper_parallel.so                    minix-base		pic
+./usr/lib/i18n/libmapper_parallel.so.5                  minix-base		pic
+./usr/lib/i18n/libmapper_parallel.so.5.0                minix-base		pic
+./usr/lib/i18n/libmapper_serial.so                      minix-base		pic
+./usr/lib/i18n/libmapper_serial.so.5                    minix-base		pic
+./usr/lib/i18n/libmapper_serial.so.5.0                  minix-base		pic
+./usr/lib/i18n/libmapper_std.so                         minix-base		pic
+./usr/lib/i18n/libmapper_std.so.5                       minix-base		pic
+./usr/lib/i18n/libmapper_std.so.5.0                     minix-base		pic
+./usr/lib/i18n/libmapper_zone.so                        minix-base		pic
+./usr/lib/i18n/libmapper_zone.so.5                      minix-base		pic
+./usr/lib/i18n/libmapper_zone.so.5.0                    minix-base		pic
 ./usr/lib/keymaps                                       minix-base
 ./usr/lib/keymaps/abnt2.map                             minix-base
 ./usr/lib/keymaps/colemak.map                           minix-base
@@ -791,240 +791,240 @@
 ./usr/lib/keymaps/ukraine-koi8-u.map                    minix-base
 ./usr/lib/keymaps/us-std.map                            minix-base
 ./usr/lib/keymaps/us-swap.map                           minix-base
-./usr/lib/libarchive.so                                 minix-base
-./usr/lib/libarchive.so.3                               minix-base
-./usr/lib/libarchive.so.3.1                             minix-base
+./usr/lib/libarchive.so                                 minix-base		pic
+./usr/lib/libarchive.so.3                               minix-base		pic
+./usr/lib/libarchive.so.3.1                             minix-base		pic
 ./usr/lib/libatf-c++.a                                  minix-base      atf
-./usr/lib/libatf-c++.so.1.0                             minix-base      atf
-./usr/lib/libatf-c++.so.1                               minix-base      atf
-./usr/lib/libatf-c++.so                                 minix-base      atf
-./usr/lib/libatf-c++_pic.a                              minix-base      atf
+./usr/lib/libatf-c++.so.1.0                             minix-base      atf,pic
+./usr/lib/libatf-c++.so.1                               minix-base      atf,pic
+./usr/lib/libatf-c++.so                                 minix-base      atf,pic
+./usr/lib/libatf-c++_pic.a                              minix-base      atf,picinstall
 ./usr/lib/libatf-c.a                                    minix-base      atf
-./usr/lib/libatf-c.so.0.0                               minix-base      atf
-./usr/lib/libatf-c.so.0                                 minix-base      atf
-./usr/lib/libatf-c.so                                   minix-base      atf
-./usr/lib/libatf-c_pic.a                                minix-base      atf
-./usr/lib/libbfd.so.13.0                                minix-base      binutils
-./usr/lib/libbfd.so.13                                  minix-base      binutils
-./usr/lib/libbind9.so                                   minix-base
-./usr/lib/libbind9.so.8                                 minix-base
-./usr/lib/libbind9.so.8.2                               minix-base
+./usr/lib/libatf-c.so.0.0                               minix-base      atf,pic
+./usr/lib/libatf-c.so.0                                 minix-base      atf,pic
+./usr/lib/libatf-c.so                                   minix-base      atf,pic
+./usr/lib/libatf-c_pic.a                                minix-base      atf,picinstall
+./usr/lib/libbfd.so.13.0                                minix-base      binutils,pic
+./usr/lib/libbfd.so.13                                  minix-base      binutils,pic
+./usr/lib/libbind9.so                                   minix-base		pic
+./usr/lib/libbind9.so.8                                 minix-base		pic
+./usr/lib/libbind9.so.8.2                               minix-base		pic
 ./usr/lib/libblacklist.a                                minix-base
-./usr/lib/libblacklist.so                               minix-base
-./usr/lib/libblacklist.so.0                             minix-base
-./usr/lib/libblacklist.so.0.0                           minix-base
-./usr/lib/libblacklist_pic.a                            minix-base
-./usr/lib/libbz2.so                                     minix-base
-./usr/lib/libbz2.so.1                                   minix-base
-./usr/lib/libbz2.so.1.1                                 minix-base
-./usr/lib/libc++.so.1.0                                 minix-base      libcxx
-./usr/lib/libc++.so.1                                   minix-base      libcxx
-./usr/lib/libc++.so                                     minix-base      libcxx
+./usr/lib/libblacklist.so                               minix-base		pic
+./usr/lib/libblacklist.so.0                             minix-base		pic
+./usr/lib/libblacklist.so.0.0                           minix-base		pic
+./usr/lib/libblacklist_pic.a                            minix-base		picinstall
+./usr/lib/libbz2.so                                     minix-base		pic
+./usr/lib/libbz2.so.1                                   minix-base		pic
+./usr/lib/libbz2.so.1.1                                 minix-base		pic
+./usr/lib/libc++.so.1.0                                 minix-base      libcxx,pic
+./usr/lib/libc++.so.1                                   minix-base      libcxx,pic
+./usr/lib/libc++.so                                     minix-base      libcxx,pic
 ./usr/lib/libc.pc                                       minix-base      obsolete
-./usr/lib/libc.so                                       minix-base
-./usr/lib/libc.so.12                                    minix-base
-./usr/lib/libc.so.12.187                                minix-base      obsolete
-./usr/lib/libc.so.12.197                                minix-base
-./usr/lib/libcompat_minix.so.0.0                        minix-base      obsolete
-./usr/lib/libcompat_minix.so.0                          minix-base      obsolete
-./usr/lib/libcompat_minix.so                            minix-base      obsolete
-./usr/lib/libcrypt.so                                   minix-base
-./usr/lib/libcrypt.so.1                                 minix-base
-./usr/lib/libcrypt.so.1.0                               minix-base
+./usr/lib/libc.so                                       minix-base		pic
+./usr/lib/libc.so.12                                    minix-base		pic
+./usr/lib/libc.so.12.187                                minix-base      obsolete,pic
+./usr/lib/libc.so.12.197                                minix-base		pic
+./usr/lib/libcompat_minix.so.0.0                        minix-base      obsolete,pic
+./usr/lib/libcompat_minix.so.0                          minix-base      obsolete,pic
+./usr/lib/libcompat_minix.so                            minix-base      obsolete,pic
+./usr/lib/libcrypt.so                                   minix-base		pic
+./usr/lib/libcrypt.so.1                                 minix-base		pic
+./usr/lib/libcrypt.so.1.0                               minix-base		pic
 ./usr/lib/libcrypto.a                                   minix-base      crypto
-./usr/lib/libcrypto.so.8.1                              minix-base      crypto,obsolete
-./usr/lib/libcrypto.so.8.4                              minix-base      crypto
-./usr/lib/libcrypto.so.8                                minix-base      crypto
-./usr/lib/libcrypto.so                                  minix-base      crypto
-./usr/lib/libcrypto_pic.a                               minix-base      crypto
-./usr/lib/libcurses.so                                  minix-base
-./usr/lib/libcurses.so.7                                minix-base
-./usr/lib/libcurses.so.7.0                              minix-base
+./usr/lib/libcrypto.so.8.1                              minix-base      crypto,obsolete,pic
+./usr/lib/libcrypto.so.8.4                              minix-base      crypto,pic
+./usr/lib/libcrypto.so.8                                minix-base      crypto,pic
+./usr/lib/libcrypto.so                                  minix-base      crypto,pic
+./usr/lib/libcrypto_pic.a                               minix-base      crypto,picinstall
+./usr/lib/libcurses.so                                  minix-base		pic
+./usr/lib/libcurses.so.7                                minix-base		pic
+./usr/lib/libcurses.so.7.0                              minix-base		pic
 ./usr/lib/libdes.a                                      minix-base      crypto
-./usr/lib/libdes.so.8.1                                 minix-base      crypto,obsolete
-./usr/lib/libdes.so.8.2                                 minix-base      crypto
-./usr/lib/libdes.so.8                                   minix-base      crypto
-./usr/lib/libdes.so                                     minix-base      crypto
-./usr/lib/libdes_pic.a                                  minix-base      crypto
-./usr/lib/libdns.so                                     minix-base
-./usr/lib/libdns.so.8                                   minix-base
-./usr/lib/libdns.so.8.2                                 minix-base
-./usr/lib/libedit.so                                    minix-base
-./usr/lib/libedit.so.3                                  minix-base
-./usr/lib/libedit.so.3.1                                minix-base
-./usr/lib/libelf.so                                     minix-base
-./usr/lib/libelf.so.0.0                                 minix-base      obsolete
-./usr/lib/libelf.so.0                                   minix-base      obsolete
-./usr/lib/libelf.so.1                                   minix-base
-./usr/lib/libelf.so.1.0                                 minix-base
-./usr/lib/libevent.so                                   minix-base
-./usr/lib/libevent.so.4                                 minix-base
-./usr/lib/libevent.so.4.0                               minix-base
+./usr/lib/libdes.so.8.1                                 minix-base      crypto,obsolete,pic
+./usr/lib/libdes.so.8.2                                 minix-base      crypto,pic
+./usr/lib/libdes.so.8                                   minix-base      crypto,pic
+./usr/lib/libdes.so                                     minix-base      crypto,pic
+./usr/lib/libdes_pic.a                                  minix-base      crypto,picinstall
+./usr/lib/libdns.so                                     minix-base		pic
+./usr/lib/libdns.so.8                                   minix-base		pic
+./usr/lib/libdns.so.8.2                                 minix-base		pic
+./usr/lib/libedit.so                                    minix-base		pic
+./usr/lib/libedit.so.3                                  minix-base		pic
+./usr/lib/libedit.so.3.1                                minix-base		pic
+./usr/lib/libelf.so                                     minix-base		pic
+./usr/lib/libelf.so.0.0                                 minix-base      obsolete,pic
+./usr/lib/libelf.so.0                                   minix-base      obsolete,pic
+./usr/lib/libelf.so.1                                   minix-base		pic
+./usr/lib/libelf.so.1.0                                 minix-base		pic
+./usr/lib/libevent.so                                   minix-base		pic
+./usr/lib/libevent.so.4                                 minix-base		pic
+./usr/lib/libevent.so.4.0                               minix-base		pic
 ./usr/lib/libevent_openssl.a                            minix-base      crypto
-./usr/lib/libevent_openssl.so.4.0                       minix-base      crypto
-./usr/lib/libevent_openssl.so.4                         minix-base      crypto
-./usr/lib/libevent_openssl.so                           minix-base      crypto
-./usr/lib/libevent_openssl_pic.a                        minix-base      crypto
-./usr/lib/libexecinfo.so                                minix-base
-./usr/lib/libexecinfo.so.0                              minix-base
-./usr/lib/libexecinfo.so.0.0                            minix-base
-./usr/lib/libexpat.so                                   minix-base
-./usr/lib/libexpat.so.2                                 minix-base
-./usr/lib/libexpat.so.2.1                               minix-base
-./usr/lib/libfetch.so                                   minix-base
-./usr/lib/libfetch.so.3                                 minix-base
-./usr/lib/libfetch.so.3.0                               minix-base
-./usr/lib/libform.so                                    minix-base
-./usr/lib/libform.so.6                                  minix-base
-./usr/lib/libform.so.6.0                                minix-base
+./usr/lib/libevent_openssl.so.4.0                       minix-base      crypto,pic
+./usr/lib/libevent_openssl.so.4                         minix-base      crypto,pic
+./usr/lib/libevent_openssl.so                           minix-base      crypto,pic
+./usr/lib/libevent_openssl_pic.a                        minix-base      crypto,picinstall
+./usr/lib/libexecinfo.so                                minix-base		pic
+./usr/lib/libexecinfo.so.0                              minix-base		pic
+./usr/lib/libexecinfo.so.0.0                            minix-base		pic
+./usr/lib/libexpat.so                                   minix-base		pic
+./usr/lib/libexpat.so.2                                 minix-base		pic
+./usr/lib/libexpat.so.2.1                               minix-base		pic
+./usr/lib/libfetch.so                                   minix-base		pic
+./usr/lib/libfetch.so.3                                 minix-base		pic
+./usr/lib/libfetch.so.3.0                               minix-base		pic
+./usr/lib/libform.so                                    minix-base		pic
+./usr/lib/libform.so.6                                  minix-base		pic
+./usr/lib/libform.so.6.0                                minix-base		pic
 ./usr/lib/libgcc.a                                      minix-base      gcc=5
 ./usr/lib/libgcc_eh.a                                   minix-base      gcc=5
-./usr/lib/libgcc_s.so                                   minix-base
-./usr/lib/libgcc_s.so.1                                 minix-base
-./usr/lib/libgcc_s.so.1.0                               minix-base
-./usr/lib/libintl.so                                    minix-base
-./usr/lib/libintl.so.1                                  minix-base
-./usr/lib/libintl.so.1.1                                minix-base
-./usr/lib/libirs.so                                     minix-base
-./usr/lib/libirs.so.8                                   minix-base
-./usr/lib/libirs.so.8.2                                 minix-base
-./usr/lib/libisc.so                                     minix-base
-./usr/lib/libisc.so.8                                   minix-base
-./usr/lib/libisc.so.8.2                                 minix-base
-./usr/lib/libisccc.so                                   minix-base
-./usr/lib/libisccc.so.8                                 minix-base
-./usr/lib/libisccc.so.8.2                               minix-base
-./usr/lib/libisccfg.so                                  minix-base
-./usr/lib/libisccfg.so.8                                minix-base
-./usr/lib/libisccfg.so.8.2                              minix-base
-./usr/lib/libkvm.so                                     minix-base
-./usr/lib/libkvm.so.6                                   minix-base
-./usr/lib/libkvm.so.6.0                                 minix-base
-./usr/lib/liblua.so                                     minix-base
-./usr/lib/liblua.so.1.0                                 minix-base      obsolete
-./usr/lib/liblua.so.1                                   minix-base      obsolete
-./usr/lib/liblua.so.5                                   minix-base
-./usr/lib/liblua.so.5.3                                 minix-base
+./usr/lib/libgcc_s.so                                   minix-base		pic
+./usr/lib/libgcc_s.so.1                                 minix-base		pic
+./usr/lib/libgcc_s.so.1.0                               minix-base		pic
+./usr/lib/libintl.so                                    minix-base		pic
+./usr/lib/libintl.so.1                                  minix-base		pic
+./usr/lib/libintl.so.1.1                                minix-base		pic
+./usr/lib/libirs.so                                     minix-base		pic
+./usr/lib/libirs.so.8                                   minix-base		pic
+./usr/lib/libirs.so.8.2                                 minix-base		pic
+./usr/lib/libisc.so                                     minix-base		pic
+./usr/lib/libisc.so.8                                   minix-base		pic
+./usr/lib/libisc.so.8.2                                 minix-base		pic
+./usr/lib/libisccc.so                                   minix-base		pic
+./usr/lib/libisccc.so.8                                 minix-base		pic
+./usr/lib/libisccc.so.8.2                               minix-base		pic
+./usr/lib/libisccfg.so                                  minix-base		pic
+./usr/lib/libisccfg.so.8                                minix-base		pic
+./usr/lib/libisccfg.so.8.2                              minix-base		pic
+./usr/lib/libkvm.so                                     minix-base		pic
+./usr/lib/libkvm.so.6                                   minix-base		pic
+./usr/lib/libkvm.so.6.0                                 minix-base		pic
+./usr/lib/liblua.so                                     minix-base		pic
+./usr/lib/liblua.so.1.0                                 minix-base      obsolete,pic
+./usr/lib/liblua.so.1                                   minix-base      obsolete,pic
+./usr/lib/liblua.so.5                                   minix-base		pic
+./usr/lib/liblua.so.5.3                                 minix-base		pic
 ./usr/lib/liblutok.a                                    minix-base      kyua
-./usr/lib/liblutok.so.2.0                               minix-base      kyua
-./usr/lib/liblutok.so.2                                 minix-base      kyua
-./usr/lib/liblutok.so                                   minix-base      kyua
-./usr/lib/liblutok_pic.a                                minix-base      kyua
-./usr/lib/liblwres.so                                   minix-base
-./usr/lib/liblwres.so.8                                 minix-base
-./usr/lib/liblwres.so.8.2                               minix-base
-./usr/lib/liblzma.so                                    minix-base
-./usr/lib/liblzma.so.1.1                                minix-base      obsolete
-./usr/lib/liblzma.so.1                                  minix-base      obsolete
-./usr/lib/liblzma.so.2                                  minix-base
-./usr/lib/liblzma.so.2.0                                minix-base
-./usr/lib/libm.so                                       minix-base
-./usr/lib/libm.so.0                                     minix-base
-./usr/lib/libm.so.0.10                                  minix-base      obsolete
-./usr/lib/libm.so.0.11                                  minix-base
-./usr/lib/libmagic.so                                   minix-base
-./usr/lib/libmagic.so.5                                 minix-base
-./usr/lib/libmagic.so.5.0                               minix-base      obsolete
-./usr/lib/libmagic.so.5.1                               minix-base
-./usr/lib/libmenu.so                                    minix-base
-./usr/lib/libmenu.so.6                                  minix-base
-./usr/lib/libmenu.so.6.0                                minix-base
-./usr/lib/libminlib.so.0.0                              minix-base      obsolete
-./usr/lib/libminlib.so.0                                minix-base      obsolete
-./usr/lib/libminlib.so                                  minix-base      obsolete
+./usr/lib/liblutok.so.2.0                               minix-base      kyua,pic
+./usr/lib/liblutok.so.2                                 minix-base      kyua,pic
+./usr/lib/liblutok.so                                   minix-base      kyua,pic
+./usr/lib/liblutok_pic.a                                minix-base      kyua,picinstall
+./usr/lib/liblwres.so                                   minix-base		pic
+./usr/lib/liblwres.so.8                                 minix-base		pic
+./usr/lib/liblwres.so.8.2                               minix-base		pic
+./usr/lib/liblzma.so                                    minix-base		pic
+./usr/lib/liblzma.so.1.1                                minix-base      obsolete,pic
+./usr/lib/liblzma.so.1                                  minix-base      obsolete,pic
+./usr/lib/liblzma.so.2                                  minix-base		pic
+./usr/lib/liblzma.so.2.0                                minix-base		pic
+./usr/lib/libm.so                                       minix-base		pic
+./usr/lib/libm.so.0                                     minix-base		pic
+./usr/lib/libm.so.0.10                                  minix-base      obsolete,pic
+./usr/lib/libm.so.0.11                                  minix-base		pic
+./usr/lib/libmagic.so                                   minix-base		pic
+./usr/lib/libmagic.so.5                                 minix-base		pic
+./usr/lib/libmagic.so.5.0                               minix-base      obsolete,pic
+./usr/lib/libmagic.so.5.1                               minix-base		pic
+./usr/lib/libmenu.so                                    minix-base		pic
+./usr/lib/libmenu.so.6                                  minix-base		pic
+./usr/lib/libmenu.so.6.0                                minix-base		pic
+./usr/lib/libminlib.so.0.0                              minix-base      obsolete,pic
+./usr/lib/libminlib.so.0                                minix-base      obsolete,pic
+./usr/lib/libminlib.so                                  minix-base      obsolete,pic
 ./usr/lib/libmj.a                                       minix-base      crypto
-./usr/lib/libmj.so.1.0                                  minix-base      crypto
-./usr/lib/libmj.so.1                                    minix-base      crypto
-./usr/lib/libmj.so                                      minix-base      crypto
-./usr/lib/libmj_pic.a                                   minix-base      crypto
-./usr/lib/libmthread.so                                 minix-base
-./usr/lib/libmthread.so.0                               minix-base
-./usr/lib/libmthread.so.0.0                             minix-base
+./usr/lib/libmj.so.1.0                                  minix-base      crypto,pic
+./usr/lib/libmj.so.1                                    minix-base      crypto,pic
+./usr/lib/libmj.so                                      minix-base      crypto,pic
+./usr/lib/libmj_pic.a                                   minix-base      crypto,picinstall
+./usr/lib/libmthread.so                                 minix-base		pic
+./usr/lib/libmthread.so.0                               minix-base		pic
+./usr/lib/libmthread.so.0.0                             minix-base		pic
 ./usr/lib/libnetpgp.a                                   minix-base      crypto
-./usr/lib/libnetpgp.so.3.0                              minix-base      crypto
-./usr/lib/libnetpgp.so.3                                minix-base      crypto
-./usr/lib/libnetpgp.so                                  minix-base      crypto
-./usr/lib/libnetpgp_pic.a                               minix-base      crypto
+./usr/lib/libnetpgp.so.3.0                              minix-base      crypto,pic
+./usr/lib/libnetpgp.so.3                                minix-base      crypto,pic
+./usr/lib/libnetpgp.so                                  minix-base      crypto,pic
+./usr/lib/libnetpgp_pic.a                               minix-base      crypto,picinstall
 ./usr/lib/libnetpgpverify.a                             minix-base      crypto
-./usr/lib/libnetpgpverify.so.4.0                        minix-base      crypto
-./usr/lib/libnetpgpverify.so.4                          minix-base      crypto
-./usr/lib/libnetpgpverify.so                            minix-base      crypto
-./usr/lib/libnetpgpverify_pic.a                         minix-base      crypto
+./usr/lib/libnetpgpverify.so.4.0                        minix-base      crypto,pic
+./usr/lib/libnetpgpverify.so.4                          minix-base      crypto,pic
+./usr/lib/libnetpgpverify.so                            minix-base      crypto,pic
+./usr/lib/libnetpgpverify_pic.a                         minix-base      crypto,picinstall
 ./usr/lib/libobjc.a                                     minix-base      gcc=5
-./usr/lib/libobjc.so.3.0                                minix-base      gcc=45,obsolete
-./usr/lib/libobjc.so.3                                  minix-base      gcc=45,obsolete
-./usr/lib/libobjc.so.4.0                                minix-base      gcc=5
-./usr/lib/libobjc.so.4                                  minix-base      gcc=5
-./usr/lib/libobjc.so                                    minix-base      gcc
-./usr/lib/libobjc_pic.a                                 minix-base      gcc=5
-./usr/lib/libopcodes.so.6.0                             minix-base      binutils
-./usr/lib/libopcodes.so.6                               minix-base      binutils
-./usr/lib/libpcap.so                                    minix-base
-./usr/lib/libpcap.so.5                                  minix-base
-./usr/lib/libpcap.so.5.1                                minix-base
-./usr/lib/libpci.so                                     minix-base
-./usr/lib/libpci.so.2                                   minix-base
-./usr/lib/libpci.so.2.0                                 minix-base      obsolete
-./usr/lib/libpci.so.2.1                                 minix-base
-./usr/lib/libprop.so                                    minix-base
-./usr/lib/libprop.so.1                                  minix-base
-./usr/lib/libprop.so.1.1                                minix-base
-./usr/lib/libpuffs.so                                   minix-base
-./usr/lib/libpuffs.so.2                                 minix-base
-./usr/lib/libpuffs.so.2.0                               minix-base
-./usr/lib/librefuse.so                                  minix-base
-./usr/lib/librefuse.so.2                                minix-base
-./usr/lib/librefuse.so.2.0                              minix-base
+./usr/lib/libobjc.so.3.0                                minix-base      gcc=45,obsolete,pic
+./usr/lib/libobjc.so.3                                  minix-base      gcc=45,obsolete,pic
+./usr/lib/libobjc.so.4.0                                minix-base      gcc=5,pic
+./usr/lib/libobjc.so.4                                  minix-base      gcc=5,pic
+./usr/lib/libobjc.so                                    minix-base      gcc,pic
+./usr/lib/libobjc_pic.a                                 minix-base      gcc=5,picinstall
+./usr/lib/libopcodes.so.6.0                             minix-base      binutils,pic
+./usr/lib/libopcodes.so.6                               minix-base      binutils,pic
+./usr/lib/libpcap.so                                    minix-base		pic
+./usr/lib/libpcap.so.5                                  minix-base		pic
+./usr/lib/libpcap.so.5.1                                minix-base		pic
+./usr/lib/libpci.so                                     minix-base		pic
+./usr/lib/libpci.so.2                                   minix-base		pic
+./usr/lib/libpci.so.2.0                                 minix-base      obsolete,pic
+./usr/lib/libpci.so.2.1                                 minix-base		pic
+./usr/lib/libprop.so                                    minix-base		pic
+./usr/lib/libprop.so.1                                  minix-base		pic
+./usr/lib/libprop.so.1.1                                minix-base		pic
+./usr/lib/libpuffs.so                                   minix-base		pic
+./usr/lib/libpuffs.so.2                                 minix-base		pic
+./usr/lib/libpuffs.so.2.0                               minix-base		pic
+./usr/lib/librefuse.so                                  minix-base		pic
+./usr/lib/librefuse.so.2                                minix-base		pic
+./usr/lib/librefuse.so.2.0                              minix-base		pic
 ./usr/lib/libsaslc.a                                    minix-base      crypto
-./usr/lib/libsaslc.so.0.0                               minix-base      crypto
-./usr/lib/libsaslc.so.0                                 minix-base      crypto
-./usr/lib/libsaslc.so                                   minix-base      crypto
-./usr/lib/libsaslc_pic.a                                minix-base      crypto
-./usr/lib/libsqlite3.so                                 minix-base
-./usr/lib/libsqlite3.so.1                               minix-base
-./usr/lib/libsqlite3.so.1.1                             minix-base      obsolete
-./usr/lib/libsqlite3.so.1.2                             minix-base
+./usr/lib/libsaslc.so.0.0                               minix-base      crypto,pic
+./usr/lib/libsaslc.so.0                                 minix-base      crypto,pic
+./usr/lib/libsaslc.so                                   minix-base      crypto,pic
+./usr/lib/libsaslc_pic.a                                minix-base      crypto,picinstall
+./usr/lib/libsqlite3.so                                 minix-base		pic
+./usr/lib/libsqlite3.so.1                               minix-base		pic
+./usr/lib/libsqlite3.so.1.1                             minix-base      obsolete,pic
+./usr/lib/libsqlite3.so.1.2                             minix-base		pic
 ./usr/lib/libssl.a                                      minix-base      crypto
-./usr/lib/libssl.so.10.1                                minix-base      crypto,obsolete
-./usr/lib/libssl.so.10.5                                minix-base      crypto
-./usr/lib/libssl.so.10                                  minix-base      crypto
-./usr/lib/libssl.so                                     minix-base      crypto
-./usr/lib/libssl_pic.a                                  minix-base      crypto
-./usr/lib/libstdc++.so.6.1                              minix-base      libstdcxx,obsolete
-./usr/lib/libstdc++.so.6.3                              minix-base      libstdcxx
-./usr/lib/libstdc++.so.6                                minix-base      libstdcxx
-./usr/lib/libstdc++.so                                  minix-base      libstdcxx
-./usr/lib/libsys.so                                     minix-base
-./usr/lib/libsys.so.0                                   minix-base
-./usr/lib/libsys.so.0.0                                 minix-base
-./usr/lib/libtermcap.so                                 minix-base
-./usr/lib/libtermcap.so.0                               minix-base
-./usr/lib/libtermcap.so.0.6                             minix-base
-./usr/lib/libterminfo.so                                minix-base
-./usr/lib/libterminfo.so.1                              minix-base
-./usr/lib/libterminfo.so.1.0                            minix-base
-./usr/lib/libtermlib.so                                 minix-base
-./usr/lib/libtermlib.so.0                               minix-base
-./usr/lib/libtermlib.so.0.6                             minix-base
-./usr/lib/libutil.so                                    minix-base
-./usr/lib/libutil.so.7                                  minix-base
-./usr/lib/libutil.so.7.21                               minix-base      obsolete
-./usr/lib/libutil.so.7.23                               minix-base
-./usr/lib/libwrap.so                                    minix-base
-./usr/lib/libwrap.so.1                                  minix-base
-./usr/lib/libwrap.so.1.0                                minix-base
-./usr/lib/libz.so                                       minix-base
-./usr/lib/libz.so.1                                     minix-base
-./usr/lib/libz.so.1.0                                   minix-base
+./usr/lib/libssl.so.10.1                                minix-base      crypto,obsolete,pic
+./usr/lib/libssl.so.10.5                                minix-base      crypto,pic
+./usr/lib/libssl.so.10                                  minix-base      crypto,pic
+./usr/lib/libssl.so                                     minix-base      crypto,pic
+./usr/lib/libssl_pic.a                                  minix-base      crypto,picinstall
+./usr/lib/libstdc++.so.6.1                              minix-base      libstdcxx,obsolete,pic
+./usr/lib/libstdc++.so.6.3                              minix-base      libstdcxx,pic
+./usr/lib/libstdc++.so.6                                minix-base      libstdcxx,pic
+./usr/lib/libstdc++.so                                  minix-base      libstdcxx,pic
+./usr/lib/libsys.so                                     minix-base		pic
+./usr/lib/libsys.so.0                                   minix-base		pic
+./usr/lib/libsys.so.0.0                                 minix-base		pic
+./usr/lib/libtermcap.so                                 minix-base		pic
+./usr/lib/libtermcap.so.0                               minix-base		pic
+./usr/lib/libtermcap.so.0.6                             minix-base		pic
+./usr/lib/libterminfo.so                                minix-base		pic
+./usr/lib/libterminfo.so.1                              minix-base		pic
+./usr/lib/libterminfo.so.1.0                            minix-base		pic
+./usr/lib/libtermlib.so                                 minix-base		pic
+./usr/lib/libtermlib.so.0                               minix-base		pic
+./usr/lib/libtermlib.so.0.6                             minix-base		pic
+./usr/lib/libutil.so                                    minix-base		pic
+./usr/lib/libutil.so.7                                  minix-base		pic
+./usr/lib/libutil.so.7.21                               minix-base      obsolete,pic
+./usr/lib/libutil.so.7.23                               minix-base		pic
+./usr/lib/libwrap.so                                    minix-base		pic
+./usr/lib/libwrap.so.1                                  minix-base		pic
+./usr/lib/libwrap.so.1.0                                minix-base		pic
+./usr/lib/libz.so                                       minix-base		pic
+./usr/lib/libz.so.1                                     minix-base		pic
+./usr/lib/libz.so.1.0                                   minix-base		pic
 ./usr/lib/lua                                           minix-base
 ./usr/lib/lua/5.1                                       minix-base      obsolete
-./usr/lib/lua/5.1/gpio.so                               minix-base      obsolete
-./usr/lib/lua/5.1/sqlite.so                             minix-base      obsolete
-./usr/lib/lua/5.1/syslog.so                             minix-base      obsolete
+./usr/lib/lua/5.1/gpio.so                               minix-base      obsolete,pic
+./usr/lib/lua/5.1/sqlite.so                             minix-base      obsolete,pic
+./usr/lib/lua/5.1/syslog.so                             minix-base      obsolete,pic
 ./usr/lib/lua/5.3                                       minix-base
-./usr/lib/lua/5.3/gpio.so                               minix-base
-./usr/lib/lua/5.3/sqlite.so                             minix-base
-./usr/lib/lua/5.3/syslog.so                             minix-base
+./usr/lib/lua/5.3/gpio.so                               minix-base		pic
+./usr/lib/lua/5.3/sqlite.so                             minix-base		pic
+./usr/lib/lua/5.3/syslog.so                             minix-base		pic
 ./usr/lib/minlib.pc                                     minix-base      obsolete
 ./usr/lib/pkgconfig                                     minix-base
 ./usr/lib/pkgconfig/atf-c++.pc                          minix-base      atf
@@ -1054,6 +1054,7 @@
 ./usr/libdata/debug/usr/libexec                         minix-base
 ./usr/libdata/debug/usr/mdec                            minix-base
 ./usr/libdata/debug/usr/sbin                            minix-base
+./usr/libdata/debug/usr/tests                           minix-base
 ./usr/libdata/debug/usr/tests/minix-posix               minix-base
 ./usr/libdata/debug/usr/tests/minix-posix/blocktest     minix-base
 ./usr/libdata/debug/usr/tests/minix-posix/ddekit        minix-base
@@ -1068,7 +1069,7 @@
 ./usr/libexec/httpd                                     minix-base
 ./usr/libexec/kyua-atf-tester                           minix-base      kyua
 ./usr/libexec/kyua-plain-tester                         minix-base      kyua
-./usr/libexec/ld.elf_so                                 minix-base
+./usr/libexec/ld.elf_so                                 minix-base		pic
 ./usr/libexec/makewhatis                                minix-base
 ./usr/libexec/rshd                                      minix-base
 ./usr/libexec/telnetd                                   minix-base

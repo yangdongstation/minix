@@ -2,6 +2,8 @@
 
 # Common makefile for riscv architecture include files
 
+INCSDIR= /usr/include/riscv
+
 INCS=	aout_machdep.h ansi.h asm.h bswap.h byte_swap.h cdefs.h \
 	cpu.h \
 	disklabel.h \

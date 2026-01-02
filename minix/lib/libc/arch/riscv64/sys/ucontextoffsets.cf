@@ -1,0 +1,47 @@
+
+include <minix/type.h>
+include <sys/ucontext.h>
+include <sys/errno.h>
+include <machine/mcontext.h>
+
+struct __ucontext
+member UC_FLAGS uc_flags
+member UC_LINK uc_link
+member MAGIC uc_mcontext.mc_magic
+member REG_PC uc_mcontext.__gregs[_REG_PC]
+member REG_RA uc_mcontext.__gregs[_REG_RA]
+member REG_SP uc_mcontext.__gregs[_REG_SP]
+member REG_GP uc_mcontext.__gregs[_REG_GP]
+member REG_TP uc_mcontext.__gregs[_REG_TP]
+member REG_T0 uc_mcontext.__gregs[_REG_T0]
+member REG_T1 uc_mcontext.__gregs[_REG_T1]
+member REG_T2 uc_mcontext.__gregs[_REG_T2]
+member REG_S0 uc_mcontext.__gregs[_REG_S0]
+member REG_S1 uc_mcontext.__gregs[_REG_S1]
+member REG_A0 uc_mcontext.__gregs[_REG_A0]
+member REG_A1 uc_mcontext.__gregs[_REG_A1]
+member REG_A2 uc_mcontext.__gregs[_REG_A2]
+member REG_A3 uc_mcontext.__gregs[_REG_A3]
+member REG_A4 uc_mcontext.__gregs[_REG_A4]
+member REG_A5 uc_mcontext.__gregs[_REG_A5]
+member REG_A6 uc_mcontext.__gregs[_REG_A6]
+member REG_A7 uc_mcontext.__gregs[_REG_A7]
+member REG_S2 uc_mcontext.__gregs[_REG_S2]
+member REG_S3 uc_mcontext.__gregs[_REG_S3]
+member REG_S4 uc_mcontext.__gregs[_REG_S4]
+member REG_S5 uc_mcontext.__gregs[_REG_S5]
+member REG_S6 uc_mcontext.__gregs[_REG_S6]
+member REG_S7 uc_mcontext.__gregs[_REG_S7]
+member REG_S8 uc_mcontext.__gregs[_REG_S8]
+member REG_S9 uc_mcontext.__gregs[_REG_S9]
+member REG_S10 uc_mcontext.__gregs[_REG_S10]
+member REG_S11 uc_mcontext.__gregs[_REG_S11]
+member REG_T3 uc_mcontext.__gregs[_REG_T3]
+member REG_T4 uc_mcontext.__gregs[_REG_T4]
+member REG_T5 uc_mcontext.__gregs[_REG_T5]
+member REG_T6 uc_mcontext.__gregs[_REG_T6]
+define EFAULT EFAULT
+define EINVAL EINVAL
+define MCF_MAGIC MCF_MAGIC
+define _UC_IGNFPU _UC_IGNFPU
+define _UC_IGNSIGM _UC_IGNSIGM
