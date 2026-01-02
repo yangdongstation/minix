@@ -63,3 +63,18 @@ u64_t usec_to_tsc(u64_t usec)
 {
     return (usec * tsc_freq) / 1000000;
 }
+
+u32_t tsc_64_to_micros(u64_t tsc)
+{
+    return (u32_t)tsc_to_usec(tsc);
+}
+
+u32_t tsc_to_micros(u32_t low, u32_t high)
+{
+    return tsc_64_to_micros(make64(low, high));
+}
+
+u32_t tsc_get_khz(void)
+{
+    return (u32_t)(tsc_freq / 1000);
+}

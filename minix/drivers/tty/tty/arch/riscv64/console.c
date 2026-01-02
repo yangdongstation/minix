@@ -45,3 +45,15 @@ con_loadfont(endpoint_t endpt, cp_grant_id_t grant)
     /* No graphics on serial console */
     return ENODEV;
 }
+
+void
+riscv_cons_init(void)
+{
+    /* No hardware init needed for SBI console. */
+}
+
+void
+riscv_cons_putc(int c)
+{
+    ser_putc((char)c);
+}

@@ -4,4 +4,4 @@
 HERE=${.CURDIR}/arch/${MACHINE_ARCH}
 .PATH:  ${HERE}
 
-SRCS += console.c keyboard.c rs232.c
+SRCS+=	console.c keyboard.c rs232_stub.c
