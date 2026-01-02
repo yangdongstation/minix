@@ -29,3 +29,22 @@ repository. Steps are updated after each change.
    Attempted to rebuild tools with `MKGCC=yes` to provide a GCC toolchain,
    but the tools build aborted in `tools/gmake` due to missing distfiles
    (network fetch blocked).
+
+## Update (2026-01-02)
+
+- Workspace: `/root/minix`
+- Build completed with current workarounds:
+  ```
+  MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
+  ./build.sh -j$(nproc) -m evbriscv64 \
+    -V AVAILABLE_COMPILER=gcc -V ACTIVE_CC=gcc -V ACTIVE_CPP=gcc -V ACTIVE_CXX=gcc -V ACTIVE_OBJC=gcc \
+    -V RISCV_ARCH_FLAGS='-march=RV64IMAFD -mcmodel=medany' \
+    -V NOGCCERROR=yes \
+    -V MKPIC=no -V MKPICLIB=no -V MKPICINSTALL=no \
+    -V MKCXX=no -V MKLIBSTDCXX=no -V MKATF=no \
+    -V USE_PCI=no \
+    -V CHECKFLIST_FLAGS='-m -e' \
+    distribution
+  ```
+- Outputs: kernel at `minix/kernel/obj/kernel`, modules in `obj/destdir.evbriscv64`
+- Note: `CHECKFLIST_FLAGS='-m -e'` allows missing/extra files while sets are incomplete

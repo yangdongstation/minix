@@ -82,33 +82,46 @@ riscv64/
 
 ```bash
 # Build toolchain
-./build.sh -m evbriscv64 tools
+MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no ./build.sh -U -m evbriscv64 tools
 
-# Build distribution
-./build.sh -m evbriscv64 distribution
+# Build distribution (current working set)
+MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
+./build.sh -j$(nproc) -m evbriscv64 \
+  -V AVAILABLE_COMPILER=gcc -V ACTIVE_CC=gcc -V ACTIVE_CPP=gcc -V ACTIVE_CXX=gcc -V ACTIVE_OBJC=gcc \
+  -V RISCV_ARCH_FLAGS='-march=RV64IMAFD -mcmodel=medany' \
+  -V NOGCCERROR=yes \
+  -V MKPIC=no -V MKPICLIB=no -V MKPICINSTALL=no \
+  -V MKCXX=no -V MKLIBSTDCXX=no -V MKATF=no \
+  -V USE_PCI=no \
+  -V CHECKFLIST_FLAGS='-m -e' \
+  distribution
 ```
+
+Notes:
+- If your toolchain supports `-march=rv64gc -mabi=lp64d`, drop `RISCV_ARCH_FLAGS`.
+- `CHECKFLIST_FLAGS='-m -e'` allows missing/extra files while the sets are incomplete.
 
 ## Running
 
 ### QEMU
 ```bash
 # Basic run
-./minix/scripts/qemu-riscv64.sh -k /path/to/kernel
+./minix/scripts/qemu-riscv64.sh -k minix/kernel/obj/kernel -B obj/destdir.evbriscv64
 
 # Debug mode (wait for GDB)
-./minix/scripts/qemu-riscv64.sh -d -k /path/to/kernel
+./minix/scripts/qemu-riscv64.sh -d -k minix/kernel/obj/kernel -B obj/destdir.evbriscv64
 
 # With networking
-./minix/scripts/qemu-riscv64.sh -n -k /path/to/kernel
+./minix/scripts/qemu-riscv64.sh -n -k minix/kernel/obj/kernel -B obj/destdir.evbriscv64
 ```
 
 ### GDB Debugging
 ```bash
 # Terminal 1: Start QEMU in debug mode
-./minix/scripts/qemu-riscv64.sh -d -k /path/to/kernel
+./minix/scripts/qemu-riscv64.sh -d -k minix/kernel/obj/kernel -B obj/destdir.evbriscv64
 
 # Terminal 2: Connect GDB
-./minix/scripts/gdb-riscv64.sh /path/to/kernel
+./minix/scripts/gdb-riscv64.sh minix/kernel/obj/kernel
 ```
 
 ## Boot Sequence

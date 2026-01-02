@@ -47,15 +47,34 @@ export DESTDIR=/path/to/minix/obj/destdir.evbriscv64
 ```bash
 # 构建主机工具（需要较长时间）
 MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no ./build.sh -U -m evbriscv64 tools
+
+# 如需强制使用 GCC（避免自动选择 clang）
+MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no \
+./build.sh -U -m evbriscv64 \
+  -V AVAILABLE_COMPILER=gcc -V ACTIVE_CC=gcc -V ACTIVE_CPP=gcc -V ACTIVE_CXX=gcc -V ACTIVE_OBJC=gcc \
+  tools
 ```
 
 ### 4. 构建完整系统
 
 ```bash
 # 构建 MINIX distribution（需要 2-4 小时）
+# 当前可通过构建的组合：允许清单缺失/多余文件，适用于移植进行中阶段
 MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
-./build.sh -U -m evbriscv64 distribution
+./build.sh -j$(nproc) -m evbriscv64 \
+  -V AVAILABLE_COMPILER=gcc -V ACTIVE_CC=gcc -V ACTIVE_CPP=gcc -V ACTIVE_CXX=gcc -V ACTIVE_OBJC=gcc \
+  -V RISCV_ARCH_FLAGS='-march=RV64IMAFD -mcmodel=medany' \
+  -V NOGCCERROR=yes \
+  -V MKPIC=no -V MKPICLIB=no -V MKPICINSTALL=no \
+  -V MKCXX=no -V MKLIBSTDCXX=no -V MKATF=no \
+  -V USE_PCI=no \
+  -V CHECKFLIST_FLAGS='-m -e' \
+  distribution
 ```
+
+说明：
+- 若交叉编译器支持 `-march=rv64gc -mabi=lp64d`，可移除 `RISCV_ARCH_FLAGS`。
+- `CHECKFLIST_FLAGS='-m -e'` 会允许缺失/多余文件，适用于当前不完整的 sets；若需严格检查，请移除该标志并恢复 `MKPIC/MKCXX/MKATF`。
 
 ## 已知问题与解决方案
 
@@ -64,26 +83,19 @@ MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
 **问题**：LLVM 在 RISC-V 64-bit 上编译失败
 **解决**：使用 `HAVE_LLVM=no MKLLVM=no` 跳过 LLVM 构建
 
-### 2. 缺失的架构支持文件
+### 2. 交叉编译器 `-march=rv64gc` 不兼容
 
-以下文件需要为 RISC-V 64-bit 创建：
+**问题**：部分交叉编译器/本地 tooldir 的 GCC 不接受 `-march=rv64gc`
+**解决**：使用 `-V RISCV_ARCH_FLAGS='-march=RV64IMAFD -mcmodel=medany'`
 
-- `minix/lib/libminc/arch/riscv64/Makefile.libc.inc`
-- `minix/lib/libminc/arch/riscv64/sys/Makefile.inc`
-- `minix/tests/arch/riscv64/Makefile.inc`
+### 3. distribution 清单检查失败
 
-### 3. 驱动程序支持
+**问题**：`checkflist` 报告缺失/多余文件，导致 distribution 失败
+**解决**：在移植进行中可用 `-V CHECKFLIST_FLAGS='-m -e'` 临时放宽；要严格校验需恢复 `MKPIC/MKCXX/MKATF` 并补齐 sets
 
-需要为 RISC-V 64-bit 创建以下驱动架构文件：
+### 4. C++ 库目录问题（开启 C++ 时）
 
-- `minix/drivers/clock/readclock/arch/riscv64/Makefile.inc`
-- `minix/drivers/tty/tty/arch/riscv64/Makefile.inc`
-- `minix/drivers/bus/i2c/arch/riscv64/Makefile.inc`
-- `minix/drivers/video/fb/arch/riscv64/Makefile.inc`
-
-### 4. C++ 库目录问题
-
-在创建 distribution 时需要手动创建：
+若启用 `MKCXX/MKLIBSTDCXX`，创建 distribution 时可能需要手动创建：
 ```bash
 mkdir -p $DESTDIR/usr/include/g++/bits/riscv32
 mkdir -p $DESTDIR/usr/include/g++/bits/riscv64
@@ -131,13 +143,13 @@ cd minix/tests/riscv64
 
 ```bash
 # 基本运行
-./minix/scripts/qemu-riscv64.sh -k minix/kernel/arch/riscv64/kernel
+./minix/scripts/qemu-riscv64.sh -k minix/kernel/obj/kernel -B obj/destdir.evbriscv64
 
 # 调试模式
-./minix/scripts/qemu-riscv64.sh -d -k minix/kernel/arch/riscv64/kernel
+./minix/scripts/qemu-riscv64.sh -d -k minix/kernel/obj/kernel -B obj/destdir.evbriscv64
 
 # 使用 GDB 调试
-./minix/scripts/gdb-riscv64.sh minix/kernel/arch/riscv64/kernel
+./minix/scripts/gdb-riscv64.sh minix/kernel/obj/kernel
 ```
 
 ## 构建输出
@@ -145,7 +157,7 @@ cd minix/tests/riscv64
 成功构建后，你将获得：
 
 1. **交叉编译工具链**：`obj/tooldir.*/bin/riscv64-elf32-minix-*`
-2. **内核镜像**：`minix/kernel/arch/riscv64/kernel`
+2. **内核镜像**：`minix/kernel/obj/kernel`
 3. **系统库**：`obj/destdir.evbriscv64/usr/lib/`
 4. **服务器程序**：`obj/destdir.evbriscv64/sbin/`
 5. **用户程序**：`obj/destdir.evbriscv64/usr/bin/`
@@ -155,8 +167,9 @@ cd minix/tests/riscv64
 ### 编译优化标志
 
 系统使用以下 RISC-V 特定优化：
-- `-march=rv64gc` - 通用 RISC-V 64-bit 扩展
+- `-march=rv64gc` - 通用 RISC-V 64-bit 扩展（工具链支持时）
 - `-mabi=lp64d` - LP64 数据模型，双精度浮点
+- 兼容 fallback：`-march=RV64IMAFD -mcmodel=medany`
 
 ### 内核优化
 
@@ -208,5 +221,5 @@ MINIX 3 遵循 BSD 许可证。详见源码中的 LICENSE 文件。
 
 ---
 
-**最后更新**：2025年12月
-**版本**：0.1 初始版本
+**最后更新**：2026年1月
+**版本**：0.2

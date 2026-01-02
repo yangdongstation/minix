@@ -73,10 +73,18 @@ The main entry point is `build.sh`, a NetBSD-derived build wrapper that handles 
 ```bash
 # Build complete system for RISC-V 64-bit
 MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
-./build.sh -j$(nproc) -m evbriscv64 distribution
+./build.sh -j$(nproc) -m evbriscv64 \
+  -V AVAILABLE_COMPILER=gcc -V ACTIVE_CC=gcc -V ACTIVE_CPP=gcc -V ACTIVE_CXX=gcc -V ACTIVE_OBJC=gcc \
+  -V RISCV_ARCH_FLAGS='-march=RV64IMAFD -mcmodel=medany' \
+  -V NOGCCERROR=yes \
+  -V MKPIC=no -V MKPICLIB=no -V MKPICINSTALL=no \
+  -V MKCXX=no -V MKLIBSTDCXX=no -V MKATF=no \
+  -V USE_PCI=no \
+  -V CHECKFLIST_FLAGS='-m -e' \
+  distribution
 
 # Build only cross-compilation tools
-./build.sh -m evbriscv64 tools
+MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no ./build.sh -U -m evbriscv64 tools
 
 # Clean and rebuild from scratch
 ./build.sh -c -m evbriscv64 distribution
@@ -91,11 +99,13 @@ Key environment variables for RISC-V builds:
 - `HAVE_GOLD=no`: Disable gold linker (compatibility)
 - `HAVE_LLVM=no MKLLVM=no`: Skip LLVM (fails on RISC-V)
 - `HOST_CFLAGS="-O -fcommon"`: Host compiler flags
+- `RISCV_ARCH_FLAGS='-march=RV64IMAFD -mcmodel=medany'`: Fallback for toolchains that reject `-march=rv64gc`
+- `CHECKFLIST_FLAGS='-m -e'`: Allow missing/extra files while sets are incomplete
 
 ### Cross-Compiler Requirements
 - **Primary**: `riscv64-unknown-elf-gcc`
 - **Alternatives**: `riscv64-linux-gnu-gcc`, `riscv64-elf-gcc`
-- **Architecture Flags**: `-march=rv64gc -mabi=lp64d`
+- **Architecture Flags**: `-march=rv64gc -mabi=lp64d` (fallback: `-march=RV64IMAFD -mcmodel=medany`)
 
 ## Development Workflow
 
@@ -114,10 +124,10 @@ Key environment variables for RISC-V builds:
 ### QEMU Integration
 ```bash
 # Run kernel in QEMU
-./minix/scripts/qemu-riscv64.sh -k /path/to/kernel
+./minix/scripts/qemu-riscv64.sh -k minix/kernel/obj/kernel -B obj/destdir.evbriscv64
 
 # Debug mode (wait for GDB)
-./minix/scripts/qemu-riscv64.sh -d -k /path/to/kernel
+./minix/scripts/qemu-riscv64.sh -d -k minix/kernel/obj/kernel -B obj/destdir.evbriscv64
 
 # Connect GDB debugger
 ./minix/scripts/gdb-riscv64.sh /path/to/kernel
@@ -307,17 +317,25 @@ sudo apt-get install gcc-riscv64-unknown-elf build-essential
 cd /path/to/minix
 
 # 2. Build cross-compilation tools
-MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no ./build.sh -m evbriscv64 tools
+MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no ./build.sh -U -m evbriscv64 tools
 
 # 3. Build complete system
 MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
-./build.sh -j$(nproc) -m evbriscv64 distribution
+./build.sh -j$(nproc) -m evbriscv64 \
+  -V AVAILABLE_COMPILER=gcc -V ACTIVE_CC=gcc -V ACTIVE_CPP=gcc -V ACTIVE_CXX=gcc -V ACTIVE_OBJC=gcc \
+  -V RISCV_ARCH_FLAGS='-march=RV64IMAFD -mcmodel=medany' \
+  -V NOGCCERROR=yes \
+  -V MKPIC=no -V MKPICLIB=no -V MKPICINSTALL=no \
+  -V MKCXX=no -V MKLIBSTDCXX=no -V MKATF=no \
+  -V USE_PCI=no \
+  -V CHECKFLIST_FLAGS='-m -e' \
+  distribution
 
 # 4. Run tests
 ./minix/tests/riscv64/run_tests.sh all
 
 # 5. Test in QEMU
-./minix/scripts/qemu-riscv64.sh -k minix/kernel/arch/riscv64/kernel
+./minix/scripts/qemu-riscv64.sh -k minix/kernel/obj/kernel -B obj/destdir.evbriscv64
 ```
 
 This guide provides the essential information needed to understand, build, and develop the MINIX 3 operating system, with particular focus on the ongoing RISC-V 64-bit port development.

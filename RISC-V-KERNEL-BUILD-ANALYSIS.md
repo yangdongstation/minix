@@ -15,7 +15,7 @@ The Minix RISC-V kernel build has specific dependencies that must be satisfied i
 
 ### Standard Minix Build Sequence
 
-From `/home/donz/minix/Makefile`, the standard build order is:
+From `Makefile`, the standard build order is:
 
 ```
 BUILDTARGETS+= check-tools
@@ -33,7 +33,7 @@ BUILDTARGETS+= do-build        ← Kernel built here
 
 ### Library Dependencies
 
-From `/home/donz/minix/minix/kernel/Makefile`:
+From `minix/kernel/Makefile`:
 
 ```makefile
 LDADD+= -ltimers -lsys -lexec
@@ -55,13 +55,13 @@ The RISC-V kernel pulls in objects from multiple sources:
 ### Missing Components Analysis
 
 #### 1. crt0.o (C Runtime Startup)
-- **Location**: `/home/donz/minix/lib/csu/arch/riscv/crt0.S`
+- **Location**: `lib/csu/arch/riscv/crt0.S`
 - **Purpose**: C runtime startup code
 - **Build target**: `lib/csu`
 - **Issue**: This is part of the standard C library startup, not kernel-specific
 
 #### 2. _cpufeature.c
-- **Location**: `/home/donz/minix/minix/lib/libc/arch/riscv64/_cpufeature.c`
+- **Location**: `minix/lib/libc/arch/riscv64/_cpufeature.c`
 - **Purpose**: CPU feature detection for RISC-V
 - **Build target**: `minix/lib/libc`
 - **Status**: Exists and should be built with libc
@@ -88,6 +88,11 @@ From the RISC-V README and Makefiles:
 3. **BSP Support**: Board Support Package for QEMU virt platform
 4. **Linker Script**: `kernel.lds` for proper kernel linking
 
+### Toolchain Compatibility
+
+Some GCC toolchains reject `-march=rv64gc`. A compatible fallback is:
+- `-V RISCV_ARCH_FLAGS='-march=RV64IMAFD -mcmodel=medany'`
+
 ### Memory Layout
 
 The RISC-V kernel uses:
@@ -97,19 +102,29 @@ The RISC-V kernel uses:
 
 ## Recommended Build Approach
 
-### Option 1: Full Build (Recommended)
+### Option 1: Full Build (Current Working Set)
 ```bash
-./build.sh -m evbriscv64 distribution
+MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
+./build.sh -j$(nproc) -m evbriscv64 \
+  -V AVAILABLE_COMPILER=gcc -V ACTIVE_CC=gcc -V ACTIVE_CPP=gcc -V ACTIVE_CXX=gcc -V ACTIVE_OBJC=gcc \
+  -V RISCV_ARCH_FLAGS='-march=RV64IMAFD -mcmodel=medany' \
+  -V NOGCCERROR=yes \
+  -V MKPIC=no -V MKPICLIB=no -V MKPICINSTALL=no \
+  -V MKCXX=no -V MKLIBSTDCXX=no -V MKATF=no \
+  -V USE_PCI=no \
+  -V CHECKFLIST_FLAGS='-m -e' \
+  distribution
 ```
 
-This builds everything in the correct order automatically.
+This builds everything in the correct order automatically. The `CHECKFLIST_FLAGS` setting
+allows missing/extra files while the RISC-V sets are still incomplete.
 
 ### Option 2: Incremental Build
 If you need to build components incrementally:
 
 ```bash
 # 1. Build tools first
-./build.sh -m evbriscv64 tools
+MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no ./build.sh -U -m evbriscv64 tools
 
 # 2. Build libraries (in dependency order)
 make -C lib/csu

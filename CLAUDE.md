@@ -240,18 +240,22 @@ The RISC-V 64-bit port is a recent addition targeting the QEMU virt platform. Th
 ### Build Commands
 ```bash
 # Build cross-compilation tools for RISC-V 64-bit
-MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no ./build.sh -m evbriscv64 tools
+MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no ./build.sh -U -m evbriscv64 tools
 
-# Build complete distribution for RISC-V 64-bit
+# Build complete distribution for RISC-V 64-bit (current working set)
 MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
-./build.sh -U -m evbriscv64 distribution
+./build.sh -j$(nproc) -m evbriscv64 \
+  -V AVAILABLE_COMPILER=gcc -V ACTIVE_CC=gcc -V ACTIVE_CPP=gcc -V ACTIVE_CXX=gcc -V ACTIVE_OBJC=gcc \
+  -V RISCV_ARCH_FLAGS='-march=RV64IMAFD -mcmodel=medany' \
+  -V NOGCCERROR=yes \
+  -V MKPIC=no -V MKPICLIB=no -V MKPICINSTALL=no \
+  -V MKCXX=no -V MKLIBSTDCXX=no -V MKATF=no \
+  -V USE_PCI=no \
+  -V CHECKFLIST_FLAGS='-m -e' \
+  distribution
 
 # Check if architecture is recognized
 ./build.sh -m evbriscv64 list-arch
-
-# Build with parallel jobs (faster on multi-core systems)
-MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
-./build.sh -j$(nproc) -m evbriscv64 distribution
 
 # Clean and rebuild from scratch
 ./build.sh -c -m evbriscv64
@@ -263,12 +267,9 @@ MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
 - Use `HAVE_LLVM=no MKLLVM=no` to skip LLVM build (required for RISC-V)
 - LLVM compilation fails on RISC-V 64-bit architecture
 
-#### Missing Architecture Files
-The following files are needed for complete RISC-V 64-bit support:
-- `minix/lib/libminc/arch/riscv64/Makefile.libc.inc`
-- `minix/lib/libminc/arch/riscv64/sys/Makefile.inc`
-- `minix/tests/arch/riscv64/Makefile.inc`
-- Various driver Makefile.inc files in `minix/drivers/*/arch/riscv64/`
+#### Toolchain ISA Flags
+Some GCC toolchains reject `-march=rv64gc`. Use the fallback:
+- `-V RISCV_ARCH_FLAGS='-march=RV64IMAFD -mcmodel=medany'`
 
 #### C++ Library Directories
 Manual creation required during distribution build:
@@ -280,16 +281,16 @@ mkdir -p $DESTDIR/usr/include/g++/bits/riscv64
 ### Running with QEMU
 ```bash
 # Basic run with pre-built kernel
-./minix/scripts/qemu-riscv64.sh -k /path/to/kernel
+./minix/scripts/qemu-riscv64.sh -k minix/kernel/obj/kernel -B obj/destdir.evbriscv64
 
 # Debug mode with GDB server
-./minix/scripts/qemu-riscv64.sh -d -k /path/to/kernel
+./minix/scripts/qemu-riscv64.sh -d -k minix/kernel/obj/kernel -B obj/destdir.evbriscv64
 
 # Connect GDB client to debug session
-./minix/scripts/gdb-riscv64.sh /path/to/kernel
+./minix/scripts/gdb-riscv64.sh minix/kernel/obj/kernel
 
 # Run with specific memory and CPU configuration
-./minix/scripts/qemu-riscv64.sh -k /path/to/kernel -m 512M -smp 4
+./minix/scripts/qemu-riscv64.sh -k minix/kernel/obj/kernel -B obj/destdir.evbriscv64 -m 512M -smp 4
 ```
 
 ### RISC-V Architecture Files
@@ -348,6 +349,7 @@ sudo apt-get install gcc-riscv64-unknown-elf
 # Compiler flags used:
 - -march=rv64gc    # RISC-V 64-bit with G and C extensions
 - -mabi=lp64d      # LP64 data model with double-precision floating point
+- -march=RV64IMAFD -mcmodel=medany   # Fallback for toolchains that reject rv64gc
 ```
 
 ## Common Build Troubleshooting

@@ -1,12 +1,12 @@
 # MINIX RISC-V 64-bit Port Status Report
 
-**Date**: 2025-12-16
-**Status**: Phase 1 Complete - Core Infrastructure Ready
-**Progress**: ~65% of Phase 1 Complete
+**Date**: 2026-01-02
+**Status**: Phase 1 in Progress - Kernel Buildable, User Space Partial
+**Progress**: ~65% overall (user space integration ongoing)
 
 ## Executive Summary
 
-The RISC-V 64-bit port of MINIX 3 has achieved significant progress with the core kernel infrastructure now in place. The project follows industrial development standards with proper validation and testing frameworks.
+The RISC-V 64-bit port of MINIX 3 is now buildable end-to-end with current workarounds, while user space integration is still in progress. Core kernel infrastructure is in place, and distribution builds complete with relaxed checkflist rules.
 
 ## Completed Components ✅
 
@@ -21,14 +21,14 @@ The RISC-V 64-bit port of MINIX 3 has achieved significant progress with the cor
 ### 2. Device Drivers
 - **UART Driver**: Complete NS16550-compatible driver
   - Early console support (console.c)
-  - Full TTY integration (rs232.c)
+  - TTY integration is in progress (rs232 stub in use for riscv64)
   - Interrupt-driven I/O with FIFO support
   - Direct output utilities for debugging
 
 ### 3. Build System
-- **Architecture Files**: All necessary Makefile.inc files created
+- **Architecture Files**: RISC-V Makefile.inc files present for core components
 - **Libminc Support**: RISC-V 64-bit library support added
-- **Validation Scripts**: Automated build verification tools
+- **Distribution Build**: Completes with GCC + `RISCV_ARCH_FLAGS` fallback, `MKPIC/MKCXX` disabled, and `CHECKFLIST_FLAGS='-m -e'`
 
 ### 4. Testing Framework
 - **Architecture Tests**: Comprehensive test suite in `minix/tests/riscv64/`
@@ -57,7 +57,7 @@ QEMU virt platform (RISC-V 64-bit)
 ### Immediate (Week 1-2)
 1. **Complete Build System**
    - Fix C++ library build issues
-   - Ensure complete system builds end-to-end
+   - Clean file lists and re-enable `MKPIC/MKCXX/MKATF`
    - Add CI/CD pipeline
 
 2. **User Space Initialization**
@@ -87,18 +87,22 @@ QEMU virt platform (RISC-V 64-bit)
    - Multiple architecture support requires careful Makefile management
    - Cross-compilation dependencies need explicit handling
 
-2. **User Space Transition**
+2. **Toolchain Compatibility**
+   - Some GCC toolchains reject `-march=rv64gc`
+   - Use `RISCV_ARCH_FLAGS` fallback until toolchains are updated
+
+3. **User Space Transition**
    - Moving from SBI console to user space TTY system
    - Ensuring backward compatibility
 
-3. **Device Integration**
+4. **Device Integration**
    - MINIX's microkernel architecture requires careful driver design
    - Message passing overhead needs optimization
 
 ## Quality Metrics
 
 - **Code Coverage**: Kernel ~75%, Drivers ~60%
-- **Build Success Rate**: 90% (some components still failing)
+- **Build Success Rate**: Buildable with current workarounds
 - **Test Pass Rate**: Architecture tests: 100%
 - **Documentation**: 80% complete for implemented components
 
@@ -129,6 +133,7 @@ QEMU virt platform (RISC-V 64-bit)
 2. **Network Access**: Basic TCP/IP functionality
 3. **Storage Support**: Read/write to block devices
 4. **Performance**: Comparable to other MINIX architectures
+5. **Build Hygiene**: Distribution builds without relaxed checkflist rules
 
 ---
 
