@@ -9,6 +9,11 @@ OBJS=	${SRCS:N*.h:R:S/$/.o/g}
 MKBUILDEXT2RD?=	no
 
 RAMDISK_PATH= ${NETBSDSRCDIR}/minix/drivers/storage/ramdisk
+.if ${.OBJDIR:M*/obj}
+RAMDISK_IMAGE= ../../ramdisk/obj/image
+.else
+RAMDISK_IMAGE= ../ramdisk/image
+.endif
 DPADD+=	${LIBBLOCKDRIVER} ${LIBCHARDRIVER}
 LDADD+=	-lblockdriver -lchardriver
 
@@ -16,7 +21,7 @@ CPPFLAGS.memory.c+=	-I${NETBSDSRCDIR}/minix
 
 imgrd.d: touch-genfiles
 touch-genfiles:
-	[ -e ../ramdisk/image ] || touch -t 197001020000.00 ../ramdisk/image
+	[ -e ${RAMDISK_IMAGE} ] || touch -t 197001020000.00 ${RAMDISK_IMAGE}
 
 
 .SUFFIXES:      .mfs .c .o
@@ -25,13 +30,13 @@ touch-genfiles:
 	${_MKTARGET_CREATE}
 	${OBJCOPY} -Ibinary -B${MACHINE_CPU} -O${MACHINE_GNU_PLATFORM} $< $@
 
-CLEANFILES+=	../ramdisk/image
+CLEANFILES+=	${RAMDISK_IMAGE}
 # BJG - don't invoke parallel Makes
 #../ramdisk/image: .PHONY
 #	${MAKE} -C ${RAMDISK_PATH} image
 
 CLEANFILES+=	imgrd.mfs
-imgrd.mfs: ../ramdisk/image
-	${HOST_LN} -fs ../ramdisk/image $@
+imgrd.mfs: ${RAMDISK_IMAGE}
+	${HOST_LN} -fs ${RAMDISK_IMAGE} $@
 
 .include <minix.service.mk>

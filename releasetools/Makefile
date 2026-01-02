@@ -5,26 +5,30 @@ GEN_FILES=	*.bak image kernel *.iso *.iso.gz cdfdimage rootimage src
 
 # LSC detect where were built the objects files
 PROGROOT:= ..
-.if "${MAKEOBJDIR:S,${.CURDIR},,}" != ""
+PROGSUFFIX:=
+.if exists(${NETBSDSRCDIR}/minix/servers/ds/obj/ds)
+PROGROOT:= ${NETBSDSRCDIR}
+PROGSUFFIX:= /obj
+.elif "${MAKEOBJDIR:S,${.CURDIR},,}" != ""
 PROGROOT:= ${MAKEOBJDIR:S,releasetools,,}
 .endif
 
 # Specify the programs that are part of the system image.
-KERNEL= ${PROGROOT}/minix/kernel/kernel
+KERNEL= ${PROGROOT}/minix/kernel${PROGSUFFIX}/kernel
 
 # PROGRAMS are in the order they should be loaded by boot
-PROGRAMS+= ${PROGROOT}/minix/servers/ds/ds
-PROGRAMS+= ${PROGROOT}/minix/servers/rs/rs
-PROGRAMS+= ${PROGROOT}/minix/servers/pm/pm
-PROGRAMS+= ${PROGROOT}/minix/servers/sched/sched
-PROGRAMS+= ${PROGROOT}/minix/servers/vfs/vfs
-PROGRAMS+= ${PROGROOT}/minix/drivers/storage/memory/memory
-PROGRAMS+= ${PROGROOT}/minix/drivers/tty/tty/tty
-PROGRAMS+= ${PROGROOT}/minix/servers/mib/mib
-PROGRAMS+= ${PROGROOT}/minix/servers/vm/vm
-PROGRAMS+= ${PROGROOT}/minix/fs/pfs/pfs
-PROGRAMS+= ${PROGROOT}/minix/fs/mfs/mfs
-PROGRAMS+= ${PROGROOT}/sbin/init/init
+PROGRAMS+= ${PROGROOT}/minix/servers/ds${PROGSUFFIX}/ds
+PROGRAMS+= ${PROGROOT}/minix/servers/rs${PROGSUFFIX}/rs
+PROGRAMS+= ${PROGROOT}/minix/servers/pm${PROGSUFFIX}/pm
+PROGRAMS+= ${PROGROOT}/minix/servers/sched${PROGSUFFIX}/sched
+PROGRAMS+= ${PROGROOT}/minix/servers/vfs${PROGSUFFIX}/vfs
+PROGRAMS+= ${PROGROOT}/minix/drivers/storage/memory${PROGSUFFIX}/memory
+PROGRAMS+= ${PROGROOT}/minix/drivers/tty/tty${PROGSUFFIX}/tty
+PROGRAMS+= ${PROGROOT}/minix/servers/mib${PROGSUFFIX}/mib
+PROGRAMS+= ${PROGROOT}/minix/servers/vm${PROGSUFFIX}/vm
+PROGRAMS+= ${PROGROOT}/minix/fs/pfs${PROGSUFFIX}/pfs
+PROGRAMS+= ${PROGROOT}/minix/fs/mfs${PROGSUFFIX}/mfs
+PROGRAMS+= ${PROGROOT}/sbin/init${PROGSUFFIX}/init
 
 all usage help:
 	@echo " " >&2
