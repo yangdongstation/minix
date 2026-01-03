@@ -1842,7 +1842,7 @@
 ./usr/include/ulimit.h                                  minix-comp
 ./usr/include/unctrl.h                                  minix-comp
 ./usr/include/unistd.h                                  minix-comp
-./usr/include/unwind.h                                  minix-comp      !libgcc_eh
+./usr/include/unwind.h                                  minix-comp
 ./usr/include/util.h                                    minix-comp
 ./usr/include/utime.h                                   minix-comp
 ./usr/include/utmp.h                                    minix-comp

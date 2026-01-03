@@ -81,6 +81,7 @@
 ./etc/X11/xorg.conf                                     minix-base      xorg,optional
 ./etc/X11/xserver                                       minix-base      xorg
 ./etc/X11/xsm                                           minix-base      xorg
+./etc/atf                                               minix-base      !atf
 ./etc/boot.cfg.default                                  minix-base
 ./etc/csh.cshrc                                         minix-base
 ./etc/csh.login                                         minix-base
@@ -113,6 +114,7 @@
 ./etc/mtree                                             minix-base
 ./etc/mtree/NetBSD.dist                                 minix-base
 ./etc/mtree/set.minix-base                              minix-base
+./etc/mtree/set.minix-tests                             minix-base      !atf
 ./etc/mtree/special                                     minix-base
 ./etc/named.conf                                        minix-base
 ./etc/namedb                                            minix-base
@@ -663,10 +665,10 @@
 ./usr/etc/daily                                         minix-base
 ./usr/etc/dhcptags.conf                                 minix-base      obsolete
 ./usr/etc/rc                                            minix-base
-./usr/include/c++                                       minix-base      gcc=5
-./usr/include/c++/experimental                          minix-base      gcc=5
-./usr/include/c++/ext                                   minix-base      gcc=5
-./usr/include/clang-3.6                                 minix-base      gcc=5
+./usr/include/c++                                       minix-base
+./usr/include/c++/experimental                          minix-base
+./usr/include/c++/ext                                   minix-base
+./usr/include/clang-3.6                                 minix-base
 ./usr/lib                                               minix-base
 ./usr/lib/cawf                                          minix-base
 ./usr/lib/cawf/common                                   minix-base
@@ -1162,6 +1164,7 @@
 ./usr/service                                           minix-base
 ./usr/service/asr                                       minix-base
 ./usr/share                                             minix-base
+./usr/share/atf                                         minix-base      !atf
 ./usr/share/calendar                                    minix-base
 ./usr/share/calendar/calendar.birthday                  minix-base
 ./usr/share/calendar/calendar.christian                 minix-base
@@ -1206,6 +1209,13 @@
 ./usr/share/doc/psd/19.curses/twinkle1.c                minix-base      obsolete
 ./usr/share/doc/psd/19.curses/twinkle2.c                minix-base      obsolete
 ./usr/share/doc/psd/19.curses/win_st.c                  minix-base      obsolete
+./usr/share/doc/reference                               minix-base      !atf
+./usr/share/doc/reference/ref1                          minix-base      !atf
+./usr/share/doc/reference/ref1/atf                      minix-base      !atf
+./usr/share/doc/reference/ref1/kyua                     minix-base      !kyua
+./usr/share/doc/reference/ref1/kyua/kyua-atf-compat     minix-base      !kyua
+./usr/share/doc/reference/ref1/kyua/kyua-cli            minix-base      !kyua
+./usr/share/doc/reference/ref1/kyua/kyua-testers        minix-base      !kyua
 ./usr/share/doc/reference/ref1/bzip2                    minix-base
 ./usr/share/doc/reference/ref1/bzip2/manual.html        minix-base
 ./usr/share/doc/reference/ref8                          minix-base
@@ -1243,12 +1253,14 @@
 ./usr/share/doc/usd/30.rogue/Makefile                   minix-base      obsolete
 ./usr/share/doc/usd/30.rogue/rogue.me                   minix-base      obsolete
 ./usr/share/examples                                    minix-base
+./usr/share/examples/atf                                minix-base      !atf
 ./usr/share/examples/blacklist                          minix-base
 ./usr/share/examples/blacklist/blacklistd.conf          minix-base
 ./usr/share/examples/blacklist/npf.conf                 minix-base
 ./usr/share/examples/dhcp                               minix-base
 ./usr/share/examples/dhcp/dhcpd.conf                    minix-base
 ./usr/share/examples/ftpd                               minix-base
+./usr/share/examples/kyua-cli                           minix-base      !kyua
 ./usr/share/examples/libsaslc                           minix-base
 ./usr/share/examples/libsaslc/README                    minix-base      crypto
 ./usr/share/examples/libsaslc/mech                      minix-base
@@ -1261,7 +1273,7 @@
 ./usr/share/examples/libsaslc/mech/PLAIN.conf           minix-base      crypto
 ./usr/share/examples/libsaslc/saslc.conf                minix-base      crypto
 ./usr/share/examples/lua                                minix-base
-./usr/share/examples/lutok                              minix-base      kyua
+./usr/share/examples/lutok                              minix-base      !kyua
 ./usr/share/examples/openssl                            minix-base
 ./usr/share/examples/openssl/CA.pl                      minix-base      crypto
 ./usr/share/examples/openssl/CA.sh                      minix-base      crypto
@@ -2010,6 +2022,10 @@
 ./usr/share/info/texinfo.info                           minix-base
 ./usr/share/info/vi.info                                minix-base
 ./usr/share/keymaps                                     minix-base
+./usr/share/kyua-atf-compat                             minix-base      !kyua
+./usr/share/kyua-cli                                    minix-base      !kyua
+./usr/share/kyua-cli/misc                               minix-base      !kyua
+./usr/share/kyua-cli/store                              minix-base      !kyua
 ./usr/share/legal                                       minix-base
 ./usr/share/legal/COPYRIGHT                             minix-base
 ./usr/share/locale                                      minix-base      nls
@@ -3928,6 +3944,11 @@
 ./usr/spool/lpd                                         minix-base
 ./usr/src                                               minix-base
 ./usr/src/src.tar.gz                                    minix-base      src
+./usr/tests                                             minix-base      !atf
+./usr/tests/minix-posix                                 minix-base      !atf
+./usr/tests/minix-posix/blocktest                       minix-base      !atf
+./usr/tests/minix-posix/ddekit                          minix-base      !atf
+./usr/tests/minix-posix/rmibtest                        minix-base      !atf
 ./usr/tmp                                               minix-base
 ./usr/var                                               minix-base
 ./usr/var/db                                            minix-base
