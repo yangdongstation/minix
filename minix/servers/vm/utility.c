@@ -21,6 +21,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <assert.h>
+#include <stdio.h>
 #include <sys/cdefs.h>
 #include <sys/param.h>
 #include <sys/mman.h>
@@ -37,6 +38,23 @@
 #include "kernel/config.h"
 #include "kernel/type.h"
 #include "kernel/proc.h"
+
+void vm_stacktrace_at(const char *file, int line)
+{
+	char buf[128];
+	int len;
+
+	len = snprintf(buf, sizeof(buf), "VM: stacktrace at %s:%d\n",
+	    file, line);
+	if (len < 0)
+		return;
+	if (len > (int)sizeof(buf))
+		len = (int)sizeof(buf);
+	sys_diagctl_diag(buf, len);
+#ifndef __riscv64__
+	util_stacktrace();
+#endif
+}
 
 /*===========================================================================*
  *                              get_mem_chunks                               *
@@ -491,4 +509,3 @@ void adjust_proc_refs()
                }
        }
 }
-

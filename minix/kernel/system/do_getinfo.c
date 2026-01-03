@@ -19,6 +19,9 @@
 #include <string.h>
 
 #include "kernel/system.h"
+#ifdef __riscv64
+#include "arch_proto.h"
+#endif
 
 
 #if USE_GETINFO
@@ -55,6 +58,9 @@ int do_getinfo(struct proc * caller, message * m_ptr)
   int wipe_rnd_bin = -1;
   struct proc *p;
   struct rusage r_usage;
+#ifdef __riscv64
+  static int getinfo_trace_once;
+#endif
 
   /* Set source address and length based on request type. */
   switch (m_ptr->m_lsys_krn_sys_getinfo.request) {
@@ -206,6 +212,19 @@ int do_getinfo(struct proc * caller, message * m_ptr)
         return(EINVAL);
   }
 
+#ifdef __riscv64
+  if (m_ptr->m_lsys_krn_sys_getinfo.request == GET_MONPARAMS &&
+      getinfo_trace_once == 0) {
+	  direct_print("rv64: getinfo MONPARAMS val_ptr=");
+	  direct_print_hex((u64_t)m_ptr->m_lsys_krn_sys_getinfo.val_ptr);
+	  direct_print(" len=");
+	  direct_print_hex((u64_t)length);
+	  direct_print(" max=");
+	  direct_print_hex((u64_t)m_ptr->m_lsys_krn_sys_getinfo.val_len);
+	  direct_print("\n");
+  }
+#endif
+
   /* Try to make the actual copy for the requested data. */
   if (m_ptr->m_lsys_krn_sys_getinfo.val_len > 0 &&
 	length > m_ptr->m_lsys_krn_sys_getinfo.val_len)
@@ -213,6 +232,16 @@ int do_getinfo(struct proc * caller, message * m_ptr)
 
   r = data_copy_vmcheck(caller, KERNEL, src_vir, caller->p_endpoint,
 	m_ptr->m_lsys_krn_sys_getinfo.val_ptr, length);
+
+#ifdef __riscv64
+  if (m_ptr->m_lsys_krn_sys_getinfo.request == GET_MONPARAMS &&
+      getinfo_trace_once == 0) {
+	  direct_print("rv64: getinfo MONPARAMS res=");
+	  direct_print_hex((u64_t)r);
+	  direct_print("\n");
+	  getinfo_trace_once = 1;
+  }
+#endif
 
   if(r != OK) return r;
 
@@ -225,4 +254,3 @@ int do_getinfo(struct proc * caller, message * m_ptr)
 }
 
 #endif /* USE_GETINFO */
-

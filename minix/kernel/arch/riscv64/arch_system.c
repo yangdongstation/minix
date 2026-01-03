@@ -9,6 +9,8 @@
 #include <assert.h>
 #include <string.h>
 
+extern u64_t _boot_pgdir[];
+
 /* Shutdown types */
 #define RBT_HALT        0
 #define RBT_REBOOT      1
@@ -163,6 +165,26 @@ void arch_proc_reset(struct proc *pr)
 	pr->p_seg.p_satp = 0;
 	pr->p_seg.p_satp_v = NULL;
 	pr->p_seg.fpu_state = NULL;
+}
+
+void riscv64_switch_address_space(struct proc *p)
+{
+	phys_bytes pgdir;
+
+	if (p && p->p_seg.p_satp != 0) {
+		pgdir = p->p_seg.p_satp;
+		set_pgdir(pgdir);
+		pg_flush_tlb();
+		if (p->p_endpoint == VM_PROC_NR)
+			csr_set_sstatus(SSTATUS_SUM);
+		else
+			csr_clear_sstatus(SSTATUS_SUM);
+		get_cpulocal_var(ptproc) = p;
+	} else {
+		set_pgdir((phys_bytes)_boot_pgdir);
+		pg_flush_tlb();
+		csr_clear_sstatus(SSTATUS_SUM);
+	}
 }
 
 void arch_proc_setcontext(struct proc *p, struct stackframe_s *state, int user,

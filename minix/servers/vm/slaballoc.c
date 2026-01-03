@@ -365,7 +365,7 @@ static inline int objstats(void *mem, int bytes,
 
 #if SANITYCHECKS
 	if(*(u32_t *) mem == JUNK && !nojunkwarning) {
-		util_stacktrace();
+		VM_STACKTRACE();
 		printf("VM: WARNING: JUNK seen in slab object, likely freed\n");
 	}
 #endif

@@ -6,6 +6,28 @@
  */
 
 #include "include/sconst.h"
+#include "include/archconst.h"
+
+#define UART_THR        0x00
+#define UART_LSR        0x05
+#define UART_LSR_THRE   0x20
+
+    .macro UART_PUTC reg
+    li      t5, VIRT_UART0_BASE
+1:
+    lbu     t6, UART_LSR(t5)
+    andi    t6, t6, UART_LSR_THRE
+    beqz    t6, 1b
+    sb      \reg, UART_THR(t5)
+    .endm
+
+    .section .text
+    .align 2
+
+    .section .bss
+    .align 3
+phys_copy_trace_once:
+    .quad 0
 
     .section .text
     .align 2
@@ -28,6 +50,20 @@ phys_copy:
     addi    sp, sp, -16
     sd      ra, 8(sp)
     sd      s0, 0(sp)
+    li      s0, 0
+
+    /* One-time trace for a typical 1KB kernel->VM copy. */
+    li      t3, 0x400
+    bne     a2, t3, .Ltrace_done
+    la      t3, phys_copy_trace_once
+    ld      t4, 0(t3)
+    bnez    t4, .Ltrace_done
+    li      t4, 1
+    sd      t4, 0(t3)
+    li      s0, 1
+    li      t4, 'C'
+    UART_PUTC t4
+.Ltrace_done:
 
     /* Check for zero length */
     beqz    a2, .Lcopy_done
@@ -47,8 +83,8 @@ phys_copy:
 
 .Lcopy_dword:
     /* Copy 8 bytes at a time */
-    ld      t0, 0(a0)
-    sd      t0, 0(a1)
+    ld      t1, 0(a0)
+    sd      t1, 0(a1)
     addi    a0, a0, 8
     addi    a1, a1, 8
     addi    a2, a2, -8
@@ -67,6 +103,10 @@ phys_copy:
     bnez    a2, .Lcopy_byte
 
 .Lcopy_done:
+    beqz    s0, .Lcopy_done_ret
+    li      t4, 'c'
+    UART_PUTC t4
+.Lcopy_done_ret:
     /* Success - return 0 */
     li      a0, 0
     ld      s0, 0(sp)
@@ -75,6 +115,10 @@ phys_copy:
     ret
 
 .Lcopy_fault:
+    beqz    s0, .Lcopy_fault_ret
+    li      t4, 'F'
+    UART_PUTC t4
+.Lcopy_fault_ret:
     /* Page fault during copy - return error */
     li      a0, -1
     ld      s0, 0(sp)

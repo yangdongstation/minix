@@ -27,6 +27,7 @@
 #include <minix/hash.h>
 
 #include "proto.h"
+#include "util.h"
 #include "vm.h"
 #include "fdref.h"
 #include "vmproc.h"
@@ -48,11 +49,11 @@ void fdref_sanitycheck(void)
 			if(fr == fr2) continue;
 			if(fr->fd == fr2->fd) {
 				printf("equal fd omg\n");
-				util_stacktrace();
+				VM_STACKTRACE();
 			}
 			if(fr->ino == fr2->ino && fr->dev == fr2->dev) {
 				printf("equal metadata omg\n");
-				util_stacktrace();
+				VM_STACKTRACE();
 			}
 		}
 		openfd++;
@@ -80,7 +81,7 @@ void fdref_sanitycheck(void)
 		if(fr->counting != fr->refcount) {
 			printf("counting %d != refcount %d\n",
 				fr->counting, fr->refcount);
-			util_stacktrace();
+			VM_STACKTRACE();
 		}
 	}
 
@@ -174,4 +175,3 @@ struct fdref *fdref_dedup_or_new(struct vmproc *owner,
 
 	return fdref_new(owner, ino, dev, fd);
 }
-

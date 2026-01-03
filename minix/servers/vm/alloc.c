@@ -54,7 +54,7 @@ struct {
 #define page_isfree(i) GET_BIT(free_pages_bitmap, i)
 
 #define RESERVEDMAGIC		0x6e4c74d5
-#define MAXRESERVEDPAGES	300
+#define MAXRESERVEDPAGES	1024
 #define MAXRESERVEDQUEUES	 15
 
 static struct reserved_pages {
@@ -531,7 +531,7 @@ int usedpages_add_f(phys_bytes addr, phys_bytes len, const char *file, int line)
 			if(warnings++ < 100)
 				printf("%s:%d: usedpages_add: addr 0x%lx reused, first %s:%d\n",
 					file, line, thisaddr, pagemap[pagestart].file, pagemap[pagestart].line);
-			util_stacktrace();
+			VM_STACKTRACE();
 			return EFAULT;
 		}
 		pagemap[pagestart].used = 1;
@@ -545,4 +545,3 @@ int usedpages_add_f(phys_bytes addr, phys_bytes len, const char *file, int line)
 }
 
 #endif
-

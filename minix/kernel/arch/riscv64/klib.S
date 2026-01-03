@@ -68,7 +68,7 @@ restore_user_context:
     /* Restore user sp last */
     ld      sp, TF_SP(sp)
 
-    sret
+    .word   RISCV_SRET_INSN
 
 /*
  * void save_fpu(struct proc *p)

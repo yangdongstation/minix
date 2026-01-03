@@ -88,6 +88,7 @@
 /* Encoded instructions for older assemblers */
 #define RISCV_WFI_INSN      0x10500073
 #define RISCV_SFENCE_VMA_INSN 0x12000073
+#define RISCV_SRET_INSN     0x10200073
 
 /* RISC-V CSR bits */
 

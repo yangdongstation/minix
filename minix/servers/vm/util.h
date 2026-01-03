@@ -7,5 +7,7 @@
 
 #define ELEMENTS(a) (int)(sizeof(a)/sizeof((a)[0]))
 
-#endif
+void vm_stacktrace_at(const char *file, int line);
+#define VM_STACKTRACE() vm_stacktrace_at(__FILE__, __LINE__)
 
+#endif

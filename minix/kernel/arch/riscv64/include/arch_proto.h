@@ -83,8 +83,15 @@ void pg_unmap(vir_bytes virt, size_t size);
 void pg_identity_map(phys_bytes start, phys_bytes end);
 void pg_flush_tlb(void);
 void pg_load(struct proc *p);
+void pg_dump_mapping(vir_bytes va);
 phys_bytes pg_create(void);
 void add_memmap(kinfo_t *cbi, u64_t addr, u64_t len);
+
+/* arch_do_vmctl.c */
+void set_pgdir(phys_bytes pgdir);
+
+/* arch_system.c */
+void riscv64_switch_address_space(struct proc *p);
 
 /* phys_copy.S */
 phys_bytes phys_copy(phys_bytes src, phys_bytes dst, phys_bytes size);

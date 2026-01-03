@@ -33,6 +33,7 @@
  */
 
 #include "kernel/system.h"
+#include "arch_proto.h"
 #include "kernel/vm.h"
 #include "kernel/clock.h"
 #include <stdlib.h>
@@ -43,6 +44,27 @@
 #include <minix/endpoint.h>
 #include <minix/safecopies.h>
 
+#ifdef __riscv64
+/* Stack layout for sys_exit/_kernel_call with current build flags. */
+#define KCALL_RA_OFFSET 40
+#define KCALL_FRAME_SIZE 48
+#define SYS_EXIT_RA_OFFSET 216
+#define SYS_EXIT_FRAME_SIZE 224
+#define SEF_EXIT_RA_OFFSET 152
+#define SEF_EXIT_FRAME_SIZE 160
+#define PANIC_FRAME_SIZE 400
+#define PANIC_RA_OFFSET 328
+#define ASSERT_RA_OFFSET 8
+#define SYS_EXIT_CALLER_RA_OFFSET (KCALL_FRAME_SIZE + SYS_EXIT_RA_OFFSET)
+#define SEF_EXIT_CALLER_RA_OFFSET \
+	(KCALL_FRAME_SIZE + SYS_EXIT_FRAME_SIZE + SEF_EXIT_RA_OFFSET)
+#define PANIC_CALLER_RA_OFFSET \
+	(KCALL_FRAME_SIZE + SYS_EXIT_FRAME_SIZE + SEF_EXIT_FRAME_SIZE + \
+	PANIC_RA_OFFSET)
+#define ASSERT_CALLER_RA_OFFSET \
+	(KCALL_FRAME_SIZE + SYS_EXIT_FRAME_SIZE + SEF_EXIT_FRAME_SIZE + \
+	PANIC_FRAME_SIZE + ASSERT_RA_OFFSET)
+#endif
 /* Declaration of the call vector that defines the mapping of system calls
  * to handler functions. The vector is initialized in sys_init() with map(),
  * which makes sure the system call numbers are ok. No space is allocated,
@@ -58,6 +80,32 @@ static int (*call_vec[NR_SYS_CALLS])(struct proc * caller, message *m_ptr);
 
 static void kernel_call_finish(struct proc * caller, message *msg, int result)
 {
+#ifdef __riscv64
+  static int kcall_result_trace_count;
+  static int kcall_vmctl_trace_count;
+#endif
+
+#ifdef __riscv64
+  if (msg->m_type == SYS_GETINFO && kcall_result_trace_count < 64) {
+	  direct_print("rv64: kcall GETINFO req=");
+	  direct_print_hex((u64_t)msg->m_lsys_krn_sys_getinfo.request);
+	  direct_print(" res=");
+	  direct_print_hex((u64_t)result);
+	  direct_print("\n");
+	  kcall_result_trace_count++;
+  }
+  if (msg->m_type == SYS_VMCTL && kcall_vmctl_trace_count < 8) {
+	  direct_print("rv64: kcall VMCTL param=");
+	  direct_print_hex((u64_t)msg->SVMCTL_PARAM);
+	  direct_print(" who=");
+	  direct_print_hex((u64_t)msg->SVMCTL_WHO);
+	  direct_print(" res=");
+	  direct_print_hex((u64_t)result);
+	  direct_print("\n");
+	  kcall_vmctl_trace_count++;
+  }
+#endif
+
   if(result == VMSUSPEND) {
 	  /* Special case: message has to be saved for handling
 	   * until VM tells us it's allowed. VM has been notified
@@ -137,6 +185,9 @@ void kernel_call(message *m_user, struct proc * caller)
 {
   int result = OK;
   message msg;
+#ifdef __riscv64
+  static int kcall_trace_count;
+#endif
 
   caller->p_delivermsg_vir = (vir_bytes) m_user;
   /*
@@ -145,6 +196,73 @@ void kernel_call(message *m_user, struct proc * caller)
    * execution of an interrupted kernel call
    */
   if (copy_msg_from_user(m_user, &msg) == 0) {
+#ifdef __riscv64
+	  if (msg.m_type == SYS_EXIT) {
+		  reg_t kcall_ra = 0;
+		  reg_t sys_exit_ra = 0;
+		  reg_t caller_ra = 0;
+		  reg_t sef_exit_caller_ra = 0;
+		  reg_t panic_caller_ra = 0;
+		  reg_t assert_caller_ra = 0;
+		  int kcall_copy = data_copy_vmcheck(caller, caller->p_endpoint,
+		      caller->p_reg.sp + KCALL_RA_OFFSET, KERNEL,
+		      (vir_bytes)&kcall_ra, sizeof(kcall_ra));
+		  int sys_exit_copy = data_copy_vmcheck(caller, caller->p_endpoint,
+		      caller->p_reg.sp + SYS_EXIT_RA_OFFSET, KERNEL,
+		      (vir_bytes)&sys_exit_ra, sizeof(sys_exit_ra));
+		  int caller_copy = data_copy_vmcheck(caller, caller->p_endpoint,
+		      caller->p_reg.sp + SYS_EXIT_CALLER_RA_OFFSET, KERNEL,
+		      (vir_bytes)&caller_ra, sizeof(caller_ra));
+		  int sef_exit_copy = data_copy_vmcheck(caller, caller->p_endpoint,
+		      caller->p_reg.sp + SEF_EXIT_CALLER_RA_OFFSET, KERNEL,
+		      (vir_bytes)&sef_exit_caller_ra, sizeof(sef_exit_caller_ra));
+		  int panic_copy = data_copy_vmcheck(caller, caller->p_endpoint,
+		      caller->p_reg.sp + PANIC_CALLER_RA_OFFSET, KERNEL,
+		      (vir_bytes)&panic_caller_ra, sizeof(panic_caller_ra));
+		  int assert_copy = data_copy_vmcheck(caller, caller->p_endpoint,
+		      caller->p_reg.sp + ASSERT_CALLER_RA_OFFSET, KERNEL,
+		      (vir_bytes)&assert_caller_ra, sizeof(assert_caller_ra));
+
+		  direct_print("rv64: kcall SYS_EXIT caller=");
+		  direct_print(caller->p_name);
+		  direct_print("/");
+		  direct_print_hex((u64_t)caller->p_endpoint);
+		  direct_print(" kcall_ra=");
+		  if (kcall_copy == OK) direct_print_hex((u64_t)kcall_ra);
+		  else direct_print("copyfail");
+		  direct_print(" sys_exit_ra=");
+		  if (sys_exit_copy == OK) direct_print_hex((u64_t)sys_exit_ra);
+		  else direct_print("copyfail");
+		  direct_print(" caller_ra=");
+		  if (caller_copy == OK) direct_print_hex((u64_t)caller_ra);
+		  else direct_print("copyfail");
+		  direct_print(" sef_exit_ra=");
+		  if (sef_exit_copy == OK) direct_print_hex((u64_t)sef_exit_caller_ra);
+		  else direct_print("copyfail");
+		  direct_print(" panic_ra=");
+		  if (panic_copy == OK) direct_print_hex((u64_t)panic_caller_ra);
+		  else direct_print("copyfail");
+		  direct_print(" assert_ra=");
+		  if (assert_copy == OK) direct_print_hex((u64_t)assert_caller_ra);
+		  else direct_print("copyfail");
+		  direct_print("\n");
+	  }
+  if (kcall_trace_count < 64) {
+		  direct_print("rv64: kcall m_ptr=");
+		  direct_print_hex((u64_t)(uintptr_t)m_user);
+		  direct_print(" type=");
+		  direct_print_hex((u64_t)msg.m_type);
+		  direct_print(" src=");
+		  direct_print_hex((u64_t)msg.m_source);
+		  if (msg.m_type == SYS_GETINFO) {
+			  direct_print(" req=");
+			  direct_print_hex((u64_t)
+				  msg.m_lsys_krn_sys_getinfo.request);
+		  }
+		  direct_print("\n");
+		  kcall_trace_count++;
+	  }
+#endif
 	  msg.m_source = caller->p_endpoint;
 	  result = kernel_call_dispatch(caller, &msg);
   }
@@ -415,6 +533,25 @@ void cause_sig(proc_nr_t proc_nr, int sig_nr)
   /* If the target is the signal manager of itself, send the signal directly. */
   if(rp->p_endpoint == sig_mgr) {
        if(SIGS_IS_LETHAL(sig_nr)) {
+#ifdef __riscv64
+           {
+               static int sigabort_trace_count;
+               if (sig_nr == SIGABRT && sigabort_trace_count < 4) {
+                   direct_print("rv64: cause_sig target=");
+                   direct_print(rp->p_name);
+                   direct_print("/");
+                   direct_print_hex((u64_t)rp->p_endpoint);
+                   direct_print(" pc=");
+                   direct_print_hex((u64_t)rp->p_reg.pc);
+                   direct_print(" sp=");
+                   direct_print_hex((u64_t)rp->p_reg.sp);
+                   direct_print(" ra=");
+                   direct_print_hex((u64_t)rp->p_reg.ra);
+                   direct_print("\n");
+                   sigabort_trace_count++;
+               }
+           }
+#endif
            /* If the signal is lethal, see if a backup signal manager exists. */
            sig_mgr = priv(rp)->s_bak_sig_mgr;
            if(sig_mgr != NONE && isokendpt(sig_mgr, &sig_mgr_proc_nr)) {
@@ -994,4 +1131,3 @@ int priv_add_mem(struct proc *rp, struct minix_mem_range *memr)
 	priv->s_nr_mem_range++;
 	return OK;
 }
-

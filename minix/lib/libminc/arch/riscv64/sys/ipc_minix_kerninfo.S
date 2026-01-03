@@ -14,9 +14,11 @@ ENTRY(_minix_kerninfo)
     /* Save argument */
     mv      t0, a0              /* t0 = pointer to store result */
 
-    /* Call kernel to get info */
-    li      a0, 0               /* Request kerninfo */
-    li      a7, KERVEC_INTR     /* Kernel call vector */
+    /* Call kernel to get info via IPC */
+    li      a0, 0               /* no endpoint */
+    li      a1, 0               /* no message */
+    li      a2, MINIX_KERNINFO  /* IPC request */
+    li      a7, IPCVEC_INTR     /* IPC syscall vector */
     ecall
 
     /* Store result if pointer is not NULL */

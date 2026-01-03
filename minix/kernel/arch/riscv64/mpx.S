@@ -106,20 +106,15 @@ context_init:
     ret
 
 /*
- * void switch_address_space(phys_bytes pgdir)
+ * void switch_address_space(struct proc *p)
  *
  * Switch to a different address space
  */
+    .extern riscv64_switch_address_space
     .globl switch_address_space
     .type switch_address_space, @function
 switch_address_space:
-    /* Convert physical address to SATP value */
-    srli    a0, a0, 12          /* PPN = addr >> 12 */
-    li      t0, SATP_MODE_SV39
-    or      a0, a0, t0
-    csrw    CSR_SATP, a0
-    .word   RISCV_SFENCE_VMA_INSN   /* Flush TLB */
-    ret
+    j       riscv64_switch_address_space
 
 /*
  * void flush_tlb(void)

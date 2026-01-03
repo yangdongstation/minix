@@ -10,6 +10,7 @@
 #include "arch_proto.h"
 #include "kernel/vm.h"
 #include <assert.h>
+#include <stdint.h>
 #include <string.h>
 
 #define PAGE_SIZE RISCV_PAGE_SIZE
@@ -47,6 +48,13 @@ static phys_bytes mem_high;     /* End of usable memory */
 
 /* Simple page allocator */
 static phys_bytes free_page_list;
+
+static u64_t *get_pgdir(struct proc *p)
+{
+    if (p && p->p_seg.p_satp_v)
+        return (u64_t *)p->p_seg.p_satp_v;
+    return _boot_pgdir;
+}
 
 /*
  * Initialize memory management
@@ -134,6 +142,37 @@ static u64_t *walk_pt(u64_t *pgdir, vir_bytes va, int create)
             /* Install in parent */
             pt[idx] = PA_TO_PTE(new_pt);
             pte = pt[idx];
+        } else if (pte & (PTE_R | PTE_W | PTE_X)) {
+            phys_bytes new_pt;
+            phys_bytes base;
+            phys_bytes child_size;
+            u64_t flags;
+            int i;
+
+            if (!create)
+                return NULL;
+
+            /* Split large-page leaf so we can map smaller pages. */
+            new_pt = page_alloc();
+            if (new_pt == 0)
+                return NULL;
+
+            memset((void *)new_pt, 0, PAGE_SIZE);
+
+            base = PTE_TO_PA(pte);
+            flags = pte & (PTE_R | PTE_W | PTE_X | PTE_U |
+                PTE_G | PTE_A | PTE_D);
+            child_size = (phys_bytes)1ULL <<
+                (RISCV_PAGE_SHIFT + (level - 1) * RISCV_PTE_SHIFT);
+
+            for (i = 0; i < PT_ENTRIES; i++) {
+                ((u64_t *)new_pt)[i] =
+                    PA_TO_PTE(base + (phys_bytes)i * child_size) |
+                    flags;
+            }
+
+            pt[idx] = PA_TO_PTE(new_pt);
+            pte = pt[idx];
         }
 
         /* Get next level page table */
@@ -154,12 +193,7 @@ int vm_map_range(struct proc *p, phys_bytes phys, vir_bytes vir,
     u64_t pte_flags;
 
     /* Get process page directory */
-    if (p == NULL) {
-        pgdir = _boot_pgdir;
-    } else {
-        /* TODO: Get from proc structure */
-        pgdir = _boot_pgdir;
-    }
+    pgdir = get_pgdir(p);
 
     /* Convert MINIX VMMF_* flags to RISC-V PTE flags */
     pte_flags = PTE_V | PTE_A | PTE_D | PTE_R | PTE_X;
@@ -193,11 +227,7 @@ void vm_unmap_range(struct proc *p, vir_bytes vir, size_t bytes)
     u64_t *pgdir;
     size_t offset;
 
-    if (p == NULL) {
-        pgdir = _boot_pgdir;
-    } else {
-        pgdir = _boot_pgdir;
-    }
+    pgdir = get_pgdir(p);
 
     for (offset = 0; offset < bytes; offset += PAGE_SIZE) {
         u64_t *pte = walk_pt(pgdir, vir + offset, 0);
@@ -224,22 +254,44 @@ void vm_init(struct proc *newptproc)
 phys_bytes umap_local(struct proc *p, int seg, vir_bytes vir, vir_bytes bytes)
 {
     u64_t *pgdir;
-    u64_t *pte;
+    u64_t *pt;
+    u64_t pte;
+    int level;
 
     (void)seg;
     (void)bytes;
 
-    if (p == NULL) {
-        pgdir = _boot_pgdir;
-    } else {
-        pgdir = _boot_pgdir;
+    pgdir = get_pgdir(p);
+
+    pt = pgdir;
+    for (level = 2; level >= 0; level--) {
+        int idx;
+        phys_bytes page_size;
+
+        switch (level) {
+        case 2: idx = VPN2(vir); break;
+        case 1: idx = VPN1(vir); break;
+        default: idx = VPN0(vir); break;
+        }
+
+        pte = pt[idx];
+        if (!(pte & PTE_V))
+            return 0;
+
+        if (pte & (PTE_R | PTE_W | PTE_X)) {
+            /* Leaf PTE: compute physical address for large pages too. */
+            page_size = (phys_bytes)1ULL <<
+                (RISCV_PAGE_SHIFT + level * RISCV_PTE_SHIFT);
+            return PTE_TO_PA(pte) | (vir & (page_size - 1));
+        }
+
+        if (level == 0)
+            return 0;
+
+        pt = (u64_t *)PTE_TO_PA(pte);
     }
 
-    pte = walk_pt(pgdir, vir, 0);
-    if (pte == NULL || !(*pte & PTE_V))
-        return 0;
-
-    return PTE_TO_PA(*pte) | (vir & (PAGE_SIZE - 1));
+    return 0;
 }
 
 /*===========================================================================*
@@ -387,6 +439,10 @@ int virtual_copy_f(struct proc *caller, struct vir_addr *src_addr,
     struct proc *procs[2];
     struct vir_addr *vir_addr[2];
     int i, r;
+#ifdef __riscv64
+    static int vcopy_trace_once;
+    int trace = 0;
+#endif
 
     if (bytes <= 0)
         return EDOM;
@@ -412,6 +468,24 @@ int virtual_copy_f(struct proc *caller, struct vir_addr *src_addr,
     if ((r = check_resumed_caller(caller)) != OK)
         return r;
 
+#ifdef __riscv64
+    if (caller && caller->p_endpoint == VM_PROC_NR &&
+        src_addr->proc_nr_e == KERNEL &&
+        dst_addr->proc_nr_e == caller->p_endpoint &&
+        bytes == 0x400 && vcopy_trace_once == 0) {
+        trace = 1;
+        direct_print("rv64: vcopy start dst=");
+        direct_print_hex((u64_t)dst_addr->offset);
+        direct_print(" src=");
+        direct_print_hex((u64_t)src_addr->offset);
+        direct_print(" bytes=");
+        direct_print_hex((u64_t)bytes);
+        direct_print(" vmcheck=");
+        direct_print_hex((u64_t)vmcheck);
+        direct_print("\n");
+    }
+#endif
+
     vir_bytes src_off = src_addr->offset;
     vir_bytes dst_off = dst_addr->offset;
     vir_bytes left = bytes;
@@ -427,6 +501,17 @@ int virtual_copy_f(struct proc *caller, struct vir_addr *src_addr,
 
         src_phys = procs[_SRC_] ?
             umap_local(procs[_SRC_], 0, src_off, chunk) : src_off;
+#ifdef __riscv64
+        if (trace) {
+            direct_print("rv64: vcopy src_phys=");
+            direct_print_hex((u64_t)src_phys);
+            direct_print(" src_off=");
+            direct_print_hex((u64_t)src_off);
+            direct_print(" chunk=");
+            direct_print_hex((u64_t)chunk);
+            direct_print("\n");
+        }
+#endif
         if (!src_phys) {
             if (vmcheck && caller) {
                 vm_suspend(caller, procs[_SRC_], src_off, bytes,
@@ -438,6 +523,15 @@ int virtual_copy_f(struct proc *caller, struct vir_addr *src_addr,
 
         dst_phys = procs[_DST_] ?
             umap_local(procs[_DST_], 0, dst_off, chunk) : dst_off;
+#ifdef __riscv64
+        if (trace) {
+            direct_print("rv64: vcopy dst_phys=");
+            direct_print_hex((u64_t)dst_phys);
+            direct_print(" dst_off=");
+            direct_print_hex((u64_t)dst_off);
+            direct_print("\n");
+        }
+#endif
         if (!dst_phys) {
             if (vmcheck && caller) {
                 vm_suspend(caller, procs[_DST_], dst_off, bytes,
@@ -448,6 +542,11 @@ int virtual_copy_f(struct proc *caller, struct vir_addr *src_addr,
         }
 
         if (phys_copy(src_phys, dst_phys, chunk) != 0) {
+#ifdef __riscv64
+            if (trace) {
+                direct_print("rv64: vcopy phys_copy fault\n");
+            }
+#endif
             if (vmcheck && caller) {
                 vm_suspend(caller, procs[_DST_], dst_off, bytes,
                     VMSTYPE_KERNELCALL, 1);
@@ -460,6 +559,13 @@ int virtual_copy_f(struct proc *caller, struct vir_addr *src_addr,
         src_off += chunk;
         dst_off += chunk;
     }
+
+#ifdef __riscv64
+    if (trace) {
+        direct_print("rv64: vcopy done\n");
+        vcopy_trace_once = 1;
+    }
+#endif
 
     return OK;
 }
@@ -512,7 +618,10 @@ void arch_proc_init(struct proc *pr, const u32_t ip, const u32_t sp,
 
 	pr->p_reg.pc = ip;
 	pr->p_reg.sp = sp;
-	pr->p_reg.retreg = ps_str;
+	/* __start(cleanup, obj, ps_strings): a0/a1 = NULL, a2 = ps_strings. */
+	pr->p_reg.a0 = 0;
+	pr->p_reg.a1 = 0;
+	pr->p_reg.a2 = ps_str;
 }
 
 static int usermapped_glo_index = -1,
@@ -568,11 +677,12 @@ int arch_phys_map(const int index, phys_bytes *addr, phys_bytes *len,
 int arch_phys_map_reply(const int index, const vir_bytes addr)
 {
 	if (index == first_um_idx) {
-		vir_bytes usermapped_offset;
+		intptr_t usermapped_offset;
 
-		assert(addr > (vir_bytes)&usermapped_start);
-		usermapped_offset = addr - (vir_bytes)&usermapped_start;
-#define FIXEDPTR(ptr) (void *)((vir_bytes)(ptr) + usermapped_offset)
+		assert(addr != 0);
+		usermapped_offset =
+			(intptr_t)addr - (intptr_t)(vir_bytes)&usermapped_start;
+#define FIXEDPTR(ptr) (void *)((intptr_t)(ptr) + usermapped_offset)
 #define ASSIGN(minixstruct) minix_kerninfo.minixstruct = FIXEDPTR(&minixstruct)
 		ASSIGN(kinfo);
 		ASSIGN(machine);

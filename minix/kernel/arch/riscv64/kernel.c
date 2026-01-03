@@ -39,6 +39,8 @@ static void riscv64_init_kinfo(void)
 	kinfo.user_sp = (vir_bytes)USR_STACKTOP;
 	kinfo.user_end = (vir_bytes)USR_DATATOP;
 	kinfo.vir_kern_start = (vir_bytes)KERNEL_BASE;
+	/* Reserve user space (0-3) and early identity mappings (0,2). */
+	kinfo.freepde_start = 4;
 	kinfo.serial_debug_baud = 115200;
 
 	kinfo.bootstrap_start = (vir_bytes)&__k_unpaged__kern_unpaged_start;

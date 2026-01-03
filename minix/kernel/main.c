@@ -38,6 +38,9 @@ static void announce(void);
 void bsp_finish_booting(void)
 {
   int i;
+#ifdef __riscv64
+  direct_print("rv64: finish_booting start\n");
+#endif
 #if SPROFILE
   sprofiling = 0;      /* we're not profiling until instructed to */
 #endif /* SPROFILE */
@@ -55,12 +58,21 @@ void bsp_finish_booting(void)
   /* it should point somewhere */
   get_cpulocal_var(bill_ptr) = get_cpulocal_var_ptr(idle_proc);
   get_cpulocal_var(proc_ptr) = get_cpulocal_var_ptr(idle_proc);
+#ifdef __riscv64
+  direct_print("rv64: finish_booting announce\n");
+#endif
   announce();				/* print MINIX startup banner */
+#ifdef __riscv64
+  direct_print("rv64: finish_booting announce done\n");
+#endif
 
   /*
    * we have access to the cpu local run queue, only now schedule the processes.
    * We ignore the slots for the former kernel tasks
    */
+#ifdef __riscv64
+  direct_print("rv64: finish_booting schedule\n");
+#endif
   for (i=0; i < NR_BOOT_PROCS - NR_TASKS; i++) {
 	RTS_UNSET(proc_addr(i), RTS_PROC_STOP);
   }
@@ -68,12 +80,18 @@ void bsp_finish_booting(void)
    * Enable timer interrupts and clock task on the boot CPU.  First reset the
    * CPU accounting values, as the timer initialization (indirectly) uses them.
    */
+#ifdef __riscv64
+  direct_print("rv64: finish_booting timer\n");
+#endif
   cycles_accounting_init();
 
   if (boot_cpu_init_timer(system_hz)) {
 	  panic("FATAL : failed to initialize timer interrupts, "
 			  "cannot continue without any clock source!");
   }
+#ifdef __riscv64
+  direct_print("rv64: finish_booting timer done\n");
+#endif
 
   fpu_init();
 
@@ -104,6 +122,9 @@ void bsp_finish_booting(void)
   /* Kernel may no longer use bits of memory as VM will be running soon */
   kernel_may_alloc = 0;
 
+#ifdef __riscv64
+  direct_print("rv64: finish_booting switch\n");
+#endif
   switch_to_user();
   NOT_REACHABLE;
 }
@@ -209,6 +230,9 @@ void kmain(kinfo_t *local_cbi)
 		NR_BOOT_MODULES, kinfo.mbi.mi_mods_count);
 
   /* Set up proc table entries for processes in boot image. */
+#ifdef __riscv64
+  direct_print("rv64: boot procs init start\n");
+#endif
   for (i=0; i < NR_BOOT_PROCS; ++i) {
 	int schedulable_proc;
 	proc_nr_t proc_nr;
@@ -317,9 +341,15 @@ void kmain(kinfo_t *local_cbi)
 	rp->p_rts_flags &= ~RTS_SLOT_FREE;
 	DEBUGEXTRA(("done\n"));
   }
+#ifdef __riscv64
+  direct_print("rv64: boot procs init done\n");
+#endif
 
   /* update boot procs info for VM */
   memcpy(kinfo.boot_procs, image, sizeof(kinfo.boot_procs));
+#ifdef __riscv64
+  direct_print("rv64: boot procs updated\n");
+#endif
 
 #define IPCNAME(n) { \
 	assert((n) >= 0 && (n) <= IPCNO_HIGHEST); \
@@ -327,6 +357,9 @@ void kmain(kinfo_t *local_cbi)
 	ipc_call_names[n] = #n; \
 }
 
+#ifdef __riscv64
+  direct_print("rv64: arch_post_init start\n");
+#endif
   arch_post_init();
 #ifdef __riscv64
   direct_print("rv64: arch_post_init\n");
@@ -340,17 +373,29 @@ void kmain(kinfo_t *local_cbi)
   IPCNAME(SENDA);
 
   /* System and processes initialization */
+#ifdef __riscv64
+  direct_print("rv64: memory_init start\n");
+#endif
   memory_init();
 #ifdef __riscv64
   direct_print("rv64: memory_init\n");
 #endif
+#ifdef __riscv64
+  direct_print("rv64: system_init start\n");
+#endif
   DEBUGEXTRA(("system_init()... "));
   system_init();
+#ifdef __riscv64
+  direct_print("rv64: system_init done\n");
+#endif
   DEBUGEXTRA(("done\n"));
 
   /* The bootstrap phase is over, so we can add the physical
    * memory used for it to the free list.
    */
+#ifdef __riscv64
+  direct_print("rv64: add_memmap\n");
+#endif
   add_memmap(&kinfo, kinfo.bootstrap_start, kinfo.bootstrap_len);
 
 #ifdef CONFIG_SMP
@@ -374,6 +419,9 @@ void kmain(kinfo_t *local_cbi)
    * are going to use everytime we execute kernel code. We finish booting and we
    * never return here
    */
+#ifdef __riscv64
+  direct_print("rv64: bsp_finish_booting\n");
+#endif
   bsp_finish_booting();
 #endif
 

@@ -316,6 +316,24 @@ void sef_exit(int status)
 /* System services use a special version of exit() that generates a
  * self-termination signal.
  */
+#ifdef __riscv64
+  {
+	static int sef_exit_trace_count;
+	void *ra = __builtin_return_address(0);
+
+	if (sef_exit_trace_count < 4) {
+		char buf[128];
+		int len;
+
+		len = snprintf(buf, sizeof(buf),
+		    "rv64: sef_exit status=%d ep=%d name=%s ra=%p\n",
+		    status, sef_self_endpoint, sef_self_name, ra);
+		if (len > 0)
+			sys_diagctl_diag(buf, len);
+		sef_exit_trace_count++;
+	}
+  }
+#endif
 
   /* Ask the kernel to exit. */
   sys_exit();

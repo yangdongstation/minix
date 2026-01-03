@@ -4,6 +4,7 @@
 #include <assert.h>
 
 #include "proto.h"
+#include "util.h"
 #include "vm.h"
 #include "region.h"
 #include "glo.h"
@@ -64,13 +65,13 @@ static int getsrc(struct vir_region *region,
 
 	if(!region->param.shared.ep || !region->param.shared.vaddr) {
 		printf("shared region has not defined source region.\n");
-		util_stacktrace();
+		VM_STACKTRACE();
 		return EINVAL;
 	}
 
         if(vm_isokendpt((endpoint_t) region->param.shared.ep, &srcproc) != OK) {
 		printf("VM: shared memory with missing source process.\n");
-		util_stacktrace();
+		VM_STACKTRACE();
                 return EINVAL;
 	}
 
@@ -208,4 +209,3 @@ static int shared_refcount(struct vir_region *vr)
 {
 	return 1 + vr->remaps;
 }
-

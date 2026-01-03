@@ -10,11 +10,20 @@
 /* A pagetable. */
 typedef struct {
 	/* Directory entries in VM addr space - root of page table.  */
+#if defined(__riscv64__)
+	u64_t *pt_dir;		/* page aligned (ARCH_VM_DIR_ENTRIES) */
+#else
 	u32_t *pt_dir;		/* page aligned (ARCH_VM_DIR_ENTRIES) */
-	u32_t pt_dir_phys;	/* physical address of pt_dir */
+#endif
+	phys_bytes pt_dir_phys;	/* physical address of pt_dir */
 
 	/* Pointers to page tables in VM address space. */
+#if defined(__riscv64__)
+	u64_t *pt_pt[ARCH_VM_DIR_ENTRIES];
+	u64_t **pt_pt_l0[ARCH_VM_DIR_ENTRIES];
+#else
 	u32_t *pt_pt[ARCH_VM_DIR_ENTRIES];
+#endif
 
 	/* When looking for a hole in virtual address space, start
 	 * looking here. This is in linear addresses, i.e.,

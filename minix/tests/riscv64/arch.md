@@ -188,6 +188,49 @@ run_category() {
 - **vm**: Virtual memory tests
 - **all**: Complete test suite
 
+## Build and Run Steps (RISC-V 64)
+
+### Prerequisites
+- RISC-V cross toolchain in PATH (`riscv64-unknown-elf-gcc` or `riscv64-linux-gnu-gcc`)
+- QEMU (`qemu-system-riscv64`) for kernel-level tests
+- DESTDIR at `obj/destdir.evbriscv64` (built via `build.sh`)
+
+### Typical build flow
+```bash
+# Build cross tools
+MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no ./build.sh -U -m evbriscv64 tools
+
+# Build full system (example settings for bare-metal toolchains)
+MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
+./build.sh -m evbriscv64 \
+  -V RISCV_ARCH_FLAGS='-march=RV64IMAFD -mcmodel=medany' \
+  -V MKPIC=no -V MKPICLIB=no -V MKPICINSTALL=no \
+  -V MKCXX=no -V MKLIBSTDCXX=no \
+  distribution
+```
+
+### Run tests
+```bash
+./minix/tests/riscv64/run_tests.sh all
+```
+
+Kernel tests boot via `minix/scripts/qemu-riscv64.sh` and pass
+`-B obj/destdir.evbriscv64` to load modules from the build DESTDIR.
+Logs go to `/tmp/boot_test.log`, `/tmp/smp_test.log`, and `/tmp/timer_test.log`.
+
+### Known skips in `run_tests.sh`
+- `SMP initialization` (reported as SKIP until SMP support is implemented)
+- `Timer interrupt` (reported as SKIP until timer test output is wired)
+- Kernel tests are skipped entirely if QEMU, `DESTDIR`, or `python3` is missing
+
+### QEMU boot smoke test
+```bash
+./minix/scripts/qemu-riscv64.sh \
+  -k minix/kernel/obj/kernel \
+  -B obj/destdir.evbriscv64 \
+  -i minix/drivers/storage/ramdisk/obj/image
+```
+
 ## RISC-V Specific Features
 
 ### Hardware Detection

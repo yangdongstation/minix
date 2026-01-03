@@ -23,6 +23,10 @@
 #define PTE_A       (1UL << 6)
 #define PTE_D       (1UL << 7)
 
+#define UART_THR        0x00
+#define UART_LSR        0x05
+#define UART_LSR_THRE   0x20
+
 #define PAGE_SIZE RISCV_PAGE_SIZE
 
 /* Extract VPN fields from virtual address */
@@ -39,6 +43,15 @@ extern u64_t _boot_pgdir[];
 #ifndef MULTIBOOT_MEMORY_AVAILABLE
 #define MULTIBOOT_MEMORY_AVAILABLE 1
 #endif
+
+static inline void early_uart_putc(int c)
+{
+	volatile u8_t *uart = (volatile u8_t *)VIRT_UART0_BASE;
+
+	while ((uart[UART_LSR] & UART_LSR_THRE) == 0)
+		;
+	uart[UART_THR] = (u8_t)c;
+}
 
 static phys_bytes pg_alloc_page(kinfo_t *cbi)
 {
@@ -85,6 +98,34 @@ static u64_t *pg_walk(u64_t *pgdir, vir_bytes va, int create)
 
 			new_pt = pg_alloc_page(&kinfo);
 			memset((void *)new_pt, 0, PAGE_SIZE);
+			pt[idx] = PA_TO_PTE(new_pt) | PTE_V;
+			pte = pt[idx];
+		} else if (pte & (PTE_R | PTE_W | PTE_X)) {
+			phys_bytes new_pt;
+			phys_bytes base;
+			phys_bytes child_size;
+			u64_t flags;
+			int i;
+
+			if (!create)
+				return NULL;
+
+			/* Split large-page leaf so we can map smaller pages. */
+			new_pt = pg_alloc_page(&kinfo);
+			memset((void *)new_pt, 0, PAGE_SIZE);
+
+			base = PTE_TO_PA(pte);
+			flags = pte & (PTE_R | PTE_W | PTE_X | PTE_U |
+				PTE_G | PTE_A | PTE_D);
+			child_size = (phys_bytes)1ULL <<
+				(RISCV_PAGE_SHIFT + (level - 1) * RISCV_PTE_SHIFT);
+
+			for (i = 0; i < RISCV_PTES_PER_PT; i++) {
+				((u64_t *)new_pt)[i] =
+					PA_TO_PTE(base + (phys_bytes)i * child_size) |
+					flags | PTE_V;
+			}
+
 			pt[idx] = PA_TO_PTE(new_pt) | PTE_V;
 			pte = pt[idx];
 		}
@@ -237,12 +278,68 @@ void pg_flush_tlb_asid(int asid)
 void pg_load(struct proc *p)
 {
     u64_t satp;
+    phys_bytes root;
 
-    /* TODO: Get page table root from proc structure */
-    /* For now, use boot page directory */
-    satp = ((phys_bytes)_boot_pgdir >> 12) | SATP_MODE_SV39;
+    if (p && p->p_seg.p_satp != 0)
+        root = p->p_seg.p_satp;
+    else
+        root = (phys_bytes)_boot_pgdir;
 
-    csr_write_satp(satp);
+    satp = (root >> 12) | SATP_MODE_SV39;
+
+    early_uart_putc('A');
+    __asm__ __volatile__("csrw " RISCV64_STRINGIFY(CSR_SATP) ", %0"
+        :: "r"(satp) : "memory");
+    early_uart_putc('B');
+    sfence_vma_all();
+    early_uart_putc('C');
+    direct_print("rv64: pg_load leave\n");
+}
+
+void pg_dump_mapping(vir_bytes va)
+{
+	u64_t *pt = _boot_pgdir;
+	u64_t pte;
+	int level;
+
+	direct_print("rv64: map va=");
+	direct_print_hex((u64_t)va);
+	direct_print(" ");
+
+	for (level = 2; level >= 0; level--) {
+		int idx;
+		u64_t page_size;
+		phys_bytes pa;
+
+		switch (level) {
+		case 2: idx = VPN2(va); break;
+		case 1: idx = VPN1(va); break;
+		default: idx = VPN0(va); break;
+		}
+
+		pte = pt[idx];
+		if (!(pte & PTE_V)) {
+			direct_print("pte=0\n");
+			return;
+		}
+
+		if ((pte & (PTE_R | PTE_W | PTE_X)) || level == 0) {
+			page_size = (u64_t)1ULL <<
+				(RISCV_PAGE_SHIFT + level * RISCV_PTE_SHIFT);
+			pa = PTE_TO_PA(pte) | (va & (page_size - 1));
+
+			direct_print("pte=");
+			direct_print_hex(pte);
+			direct_print(" pa=");
+			direct_print_hex((u64_t)pa);
+			direct_print(" L");
+			direct_print_dec((u64_t)level);
+			direct_print("\n");
+			return;
+		}
+
+		pt = (u64_t *)PTE_TO_PA(pte);
+	}
 }
 
 /*

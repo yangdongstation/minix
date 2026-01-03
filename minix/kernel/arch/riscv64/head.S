@@ -16,6 +16,10 @@
 #include "include/sconst.h"
 #include "include/archconst.h"
 
+#define UART_THR        0x00
+#define UART_LSR        0x05
+#define UART_LSR_THRE   0x20
+
     .section .text.boot
     .globl _start
     .type _start, @function
@@ -28,8 +32,11 @@ _start:
     /* Save hart ID in tp register for later use */
     mv      tp, a0
 
-    /* Only boot hart 0 continues, others wait */
-    bnez    a0, secondary_hart_wait
+    /* First hart wins, others wait */
+    la      t0, _boot_hart_lock
+    li      t1, 1
+    amoswap.d.aq t2, t1, (t0)
+    bnez    t2, secondary_hart_wait
 
     /* Save FDT pointer */
     la      t0, _boot_fdt
@@ -165,6 +172,15 @@ trap_entry:
     csrr    sp, CSR_SSCRATCH
 
 trap_from_kernel:
+    /* Early trap debug: emit 'K' before using the stack. */
+    li      t0, VIRT_UART0_BASE
+9:
+    lbu     t1, UART_LSR(t0)
+    andi    t1, t1, UART_LSR_THRE
+    beqz    t1, 9b
+    li      t1, 'K'
+    sb      t1, UART_THR(t0)
+
     /* Save registers on kernel stack */
     addi    sp, sp, -TRAPFRAME_SIZE
 
@@ -302,10 +318,6 @@ return_to_user:
     /* Save kernel sp in sscratch for next trap */
     addi    t0, sp, TRAPFRAME_SIZE
     csrw    CSR_SSCRATCH, t0
-
-    /* Restore user sp */
-    ld      sp, TF_SP(sp)
-    addi    sp, sp, -TRAPFRAME_SIZE  /* Point back to trapframe for restore */
     j       restore_regs
 
 return_to_kernel:
@@ -345,12 +357,16 @@ restore_regs:
     /* Restore sp last */
     ld      sp, TF_SP(sp)
 
-    sret
+    .word   RISCV_SRET_INSN
 
     .section .data
     .align 3
     .globl _boot_fdt
 _boot_fdt:
+    .quad 0
+
+    .globl _boot_hart_lock
+_boot_hart_lock:
     .quad 0
 
     .globl _secondary_start_flag

@@ -22,12 +22,20 @@
 void panic(const char *fmt, ...)
 {
   va_list arg;
+  char buf[256];
   /* The system has run aground of a fatal kernel error. Terminate execution. */
   if (kinfo.minix_panicing == ARE_PANICING) {
   	reset();
   }
   kinfo.minix_panicing = ARE_PANICING;
   if (fmt != NULL) {
+	va_start(arg, fmt);
+	vsnprintf(buf, sizeof(buf), fmt, arg);
+	va_end(arg);
+	direct_print("kernel panic: ");
+	direct_print(buf);
+	direct_print("\n");
+
 	printf("kernel panic: ");
   	va_start(arg, fmt);
 	vprintf(fmt, arg);
@@ -35,8 +43,12 @@ void panic(const char *fmt, ...)
 	printf("\n");
   }
 
+#ifdef __riscv64
+  direct_print("rv64: panic skipping stacktrace\n");
+#else
   printf("kernel on CPU %d: ", cpuid);
   util_stacktrace();
+#endif
 
 #if 0
   if(get_cpulocal_var(proc_ptr)) {

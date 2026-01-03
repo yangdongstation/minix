@@ -10,6 +10,7 @@
  */
 
 #include "kernel/system.h"
+#include "arch_proto.h"
 
 
 /*===========================================================================*
@@ -36,6 +37,15 @@ int do_diagctl(struct proc * caller, message * m_ptr)
 			caller->p_endpoint, len, s);
 		return s;
 	}
+#ifdef __riscv64__
+	if (len > 0) {
+		if (len >= DIAG_BUFSIZE)
+			mybuf[DIAG_BUFSIZE - 1] = '\0';
+		else
+			mybuf[len] = '\0';
+		direct_print(mybuf);
+	}
+#endif
 	for(i = 0; i < len; i++)
 		kputc(mybuf[i]);
 	kputc(END_OF_KMESS);
@@ -65,4 +75,3 @@ int do_diagctl(struct proc * caller, message * m_ptr)
         return(EINVAL);
   }
 }
-

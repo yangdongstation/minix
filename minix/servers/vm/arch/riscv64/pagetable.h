@@ -26,6 +26,9 @@
 #define RISCV_PTE_A     (1UL << 6)  /* Accessed */
 #define RISCV_PTE_D     (1UL << 7)  /* Dirty */
 
+/* Leaf entry mask */
+#define RISCV_PTE_LEAF  (RISCV_PTE_R | RISCV_PTE_W | RISCV_PTE_X)
+
 /* Reserved bits for software use (8-9) */
 #define RISCV_PTE_SW0   (1UL << 8)
 #define RISCV_PTE_SW1   (1UL << 9)
@@ -40,14 +43,14 @@
 
 /* Architecture constants */
 #define ARCH_VM_DIR_ENTRIES     512
-#define ARCH_BIG_PAGE_SIZE      (2UL * 1024 * 1024)  /* 2MB mega page */
+#define ARCH_BIG_PAGE_SIZE      (1UL * 1024 * 1024 * 1024)  /* 1GB giga page */
 #define ARCH_VM_ADDR_MASK       (~0xFFFUL)           /* Page frame mask */
 #define ARCH_VM_PAGE_PRESENT    RISCV_PTE_V
 #define ARCH_VM_PDE_MASK        0x1FF                /* 9 bits for each level */
 #define ARCH_VM_PDE_PRESENT     RISCV_PTE_V
 #define ARCH_VM_PTE_PRESENT     RISCV_PTE_V
 #define ARCH_VM_PTE_USER        RISCV_PTE_U
-#define ARCH_VM_PTE_RW          RISCV_PTE_W
+#define ARCH_VM_PTE_RW          (RISCV_PTE_R | RISCV_PTE_W)
 #define ARCH_PAGEDIR_SIZE       4096                 /* Page table size */
 #define ARCH_VM_BIGPAGE         0                    /* Mega page indicator */
 #define ARCH_VM_PT_ENTRIES      512
@@ -77,8 +80,9 @@
 #define RISCV_VA_VPN2(va)       (((va) >> 30) & 0x1FF)
 
 /* Virtual address -> page table index macros */
-#define ARCH_VM_PTE(v)  RISCV_VA_VPN0(v)
 #define ARCH_VM_PDE(v)  RISCV_VA_VPN2(v)
+#define ARCH_VM_PTE1(v) RISCV_VA_VPN1(v)
+#define ARCH_VM_PTE(v)  RISCV_VA_VPN0(v)
 
 /* PTE to physical address conversion */
 #define RISCV_PTE_TO_PA(pte)    (((pte) >> 10) << 12)

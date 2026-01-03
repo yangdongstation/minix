@@ -9,12 +9,22 @@ Copyright 1995 Philip Homburg
 #include <stdio.h>
 #include <string.h>
 #include <machine/stackframe.h>
+#include <minix/syslib.h>
 #include <minix/sysutil.h>
 
 extern reg_t get_bp(void);
 
 void util_stacktrace(void)
 {
+#if defined(__riscv64__)
+#ifndef __kernel__
+	{
+		static char msg[] = "syslib: stacktrace disabled on riscv64\n";
+		sys_diagctl_diag(msg, (int)strlen(msg));
+	}
+#endif
+	return;
+#endif
 #if USE_SYSDEBUG
 	reg_t bp, pc, hbp;
 

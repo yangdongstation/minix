@@ -218,7 +218,7 @@ fi
 # Disk image
 if [ -n "$DISK" ]; then
     QEMU_ARGS+=(
-        -drive file="$DISK",format=raw,id=hd0
+        -drive if=none,file="$DISK",format=raw,id=hd0
         -device virtio-blk-device,drive=hd0
     )
 fi

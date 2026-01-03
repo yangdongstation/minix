@@ -85,4 +85,13 @@ extern char _end;
 #define VM_OWN_MMAPBASE (VM_OWN_HEAPBASE+1024*1024*1024)
 #define VM_OWN_MMAPTOP   (VM_OWN_MMAPBASE+100 * 1024 * 1024)
 
+#if defined(__riscv64__)
+/* VM direct-physical map (1GB window at RAM base). */
+#define VM_OWN_DMAPBASE ((vir_bytes)0xD0000000UL)
+#define VM_OWN_DMAPTOP  ((vir_bytes)0xE0000000UL)
+#define VM_OWN_DMAP_PHYS_BASE ((phys_bytes)0x80000000UL)
+#define VM_OWN_DMAP_PHYS_TOP ((phys_bytes)(VM_OWN_DMAP_PHYS_BASE + \
+	(VM_OWN_DMAPTOP - VM_OWN_DMAPBASE)))
+#endif
+
 #endif

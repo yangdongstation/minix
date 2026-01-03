@@ -18,6 +18,22 @@
 
 #include <sys/exec.h>
 
+extern u64_t __k_unpaged__boot_pgdir[];
+extern u64_t _boot_pgdir[];
+
+static int boot_pgdir_synced;
+
+static void sync_boot_pgdir(void)
+{
+	/* Seed the paged boot page table with the early (unpaged) mappings. */
+	if (boot_pgdir_synced)
+		return;
+
+	memcpy(_boot_pgdir, __k_unpaged__boot_pgdir, RISCV_PAGE_SIZE);
+	boot_pgdir_synced = 1;
+	direct_print("rv64: boot_pgdir synced\n");
+}
+
 /*
  * Initialize protection
  */
@@ -108,6 +124,7 @@ static int load_vm_elf(multiboot_module_t *mod, vir_bytes stack_high,
 	image = (const char *)(vir_bytes)mod->mod_start;
 	image_size = mod->mod_end - mod->mod_start;
 
+	direct_print("rv64: load_vm_elf start\n");
 	if (image_size < sizeof(*ehdr))
 		return ENOEXEC;
 
@@ -130,6 +147,9 @@ static int load_vm_elf(multiboot_module_t *mod, vir_bytes stack_high,
 
 	phdr = (Elf64_Phdr *)(image + ehdr->e_phoff);
 
+	sync_boot_pgdir();
+
+	direct_print("rv64: load_vm_elf map segs\n");
 	for (i = 0; i < ehdr->e_phnum; i++) {
 		Elf64_Phdr *ph = &phdr[i];
 		u64_t flags = RISCV_PTE_U;
@@ -148,11 +168,15 @@ static int load_vm_elf(multiboot_module_t *mod, vir_bytes stack_high,
 		if (ph->p_flags & PF_X)
 			flags |= RISCV_PTE_X;
 
+		/* Allow writes while loading; tighten permissions after copy. */
+		flags |= RISCV_PTE_W;
+
 		pg_map(PG_ALLOCATEME, (vir_bytes)ph->p_vaddr,
 			(size_t)ph->p_memsz, flags);
 		alloc_for_vm += roundup((vir_bytes)ph->p_memsz, RISCV_PAGE_SIZE);
 	}
 
+	direct_print("rv64: load_vm_elf map stack\n");
 	stack_size = roundup(stack_size, RISCV_PAGE_SIZE);
 	stack_high = rounddown(stack_high, RISCV_PAGE_SIZE);
 	if (stack_size > 0) {
@@ -161,7 +185,11 @@ static int load_vm_elf(multiboot_module_t *mod, vir_bytes stack_high,
 		alloc_for_vm += stack_size;
 	}
 
+	direct_print("rv64: load_vm_elf pg_load\n");
 	pg_load(NULL);
+	direct_print("rv64: load_vm_elf copy segs\n");
+	pg_dump_mapping((vir_bytes)0x800000);
+	pg_dump_mapping(stack_high - 0x100);
 
 	enable_user_access();
 	for (i = 0; i < ehdr->e_phnum; i++) {
@@ -184,6 +212,7 @@ static int load_vm_elf(multiboot_module_t *mod, vir_bytes stack_high,
 	}
 	disable_user_access();
 
+	direct_print("rv64: load_vm_elf done\n");
 	*entry = (vir_bytes)ehdr->e_entry;
 	return OK;
 }
@@ -228,6 +257,7 @@ void arch_boot_proc(struct boot_image *ip, struct proc *rp)
 			panic("VM loading failed");
 		direct_print("rv64: VM loaded\n");
 
+		enable_user_access();
 		stack_high = rounddown(stack_high, RISCV_PAGE_SIZE);
 		sp = (char *)(vir_bytes)stack_high;
 		sp -= sizeof(struct ps_strings);
@@ -238,6 +268,7 @@ void arch_boot_proc(struct boot_image *ip, struct proc *rp)
 		psp->ps_nargvstr = 0;
 		psp->ps_envstr = psp->ps_argvstr + sizeof(void *);
 		psp->ps_nenvstr = 0;
+		disable_user_access();
 
 		arch_proc_init(rp, pc, (vir_bytes)sp,
 			stack_high - sizeof(struct ps_strings),

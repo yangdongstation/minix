@@ -2,9 +2,13 @@
  * RISC-V 64 exception and interrupt handling
  */
 
+#include <string.h>
+
 #include "kernel/kernel.h"
 #include "archconst.h"
 #include "arch_proto.h"
+
+static message m_pagefault;
 
 void proc_stacktrace(struct proc *proc)
 {
@@ -64,6 +68,30 @@ void exception_handler(struct trapframe *tf)
 {
     u64_t cause = tf->tf_scause;
     int is_interrupt = (cause >> 63) & 1;
+    struct proc *caller = NULL;
+    int from_user = (tf->tf_sstatus & SSTATUS_SPP) == 0;
+    static int trap_trace_count;
+
+    if (from_user) {
+        caller = get_cpulocal_var(proc_ptr);
+        if (caller != NULL) {
+            memcpy(&caller->p_reg, (struct stackframe_s *)tf,
+                sizeof(caller->p_reg));
+        }
+    }
+
+    if (!is_interrupt && !from_user && trap_trace_count < 32) {
+        direct_print("rv64: trap scause=");
+        direct_print_hex(cause);
+        direct_print(" sepc=");
+        direct_print_hex(tf->tf_sepc);
+        direct_print(" stval=");
+        direct_print_hex(tf->tf_stval);
+        direct_print(" sstatus=");
+        direct_print_hex(tf->tf_sstatus);
+        direct_print("\n");
+        trap_trace_count++;
+    }
 
     cause &= ~(1UL << 63);  /* Clear interrupt bit */
 
@@ -71,6 +99,11 @@ void exception_handler(struct trapframe *tf)
         handle_interrupt(tf, cause);
     } else {
         handle_exception(tf, cause);
+    }
+
+    if (from_user && caller != NULL) {
+        memcpy((struct stackframe_s *)tf, &caller->p_reg,
+            sizeof(caller->p_reg));
     }
 }
 
@@ -158,15 +191,42 @@ static void handle_exception(struct trapframe *tf, u64_t cause)
  */
 static void handle_syscall(struct trapframe *tf)
 {
+    struct proc *caller = get_cpulocal_var(proc_ptr);
+    static int syscall_trace_count;
+
+    if (caller == NULL) {
+        tf->tf_a0 = (u64_t)-1;
+        return;
+    }
+
+    if (syscall_trace_count < 64) {
+        direct_print("rv64: syscall a7=");
+        direct_print_hex(caller->p_reg.a7);
+        direct_print(" a2=");
+        direct_print_hex(caller->p_reg.a2);
+        direct_print(" a0=");
+        direct_print_hex(caller->p_reg.a0);
+        direct_print(" a1=");
+        direct_print_hex(caller->p_reg.a1);
+        direct_print("\n");
+        syscall_trace_count++;
+    }
+
     /* Skip ecall instruction */
-    tf->tf_sepc += 4;
+    caller->p_reg.pc += 4;
 
-    /* System call number in a7, arguments in a0-a5 */
-    /* Return value goes in a0 */
-
-    /* TODO: Route to MINIX IPC system */
-    /* For now, just return error */
-    tf->tf_a0 = (u64_t)-1;
+    switch (caller->p_reg.a7) {
+    case IPCVEC_INTR:
+        caller->p_reg.retreg = do_ipc(caller->p_reg.a2,
+            caller->p_reg.a0, caller->p_reg.a1);
+        break;
+    case KERVEC_INTR:
+        kernel_call((message *)caller->p_reg.a0, caller);
+        break;
+    default:
+        caller->p_reg.retreg = EBADCALL;
+        break;
+    }
 }
 
 /*
@@ -176,6 +236,8 @@ static void handle_page_fault(struct trapframe *tf, u64_t cause, u64_t addr)
 {
     int write_fault = (cause == EXC_STORE_PAGE_FAULT);
     int exec_fault = (cause == EXC_INST_PAGE_FAULT);
+    struct proc *pr = get_cpulocal_var(proc_ptr);
+    int err;
 
     /* Check if we're in kernel mode */
     if (tf->tf_sstatus & SSTATUS_SPP) {
@@ -184,8 +246,32 @@ static void handle_page_fault(struct trapframe *tf, u64_t cause, u64_t addr)
               (void *)tf->tf_sepc, (void *)addr, cause);
     }
 
-    /* User page fault - send signal or handle COW */
-    /* TODO: Integrate with MINIX VM server */
+    /* VM can't handle page faults for itself. */
+    if (pr && pr->p_endpoint == VM_PROC_NR) {
+        printf("pagefault for VM on CPU %d, pc = 0x%lx, addr = 0x%lx, cause = 0x%lx\n",
+            cpuid, pr->p_reg.pc, addr, cause);
+        proc_stacktrace(pr);
+        panic("pagefault in VM");
+    }
+
+    /* Don't schedule this process until pagefault is handled. */
+    if (pr) {
+        RTS_SET(pr, RTS_PAGEFAULT);
+
+        /* tell VM about the pagefault */
+        m_pagefault.m_source = pr->p_endpoint;
+        m_pagefault.m_type   = VM_PAGEFAULT;
+        m_pagefault.VPF_ADDR = addr;
+        m_pagefault.VPF_FLAGS = (u32_t)cause;
+
+        if ((err = mini_send(pr, VM_PROC_NR,
+                &m_pagefault, FROM_KERNEL))) {
+            panic("WARNING: pagefault: mini_send returned %d\n", err);
+        }
+        return;
+    }
+
+    /* Fallback if we don't have a process pointer. */
     panic("User page fault at %p: addr %p (write=%d, exec=%d)",
           (void *)tf->tf_sepc, (void *)addr, write_fault, exec_fault);
 }
