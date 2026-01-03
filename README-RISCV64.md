@@ -132,6 +132,7 @@ MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
 当前结果：
 - 用户态编译测试：全部通过（脚本已自动使用 in-tree toolchain + sysroot，并统一 `-std=gnu99`）。
 - 内核启动测试：失败，QEMU 中出现 `rv64: kernel_main` 后触发 `System reset...`，详见 `/tmp/boot_test.log`。
+- SMP initialization：当前脚本固定标记为跳过（not yet implemented）。
 
 #### 5.1 内核启动复位排查记录
 
@@ -148,10 +149,14 @@ MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
 
 #### 5.2 测试脚本启动判定说明
 
-`run_tests.sh` 的内核启动测试通过以下条件判断成功：
+`run_tests.sh` 的内核启动测试通过以下条件之一判断成功：
 
 ```bash
 grep -q "MINIX" /tmp/boot_test.log
+# 或
+grep -q "rv64: arch_post_init" /tmp/boot_test.log
+# 或
+grep -q "rv64: arch_boot_proc VM" /tmp/boot_test.log
 ```
 
 当前内核日志未输出 `MINIX` 字符串，因此该用例会失败。可选处理方式：

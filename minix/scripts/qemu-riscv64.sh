@@ -95,29 +95,30 @@ add_boot_modules() {
         exit 1
     fi
 
-    module_path=$(find_boot_module "ds" "minix/servers/ds/ds") || exit 1
+    module_path=$(find_boot_module "ds" "service/ds" "minix/servers/ds/ds") || exit 1
     module_paths+=("$module_path")
-    module_path=$(find_boot_module "rs" "minix/servers/rs/rs") || exit 1
+    module_path=$(find_boot_module "rs" "service/rs" "minix/servers/rs/rs") || exit 1
     module_paths+=("$module_path")
-    module_path=$(find_boot_module "pm" "minix/servers/pm/pm") || exit 1
+    module_path=$(find_boot_module "pm" "service/pm" "minix/servers/pm/pm") || exit 1
     module_paths+=("$module_path")
-    module_path=$(find_boot_module "sched" "minix/servers/sched/sched") || exit 1
+    module_path=$(find_boot_module "sched" "service/sched" "minix/servers/sched/sched") || exit 1
     module_paths+=("$module_path")
-    module_path=$(find_boot_module "vfs" "minix/servers/vfs/vfs") || exit 1
+    module_path=$(find_boot_module "vfs" "service/vfs" "minix/servers/vfs/vfs") || exit 1
     module_paths+=("$module_path")
     module_path=$(find_boot_module "memory" \
+        "service/memory" \
         "minix/drivers/storage/memory/memory" \
         "minix/drivers/system/memory/memory") || exit 1
     module_paths+=("$module_path")
-    module_path=$(find_boot_module "tty" "minix/drivers/tty/tty/tty") || exit 1
+    module_path=$(find_boot_module "tty" "service/tty" "minix/drivers/tty/tty/tty") || exit 1
     module_paths+=("$module_path")
-    module_path=$(find_boot_module "mib" "minix/servers/mib/mib") || exit 1
+    module_path=$(find_boot_module "mib" "service/mib" "minix/servers/mib/mib") || exit 1
     module_paths+=("$module_path")
-    module_path=$(find_boot_module "vm" "minix/servers/vm/vm") || exit 1
+    module_path=$(find_boot_module "vm" "service/vm" "minix/servers/vm/vm") || exit 1
     module_paths+=("$module_path")
-    module_path=$(find_boot_module "pfs" "minix/fs/pfs/pfs") || exit 1
+    module_path=$(find_boot_module "pfs" "service/pfs" "minix/fs/pfs/pfs") || exit 1
     module_paths+=("$module_path")
-    module_path=$(find_boot_module "mfs" "minix/fs/mfs/mfs") || exit 1
+    module_path=$(find_boot_module "mfs" "service/mfs" "minix/fs/mfs/mfs") || exit 1
     module_paths+=("$module_path")
     module_path=$(find_boot_module "init" "sbin/init" "sbin/init/init") || exit 1
     module_paths+=("$module_path")
@@ -135,9 +136,14 @@ add_boot_modules() {
         addr=$((addr + module_size))
     done
 
+    modinfo_args=()
+    for i in "${!module_paths[@]}"; do
+        modinfo_args+=("${module_addrs[$i]}" "${module_sizes[$i]}")
+    done
+
     modinfo_file=$(mktemp "${TMPDIR:-/tmp}/minix-rv64-modinfo.XXXXXX")
     python3 - "$modinfo_file" "$MODINFO_MAGIC" "${#module_paths[@]}" \
-        "${module_addrs[@]}" "${module_sizes[@]}" << 'PY'
+        "${modinfo_args[@]}" << 'PY'
 import struct
 import sys
 

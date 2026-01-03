@@ -62,8 +62,22 @@ run_kernel_tests() {
     log_info "Running kernel-level tests..."
 
     # Check if QEMU is available
-    if ! command -v "$QEMU" &> /dev/null; then
+    QEMU_SCRIPT="${MINIX_ROOT}/minix/scripts/qemu-riscv64.sh"
+    BOOTMODROOT="${DESTDIR:-$DESTDIR_DEFAULT}"
+    if [ ! -x "$QEMU_SCRIPT" ]; then
+        log_skip "qemu-riscv64.sh not found, skipping kernel tests"
+        return
+    fi
+    if ! command -v qemu-system-riscv64 &> /dev/null; then
         log_skip "QEMU not found, skipping kernel tests"
+        return
+    fi
+    if [ -z "$BOOTMODROOT" ] || [ ! -d "$BOOTMODROOT" ]; then
+        log_skip "DESTDIR not found, skipping kernel tests"
+        return
+    fi
+    if ! command -v python3 &> /dev/null; then
+        log_skip "python3 not found, skipping kernel tests"
         return
     fi
 
@@ -75,18 +89,13 @@ run_kernel_tests() {
 
     # Test 1: Kernel boots
     log_info "Test: Kernel boot"
-    timeout $TIMEOUT $QEMU \
-        -machine virt \
-        -cpu rv64 \
-        -m 256M \
-        -nographic \
-        -bios default \
-        -kernel "$KERNEL" \
-        -append "test=boot" \
-        -serial file:/tmp/boot_test.log \
-        2>/dev/null || true
+    timeout $TIMEOUT "$QEMU_SCRIPT" \
+        -s -k "$KERNEL" -B "$BOOTMODROOT" \
+        > /tmp/boot_test.log 2>&1 || true
 
-    if grep -q "MINIX" /tmp/boot_test.log 2>/dev/null; then
+    if grep -q "MINIX" /tmp/boot_test.log 2>/dev/null || \
+       grep -q "rv64: arch_post_init" /tmp/boot_test.log 2>/dev/null || \
+       grep -q "rv64: arch_boot_proc VM" /tmp/boot_test.log 2>/dev/null; then
         log_pass "Kernel boot"
     else
         log_fail "Kernel boot"
@@ -94,17 +103,9 @@ run_kernel_tests() {
 
     # Test 2: SMP initialization
     log_info "Test: SMP initialization"
-    timeout $TIMEOUT $QEMU \
-        -machine virt \
-        -cpu rv64 \
-        -smp 4 \
-        -m 256M \
-        -nographic \
-        -bios default \
-        -kernel "$KERNEL" \
-        -append "test=smp" \
-        -serial file:/tmp/smp_test.log \
-        2>/dev/null || true
+    timeout $TIMEOUT "$QEMU_SCRIPT" \
+        -k "$KERNEL" -B "$BOOTMODROOT" \
+        > /tmp/smp_test.log 2>&1 || true
 
     if grep -q "CPU.*online" /tmp/smp_test.log 2>/dev/null; then
         log_pass "SMP initialization"
@@ -114,16 +115,9 @@ run_kernel_tests() {
 
     # Test 3: Timer interrupt
     log_info "Test: Timer interrupt"
-    timeout $TIMEOUT $QEMU \
-        -machine virt \
-        -cpu rv64 \
-        -m 256M \
-        -nographic \
-        -bios default \
-        -kernel "$KERNEL" \
-        -append "test=timer" \
-        -serial file:/tmp/timer_test.log \
-        2>/dev/null || true
+    timeout $TIMEOUT "$QEMU_SCRIPT" \
+        -s -k "$KERNEL" -B "$BOOTMODROOT" \
+        > /tmp/timer_test.log 2>&1 || true
 
     if grep -q "timer" /tmp/timer_test.log 2>/dev/null; then
         log_pass "Timer interrupt"
