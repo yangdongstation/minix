@@ -76,8 +76,6 @@ MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
 - 若交叉编译器支持 `-march=rv64gc -mabi=lp64d`，可移除 `RISCV_ARCH_FLAGS`。
 - `CHECKFLIST_FLAGS='-m -e'` 会允许缺失/多余文件，适用于当前不完整的 sets；若需严格检查，请移除该标志并恢复 `MKPIC/MKCXX/MKATF`。
 
-## 已知问题与解决方案
-
 ## 本次移植与验证步骤（evbriscv64）
 
 ### 1. CSU 移植（让 lib/csu 可编译）
@@ -134,6 +132,34 @@ MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
 当前结果：
 - 用户态编译测试：全部通过（脚本已自动使用 in-tree toolchain + sysroot，并统一 `-std=gnu99`）。
 - 内核启动测试：失败，QEMU 中出现 `rv64: kernel_main` 后触发 `System reset...`，详见 `/tmp/boot_test.log`。
+
+#### 5.1 内核启动复位排查记录
+
+1. 执行测试：`./minix/tests/riscv64/run_tests.sh all`
+2. 查看日志：`/tmp/boot_test.log`
+   - 可见 OpenSBI banner
+   - 内核初始化输出：`rv64: kernel_main`、`rv64: kmain entry`、`rv64: mods_count=0`
+   - 随后出现 `System reset...`，OpenSBI banner 重复
+3. 结论：内核已进入早期初始化，但在继续启动过程中触发复位（原因待进一步定位）
+4. 初步排查建议：
+   - 关注是否有显式复位/关机路径被触发（`minix/kernel/arch/riscv64/sbi.c`、`minix/kernel/arch/riscv64/exception.c`）
+   - 在 `rv64:` 打点附近继续细化日志，定位复位发生点
+   - 若需要交互调试，使用 `minix/scripts/qemu-riscv64.sh -d -k minix/kernel/obj/kernel -B obj/destdir.evbriscv64`
+
+#### 5.2 测试脚本启动判定说明
+
+`run_tests.sh` 的内核启动测试通过以下条件判断成功：
+
+```bash
+grep -q "MINIX" /tmp/boot_test.log
+```
+
+当前内核日志未输出 `MINIX` 字符串，因此该用例会失败。可选处理方式：
+
+- 将判定条件调整为当前已有的启动标记（例如 `rv64: kernel_main` 或 `rv64: kmain entry`）
+- 或者在内核早期输出包含 `MINIX` 的 banner
+
+## 已知问题与解决方案
 
 ### 1. LLVM 编译问题
 
