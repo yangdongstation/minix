@@ -9,6 +9,16 @@
 #include <signal.h>
 #include <setjmp.h>
 
+#define STR(x) #x
+#define XSTR(x) STR(x)
+
+#define CSR_STVEC   0x105
+#define CSR_SCAUSE  0x142
+#define CSR_STVAL   0x143
+
+#define RISCV_EBREAK_INSN 0x00100073
+#define RISCV_WFI_INSN    0x10500073
+
 static int test_count = 0;
 static int pass_count = 0;
 static int fail_count = 0;
@@ -101,7 +111,7 @@ void test_breakpoint(void)
 
     if (setjmp(jump_buf) == 0) {
         /* Execute EBREAK */
-        __asm__ __volatile__("ebreak" ::: "memory");
+        __asm__ __volatile__(".word " XSTR(RISCV_EBREAK_INSN) ::: "memory");
     }
 
     sigaction(SIGTRAP, &old_sa, NULL);
@@ -139,14 +149,14 @@ void test_csrs(void)
     uint64_t stvec, scause, stval;
 
     /* Read stvec (trap vector base) */
-    __asm__ __volatile__("csrr %0, stvec" : "=r"(stvec));
+    __asm__ __volatile__("csrr %0, " XSTR(CSR_STVEC) : "=r"(stvec));
     printf("  stvec = 0x%lx\n", stvec);
     printf("  MODE = %s\n", (stvec & 3) == 0 ? "Direct" : "Vectored");
     TEST("stvec readable", 1);
 
     /* scause and stval are only valid after a trap */
-    __asm__ __volatile__("csrr %0, scause" : "=r"(scause));
-    __asm__ __volatile__("csrr %0, stval" : "=r"(stval));
+    __asm__ __volatile__("csrr %0, " XSTR(CSR_SCAUSE) : "=r"(scause));
+    __asm__ __volatile__("csrr %0, " XSTR(CSR_STVAL) : "=r"(stval));
     printf("  scause = 0x%lx (last trap cause)\n", scause);
     printf("  stval = 0x%lx (last trap value)\n", stval);
     TEST("scause/stval readable", 1);
@@ -162,7 +172,7 @@ void test_wfi(void)
 
     /* WFI might trap to M-mode depending on mstatus.TW */
     /* In user mode, it might be emulated as NOP */
-    __asm__ __volatile__("wfi" ::: "memory");
+    __asm__ __volatile__(".word " XSTR(RISCV_WFI_INSN) ::: "memory");
 
     TEST("WFI instruction", 1);  /* If we get here, it worked */
 }

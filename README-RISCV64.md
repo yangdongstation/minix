@@ -78,6 +78,63 @@ MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
 
 ## 已知问题与解决方案
 
+## 本次移植与验证步骤（evbriscv64）
+
+### 1. CSU 移植（让 lib/csu 可编译）
+- 在 `lib/csu/arch/riscv64/` 增加 riscv64 入口与 Makefile 包装层，复用 `lib/csu/arch/riscv/*` 实现。
+- 在 `lib/csu/arch/riscv64/machine/asm.h` 与 `lib/csu/arch/riscv/riscv64/machine/asm.h` 补齐 `PTR_SCALESHIFT`，避免未安装系统头时缺宏。
+
+### 2. CSU 编译验证
+
+```bash
+MAKEFLAGS="-de -m $PWD/share/mk" \
+TOOLDIR="$PWD/obj/tooldir.$(uname -s)-$(uname -r)-$(uname -m)" \
+MACHINE=evbriscv64 MACHINE_ARCH=riscv64 NETBSDSRCDIR="$PWD" \
+DESTDIR="$PWD/obj/destdir.evbriscv64" \
+AVAILABLE_COMPILER=gcc ACTIVE_CC=gcc ACTIVE_CPP=gcc ACTIVE_CXX=gcc ACTIVE_OBJC=gcc \
+RISCV_ARCH_FLAGS='-march=RV64IMAFD -mcmodel=medany' \
+"$PWD/obj/tooldir.$(uname -s)-$(uname -r)-$(uname -m)/bin/nbmake" \
+  -C lib/csu dependall
+```
+
+### 3. 工具链可用性验证
+
+```bash
+obj/tooldir.*/bin/riscv64-elf32-minix-gcc -dumpmachine
+# 期望输出：riscv64-elf32-minix
+```
+
+### 4. 完整构建（跳过 libobjc/libgomp/C++）
+
+```bash
+unset EXTERNAL_TOOLCHAIN
+HOST_CC="cc -Wno-implicit-int -Wno-implicit-function-declaration" \
+MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
+./build.sh -u -j"$(nproc)" -m evbriscv64 \
+  -V AVAILABLE_COMPILER=gcc -V ACTIVE_CC=gcc -V ACTIVE_CPP=gcc -V ACTIVE_CXX=gcc -V ACTIVE_OBJC=gcc \
+  -V RISCV_ARCH_FLAGS='-march=RV64IMAFD -mcmodel=medany' \
+  -V NOGCCERROR=yes -V MKPIC=no -V MKPICLIB=no -V MKPICINSTALL=no \
+  -V MKGCC=yes -V MKGCCCMDS=no -V MKLIBSTDCXX=no \
+  -V MKCXX=no -V MKLIBCXX=no -V MKATF=yes -V MKKYUA=yes -V USE_PCI=no \
+  -V MKLIBOBJC=no -V MKLIBGOMP=no \
+  -V CHECKFLIST_FLAGS='-m -e' \
+  distribution
+```
+
+说明：
+- `MKLIBOBJC=no` 与 `MKLIBGOMP=no` 用于避开 `pthread.h` 未齐全导致的构建失败。
+- `NOGCCERROR=yes` 与 libevent 的版本化警告屏蔽避免旧 GCC 不识别 `-Wno-error=...`。
+
+### 5. 测试与当前结果
+
+```bash
+./minix/tests/riscv64/run_tests.sh all
+```
+
+当前结果：
+- 用户态编译测试：全部通过（脚本已自动使用 in-tree toolchain + sysroot，并统一 `-std=gnu99`）。
+- 内核启动测试：失败，QEMU 中出现 `rv64: kernel_main` 后触发 `System reset...`，详见 `/tmp/boot_test.log`。
+
 ### 1. LLVM 编译问题
 
 **问题**：LLVM 在 RISC-V 64-bit 上编译失败

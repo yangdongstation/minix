@@ -73,6 +73,16 @@
 # define __STRING(x)	"x"
 #endif
 
+#ifndef PTR_SCALESHIFT
+#if defined(__riscv_xlen) && __riscv_xlen == 32
+#define PTR_SCALESHIFT	2
+#elif defined(__riscv32) || defined(__riscv32__)
+#define PTR_SCALESHIFT	2
+#else
+#define PTR_SCALESHIFT	3
+#endif
+#endif
+
 /* let kernels and others override entrypoint alignment */
 #if !defined(_ALIGN_TEXT) && !defined(_KERNEL)
 # ifdef _STANDALONE

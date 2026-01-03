@@ -9,8 +9,10 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+MINIX_ROOT="${SCRIPT_DIR}/../../.."
 QEMU="${QEMU:-qemu-system-riscv64}"
-KERNEL="${KERNEL:-/usr/obj/minix/riscv64/minix/kernel/kernel}"
+KERNEL_DEFAULT="${MINIX_ROOT}/minix/kernel/obj/kernel"
+KERNEL="${KERNEL:-$KERNEL_DEFAULT}"
 TIMEOUT="${TIMEOUT:-60}"
 
 RED='\033[0;31m'
@@ -22,19 +24,31 @@ passed=0
 failed=0
 skipped=0
 
+TOOLDIR_DEFAULT=""
+DESTDIR_DEFAULT=""
+for d in "$MINIX_ROOT"/obj/tooldir.*; do
+    if [ -x "$d/bin/riscv64-elf32-minix-gcc" ]; then
+        TOOLDIR_DEFAULT="$d"
+        break
+    fi
+done
+if [ -d "$MINIX_ROOT/obj/destdir.evbriscv64" ]; then
+    DESTDIR_DEFAULT="$MINIX_ROOT/obj/destdir.evbriscv64"
+fi
+
 log_pass() {
     echo -e "${GREEN}[PASS]${NC} $1"
-    ((passed++))
+    passed=$((passed + 1))
 }
 
 log_fail() {
     echo -e "${RED}[FAIL]${NC} $1"
-    ((failed++))
+    failed=$((failed + 1))
 }
 
 log_skip() {
     echo -e "${YELLOW}[SKIP]${NC} $1"
-    ((skipped++))
+    skipped=$((skipped + 1))
 }
 
 log_info() {
@@ -125,10 +139,18 @@ run_user_tests() {
     log_info "Running user-level tests..."
 
     # Check if cross-compiler is available
-    CC="${CC:-riscv64-unknown-elf-gcc}"
+    if [ -z "${CC:-}" ]; then
+        if [ -n "${TOOLDIR:-}" ] && [ -x "${TOOLDIR}/bin/riscv64-elf32-minix-gcc" ]; then
+            CC="${TOOLDIR}/bin/riscv64-elf32-minix-gcc"
+        elif [ -n "$TOOLDIR_DEFAULT" ]; then
+            CC="${TOOLDIR_DEFAULT}/bin/riscv64-elf32-minix-gcc"
+        else
+            CC="riscv64-unknown-elf-gcc"
+        fi
+    fi
     if ! command -v "$CC" &> /dev/null; then
         # Try alternatives
-        for alt in riscv64-linux-gnu-gcc riscv64-elf-gcc; do
+        for alt in riscv64-elf32-minix-gcc riscv64-linux-gnu-gcc riscv64-elf-gcc; do
             if command -v "$alt" &> /dev/null; then
                 CC="$alt"
                 break
@@ -142,13 +164,19 @@ run_user_tests() {
     fi
 
     log_info "Using compiler: $CC"
+    ARCH_FLAGS="${RISCV_ARCH_FLAGS:--march=RV64IMAFD -mcmodel=medany}"
+    SYSROOT="${SYSROOT:-${DESTDIR:-$DESTDIR_DEFAULT}}"
+    SYSROOT_FLAGS=""
+    if [ -n "$SYSROOT" ]; then
+        SYSROOT_FLAGS="--sysroot=$SYSROOT -I$SYSROOT/usr/include"
+    fi
 
     # Test compilation of each test file
     for test_file in "$SCRIPT_DIR"/test_*.c; do
         test_name=$(basename "$test_file" .c)
         log_info "Compiling: $test_name"
 
-        if $CC -march=rv64gc -mabi=lp64d -O2 -Wall \
+        if $CC $ARCH_FLAGS $SYSROOT_FLAGS -O2 -Wall -std=gnu99 \
                -c "$test_file" -o "/tmp/${test_name}.o" 2>/dev/null; then
             log_pass "Compile $test_name"
         else
@@ -162,8 +190,6 @@ run_user_tests() {
 #
 run_build_tests() {
     log_info "Running build system tests..."
-
-    MINIX_ROOT="${SCRIPT_DIR}/../../.."
 
     # Test 1: Check if architecture is recognized
     if [ -f "$MINIX_ROOT/build.sh" ]; then

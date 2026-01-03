@@ -3,7 +3,13 @@
 .include <bsd.own.mk>
 
 # crtstuff is built out of elsewhere, or not at all
-SUBDIR+= libgcc libiberty libobjc libgomp
+SUBDIR+= libgcc libiberty
+.if ${MKLIBGOMP:Uyes} != "no"
+SUBDIR+= libgomp
+.endif
+.if ${MKLIBOBJC:Uyes} != "no"
+SUBDIR+= libobjc
+.endif
 #MINIX:
 SUBDIR+= libbacktrace
 SUBDIR+= liblto_plugin

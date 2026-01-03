@@ -28,9 +28,16 @@ poll.c \
 select.c \
 signal.c
 
-.if ${ACTIVE_CC} == "gcc" && ${HAVE_GCC:U48} != 48
-CFLAGS+=	-Wno-error=builtin-declaration-mismatch -Wno-error=dangling-pointer \
-		-Wno-error=implicit-fallthrough -Wno-error=array-parameter
+.if ${ACTIVE_CC} == "gcc" && !defined(NOGCCERROR)
+. if ${HAVE_GCC:U0} >= 7
+CFLAGS+=	-Wno-error=builtin-declaration-mismatch -Wno-error=implicit-fallthrough
+. endif
+. if ${HAVE_GCC:U0} >= 8
+CFLAGS+=	-Wno-error=array-parameter
+. endif
+. if ${HAVE_GCC:U0} >= 12
+CFLAGS+=	-Wno-error=dangling-pointer
+. endif
 .endif
 
 .if defined(HAVE_GCC) && ${HAVE_GCC} == 48

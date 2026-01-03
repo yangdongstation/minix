@@ -6,7 +6,6 @@
 
 #include <stdio.h>
 #include <stdint.h>
-#include <stdatomic.h>
 
 static int test_count = 0;
 static int pass_count = 0;

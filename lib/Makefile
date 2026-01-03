@@ -136,8 +136,12 @@ SUBDIR+=	../external/public-domain/sqlite/lib
 
 .if (${MKGCC} != "no")
 . if !defined(__MINIX) || ${MKLIBSTDCXX} == "yes"
+.  if ${MKLIBOBJC:Uyes} != "no"
 SUBDIR+=	../external/gpl3/${EXTERNAL_GCC_SUBDIR}/lib/libobjc
+.  endif
+.  if ${MKLIBGOMP:Uyes} != "no"
 SUBDIR+=	../external/gpl3/${EXTERNAL_GCC_SUBDIR}/lib/libgomp
+.  endif
 #SUBDIR+=	../external/gpl3/${EXTERNAL_GCC_SUBDIR}/lib/libmudflap
 #SUBDIR+=	../external/gpl3/${EXTERNAL_GCC_SUBDIR}/lib/libmudflapth
 . endif # !defined(__MINIX) || ${MKLIBSTDCXX} == "yes"

@@ -7,23 +7,33 @@
 #include <stdio.h>
 #include <stdint.h>
 
+#define STR(x) #x
+#define XSTR(x) STR(x)
+
+#define CSR_SSTATUS 0x100
+#define CSR_SIE     0x104
+#define CSR_SIP     0x144
+#define CSR_SATP    0x180
+#define CSR_CYCLE   0xC00
+#define CSR_TIME    0xC01
+
 /* CSR read macros */
 #define csr_read(csr) ({ \
     uint64_t __v; \
-    __asm__ __volatile__("csrr %0, " #csr : "=r"(__v)); \
+    __asm__ __volatile__("csrr %0, " XSTR(csr) : "=r"(__v)); \
     __v; \
 })
 
 #define csr_write(csr, val) ({ \
-    __asm__ __volatile__("csrw " #csr ", %0" :: "r"(val)); \
+    __asm__ __volatile__("csrw " XSTR(csr) ", %0" :: "r"(val)); \
 })
 
 #define csr_set(csr, val) ({ \
-    __asm__ __volatile__("csrs " #csr ", %0" :: "r"(val)); \
+    __asm__ __volatile__("csrs " XSTR(csr) ", %0" :: "r"(val)); \
 })
 
 #define csr_clear(csr, val) ({ \
-    __asm__ __volatile__("csrc " #csr ", %0" :: "r"(val)); \
+    __asm__ __volatile__("csrc " XSTR(csr) ", %0" :: "r"(val)); \
 })
 
 static int test_count = 0;
@@ -46,7 +56,7 @@ void test_sstatus(void)
     uint64_t sstatus;
 
     /* Read sstatus */
-    sstatus = csr_read(sstatus);
+    sstatus = csr_read(CSR_SSTATUS);
     TEST("sstatus readable", 1);
 
     /* Check SPP bit (should be 0 in user mode, 1 in supervisor) */
@@ -60,7 +70,7 @@ void test_sie(void)
     uint64_t sie;
 
     /* Read sie (Supervisor Interrupt Enable) */
-    sie = csr_read(sie);
+    sie = csr_read(CSR_SIE);
     TEST("sie readable", 1);
 
     printf("  sie = 0x%lx\n", sie);
@@ -74,7 +84,7 @@ void test_sip(void)
     uint64_t sip;
 
     /* Read sip (Supervisor Interrupt Pending) */
-    sip = csr_read(sip);
+    sip = csr_read(CSR_SIP);
     TEST("sip readable", 1);
 
     printf("  sip = 0x%lx\n", sip);
@@ -85,7 +95,7 @@ void test_satp(void)
     uint64_t satp;
 
     /* Read satp (Supervisor Address Translation and Protection) */
-    satp = csr_read(satp);
+    satp = csr_read(CSR_SATP);
     TEST("satp readable", 1);
 
     printf("  satp = 0x%lx\n", satp);
@@ -99,12 +109,12 @@ void test_time(void)
     uint64_t time1, time2;
 
     /* Read time CSR */
-    time1 = csr_read(time);
+    time1 = csr_read(CSR_TIME);
 
     /* Small delay */
     for (volatile int i = 0; i < 10000; i++);
 
-    time2 = csr_read(time);
+    time2 = csr_read(CSR_TIME);
 
     TEST("time CSR incrementing", time2 > time1);
     printf("  time1 = %lu\n", time1);
@@ -117,12 +127,12 @@ void test_cycle(void)
     uint64_t cycle1, cycle2;
 
     /* Read cycle CSR */
-    cycle1 = csr_read(cycle);
+    cycle1 = csr_read(CSR_CYCLE);
 
     /* Small delay */
     for (volatile int i = 0; i < 10000; i++);
 
-    cycle2 = csr_read(cycle);
+    cycle2 = csr_read(CSR_CYCLE);
 
     TEST("cycle CSR incrementing", cycle2 > cycle1);
     printf("  cycle1 = %lu\n", cycle1);
