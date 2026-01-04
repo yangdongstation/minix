@@ -53,6 +53,26 @@ static void handle_memory_continue(struct vmproc *vmp, message *m,
 static int handle_memory_step(struct hm_state *hmstate, int retry);
 static void handle_memory_final(struct hm_state *state, int result);
 
+#if defined(__riscv64__)
+static void vm_trace_pdbr(const char *tag, struct vmproc *vmp, int r)
+{
+	u32_t pdbr = 0;
+	phys_bytes vm_pdbr = vmproc[VM_PROC_NR].vm_pt.pt_dir_phys;
+	phys_bytes tgt_pdbr = vmp ? vmp->vm_pt.pt_dir_phys : 0;
+	int r2;
+
+	r2 = sys_vmctl_get_pdbr(SELF, &pdbr);
+	if (r2 == OK) {
+		printf("vm: %s pdbr=0x%x vm_pt=0x%llx tgt_pt=0x%llx ep=%d r=%d\n",
+		    tag, pdbr, (unsigned long long)vm_pdbr,
+		    (unsigned long long)tgt_pdbr,
+		    vmp ? vmp->vm_endpoint : -1, r);
+	} else {
+		printf("vm: %s get_pdbr failed r=%d\n", tag, r2);
+	}
+}
+#endif
+
 /*===========================================================================*
  *				pf_errstr	     		     	*
  *===========================================================================*/
@@ -246,7 +266,27 @@ int handle_memory_once(struct vmproc *vmp, vir_bytes mem, vir_bytes len,
 	int wrflag)
 {
 	int r;
+#if defined(__riscv64__)
+	{
+		static int hm_trace_count;
+		if (hm_trace_count < 8) {
+			printf("vm: handle_memory_once enter ep=%d mem=0x%lx len=0x%lx wr=%d\n",
+			    vmp ? vmp->vm_endpoint : -1,
+			    (unsigned long)mem, (unsigned long)len, wrflag);
+			vm_trace_pdbr("handle_memory_once", vmp, 0);
+			hm_trace_count++;
+		}
+	}
+#endif
 	r = handle_memory_start(vmp, mem, len, wrflag, NONE, NONE, 0, 0);
+	if (r != OK) {
+		printf("vm: handle_memory_once failed ep=%d mem=0x%lx len=0x%lx wr=%d r=%d\n",
+			vmp ? vmp->vm_endpoint : -1,
+			(unsigned long)mem, (unsigned long)len, wrflag, r);
+#if defined(__riscv64__)
+		vm_trace_pdbr("handle_memory_once", vmp, r);
+#endif
+	}
 	assert(r != SUSPEND);
 	return r;
 }
@@ -415,4 +455,3 @@ static int handle_memory_step(struct hm_state *hmstate, int retry)
 
 	return OK;
 }
-

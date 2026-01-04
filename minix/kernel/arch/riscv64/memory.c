@@ -253,15 +253,18 @@ void vm_init(struct proc *newptproc)
  */
 phys_bytes umap_local(struct proc *p, int seg, vir_bytes vir, vir_bytes bytes)
 {
-    u64_t *pgdir;
-    u64_t *pt;
-    u64_t pte;
-    int level;
+	u64_t *pgdir;
+	u64_t *pt;
+	u64_t pte;
+	int level;
+#if defined(__riscv64__)
+	static int umap_user_faults;
+#endif
 
-    (void)seg;
-    (void)bytes;
+	(void)seg;
+	(void)bytes;
 
-    pgdir = get_pgdir(p);
+	pgdir = get_pgdir(p);
 
     pt = pgdir;
     for (level = 2; level >= 0; level--) {
@@ -274,15 +277,30 @@ phys_bytes umap_local(struct proc *p, int seg, vir_bytes vir, vir_bytes bytes)
         default: idx = VPN0(vir); break;
         }
 
-        pte = pt[idx];
-        if (!(pte & PTE_V))
-            return 0;
+		pte = pt[idx];
+		if (!(pte & PTE_V))
+			return 0;
 
-        if (pte & (PTE_R | PTE_W | PTE_X)) {
-            /* Leaf PTE: compute physical address for large pages too. */
-            page_size = (phys_bytes)1ULL <<
-                (RISCV_PAGE_SHIFT + level * RISCV_PTE_SHIFT);
-            return PTE_TO_PA(pte) | (vir & (page_size - 1));
+		if (pte & (PTE_R | PTE_W | PTE_X)) {
+			if (p && !iskerneln(p->p_nr) && !(pte & PTE_U)) {
+#if defined(__riscv64__)
+				if (umap_user_faults < 8) {
+					direct_print("rv64: umap_local no PTE_U ep=");
+					direct_print_hex((u64_t)p->p_endpoint);
+					direct_print(" va=");
+					direct_print_hex((u64_t)vir);
+					direct_print(" pte=");
+					direct_print_hex((u64_t)pte);
+					direct_print("\n");
+					umap_user_faults++;
+				}
+#endif
+				return 0;
+			}
+			/* Leaf PTE: compute physical address for large pages too. */
+			page_size = (phys_bytes)1ULL <<
+				(RISCV_PAGE_SHIFT + level * RISCV_PTE_SHIFT);
+			return PTE_TO_PA(pte) | (vir & (page_size - 1));
         }
 
         if (level == 0)
@@ -680,6 +698,13 @@ int arch_phys_map_reply(const int index, const vir_bytes addr)
 		intptr_t usermapped_offset;
 
 		assert(addr != 0);
+		direct_print("rv64: phys_map_reply idx=");
+		direct_print_hex((u64_t)index);
+		direct_print(" addr=");
+		direct_print_hex((u64_t)addr);
+		direct_print(" usermapped_start=");
+		direct_print_hex((u64_t)(vir_bytes)&usermapped_start);
+		direct_print("\n");
 		usermapped_offset =
 			(intptr_t)addr - (intptr_t)(vir_bytes)&usermapped_start;
 #define FIXEDPTR(ptr) (void *)((intptr_t)(ptr) + usermapped_offset)
@@ -695,14 +720,25 @@ int arch_phys_map_reply(const int index, const vir_bytes addr)
 		minix_kerninfo.kerninfo_magic = KERNINFO_MAGIC;
 		minix_kerninfo.minix_feature_flags = minix_feature_flags;
 		minix_kerninfo_user = (vir_bytes)FIXEDPTR(&minix_kerninfo);
+		direct_print("rv64: phys_map_reply offset=");
+		direct_print_hex((u64_t)(uintptr_t)usermapped_offset);
+		direct_print(" kerninfo_user=");
+		direct_print_hex((u64_t)minix_kerninfo_user);
+		direct_print("\n");
 
 		minix_kerninfo.ki_flags |= MINIX_KIF_USERINFO;
 
 		return OK;
 	}
 
-	if (index == usermapped_index)
+	if (index == usermapped_index) {
+		direct_print("rv64: phys_map_reply idx=");
+		direct_print_hex((u64_t)index);
+		direct_print(" addr=");
+		direct_print_hex((u64_t)addr);
+		direct_print(" (nonglo)\n");
 		return OK;
+	}
 
 	return EINVAL;
 }

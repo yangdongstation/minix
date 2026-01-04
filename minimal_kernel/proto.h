@@ -172,7 +172,7 @@ void stop_profile_clock(void);
 /* functions defined in architecture-dependent files. */
 void prot_init(void);
 void arch_post_init(void);
-void arch_set_secondary_ipc_return(struct proc *, u32_t val);
+void arch_set_secondary_ipc_return(struct proc *, reg_t val);
 phys_bytes phys_copy(phys_bytes source, phys_bytes dest, phys_bytes
 	count);
 void phys_copy_fault(void);

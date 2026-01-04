@@ -121,6 +121,17 @@ int main(void)
 
   	if ((r=sef_receive_status(ANY, &msg, &rcv_sts)) != OK)
 		panic("sef_receive_status() error: %d", r);
+#if defined(__riscv64__)
+	{
+		static int vm_msg_log_count;
+		if (vm_msg_log_count < 8) {
+			printf("VM: recv src=%d type=%d hex=0x%x status=0x%x i1=%d i2=%d i3=%d\n",
+			    msg.m_source, msg.m_type, (unsigned int)msg.m_type,
+			    rcv_sts, msg.m1_i1, msg.m1_i2, msg.m1_i3);
+			vm_msg_log_count++;
+		}
+	}
+#endif
 
 	if (is_ipc_notify(rcv_sts)) {
 		/* Unexpected ipc_notify(). */
@@ -332,8 +343,12 @@ static void exec_bootproc(struct vmproc *vmp, struct boot_image *ip)
 {
 	struct vm_exec_info vmexeci;
 	struct exec_info *execi = &vmexeci.execi;
-	/* libexec need proper alignment for casting to structures */
-	char hdr[VM_PAGE_SIZE] __aligned(8);
+	/* libexec needs proper alignment for casting to structures */
+	static union {
+		u64_t align;
+		char buf[VM_PAGE_SIZE];
+	} hdr_store;
+	char *hdr = hdr_store.buf;
 
 	size_t frame_size = 0;	/* Size of the new initial stack. */
 	int argc = 0;		/* Argument count. */
@@ -341,7 +356,7 @@ static void exec_bootproc(struct vmproc *vmp, struct boot_image *ip)
 	char overflow = 0;	/* No overflow yet. */
 	struct ps_strings *psp;
 
-	int vsp = 0;	/* (virtual) Stack pointer in new address space. */
+	vir_bytes vsp = 0;	/* (virtual) Stack pointer in new address space. */
 	char *argv[] = { ip->proc_name, NULL };
 	char *envp[] = { NULL };
 	char *path = ip->proc_name;
@@ -356,14 +371,14 @@ static void exec_bootproc(struct vmproc *vmp, struct boot_image *ip)
 		panic("VM: pt_bind failed");
 
 	if(sys_physcopy(NONE, ip->start_addr, SELF,
-		(vir_bytes) hdr, sizeof(hdr), 0) != OK)
+		(vir_bytes)hdr, sizeof(hdr_store.buf), 0) != OK)
 		panic("can't look at boot proc header");
 
 	execi->stack_high = kernel_boot_info.user_sp;
 	execi->stack_size = DEFAULT_STACK_LIMIT;
 	execi->proc_e = vmp->vm_endpoint;
 	execi->hdr = hdr;
-	execi->hdr_len = sizeof(hdr);
+	execi->hdr_len = sizeof(hdr_store.buf);
 	strlcpy(execi->progname, ip->proc_name, sizeof(execi->progname));
 	execi->frame_len = 0;
 	execi->opaque = &vmexeci;
@@ -380,9 +395,16 @@ static void exec_bootproc(struct vmproc *vmp, struct boot_image *ip)
 	execi->allocmem_prealloc_cleared = libexec_alloc_vm_prealloc;
 	execi->allocmem_ondemand = libexec_alloc_vm_ondemand;
 
-	if (libexec_load_elf(execi) != OK)
-		panic("vm: boot process load of process %s (ep=%d) failed\n", 
-			execi->progname, vmp->vm_endpoint);
+	{
+		int r;
+		r = libexec_load_elf(execi);
+		if (r != OK) {
+			printf("vm: boot load failed prog=%s ep=%d r=%d\n",
+				execi->progname, vmp->vm_endpoint, r);
+			panic("vm: boot process load of process %s (ep=%d) failed\n",
+				execi->progname, vmp->vm_endpoint);
+		}
+	}
 
 	/* Setup a minimal stack. */
 	minix_stack_params(path, argv, envp, &frame_size, &overflow, &argc,
@@ -397,23 +419,55 @@ static void exec_bootproc(struct vmproc *vmp, struct boot_image *ip)
 	minix_stack_fill(path, argc, argv, envc, envp, frame_size, frame, &vsp,
 		&psp);
 
-	if(handle_memory_once(vmp, vsp, frame_size, 1) != OK)
-		panic("vm: could not map stack for boot process %s (ep=%d)\n",
-			execi->progname, vmp->vm_endpoint);
+	{
+		int r;
+		r = handle_memory_once(vmp, vsp, frame_size, 1);
+		if (r != OK) {
+			printf("vm: boot map stack failed prog=%s ep=%d vsp=0x%lx len=0x%lx r=%d\n",
+				execi->progname, vmp->vm_endpoint,
+				(unsigned long)vsp, (unsigned long)frame_size, r);
+			panic("vm: could not map stack for boot process %s (ep=%d)\n",
+				execi->progname, vmp->vm_endpoint);
+		}
+	}
 
-	if(sys_datacopy(SELF, (vir_bytes)frame, vmp->vm_endpoint, vsp, frame_size) != OK)
-		panic("vm: could not copy stack for boot process %s (ep=%d)\n",
-			execi->progname, vmp->vm_endpoint);
+	{
+		int r;
+		r = sys_datacopy(SELF, (vir_bytes)frame, vmp->vm_endpoint, vsp,
+			frame_size);
+		if (r != OK) {
+			printf("vm: boot copy stack failed prog=%s ep=%d vsp=0x%lx len=0x%lx r=%d\n",
+				execi->progname, vmp->vm_endpoint,
+				(unsigned long)vsp, (unsigned long)frame_size, r);
+			panic("vm: could not copy stack for boot process %s (ep=%d)\n",
+				execi->progname, vmp->vm_endpoint);
+		}
+	}
 
-	if(sys_exec(vmp->vm_endpoint, (vir_bytes)vsp,
-		   (vir_bytes)execi->progname, execi->pc,
-		   (vir_bytes)vsp + (vir_bytes)((char *)psp - frame)) != OK)
-		panic("vm: boot process exec of process %s (ep=%d) failed\n",
-			execi->progname,vmp->vm_endpoint);
+	{
+		int r;
+		r = sys_exec(vmp->vm_endpoint, (vir_bytes)vsp,
+			(vir_bytes)execi->progname, execi->pc,
+			(vir_bytes)vsp + (vir_bytes)((char *)psp - frame));
+		if (r != OK) {
+			printf("vm: boot exec failed prog=%s ep=%d pc=0x%lx sp=0x%lx r=%d\n",
+				execi->progname, vmp->vm_endpoint,
+				(unsigned long)execi->pc, (unsigned long)vsp, r);
+			panic("vm: boot process exec of process %s (ep=%d) failed\n",
+				execi->progname, vmp->vm_endpoint);
+		}
+	}
 
 	/* make it runnable */
-	if(sys_vmctl(vmp->vm_endpoint, VMCTL_BOOTINHIBIT_CLEAR, 0) != OK)
-		panic("VMCTL_BOOTINHIBIT_CLEAR failed");
+	{
+		int r;
+		r = sys_vmctl(vmp->vm_endpoint, VMCTL_BOOTINHIBIT_CLEAR, 0);
+		if (r != OK) {
+			printf("vm: boot inhibit clear failed prog=%s ep=%d r=%d\n",
+				execi->progname, vmp->vm_endpoint, r);
+			panic("VMCTL_BOOTINHIBIT_CLEAR failed");
+		}
+	}
 }
 
 static int do_procctl_notrans(message *msg)

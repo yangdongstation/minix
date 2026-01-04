@@ -264,6 +264,17 @@ reply(
   rmp = &mproc[proc_nr];
   rmp->mp_reply.m_type = result;
 
+#if defined(__riscv64__)
+  {
+	static int reply_vm_log_count;
+	if (rmp->mp_endpoint == VM_PROC_NR && reply_vm_log_count < 8) {
+		printf("PM: reply to VM proc_nr=%d name=%s result=%d\n",
+			proc_nr, rmp->mp_name, result);
+		reply_vm_log_count++;
+	}
+  }
+#endif
+
   if ((r = ipc_sendnb(rmp->mp_endpoint, &rmp->mp_reply)) != OK)
 	printf("PM can't reply to %d (%s): %d\n", rmp->mp_endpoint,
 		rmp->mp_name, r);

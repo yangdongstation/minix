@@ -211,6 +211,32 @@ static void handle_syscall(struct trapframe *tf)
         direct_print("\n");
         syscall_trace_count++;
     }
+#if defined(__riscv64__) || defined(__riscv64)
+    {
+        static int ipc_vm_trace_count;
+        if (caller->p_reg.a7 == IPCVEC_INTR &&
+            caller->p_reg.a2 == SENDREC &&
+            caller->p_reg.a0 == VM_PROC_NR &&
+            ipc_vm_trace_count < 8) {
+            message m;
+            int cr = data_copy_vmcheck(caller, caller->p_endpoint,
+                (vir_bytes)caller->p_reg.a1, KERNEL,
+                (vir_bytes)&m, sizeof(m));
+            direct_print("rv64: ipc sendrec to vm from=");
+            direct_print_hex((u64_t)caller->p_endpoint);
+            direct_print(" ptr=");
+            direct_print_hex((u64_t)caller->p_reg.a1);
+            if (cr == OK) {
+                direct_print(" mtype=");
+                direct_print_hex((u64_t)m.m_type);
+            } else {
+                direct_print(" mtype=copyfail");
+            }
+            direct_print("\n");
+            ipc_vm_trace_count++;
+        }
+    }
+#endif
 
     /* Skip ecall instruction */
     caller->p_reg.pc += 4;
@@ -248,6 +274,17 @@ static void handle_page_fault(struct trapframe *tf, u64_t cause, u64_t addr)
 
     /* VM can't handle page faults for itself. */
     if (pr && pr->p_endpoint == VM_PROC_NR) {
+        direct_print("rv64: VM pagefault pc=");
+        direct_print_hex(pr->p_reg.pc);
+        direct_print(" stval=");
+        direct_print_hex(addr);
+        direct_print(" cause=");
+        direct_print_hex(cause);
+        direct_print(" sstatus=");
+        direct_print_hex(tf->tf_sstatus);
+        direct_print(" satp=");
+        direct_print_hex(csr_read_satp());
+        direct_print("\n");
         printf("pagefault for VM on CPU %d, pc = 0x%lx, addr = 0x%lx, cause = 0x%lx\n",
             cpuid, pr->p_reg.pc, addr, cause);
         proc_stacktrace(pr);

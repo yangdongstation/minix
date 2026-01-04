@@ -668,6 +668,7 @@ static void clear_ipc(
       }
       RTS_UNSET(rc, RTS_SENDING);
   }
+  rc->p_q_link = NULL;
   RTS_UNSET(rc, RTS_RECEIVING);
 }
 

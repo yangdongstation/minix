@@ -269,6 +269,11 @@ void kmain(kinfo_t *local_cbi)
 	if(schedulable_proc) {
 	    /* Assign privilege structure. Force a static privilege id. */
             (void) get_priv(rp, static_priv_id(proc_nr));
+#ifdef __riscv64
+	    direct_printf("rv64: get_priv proc=%d ep=%d priv=%p\n",
+	        (u64_t)proc_nr, (u64_t)rp->p_endpoint,
+	        (u64_t)(unsigned long)rp->p_priv);
+#endif
 
             /* Privileges for kernel tasks. */
 	    if(proc_nr == VM_PROC_NR) {
@@ -323,6 +328,13 @@ void kmain(kinfo_t *local_cbi)
 	    /* Don't let the process run for now. */
             RTS_SET(rp, RTS_NO_PRIV | RTS_NO_QUANTUM);
 	}
+#ifdef __riscv64
+	if (proc_nr == PM_PROC_NR && rp->p_priv == NULL) {
+		(void) get_priv(rp, static_priv_id(proc_nr));
+		direct_printf("rv64: preassign PM priv=%p\n",
+		    (u64_t)(unsigned long)rp->p_priv);
+	}
+#endif
 
 	/* Arch-specific state initialization. */
 	arch_boot_proc(ip, rp);
@@ -343,6 +355,15 @@ void kmain(kinfo_t *local_cbi)
   }
 #ifdef __riscv64
   direct_print("rv64: boot procs init done\n");
+  {
+	struct proc *pm = proc_addr(PM_PROC_NR);
+	struct proc *rs = proc_addr(RS_PROC_NR);
+	struct proc *vm = proc_addr(VM_PROC_NR);
+	direct_printf("rv64: boot p_priv PM=%p RS=%p VM=%p\n",
+	    (u64_t)(unsigned long)pm->p_priv,
+	    (u64_t)(unsigned long)rs->p_priv,
+	    (u64_t)(unsigned long)vm->p_priv);
+  }
 #endif
 
   /* update boot procs info for VM */

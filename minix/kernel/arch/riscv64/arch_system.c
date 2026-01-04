@@ -148,7 +148,7 @@ reg_t arch_get_sp(struct proc *p)
 	return p->p_reg.sp;
 }
 
-void arch_set_secondary_ipc_return(struct proc *p, u32_t val)
+void arch_set_secondary_ipc_return(struct proc *p, reg_t val)
 {
 	p->p_reg.a1 = val;
 }

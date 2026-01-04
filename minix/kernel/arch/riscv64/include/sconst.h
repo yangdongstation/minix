@@ -45,7 +45,7 @@
 #define TRAPFRAME_SIZE  (35 * 8)
 
 /* Stack size */
-#define STACK_SIZE      4096
+#define STACK_SIZE      16384
 
 /* Kernel stack guard size */
 #define STACK_GUARD     4096

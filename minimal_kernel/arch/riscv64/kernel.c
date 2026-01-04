@@ -3,7 +3,7 @@
  * Called from head.S after basic initialization
  */
 
-#include "kernel/kernel.h"
+#include "kernel.h"
 #include "arch_proto.h"
 
 /* External functions from other kernel modules */

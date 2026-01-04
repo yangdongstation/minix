@@ -263,6 +263,7 @@ void arch_boot_proc(struct boot_image *ip, struct proc *rp)
 		sp -= sizeof(struct ps_strings);
 		psp = (struct ps_strings *)sp;
 		sp -= (sizeof(void *) + sizeof(void *) + sizeof(int));
+		sp = (char *)((vir_bytes)sp & ~((vir_bytes)0xF));
 
 		psp->ps_argvstr = (char **)(sp + sizeof(int));
 		psp->ps_nargvstr = 0;

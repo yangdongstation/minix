@@ -33,9 +33,16 @@
 
 static int vm_self_pages;
 static int pt_init_done;
+#if defined(__riscv64__)
+static int pt_copying;
+#endif
+#if defined(__riscv64__)
+static int pt_dmap_ready;
+#endif
 
 #if defined(__riscv64__)
 static int pt_l0alloc(pt_t *pt, int pde, int pte1, int verify);
+static int pt_l1alloc(pt_t *pt, int pde, int verify);
 static u64_t *pt_get_pte(pt_t *pt, vir_bytes v);
 static int vm_dmap_in_range(vir_bytes v, int pages);
 static int vm_phys_in_dmap(phys_bytes p, int pages);
@@ -46,8 +53,39 @@ static int pt_l0alloc(pt_t *pt, int pde, int pte1, int verify)
 	u64_t *p;
 
 	if (pt->pt_pt[pde][pte1] & ARCH_VM_PDE_PRESENT) {
-		if (pt->pt_pt[pde][pte1] & RISCV_PTE_LEAF)
-			return EFAULT;
+		if (pt->pt_pt[pde][pte1] & RISCV_PTE_LEAF) {
+			phys_bytes base;
+			u64_t flags;
+			int i;
+
+			if (verify)
+				return EFAULT;
+			if (!pt->pt_pt_l0[pde]) {
+				phys_bytes l0_phys;
+				u64_t **l0 = vm_allocpage(&l0_phys, VMP_PAGETABLE);
+				if (!l0)
+					return ENOMEM;
+				memset(l0, 0, VM_PAGE_SIZE);
+				pt->pt_pt_l0[pde] = l0;
+			}
+			if (pt->pt_pt_l0[pde] && pt->pt_pt_l0[pde][pte1])
+				return OK;
+			if (!(p = vm_allocpage(&pt_phys, VMP_PAGETABLE)))
+				return ENOMEM;
+			memset(p, 0, VM_PAGE_SIZE);
+			base = RISCV_PTE_TO_PA(pt->pt_pt[pde][pte1]);
+			flags = pt->pt_pt[pde][pte1] &
+				(RISCV_PTE_R | RISCV_PTE_W | RISCV_PTE_X |
+				RISCV_PTE_U | RISCV_PTE_G | RISCV_PTE_A |
+				RISCV_PTE_D);
+			for (i = 0; i < ARCH_VM_PT_ENTRIES; i++) {
+				p[i] = RISCV_PA_TO_PTE(base +
+					(phys_bytes)i * VM_PAGE_SIZE) | flags;
+			}
+			pt->pt_pt_l0[pde][pte1] = p;
+			pt->pt_pt[pde][pte1] = RISCV_PA_TO_PTE(pt_phys);
+			return OK;
+		}
 		if (!pt->pt_pt_l0[pde]) {
 			phys_bytes l0_phys;
 			u64_t **l0 = vm_allocpage(&l0_phys, VMP_PAGETABLE);
@@ -58,7 +96,28 @@ static int pt_l0alloc(pt_t *pt, int pde, int pte1, int verify)
 		}
 		if (pt->pt_pt_l0[pde] && pt->pt_pt_l0[pde][pte1])
 			return OK;
-		return EFAULT;
+		if (verify)
+			return EFAULT;
+		{
+			phys_bytes l0_phys;
+
+			l0_phys = RISCV_PTE_TO_PA(pt->pt_pt[pde][pte1]);
+			if (pt_dmap_ready && vm_phys_in_dmap(l0_phys, 1)) {
+				pt->pt_pt_l0[pde][pte1] = (u64_t *)(
+				    VM_OWN_DMAPBASE +
+				    (vir_bytes)(l0_phys - VM_OWN_DMAP_PHYS_BASE));
+				return OK;
+			}
+			if (!(p = vm_allocpage(&pt_phys, VMP_PAGETABLE)))
+				return ENOMEM;
+			if (sys_abscopy(l0_phys, pt_phys, VM_PAGE_SIZE) != OK) {
+				vm_freepages((vir_bytes)p, 1);
+				return EFAULT;
+			}
+			pt->pt_pt_l0[pde][pte1] = p;
+			pt->pt_pt[pde][pte1] = RISCV_PA_TO_PTE(pt_phys);
+			return OK;
+		}
 	}
 
 	if (verify)
@@ -72,10 +131,63 @@ static int pt_l0alloc(pt_t *pt, int pde, int pte1, int verify)
 	}
 
 	memset(p, 0, VM_PAGE_SIZE);
-	if (!pt->pt_pt_l0[pde])
-		return EFAULT;
+	if (!pt->pt_pt_l0[pde]) {
+		phys_bytes l0_phys;
+		u64_t **l0 = vm_allocpage(&l0_phys, VMP_PAGETABLE);
+		if (!l0) {
+			vm_freepages((vir_bytes)p, 1);
+			return ENOMEM;
+		}
+		memset(l0, 0, VM_PAGE_SIZE);
+		pt->pt_pt_l0[pde] = l0;
+	}
 	pt->pt_pt_l0[pde][pte1] = p;
 	pt->pt_pt[pde][pte1] = RISCV_PA_TO_PTE(pt_phys);
+
+	return OK;
+}
+
+static int pt_l1alloc(pt_t *pt, int pde, int verify)
+{
+	phys_bytes pt_phys;
+	phys_bytes l0_phys;
+	phys_bytes base;
+	u64_t flags;
+	u64_t *p;
+	u64_t **l0;
+	int i;
+
+	if (!(pt->pt_dir[pde] & RISCV_PTE_LEAF))
+		return OK;
+	if (verify)
+		return EFAULT;
+	if (pt->pt_pt[pde])
+		return OK;
+
+	if (!(p = vm_allocpage(&pt_phys, VMP_PAGETABLE)))
+		return ENOMEM;
+	memset(p, 0, VM_PAGE_SIZE);
+
+	if (!(l0 = vm_allocpage(&l0_phys, VMP_PAGETABLE))) {
+		vm_freepages((vir_bytes)p, 1);
+		return ENOMEM;
+	}
+	memset(l0, 0, VM_PAGE_SIZE);
+
+	base = RISCV_PTE_TO_PA(pt->pt_dir[pde]);
+	flags = pt->pt_dir[pde] &
+		(RISCV_PTE_R | RISCV_PTE_W | RISCV_PTE_X |
+		RISCV_PTE_U | RISCV_PTE_G | RISCV_PTE_A |
+		RISCV_PTE_D);
+	for (i = 0; i < ARCH_VM_PT_ENTRIES; i++) {
+		p[i] = RISCV_PA_TO_PTE(base +
+			(phys_bytes)i * (VM_PAGE_SIZE * ARCH_VM_PT_ENTRIES)) |
+			flags;
+	}
+
+	pt->pt_pt[pde] = p;
+	pt->pt_pt_l0[pde] = l0;
+	pt->pt_dir[pde] = RISCV_PA_TO_PTE(pt_phys);
 
 	return OK;
 }
@@ -190,6 +302,46 @@ static struct {
 	int		flags;
 } kern_mappings[MAX_KERNMAPPINGS];
 int kernmappings = 0;
+
+#if defined(__riscv64__)
+static void pt_verify_kernel_mappings(pt_t *pt, const char *tag)
+{
+	int i;
+	int missing = 0;
+	u64_t entry;
+
+	if (!pt || kern_start_pde < 0)
+		return;
+
+	entry = pt->pt_dir[kern_start_pde];
+	if (!(entry & ARCH_VM_PTE_PRESENT) || !(entry & RISCV_PTE_LEAF)) {
+		printf("VM: %s missing kern pde=%d entry=0x%llx\n",
+		    tag, kern_start_pde, (unsigned long long)entry);
+		missing++;
+	}
+
+	entry = pt->pt_dir[2];
+	if (!(entry & ARCH_VM_PTE_PRESENT) || !(entry & RISCV_PTE_LEAF)) {
+		printf("VM: %s missing identity pde=2 entry=0x%llx\n",
+		    tag, (unsigned long long)entry);
+		missing++;
+	}
+
+	for (i = 0; i < kernmappings; i++) {
+		u64_t *pte = pt_get_pte(pt, kern_mappings[i].vir_addr);
+
+		if (!pte || !(*pte & ARCH_VM_PTE_PRESENT)) {
+			printf("VM: %s missing kernmap i=%d vir=0x%lx\n",
+			    tag, i, (unsigned long)kern_mappings[i].vir_addr);
+			missing++;
+		}
+	}
+
+	if (missing) {
+		printf("VM: %s kernel mapping missing=%d\n", tag, missing);
+	}
+}
+#endif
 
 /* Clicks must be pages, as
  *  - they must be page aligned to map them
@@ -467,7 +619,11 @@ void *vm_allocpages(phys_bytes *phys, int reason, int pages)
 	assert(level >= 1);
 	assert(level <= 2);
 
-	if((level > 1) || !pt_init_done) {
+	if((level > 1) || !pt_init_done
+#if defined(__riscv64__)
+		|| pt_copying
+#endif
+		) {
 		void *s;
 
 		if(pages == 1) s=vm_getsparepage(phys);
@@ -501,7 +657,7 @@ void *vm_allocpages(phys_bytes *phys, int reason, int pages)
 	*phys = CLICK2ABS(newpage);
 
 #if defined(__riscv64__)
-	if (pt_init_done &&
+	if (pt_init_done && pt_dmap_ready &&
 	    (reason == VMP_PAGETABLE || reason == VMP_PAGEDIR) &&
 	    vm_phys_in_dmap(*phys, pages)) {
 		level--;
@@ -743,8 +899,11 @@ int pt_ptalloc_in_range(pt_t *pt, vir_bytes start, vir_bytes end,
 	for(pde = first_pde; pde <= last_pde; pde++) {
 		assert(!(pt->pt_dir[pde] & ARCH_VM_BIGPAGE));
 #if defined(__riscv64__)
-		if (pt->pt_dir[pde] & RISCV_PTE_LEAF)
-			return EFAULT;
+		if (pt->pt_dir[pde] & RISCV_PTE_LEAF) {
+			int r = pt_l1alloc(pt, pde, verify);
+			if (r != OK)
+				return r;
+		}
 #endif
 		if(!(pt->pt_dir[pde] & ARCH_VM_PDE_PRESENT)) {
 			int r;
@@ -1172,8 +1331,12 @@ int pt_writemap(struct vmproc * vmp,
 #elif defined(__riscv64__)
 		if (physaddr == MAP_NONE)
 			entry = 0;
-		else
-			entry = RISCV_PA_TO_PTE(physaddr) | flags;
+		else {
+			u64_t ad = RISCV_PTE_A;
+			if (flags & ARCH_VM_PTE_RW)
+				ad |= RISCV_PTE_D;
+			entry = RISCV_PA_TO_PTE(physaddr) | flags | ad;
+		}
 #elif defined(__arm__)
 		entry = (physaddr & ARM_VM_PTE_MASK) | flags;
 #endif
@@ -1438,19 +1601,47 @@ static void pt_copy(pt_t *dst, pt_t *src)
 {
 	int pde;
 	for(pde=0; pde < kern_start_pde; pde++) {
+#if defined(__riscv64__)
+		int pd;
+		int skip = 0;
+
+		for (pd = 0; pd < MAX_PAGEDIR_PDES; pd++) {
+			if (pagedir_mappings[pd].pdeno == pde) {
+				skip = 1;
+				break;
+			}
+		}
+		if (skip)
+			continue;
+#endif
 		if(!(src->pt_dir[pde] & ARCH_VM_PDE_PRESENT)) {
 			continue;
 		}
 #if defined(__riscv64__)
-		if(src->pt_dir[pde] & RISCV_PTE_LEAF)
+		if(src->pt_dir[pde] & RISCV_PTE_LEAF) {
+			dst->pt_dir[pde] = src->pt_dir[pde];
 			continue;
+		}
 #else
 		assert(!(src->pt_dir[pde] & ARCH_VM_BIGPAGE));
 #endif
 		if(!src->pt_pt[pde]) { panic("pde %d empty\n", pde); }
-		if(pt_ptalloc(dst, pde, 0) != OK)
-			panic("pt_ptalloc failed");
 #if defined(__riscv64__)
+		if(!(dst->pt_dir[pde] & ARCH_VM_PDE_PRESENT)) {
+			if(pt_ptalloc(dst, pde, 0) != OK)
+				panic("pt_ptalloc failed");
+		} else if (dst->pt_dir[pde] & RISCV_PTE_LEAF) {
+			continue;
+		}
+		if(!dst->pt_pt[pde]) { panic("dst pde %d empty\n", pde); }
+		if(!dst->pt_pt_l0[pde]) {
+			phys_bytes l0_phys;
+			u64_t **l0 = vm_allocpage(&l0_phys, VMP_PAGETABLE);
+			if (!l0)
+				panic("pt_copy l0 root alloc failed");
+			memset(l0, 0, VM_PAGE_SIZE);
+			dst->pt_pt_l0[pde] = l0;
+		}
 		{
 			int pte1;
 			for(pte1 = 0; pte1 < ARCH_VM_PT_ENTRIES; pte1++) {
@@ -1474,6 +1665,8 @@ static void pt_copy(pt_t *dst, pt_t *src)
 			}
 		}
 #else
+		if(pt_ptalloc(dst, pde, 0) != OK)
+			panic("pt_ptalloc failed");
 		memcpy(dst->pt_pt[pde], src->pt_pt[pde],
 			ARCH_VM_PT_ENTRIES * sizeof(*dst->pt_pt[pde]));
 #endif
@@ -1525,7 +1718,6 @@ void pt_init(void)
 #else
 	kern_start_pde = kernel_boot_info.vir_kern_start / ARCH_BIG_PAGE_SIZE;
 #endif
-
         /* Get ourselves spare pages. */
         sparepages_mem = (vir_bytes) static_sparepages;
 	assert(!(sparepages_mem % VM_PAGE_SIZE));
@@ -1612,13 +1804,19 @@ void pt_init(void)
 			kern_mappings[pindex].vir_addr = offset;
 			kern_mappings[pindex].flags =
 				ARCH_VM_PTE_PRESENT;
+#if defined(__riscv64__)
+			kern_mappings[pindex].flags |= RISCV_PTE_R;
+#endif
+#if defined(__arm__)
 			if(flags & VMMF_UNCACHED)
+				kern_mappings[pindex].flags |= ARM_VM_PTE_DEVICE;
+			else
+				kern_mappings[pindex].flags |= ARM_VM_PTE_CACHED;
+#else
+			if(flags & VMMF_UNCACHED) {
 #if defined(__i386__)
 				kern_mappings[pindex].flags |= PTF_NOCACHE;
-#elif defined(__arm__)
-				kern_mappings[pindex].flags |= ARM_VM_PTE_DEVICE;
-			else {
-				kern_mappings[pindex].flags |= ARM_VM_PTE_CACHED;
+#endif
 			}
 #endif
 			if(flags & VMMF_USER)
@@ -1633,6 +1831,11 @@ void pt_init(void)
 			else 
 				kern_mappings[pindex].flags |= ARCH_VM_PTE_RO;
 #endif
+			if (pindex == 0) {
+				printf("VM: kernmap set flags=0x%x userflag=0x%x\n",
+				    kern_mappings[pindex].flags,
+				    ARCH_VM_PTE_USER);
+			}
 
 #if defined(__i386__)
 			if(flags & VMMF_GLO)
@@ -1644,6 +1847,12 @@ void pt_init(void)
 			if(len % VM_PAGE_SIZE)
                 		panic("VM: len unaligned: %lu", len);
 			vir = offset;
+			if (flags & VMMF_USER) {
+				printf("VM: kernmap user pindex=%d phys=0x%llx len=0x%llx flags=0x%x vir=0x%lx\n",
+				    pindex, (unsigned long long)addr,
+				    (unsigned long long)len, flags,
+				    (unsigned long)vir);
+			}
 			if(sys_vmctl_reply_mapping(pindex, vir) != OK)
                 		panic("VM: reply failed");
 			offset += len;
@@ -1826,6 +2035,7 @@ void pt_init(void)
 	assert(vmproc[VM_PROC_NR].vm_endpoint == VM_PROC_NR);
 #if defined(__riscv64__)
 	printf("VM: pt_init before pt_bind\n");
+	pt_verify_kernel_mappings(newpt, "pt_init bind");
 #endif
 	pt_bind(newpt, &vmproc[VM_PROC_NR]);
 #if defined(__riscv64__)
@@ -1833,6 +2043,17 @@ void pt_init(void)
 #endif
 
 	pt_init_done = 1;
+#if defined(__riscv64__)
+	{
+		u64_t *entry = pt_get_pte(&vmprocess->vm_pt, VM_OWN_DMAPBASE);
+		if (entry &&
+		    ((*entry & (ARCH_VM_PTE_PRESENT | ARCH_VM_PTE_USER |
+		    ARCH_VM_PTE_RW)) ==
+		    (ARCH_VM_PTE_PRESENT | ARCH_VM_PTE_USER |
+		    ARCH_VM_PTE_RW)))
+			pt_dmap_ready = 1;
+	}
+#endif
 
 	/* VM is now fully functional in that it can dynamically allocate memory
 	 * for itself.
@@ -1852,6 +2073,9 @@ void pt_init(void)
 	pt_allocate_kernel_mapped_pagetables(); /* Reallocate in-kernel pages */
 	pt_bind(newpt, &vmproc[VM_PROC_NR]);    /* Recalculate */
 	pt_mapkernel(newpt);                    /* Rewrite pagetable info */
+#if defined(__riscv64__)
+	pt_verify_kernel_mappings(newpt, "pt_init remap");
+#endif
 
 	/* Flush TLB just in case any of those mappings have been touched */
 	if((sys_vmctl(SELF, VMCTL_FLUSHTLB, 0)) != OK) {
@@ -1861,16 +2085,48 @@ void pt_init(void)
 	/* Recreate VM page table with dynamic-only allocations */
 	memset(&newpt_dyn, 0, sizeof(newpt_dyn));
 	pt_new(&newpt_dyn);
+#if defined(__riscv64__)
+	pt_copying = 1;
+#endif
 	pt_copy(&newpt_dyn, newpt);
+#if defined(__riscv64__)
+	pt_copying = 0;
+	pt_verify_kernel_mappings(&newpt_dyn, "pt_copy");
+#endif
 	memcpy(newpt, &newpt_dyn, sizeof(*newpt));
 
 	pt_bind(newpt, &vmproc[VM_PROC_NR]);    /* Recalculate */
 	pt_mapkernel(newpt);                    /* Rewrite pagetable info */
+#if defined(__riscv64__)
+	pt_verify_kernel_mappings(newpt, "pt_init dyn");
+#endif
 
 	/* Flush TLB just in case any of those mappings have been touched */
 	if((sys_vmctl(SELF, VMCTL_FLUSHTLB, 0)) != OK) {
 		panic("VMCTL_FLUSHTLB failed");
 	}
+
+#if defined(__riscv64__)
+	{
+		int i;
+		for (i = 0; i < kernmappings; i++) {
+			u64_t *entry;
+			printf("VM: kernmap check i=%d vir=0x%lx flags=0x%x\n",
+			    i, (unsigned long)kern_mappings[i].vir_addr,
+			    kern_mappings[i].flags);
+			entry = pt_get_pte(&vmprocess->vm_pt, kern_mappings[i].vir_addr);
+			if (entry) {
+				printf("VM: kernmap pte vir=0x%lx entry=0x%llx\n",
+				    (unsigned long)kern_mappings[i].vir_addr,
+				    (unsigned long long)*entry);
+			} else {
+				printf("VM: kernmap pte missing vir=0x%lx\n",
+				    (unsigned long)kern_mappings[i].vir_addr);
+			}
+		}
+	}
+#endif
+	printf("VM: pt_init end\n");
 
         /* All OK. */
         return;
@@ -1952,6 +2208,21 @@ int pt_bind(pt_t *pt, struct vmproc *who)
 		int r = sys_vmctl_set_addrspace(who->vm_endpoint, pt->pt_dir_phys, pdes);
 #if defined(__riscv64__)
 		printf("VM: pt_bind set_addrspace r=%d\n", r);
+		if (r == OK && who->vm_endpoint == VM_PROC_NR) {
+			u32_t pdbr = 0;
+			int r2 = sys_vmctl_get_pdbr(SELF, &pdbr);
+			if (r2 == OK) {
+				if (pdbr != (u32_t)pt->pt_dir_phys) {
+					printf("VM: pt_bind pdbr mismatch pdbr=0x%x want=0x%llx\n",
+					    pdbr, (unsigned long long)pt->pt_dir_phys);
+					r = sys_vmctl_set_addrspace(who->vm_endpoint,
+					    pt->pt_dir_phys, pdes);
+				}
+			} else {
+				printf("VM: pt_bind get_pdbr failed r=%d\n", r2);
+			}
+			pt_verify_kernel_mappings(pt, "pt_bind");
+		}
 #endif
 		return r;
 	}

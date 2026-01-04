@@ -181,7 +181,7 @@ void arch_proc_reset(struct proc *pr)
 	arch_proc_setcontext(pr, &reg, 0, KTS_FULLCONTEXT);
 }
 
-void arch_set_secondary_ipc_return(struct proc *p, u32_t val)
+void arch_set_secondary_ipc_return(struct proc *p, reg_t val)
 {
 	p->p_reg.bx = val;
 }

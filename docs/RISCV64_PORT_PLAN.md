@@ -1,14 +1,65 @@
-# MINIX 3 RISC-V 64 移植项目计划 (详细可执行版)
+# MINIX 3 RISC-V 64 Port Plan / MINIX 3 RISC-V 64 移植项目计划（可执行版）
 
-## 项目目标
+**Document Info / 文档信息**
+- Last updated / 最后更新: 2026-01-04
+- Scope / 范围: evbriscv64 on QEMU virt
+- Purpose / 用途: actionable checklist; do not re-apply steps already present in tree
 
-将 MINIX 3 移植到 RISC-V 64 位架构，达到与官方 x86_64 ISO 相同完成度。
+**Status Legend / 状态标识**
+- Done / 已完成：已在代码树中观察到
+- Partial / 部分完成：已实现但运行不稳定或仍有缺口
+- Planned / 计划中：尚未实现
+- Blocked / 受阻：已知阻塞原因
+
+## Status Summary / 状态概览
+
+**中文**
+- Phase 0/1：构建系统与目录结构已在代码树中观察到（见 `build.sh`、`sys/arch/*`、`share/mk/bsd.own.mk`）。
+- Phase 2：`minix/kernel/arch/riscv64` 已存在，内核基础具备但运行不稳定（见 `RISC64-STATUS.md`）。
+- 运行时关键问题与修复建议见 `issue.md`。
+
+**English**
+- Phase 0/1: build-system and arch directories are present in tree (`build.sh`, `sys/arch/*`, `share/mk/bsd.own.mk`).
+- Phase 2: `minix/kernel/arch/riscv64` exists; runtime remains unstable (see `RISC64-STATUS.md`).
+- Runtime issues and fixes are tracked in `issue.md`.
+
+## Phase Overview / 阶段概览
+
+**中文**
+- Phase 0：依赖安装、QEMU virt 设备树与硬件地址确认
+- Phase 1：构建系统识别 evbriscv64、RISC-V CPU 家族与编译标志
+- Phase 2：内核架构层文件结构与基础实现
+- Phase 3：异常/中断/时钟/VM 等核心链路
+- Phase 4：VirtIO 设备驱动
+- Phase 5：SMP 多核支持
+- Phase 6：完整系统集成与回归
+
+**English**
+- Phase 0: dependencies, QEMU virt device tree, and hardware addresses
+- Phase 1: build system recognition of evbriscv64, CPU family, and flags
+- Phase 2: kernel architecture layer files and baseline implementation
+- Phase 3: core paths (traps, IRQ, clock, VM)
+- Phase 4: VirtIO device drivers
+- Phase 5: SMP support
+- Phase 6: full system integration and regression
+
+**Note / 说明**
+- 详细步骤以中文为主；命令与代码块为语言无关内容。  
+  Detailed steps below are Chinese-first; commands and code blocks are language-neutral.
+
+## 项目目标 / Goal
+
+将 MINIX 3 移植到 RISC-V 64 位架构，达到与官方 x86_64 ISO 相同完成度。  
+Port MINIX 3 to RISC-V 64-bit with parity to the official x86_64 ISO.
 
 ---
 
-## 阶段 0: 环境准备与验证
+## 阶段 0: 环境准备与验证 / Phase 0: Environment Setup and Validation
 
-### 0.1 安装依赖工具
+### 0.1 安装依赖工具 / Install Dependencies
+
+**Status / 状态**: Planned  
+**Evidence / 证据**: N/A (host environment)
 
 ```bash
 # Ubuntu/Debian
@@ -20,7 +71,10 @@ qemu-system-riscv64 --version
 riscv64-linux-gnu-gcc --version
 ```
 
-### 0.2 获取 QEMU virt 平台设备树
+### 0.2 获取 QEMU virt 平台设备树 / Get QEMU virt Device Tree
+
+**Status / 状态**: Planned  
+**Evidence / 证据**: N/A (host environment)
 
 ```bash
 # 导出设备树供参考
@@ -33,23 +87,26 @@ grep -A5 "serial@" qemu-virt.dts   # UART 地址: 0x10000000
 grep -A5 "virtio_mmio@" qemu-virt.dts  # VirtIO MMIO 区域
 ```
 
-**检查点**: 设备树文件生成成功，记录关键硬件地址
+**检查点 / Checkpoint**: 设备树文件生成成功，记录关键硬件地址
 
 ---
 
-## 阶段 1: 构建系统适配
+## 阶段 1: 构建系统适配 / Phase 1: Build System Integration
 
-### 1.1 修改 build.sh 添加 RISC-V 目标
+### 1.1 修改 build.sh 添加 RISC-V 目标 / Add RISC-V Target to build.sh
 
-**文件**: `/home/donz/minix/build.sh`
-**位置**: 行 615-720 附近 (MACHINE/MACHINE_ARCH 定义区域)
+**Status / 状态**: Done  
+**Evidence / 证据**: `build.sh` includes evbriscv64 entries
+
+**文件 / File**: `/path/to/minix/build.sh`
+**位置 / Location**: 行 615-720 附近 (MACHINE/MACHINE_ARCH 定义区域)
 
 ```bash
 # 找到添加位置
 grep -n "evbarm" build.sh | head -5
 ```
 
-**添加内容** (在 evbarm 定义后):
+**添加内容 / Add** (在 evbarm 定义后):
 ```bash
 # 在约 653 行后添加
 evbriscv64)
@@ -59,45 +116,51 @@ evbriscv64)
     ;;
 ```
 
-**验证命令**:
+**验证命令 / Verify**:
 ```bash
 ./build.sh -m evbriscv64 list-arch
 ```
 
-### 1.2 修改 bsd.own.mk 添加 RISC-V CPU 族
+### 1.2 修改 bsd.own.mk 添加 RISC-V CPU 族 / Add RISC-V CPU Family in bsd.own.mk
 
-**文件**: `/home/donz/minix/share/mk/bsd.own.mk`
-**位置**: 行 188-189 (MACHINE_CPU 定义)
+**Status / 状态**: Done  
+**Evidence / 证据**: `share/mk/bsd.own.mk` defines `RISCV_ARCH_FLAGS` and CFLAGS
 
-**当前代码**:
+**文件 / File**: `/path/to/minix/share/mk/bsd.own.mk`
+**位置 / Location**: 行 188-189 (MACHINE_CPU 定义)
+
+**当前代码 / Current**:
 ```makefile
 MACHINE_CPU= ${MACHINE_ARCH:C/mipse[bl]/mips/:C/earm.*/arm/:C/riscv../riscv/}
 ```
 
-**修改为** (已支持，无需修改，确认即可):
+**修改为 / Change to** (已支持，无需修改，确认即可):
 ```makefile
 # riscv32 -> riscv, riscv64 -> riscv
 # 规则 :C/riscv../riscv/ 已覆盖
 ```
 
-**新增 RISC-V 编译标志** (约行 120 后):
+**新增 RISC-V 编译标志 / Add RISC-V CFLAGS** (约行 120 后):
 ```makefile
 .if ${MACHINE_ARCH} == "riscv64"
 CFLAGS+= -march=rv64gc -mabi=lp64d
 .endif
 ```
 
-**验证命令**:
+**验证命令 / Verify**:
 ```bash
 grep -n "riscv" share/mk/bsd.own.mk
 ```
 
-### 1.3 修改 sys/arch/Makefile
+### 1.3 修改 sys/arch/Makefile / Update sys/arch/Makefile
 
-**文件**: `/home/donz/minix/sys/arch/Makefile`
-**位置**: 行 19-35 (SUBDIR 定义)
+**Status / 状态**: Done  
+**Evidence / 证据**: `sys/arch/Makefile` contains riscv SUBDIR branch
 
-**添加内容**:
+**文件 / File**: `/path/to/minix/sys/arch/Makefile`
+**位置 / Location**: 行 19-35 (SUBDIR 定义)
+
+**添加内容 / Add**:
 ```makefile
 .elif ${MACHINE_CPU} == "riscv"
 .if defined(__MINIX)
@@ -107,7 +170,10 @@ SUBDIR= riscv
 .endif
 ```
 
-### 1.4 创建 sys/arch/riscv 头文件目录
+### 1.4 创建 sys/arch/riscv 头文件目录 / Create sys/arch/riscv Headers
+
+**Status / 状态**: Done  
+**Evidence / 证据**: `sys/arch/riscv/include/` exists with headers
 
 ```bash
 # 创建目录结构
@@ -228,20 +294,23 @@ struct fpreg {
 #endif /* _RISCV_REG_H_ */
 ```
 
-### 1.5 创建 sys/arch/evbriscv64 评估板目录
+### 1.5 创建 sys/arch/evbriscv64 评估板目录 / Create sys/arch/evbriscv64 Board Dir
+
+**Status / 状态**: Done  
+**Evidence / 证据**: `sys/arch/evbriscv64/Makefile` and `sys/arch/evbriscv64/include/`
 
 ```bash
 mkdir -p sys/arch/evbriscv64/include
 ```
 
-**文件: sys/arch/evbriscv64/include/Makefile**:
+**文件 / File**: `sys/arch/evbriscv64/include/Makefile`
 ```makefile
 INCSDIR= /usr/include/evbriscv64
 
 .include "../../riscv/include/Makefile.common"
 ```
 
-**文件: sys/arch/evbriscv64/Makefile**:
+**文件 / File**: `sys/arch/evbriscv64/Makefile`
 ```makefile
 .include <bsd.own.mk>
 
@@ -251,7 +320,7 @@ SUBDIR= include
 .include <bsd.subdir.mk>
 ```
 
-**阶段 1 检查点**:
+**阶段 1 检查点 / Phase 1 Checkpoint**:
 ```bash
 # 1. build.sh 识别新架构
 ./build.sh -m evbriscv64 list-arch
@@ -263,17 +332,23 @@ ls sys/arch/evbriscv64/include/
 
 ---
 
-## 阶段 2: MINIX 内核架构层
+## 阶段 2: MINIX 内核架构层 / Phase 2: Kernel Architecture Layer
 
-### 2.1 创建 minix/kernel/arch/riscv64 目录结构
+### 2.1 创建 minix/kernel/arch/riscv64 目录结构 / Create minix/kernel/arch/riscv64 Layout
+
+**Status / 状态**: Done  
+**Evidence / 证据**: `minix/kernel/arch/riscv64/` directory exists
 
 ```bash
 mkdir -p minix/kernel/arch/riscv64/{include,bsp/virt}
 ```
 
-### 2.2 创建 Makefile.inc
+### 2.2 创建 Makefile.inc / Create Makefile.inc
 
-**文件**: `minix/kernel/arch/riscv64/Makefile.inc`
+**Status / 状态**: Done  
+**Evidence / 证据**: `minix/kernel/arch/riscv64/Makefile.inc`
+
+**文件 / File**: `minix/kernel/arch/riscv64/Makefile.inc`
 
 ```makefile
 # MINIX kernel RISC-V 64 architecture Makefile
@@ -321,9 +396,12 @@ EXTRA_OBJS+= ${HERE}/kernel.lds
 LDFLAGS+= -T ${HERE}/kernel.lds
 ```
 
-### 2.3 创建头文件
+### 2.3 创建头文件 / Create Headers
 
-**文件**: `minix/kernel/arch/riscv64/include/archconst.h`
+**Status / 状态**: Done  
+**Evidence / 证据**: `minix/kernel/arch/riscv64/include/archconst.h`, `arch_proto.h`, `hw_intr.h`
+
+**文件 / File**: `minix/kernel/arch/riscv64/include/archconst.h`
 
 ```c
 #ifndef _RISCV64_ARCHCONST_H
@@ -360,7 +438,7 @@ LDFLAGS+= -T ${HERE}/kernel.lds
 #endif /* _RISCV64_ARCHCONST_H */
 ```
 
-**文件**: `minix/kernel/arch/riscv64/include/arch_proto.h`
+**文件 / File**: `minix/kernel/arch/riscv64/include/arch_proto.h`
 
 ```c
 #ifndef _RISCV64_ARCH_PROTO_H
@@ -512,7 +590,7 @@ static inline uint64_t csr_read_time(void) {
 #endif /* _RISCV64_ARCH_PROTO_H */
 ```
 
-**文件**: `minix/kernel/arch/riscv64/include/hw_intr.h`
+**文件 / File**: `minix/kernel/arch/riscv64/include/hw_intr.h`
 
 ```c
 #ifndef _RISCV64_HW_INTR_H
@@ -537,9 +615,12 @@ static inline uint64_t csr_read_time(void) {
 #endif /* _RISCV64_HW_INTR_H */
 ```
 
-### 2.4 创建 SBI 接口
+### 2.4 创建 SBI 接口 / Create SBI Interface
 
-**文件**: `minix/kernel/arch/riscv64/sbi.c` (~100 行新代码)
+**Status / 状态**: Partial  
+**Evidence / 证据**: `minix/kernel/arch/riscv64/sbi.c` present; legacy IPI/fence uses VA (see `issue.md`)
+
+**文件 / File**: `minix/kernel/arch/riscv64/sbi.c` (~100 行新代码)
 
 ```c
 /*
@@ -664,9 +745,12 @@ void sbi_system_reset(uint32_t reset_type, uint32_t reset_reason)
 }
 ```
 
-### 2.5 创建 PLIC 驱动
+### 2.5 创建 PLIC 驱动 / Create PLIC Driver
 
-**文件**: `minix/kernel/arch/riscv64/plic.c` (~150 行，含关键新代码)
+**Status / 状态**: Done  
+**Evidence / 证据**: `minix/kernel/arch/riscv64/plic.c`
+
+**文件 / File**: `minix/kernel/arch/riscv64/plic.c` (~150 行，含关键新代码)
 
 ```c
 /*
@@ -812,9 +896,12 @@ uint32_t plic_irq_get_cpu_mask(int irq)
 }
 ```
 
-### 2.6 创建启动汇编
+### 2.6 创建启动汇编 / Create Boot Assembly
 
-**文件**: `minix/kernel/arch/riscv64/head.S` (~200 行)
+**Status / 状态**: Done  
+**Evidence / 证据**: `minix/kernel/arch/riscv64/head.S`, `exc.S`, `mpx.S`
+
+**文件 / File**: `minix/kernel/arch/riscv64/head.S` (~200 行)
 
 ```assembly
 /*
@@ -1021,9 +1108,12 @@ _percpu_stack:
 _percpu_stack_top:
 ```
 
-### 2.7 创建链接脚本
+### 2.7 创建链接脚本 / Create Linker Script
 
-**文件**: `minix/kernel/arch/riscv64/kernel.lds`
+**Status / 状态**: Done  
+**Evidence / 证据**: `minix/kernel/arch/riscv64/kernel.lds`
+
+**文件 / File**: `minix/kernel/arch/riscv64/kernel.lds`
 
 ```ld
 /*
@@ -1085,9 +1175,12 @@ SECTIONS
 }
 ```
 
-### 2.8 创建 trapframe 常量定义
+### 2.8 创建 trapframe 常量定义 / Create trapframe Constants
 
-**文件**: `minix/kernel/arch/riscv64/sconst.h`
+**Status / 状态**: Done  
+**Evidence / 证据**: `minix/kernel/arch/riscv64/include/sconst.h`
+
+**文件 / File**: `minix/kernel/arch/riscv64/sconst.h`
 
 ```c
 #ifndef _RISCV64_SCONST_H
@@ -1138,7 +1231,7 @@ SECTIONS
 #endif /* _RISCV64_SCONST_H */
 ```
 
-**阶段 2 检查点**:
+**阶段 2 检查点 / Phase 2 Checkpoint**:
 ```bash
 # 所有文件创建完成
 ls minix/kernel/arch/riscv64/
@@ -1149,11 +1242,14 @@ ls minix/kernel/arch/riscv64/
 
 ---
 
-## 阶段 3: 核心内核功能实现
+## 阶段 3: 核心内核功能实现 / Phase 3: Core Kernel Functionality
 
-### 3.1 异常处理
+### 3.1 异常处理 / Trap and Exception Handling
 
-**文件**: `minix/kernel/arch/riscv64/exception.c`
+**Status / 状态**: Partial  
+**Evidence / 证据**: `minix/kernel/arch/riscv64/exception.c`; issues in `issue.md` (breakpoint length, SSIE, pagefault msg)
+
+**文件 / File**: `minix/kernel/arch/riscv64/exception.c`
 
 ```c
 /*
@@ -1251,9 +1347,12 @@ void exception_handler(struct trapframe *tf)
 }
 ```
 
-### 3.2 时钟驱动
+### 3.2 时钟驱动 / Timer and Clock Driver
 
-**文件**: `minix/kernel/arch/riscv64/arch_clock.c`
+**Status / 状态**: Partial  
+**Evidence / 证据**: `minix/kernel/arch/riscv64/arch_clock.c`; missing kernel clock handler (see `issue.md`)
+
+**文件 / File**: `minix/kernel/arch/riscv64/arch_clock.c`
 
 ```c
 /*
@@ -1301,9 +1400,12 @@ uint64_t arch_get_timestamp(void)
 }
 ```
 
-### 3.3 VirtIO 公共层 (关键: virtio_fence)
+### 3.3 VirtIO 公共层 (关键: virtio_fence) / VirtIO Common Layer (key: virtio_fence)
 
-**文件**: `minix/drivers/virtio/virtio_riscv.h`
+**Status / 状态**: Planned  
+**Evidence / 证据**: no `virtio_fence` symbol found; no `minix/drivers/virtio/` directory
+
+**文件 / File**: `minix/drivers/virtio/virtio_riscv.h`
 
 ```c
 /*
@@ -1430,7 +1532,7 @@ static inline void virtio_write64(volatile void *addr, uint64_t val)
 #endif /* _VIRTIO_RISCV_H */
 ```
 
-**阶段 3 检查点**:
+**阶段 3 检查点 / Phase 3 Checkpoint**:
 ```bash
 # 编译内核
 ./build.sh -m evbriscv64 kernel
@@ -1445,11 +1547,14 @@ qemu-system-riscv64 -M virt -m 256M -nographic \
 
 ---
 
-## 阶段 4: VirtIO 驱动移植
+## 阶段 4: VirtIO 驱动移植 / Phase 4: VirtIO Driver Porting
 
-### 4.1 virtio-blk 移植步骤
+### 4.1 virtio-blk 移植步骤 / virtio-blk Porting Steps
 
-**源文件**: `minix/drivers/storage/virtio_blk/`
+**Status / 状态**: Partial  
+**Evidence / 证据**: `minix/drivers/storage/virtio_blk` and `virtio_blk_mmio` exist; RISC-V-specific wiring not verified
+
+**源文件 / Source**: `minix/drivers/storage/virtio_blk/`
 
 | 步骤 | 操作 | 预计修改 |
 |------|------|----------|
@@ -1460,7 +1565,7 @@ qemu-system-riscv64 -M virt -m 256M -nographic \
 | 5 | 更新 IRQ 号为 PLIC IRQ | ~5 处 |
 | 6 | 修改 MMIO 基地址 | ~3 处 |
 
-**验证命令**:
+**验证命令 / Verify**:
 ```bash
 # 创建测试磁盘镜像
 dd if=/dev/zero of=test.img bs=1M count=64
@@ -1471,23 +1576,32 @@ qemu-system-riscv64 -M virt -m 512M -nographic \
     -drive file=test.img,if=virtio,format=raw
 ```
 
-### 4.2 virtio-net 移植步骤
+### 4.2 virtio-net 移植步骤 / virtio-net Porting Steps
+
+**Status / 状态**: Partial  
+**Evidence / 证据**: `minix/drivers/net/virtio_net` exists; RISC-V MMIO/PLIC integration not verified
 
 与 virtio-blk 类似，额外注意:
 - 中断处理中的 DMA 缓冲区同步
 - `virtio_fence()` 在发送/接收路径
 
-### 4.3 virtio-gpu 移植步骤
+### 4.3 virtio-gpu 移植步骤 / virtio-gpu Porting Steps
+
+**Status / 状态**: Planned  
+**Evidence / 证据**: no `minix/drivers/video/virtio_gpu` directory
 
 额外注意:
 - 帧缓冲区映射
 - 2D 渲染命令序列化
 
-### 4.4 virtio-input 移植步骤
+### 4.4 virtio-input 移植步骤 / virtio-input Porting Steps
+
+**Status / 状态**: Planned  
+**Evidence / 证据**: no `minix/drivers/hid/virtio_input` directory
 
 最简单的驱动，主要是事件队列处理。
 
-**阶段 4 检查点**:
+**阶段 4 检查点 / Phase 4 Checkpoint**:
 ```bash
 # 完整启动测试
 qemu-system-riscv64 -M virt -m 2G -smp 1 \
@@ -1501,11 +1615,14 @@ qemu-system-riscv64 -M virt -m 2G -smp 1 \
 
 ---
 
-## 阶段 5: SMP 多核支持
+## 阶段 5: SMP 多核支持 / Phase 5: SMP Support
 
-### 5.1 SMP 核心代码
+### 5.1 SMP 核心代码 / SMP Core Code
 
-**文件**: `minix/kernel/arch/riscv64/smp.c` (~200 行新代码)
+**Status / 状态**: Planned  
+**Evidence / 证据**: no `minix/kernel/arch/riscv64/smp.c` in tree
+
+**文件 / File**: `minix/kernel/arch/riscv64/smp.c` (~200 行新代码)
 
 ```c
 /*
@@ -1619,16 +1736,19 @@ void smp_ipi_handler(struct trapframe *tf)
 }
 ```
 
-### 5.2 SMP 调度器适配
+### 5.2 SMP 调度器适配 / SMP Scheduler Integration
 
-**文件**: `minix/servers/sched/` (修改现有代码)
+**Status / 状态**: Planned  
+**Evidence / 证据**: no riscv64-specific scheduler changes observed; user space not stable (`RISC64-STATUS.md`)
+
+**文件 / File**: `minix/servers/sched/` (修改现有代码)
 
 主要添加:
 - 负载均衡
 - CPU 亲和性支持
 - 每核运行队列
 
-**阶段 5 检查点**:
+**阶段 5 检查点 / Phase 5 Checkpoint**:
 ```bash
 # 16 核启动测试
 qemu-system-riscv64 -M virt -m 2G -smp 16 \
@@ -1643,9 +1763,12 @@ cat /proc/cpuinfo | grep processor | wc -l
 
 ---
 
-## 阶段 6: 完整系统集成
+## 阶段 6: 完整系统集成 / Phase 6: Full System Integration
 
-### 6.1 X11 测试
+### 6.1 X11 测试 / X11 Tests
+
+**Status / 状态**: Planned  
+**Evidence / 证据**: user space not stable (see `RISC64-STATUS.md`)
 
 ```bash
 # 带 GPU 启动
@@ -1660,7 +1783,10 @@ qemu-system-riscv64 -M virt -m 2G -smp 16 \
 startx
 ```
 
-### 6.2 完整测试清单
+### 6.2 完整测试清单 / Full Test Checklist
+
+**Status / 状态**: Planned  
+**Evidence / 证据**: user space not stable; full checklist not yet executable (see `RISC64-STATUS.md`)
 
 | 测试项 | 命令 | 预期结果 |
 |--------|------|----------|
@@ -1673,9 +1799,14 @@ startx
 
 ---
 
-## 文件清单总结
+## 文件清单总结 / File Summary
 
-### 需要新建的文件 (~30 个)
+### 需要新建的文件 (~30 个) / Files to Add (~30)
+
+**Status / 状态**: Partial  
+**Evidence / 证据**: most arch files exist; missing `minix/kernel/arch/riscv64/smp.c`,
+`minix/drivers/virtio/virtio_riscv.h`, `minix/drivers/video/virtio_gpu/`,
+`minix/drivers/hid/virtio_input/`
 
 ```
 sys/arch/riscv/include/
@@ -1706,7 +1837,18 @@ minix/drivers/virtio/
 └── virtio_riscv.h
 ```
 
-### 需要修改的文件 (~10 个)
+**备注 / Note**:
+- 已存在：`sys/arch/riscv/include/`, `sys/arch/evbriscv64/`, `minix/kernel/arch/riscv64/` 的大部分文件。  
+  Present: most files under `sys/arch/riscv/include/`, `sys/arch/evbriscv64/`, `minix/kernel/arch/riscv64/`.
+- 缺失：`minix/kernel/arch/riscv64/smp.c`、`minix/drivers/virtio/virtio_riscv.h`、`virtio_gpu/input` 目录。  
+  Missing: `minix/kernel/arch/riscv64/smp.c`, `minix/drivers/virtio/virtio_riscv.h`,
+  `virtio_gpu/input` directories.
+
+### 需要修改的文件 (~10 个) / Files to Update (~10)
+
+**Status / 状态**: Partial  
+**Evidence / 证据**: `build.sh`, `share/mk/bsd.own.mk`, `sys/arch/Makefile` already updated;
+virtio driver MMIO/IRQ wiring not verified
 
 ```
 build.sh                    # 添加 evbriscv64 目标

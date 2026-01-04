@@ -269,7 +269,11 @@ int map_ph_writept(struct vmproc *vmp, struct vir_region *vr,
 	assert(pb->refcount > 0);
 
 	if(pr_writable(vr, pr))
+#if defined(__riscv64__)
+		flags |= PTF_READ | PTF_WRITE;
+#else
 		flags |= PTF_WRITE;
+#endif
 	else
 		flags |= PTF_READ;
 

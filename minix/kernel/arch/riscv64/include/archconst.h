@@ -44,8 +44,8 @@
 #define SATP_PPN_MASK       ((RISCV_ULL(1) << 44) - 1)
 
 /* Virtual address space layout for Sv39 */
-#define KERNEL_BASE         RISCV_UL(0xFFFFFFC000000000)  /* -256GB */
-#define KERNEL_SIZE         RISCV_UL(0x0000004000000000)  /* 256GB */
+#define KERNEL_BASE         RISCV_UL(0xFFFFFFFF80000000)  /* -2GB */
+#define KERNEL_SIZE         RISCV_UL(0x0000000080000000)  /* 2GB */
 #define USER_BASE           RISCV_UL(0x0000000000000000)
 #define USER_MAX            RISCV_UL(0x0000004000000000)  /* 256GB */
 
@@ -149,7 +149,7 @@
 #endif
 
 /* Stack sizes */
-#define K_STACK_SIZE            4096
+#define K_STACK_SIZE            16384
 #define K_STACK_GUARD           4096
 
 #define PG_ALLOCATEME           ((phys_bytes)-1)

@@ -172,15 +172,6 @@ trap_entry:
     csrr    sp, CSR_SSCRATCH
 
 trap_from_kernel:
-    /* Early trap debug: emit 'K' before using the stack. */
-    li      t0, VIRT_UART0_BASE
-9:
-    lbu     t1, UART_LSR(t0)
-    andi    t1, t1, UART_LSR_THRE
-    beqz    t1, 9b
-    li      t1, 'K'
-    sb      t1, UART_THR(t0)
-
     /* Save registers on kernel stack */
     addi    sp, sp, -TRAPFRAME_SIZE
 
@@ -228,6 +219,15 @@ trap_from_kernel:
     sd      t0, TF_SCAUSE(sp)
     csrr    t0, CSR_STVAL
     sd      t0, TF_STVAL(sp)
+
+    /* Trap debug: emit 'K' after saving temporaries. */
+    li      t0, VIRT_UART0_BASE
+9:
+    lbu     t1, UART_LSR(t0)
+    andi    t1, t1, UART_LSR_THRE
+    beqz    t1, 9b
+    li      t1, 'K'
+    sb      t1, UART_THR(t0)
 
     /* Call C handler */
     mv      a0, sp
@@ -315,8 +315,8 @@ trap_return:
     bnez    t0, return_to_kernel
 
 return_to_user:
-    /* Save kernel sp in sscratch for next trap */
-    addi    t0, sp, TRAPFRAME_SIZE
+    /* Reset kernel stack pointer for next trap. */
+    la      t0, _boot_stack_top
     csrw    CSR_SSCRATCH, t0
     j       restore_regs
 

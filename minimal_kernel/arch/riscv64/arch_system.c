@@ -84,6 +84,11 @@ void arch_get_aout_headers(int i, struct exec *h)
     (void)h;
 }
 
+void arch_set_secondary_ipc_return(struct proc *p, reg_t val)
+{
+    p->p_reg.a1 = val;
+}
+
 /*
  * Architecture-specific reset
  */

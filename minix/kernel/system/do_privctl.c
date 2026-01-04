@@ -10,6 +10,9 @@
  */
 
 #include "kernel/system.h"
+#if defined(__riscv64__)
+#include "arch_proto.h"
+#endif
 #include <signal.h>
 #include <string.h>
 #include <minix/endpoint.h>
@@ -19,6 +22,28 @@
 #define PRIV_DEBUG 0
 
 static int update_priv(struct proc *rp, struct priv *priv);
+#if defined(__riscv64__)
+static void privctl_log(const char *tag, struct proc *caller, struct proc *rp,
+	int req, int priv_id, int r)
+{
+	static int privctl_log_count;
+
+	if (privctl_log_count >= 16)
+		return;
+
+	direct_printf("privctl:%s req=%d caller=%d target=%d priv_id=%d r=%d p_priv=%p satp=%p\n",
+	    tag,
+	    (u64_t)req,
+	    (u64_t)caller->p_endpoint,
+	    (u64_t)rp->p_endpoint,
+	    (u64_t)priv_id,
+	    (u64_t)r,
+	    (u64_t)(unsigned long)rp->p_priv,
+	    (u64_t)csr_read_satp());
+
+	privctl_log_count++;
+}
+#endif
 
 /*===========================================================================*
  *				do_privctl				     *
@@ -57,6 +82,11 @@ int do_privctl(struct proc * caller, message * m_ptr)
 	/* Allow process to run. Make sure its privilege structure has already
 	 * been set.
 	 */
+#if defined(__riscv64__)
+	if (rp->p_endpoint == PM_PROC_NR || rp->p_priv == NULL)
+		privctl_log("allow", caller, rp,
+		    m_ptr->m_lsys_krn_sys_privctl.request, 0, 0);
+#endif
 	if (!RTS_ISSET(rp, RTS_NO_PRIV) || priv(rp)->s_proc_nr == NONE) {
 		return(EPERM);
 	}
@@ -65,6 +95,11 @@ int do_privctl(struct proc * caller, message * m_ptr)
 
   case SYS_PRIV_YIELD:
 	/* Allow process to run and suspend the caller. */
+#if defined(__riscv64__)
+	if (rp->p_endpoint == PM_PROC_NR || rp->p_priv == NULL)
+		privctl_log("yield", caller, rp,
+		    m_ptr->m_lsys_krn_sys_privctl.request, 0, 0);
+#endif
 	if (!RTS_ISSET(rp, RTS_NO_PRIV) || priv(rp)->s_proc_nr == NONE) {
 		return(EPERM);
 	}
@@ -107,12 +142,35 @@ int do_privctl(struct proc * caller, message * m_ptr)
 	 * fail, since there are only a limited number of system processes.
 	 * Then copy privileges from the caller and restore some defaults.
 	 */
-	if ((i=get_priv(rp, priv_id)) != OK)
+#if defined(__riscv64__)
+	if (rp->p_endpoint == PM_PROC_NR || rp->p_priv == NULL)
+		privctl_log("set_sys pre", caller, rp,
+		    m_ptr->m_lsys_krn_sys_privctl.request, priv_id, 0);
+#endif
+	i = OK;
+	if (rp->p_priv && rp->p_priv->s_proc_nr == proc_nr &&
+	    (priv_id == NULL_PRIV_ID || rp->p_priv->s_id == priv_id)) {
+#if defined(__riscv64__)
+		if (rp->p_endpoint == PM_PROC_NR || rp->p_priv == NULL)
+			privctl_log("set_sys reuse", caller, rp,
+			    m_ptr->m_lsys_krn_sys_privctl.request, priv_id, OK);
+#endif
+	} else if ((i=get_priv(rp, priv_id)) != OK)
 	{
 		printf("do_privctl: unable to allocate priv_id %d: %d\n",
 			priv_id, i);
+#if defined(__riscv64__)
+		if (rp->p_endpoint == PM_PROC_NR || rp->p_priv == NULL)
+			privctl_log("set_sys get_priv_fail", caller, rp,
+			    m_ptr->m_lsys_krn_sys_privctl.request, priv_id, i);
+#endif
 		return(i);
 	}
+#if defined(__riscv64__)
+	if (rp->p_endpoint == PM_PROC_NR || rp->p_priv == NULL)
+		privctl_log("set_sys post", caller, rp,
+		    m_ptr->m_lsys_krn_sys_privctl.request, priv_id, OK);
+#endif
 	priv_id = priv(rp)->s_id;		/* backup privilege id */
 	*priv(rp) = *priv(caller);		/* copy from caller */
 	priv(rp)->s_id = priv_id;		/* restore privilege id */
@@ -167,10 +225,21 @@ int do_privctl(struct proc * caller, message * m_ptr)
 	if (m_ptr->m_lsys_krn_sys_privctl.arg_ptr)
 	{
 		if((r = update_priv(rp, &priv)) != OK) {
+#if defined(__riscv64__)
+			if (rp->p_endpoint == PM_PROC_NR || rp->p_priv == NULL)
+				privctl_log("set_sys update_fail", caller, rp,
+				    m_ptr->m_lsys_krn_sys_privctl.request,
+				    priv_id, r);
+#endif
 			return r;
 		} 
 	}
 
+#if defined(__riscv64__)
+	if (rp->p_endpoint == PM_PROC_NR || rp->p_priv == NULL)
+		privctl_log("set_sys done", caller, rp,
+		    m_ptr->m_lsys_krn_sys_privctl.request, priv_id, OK);
+#endif
 	return(OK);
 
   case SYS_PRIV_SET_USER:
@@ -180,6 +249,11 @@ int do_privctl(struct proc * caller, message * m_ptr)
 	/* Link the process to the privilege structure of the root user
 	 * process all the user processes share.
 	 */
+#if defined(__riscv64__)
+	if (rp->p_endpoint == PM_PROC_NR || rp->p_priv == NULL)
+		privctl_log("set_user", caller, rp,
+		    m_ptr->m_lsys_krn_sys_privctl.request, 0, 0);
+#endif
 	priv(rp) = priv_addr(USER_PRIV_ID);
 
 	return(OK);
@@ -368,4 +442,3 @@ static int update_priv(struct proc *rp, struct priv *priv)
 }
 
 #endif /* USE_PRIVCTL */
-

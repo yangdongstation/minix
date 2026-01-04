@@ -72,7 +72,7 @@ void arch_proc_setcontext(struct proc *p, struct stackframe_s *state,
         }
 }
 
-void arch_set_secondary_ipc_return(struct proc *p, u32_t val)
+void arch_set_secondary_ipc_return(struct proc *p, reg_t val)
 {
 	p->p_reg.r1 = val;
 }

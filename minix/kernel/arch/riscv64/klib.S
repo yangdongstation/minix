@@ -20,9 +20,9 @@
     .globl restore_user_context
     .type restore_user_context, @function
 restore_user_context:
-    /* Set sscratch to kernel stack for next trap */
-    /* TODO: Calculate proper kernel stack from proc */
-    csrw    CSR_SSCRATCH, sp
+    /* Reset kernel stack pointer for next trap. */
+    la      t0, _boot_stack_top
+    csrw    CSR_SSCRATCH, t0
 
     /* Load trapframe pointer */
     mv      sp, a0

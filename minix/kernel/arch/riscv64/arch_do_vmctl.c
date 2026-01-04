@@ -17,8 +17,11 @@ static void set_satp(struct proc *p, phys_bytes root, reg_t *root_v)
     static int switch_trace_count;
 
     p->p_seg.p_satp = root;
-    /* Use identity-mapped physical root for page table walks. */
-    p->p_seg.p_satp_v = (reg_t *)root;
+    /* Prefer kernel-mapped root; fall back to identity mapping. */
+    if (root_v != NULL)
+        p->p_seg.p_satp_v = root_v;
+    else
+        p->p_seg.p_satp_v = (reg_t *)root;
 
     if (p == get_cpulocal_var(ptproc)) {
         if (switch_trace_count < 4)

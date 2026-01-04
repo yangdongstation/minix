@@ -266,6 +266,25 @@ static void delivermsg(struct proc *rp)
         assert(rp->p_misc_flags & MF_DELIVERMSG);
         assert(rp->p_delivermsg.m_source != NONE);
 
+#if defined(__riscv64__) || defined(__riscv64)
+	{
+		static int vm_deliver_msg_count;
+		if (rp->p_endpoint == VM_PROC_NR &&
+		    vm_deliver_msg_count < 8) {
+			direct_print("rv64: delivermsg vm src=");
+			direct_print_hex((u64_t)rp->p_delivermsg.m_source);
+			direct_print(" mtype=");
+			direct_print_hex((u64_t)rp->p_delivermsg.m_type);
+			direct_print(" vir=");
+			direct_print_hex((u64_t)(unsigned long)rp->p_delivermsg_vir);
+			direct_print(" misc=");
+			direct_print_hex((u64_t)rp->p_misc_flags);
+			direct_print("\n");
+			vm_deliver_msg_count++;
+		}
+	}
+#endif
+
         if (copy_msg_to_user(&rp->p_delivermsg,
                                 (message *) rp->p_delivermsg_vir)) {
                 if(rp->p_misc_flags & MF_MSGFAILED) {
@@ -502,6 +521,25 @@ static int do_sync_ipc(struct proc * caller_ptr, /* who made the call */
 	return(ETRAPDENIED);		/* trap denied by mask or kernel */
   }
 
+#if defined(__riscv64__) || defined(__riscv64)
+  {
+	static int bad_priv_logged;
+	struct priv *pp = priv(caller_ptr);
+	if ((pp < BEG_PRIV_ADDR || pp >= END_PRIV_ADDR) &&
+	    bad_priv_logged < 4) {
+		direct_printf("do_sync_ipc: bad priv caller=%d ep=%d priv=%p call=%d src_dst=%d satp=%p p_satp=%p\n",
+		    (u64_t)proc_nr(caller_ptr),
+		    (u64_t)caller_ptr->p_endpoint,
+		    (u64_t)(uintptr_t)pp,
+		    (u64_t)call_nr,
+		    (u64_t)src_dst_e,
+		    (u64_t)csr_read_satp(),
+		    (u64_t)caller_ptr->p_seg.p_satp);
+		bad_priv_logged++;
+	}
+  }
+#endif
+
   if (src_dst_e == ANY)
   {
 	if (call_nr != RECEIVE)
@@ -533,6 +571,25 @@ static int do_sync_ipc(struct proc * caller_ptr, /* who made the call */
 	 */
 	if (call_nr != RECEIVE)
 	{
+#if defined(__riscv64__) || defined(__riscv64)
+		{
+			static int bad_dst_priv_logged;
+			struct proc *dst_ptr = proc_addr(src_dst_p);
+			struct priv *dst_priv = priv(dst_ptr);
+			if ((dst_priv < BEG_PRIV_ADDR ||
+			    dst_priv >= END_PRIV_ADDR) &&
+			    bad_dst_priv_logged < 4) {
+				direct_printf("do_sync_ipc: bad dst priv caller=%d ep=%d dst_p=%d dst_ep=%d dst_priv=%p satp=%p\n",
+				    (u64_t)proc_nr(caller_ptr),
+				    (u64_t)caller_ptr->p_endpoint,
+				    (u64_t)src_dst_p,
+				    (u64_t)dst_ptr->p_endpoint,
+				    (u64_t)(uintptr_t)dst_priv,
+				    (u64_t)csr_read_satp());
+				bad_dst_priv_logged++;
+			}
+		}
+#endif
 		if (!may_send_to(caller_ptr, src_dst_p)) {
 #if DEBUG_ENABLE_IPC_WARNINGS
 			printf(
@@ -881,6 +938,22 @@ int mini_send(
   register struct proc *dst_ptr;
   register struct proc **xpp;
   int dst_p;
+
+#if defined(__riscv64__) || defined(__riscv64)
+  {
+	static int pm_vm_enter_log_count;
+	if (caller_ptr->p_endpoint == PM_PROC_NR &&
+	    dst_e == VM_PROC_NR &&
+	    pm_vm_enter_log_count < 8) {
+		direct_printf("mini_send: enter pm->vm dst_e=%d msg=%p flags=0x%x\n",
+		    (u64_t)dst_e,
+		    (u64_t)(unsigned long)m_ptr,
+		    (u64_t)flags);
+		pm_vm_enter_log_count++;
+	}
+  }
+#endif
+
   dst_p = _ENDPOINT_P(dst_e);
   dst_ptr = proc_addr(dst_p);
 
@@ -904,9 +977,39 @@ int mini_send(
 		dst_ptr->p_delivermsg = *m_ptr;
 		IPC_STATUS_ADD_FLAGS(dst_ptr, IPC_FLG_MSG_FROM_KERNEL);
 	}
+#if defined(__riscv64__) || defined(__riscv64)
+	{
+		static int pm_vm_deliver_log_count;
+		if (caller_ptr->p_endpoint == PM_PROC_NR &&
+		    dst_ptr->p_endpoint == VM_PROC_NR &&
+		    pm_vm_deliver_log_count < 8) {
+			direct_print("rv64: pm->vm deliver mtype=");
+			direct_print_hex((u64_t)dst_ptr->p_delivermsg.m_type);
+			direct_print(" m_ptr=");
+			direct_print_hex((u64_t)(unsigned long)m_ptr);
+			direct_print("\n");
+			pm_vm_deliver_log_count++;
+		}
+	}
+#endif
 
 	dst_ptr->p_delivermsg.m_source = caller_ptr->p_endpoint;
 	dst_ptr->p_misc_flags |= MF_DELIVERMSG;
+#if defined(__riscv64__) || defined(__riscv64)
+	{
+		static int vm_deliver_log_count;
+		if (dst_ptr->p_endpoint == VM_PROC_NR &&
+		    vm_deliver_log_count < 8) {
+			direct_printf("mini_send: deliver to vm from=%d name=%s mtype=%d rts=%x misc=%x\n",
+			    (u64_t)caller_ptr->p_endpoint,
+			    caller_ptr->p_name,
+			    (u64_t)dst_ptr->p_delivermsg.m_type,
+			    (u64_t)dst_ptr->p_rts_flags,
+			    (u64_t)dst_ptr->p_misc_flags);
+			vm_deliver_log_count++;
+		}
+	}
+#endif
 
 	call = (caller_ptr->p_misc_flags & MF_REPLY_PEND ? SENDREC
 		: (flags & NON_BLOCKING ? SENDNB : SEND));
@@ -944,11 +1047,143 @@ int mini_send(
 		 */
 		caller_ptr->p_misc_flags |= MF_SENDING_FROM_KERNEL;
 	}
+#if defined(__riscv64__) || defined(__riscv64)
+	{
+		static int pm_vm_queue_log_count;
+		if (caller_ptr->p_endpoint == PM_PROC_NR &&
+		    dst_ptr->p_endpoint == VM_PROC_NR &&
+		    pm_vm_queue_log_count < 8) {
+			direct_print("rv64: pm->vm queue mtype=");
+			direct_print_hex((u64_t)caller_ptr->p_sendmsg.m_type);
+			direct_print(" m_ptr=");
+			direct_print_hex((u64_t)(unsigned long)m_ptr);
+			direct_print("\n");
+			pm_vm_queue_log_count++;
+		}
+	}
+#endif
+#if defined(__riscv64__) || defined(__riscv64)
+	{
+		static int pm_vm_send_log_count;
+		if (caller_ptr->p_endpoint == PM_PROC_NR &&
+		    dst_ptr->p_endpoint == VM_PROC_NR &&
+		    pm_vm_send_log_count < 8) {
+			direct_printf("mini_send: pm->vm send mtype=%d src=%d dst=%d msg=%p\n",
+			    (u64_t)caller_ptr->p_sendmsg.m_type,
+			    (u64_t)caller_ptr->p_endpoint,
+			    (u64_t)dst_ptr->p_endpoint,
+			    (u64_t)(unsigned long)m_ptr);
+			pm_vm_send_log_count++;
+		}
+	}
+#endif
+
+	if (caller_ptr->p_q_link != NULL) {
+		endpoint_t old_sendto = caller_ptr->p_sendto_e;
+		int old_dst_p;
+
+		/* Repair a stale queue link before re-queueing. */
+		if (isokendpt(old_sendto, &old_dst_p)) {
+			struct proc **rxpp = &proc_addr(old_dst_p)->p_caller_q;
+			int depth = 0;
+
+			while (*rxpp) {
+				if (*rxpp == caller_ptr) {
+					struct proc *next = caller_ptr->p_q_link;
+
+					if (next == caller_ptr)
+						next = NULL;
+					*rxpp = next;
+					break;
+				}
+				if (*rxpp < BEG_PROC_ADDR ||
+				    *rxpp >= END_PROC_ADDR)
+					break;
+				if (++depth > NR_TASKS + NR_PROCS)
+					break;
+				rxpp = &(*rxpp)->p_q_link;
+			}
+		}
+		caller_ptr->p_q_link = NULL;
+	}
 
 	RTS_SET(caller_ptr, RTS_SENDING);
 	caller_ptr->p_sendto_e = dst_e;
 
 	/* Process is now blocked.  Put in on the destination's queue. */
+#if defined(__riscv64__) || defined(__riscv64)
+	{
+		static int qlink_log_count;
+		if (caller_ptr->p_q_link != NULL && qlink_log_count < 8) {
+			u64_t qlink_ep = (u64_t)-1;
+			struct proc *qp;
+			int i;
+			if (caller_ptr->p_q_link >= BEG_PROC_ADDR &&
+			    caller_ptr->p_q_link < END_PROC_ADDR) {
+				qlink_ep =
+				    (u64_t)caller_ptr->p_q_link->p_endpoint;
+			}
+			direct_printf("mini_send: q_link!=NULL caller=%d ep=%d name=%s dst=%d dst_ep=%d dst_name=%s qlink=%p qlink_ep=%d rts=%x misc=%x sendto=%d getfrom=%d flags=%x mtype=%d dst_rts=%x dst_misc=%x dst_getfrom=%d dst_sendto=%d dst_q=%p satp=%p p_satp=%p\n",
+			    (u64_t)proc_nr(caller_ptr),
+			    (u64_t)caller_ptr->p_endpoint,
+			    caller_ptr->p_name,
+			    (u64_t)dst_p,
+			    (u64_t)dst_ptr->p_endpoint,
+			    dst_ptr->p_name,
+			    (u64_t)(unsigned long)caller_ptr->p_q_link,
+			    qlink_ep,
+			    (u64_t)caller_ptr->p_rts_flags,
+			    (u64_t)caller_ptr->p_misc_flags,
+			    (u64_t)caller_ptr->p_sendto_e,
+			    (u64_t)caller_ptr->p_getfrom_e,
+			    (u64_t)flags,
+			    (u64_t)caller_ptr->p_sendmsg.m_type,
+			    (u64_t)dst_ptr->p_rts_flags,
+			    (u64_t)dst_ptr->p_misc_flags,
+			    (u64_t)dst_ptr->p_getfrom_e,
+			    (u64_t)dst_ptr->p_sendto_e,
+			    (u64_t)(unsigned long)dst_ptr->p_caller_q,
+			    (u64_t)csr_read_satp(),
+			    (u64_t)caller_ptr->p_seg.p_satp);
+			if (caller_ptr->p_rts_flags & RTS_SENDING) {
+				direct_printf("mini_send: caller RTS_SENDING sendto=%d qlink=%p\n",
+				    (u64_t)caller_ptr->p_sendto_e,
+				    (u64_t)(unsigned long)caller_ptr->p_q_link);
+			}
+			if (caller_ptr->p_rts_flags & RTS_RECEIVING) {
+				direct_printf("mini_send: caller RTS_RECEIVING getfrom=%d\n",
+				    (u64_t)caller_ptr->p_getfrom_e);
+			}
+			if (proc_nr(caller_ptr) == VM_PROC_NR) {
+				struct proc *rs = proc_addr(RS_PROC_NR);
+				direct_printf("mini_send: rs rts=%x misc=%x priv=%p\n",
+				    (u64_t)rs->p_rts_flags,
+				    (u64_t)rs->p_misc_flags,
+				    (u64_t)(unsigned long)rs->p_priv);
+			}
+			qp = dst_ptr->p_caller_q;
+			for (i = 0; qp != NULL && i < 8; i++) {
+				if (qp < BEG_PROC_ADDR || qp >= END_PROC_ADDR) {
+					direct_printf("mini_send: dst_q[%d] bad ptr=%p\n",
+					    (u64_t)i,
+					    (u64_t)(unsigned long)qp);
+					break;
+				}
+				direct_printf("mini_send: dst_q[%d] proc=%d ep=%d name=%s qlink=%p sendto=%d rts=%x misc=%x\n",
+				    (u64_t)i,
+				    (u64_t)proc_nr(qp),
+				    (u64_t)qp->p_endpoint,
+				    qp->p_name,
+				    (u64_t)(unsigned long)qp->p_q_link,
+				    (u64_t)qp->p_sendto_e,
+				    (u64_t)qp->p_rts_flags,
+				    (u64_t)qp->p_misc_flags);
+				qp = qp->p_q_link;
+			}
+			qlink_log_count++;
+		}
+	}
+#endif
 	assert(caller_ptr->p_q_link == NULL);
 	xpp = &dst_ptr->p_caller_q;		/* find end of list */
 	while (*xpp) xpp = &(*xpp)->p_q_link;	
@@ -1029,6 +1264,18 @@ static int mini_receive(struct proc * caller_ptr,
 	    BuildNotifyMessage(&caller_ptr->p_delivermsg, src_proc_nr, caller_ptr);
 	    caller_ptr->p_delivermsg.m_source = sender_e;
 	    caller_ptr->p_misc_flags |= MF_DELIVERMSG;
+#if defined(__riscv64__) || defined(__riscv64)
+	    {
+		static int vm_notify_log_count;
+		if (caller_ptr->p_endpoint == VM_PROC_NR &&
+		    vm_notify_log_count < 8) {
+			direct_printf("mini_receive: vm notify from=%d name=%s\n",
+			    (u64_t)sender_e,
+			    proc_addr(src_proc_nr)->p_name);
+			vm_notify_log_count++;
+		}
+	    }
+#endif
 
 	    IPC_STATUS_ADD_CALL(caller_ptr, NOTIFY);
 
@@ -1044,6 +1291,18 @@ static int mini_receive(struct proc * caller_ptr,
         	r = try_async(caller_ptr);
 
 	if (r == OK) {
+#if defined(__riscv64__) || defined(__riscv64)
+		{
+			static int vm_async_log_count;
+			if (caller_ptr->p_endpoint == VM_PROC_NR &&
+			    vm_async_log_count < 8) {
+				direct_printf("mini_receive: vm async from=%d mtype=%d\n",
+				    (u64_t)caller_ptr->p_delivermsg.m_source,
+				    (u64_t)caller_ptr->p_delivermsg.m_type);
+				vm_async_log_count++;
+			}
+		}
+#endif
             IPC_STATUS_ADD_CALL(caller_ptr, SENDA);
             goto receive_done;
         }
@@ -1059,6 +1318,34 @@ static int mini_receive(struct proc * caller_ptr,
             int call;
 	    assert(!RTS_ISSET(sender, RTS_SLOT_FREE));
 	    assert(!RTS_ISSET(sender, RTS_NO_ENDPOINT));
+#if defined(__riscv64__) || defined(__riscv64)
+	    if (caller_ptr->p_endpoint == VM_PROC_NR) {
+		static int vm_recv_log_count2;
+		if (vm_recv_log_count2 < 8) {
+			direct_print("rv64: vm recv from=");
+			direct_print_hex((u64_t)sender->p_endpoint);
+			direct_print(" mtype=");
+			direct_print_hex((u64_t)sender->p_sendmsg.m_type);
+			direct_print("\n");
+			vm_recv_log_count2++;
+		}
+	    }
+#endif
+#if defined(__riscv64__) || defined(__riscv64)
+	    {
+		static int vm_recv_log_count;
+		if (caller_ptr->p_endpoint == VM_PROC_NR &&
+		    vm_recv_log_count < 8) {
+			direct_printf("mini_receive: vm from=%d name=%s mtype=%d src_rts=%x dst_getfrom=%d\n",
+			    (u64_t)sender->p_endpoint,
+			    sender->p_name,
+			    (u64_t)sender->p_sendmsg.m_type,
+			    (u64_t)sender->p_rts_flags,
+			    (u64_t)caller_ptr->p_getfrom_e);
+			vm_recv_log_count++;
+		}
+	    }
+#endif
 
 	    /* Found acceptable message. Copy it and update status. */
   	    assert(!(caller_ptr->p_misc_flags & MF_DELIVERMSG));

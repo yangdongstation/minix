@@ -1,5 +1,13 @@
 #define _SYSTEM 1
 
+#ifndef __ELF_WORD_SIZE
+#if defined(__riscv64__)
+#define __ELF_WORD_SIZE 64
+#else
+#define __ELF_WORD_SIZE 32
+#endif
+#endif
+
 #include <minix/type.h>
 #include <minix/const.h>
 #include <minix/com.h>
@@ -7,6 +15,7 @@
 #include <sys/param.h>
 #include <sys/mman.h>
 #include <assert.h>
+#include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
 #include <libexec.h>
@@ -19,9 +28,6 @@
 /* For verbose logging */
 #define ELF_DEBUG 0
 
-/* Support only 32-bit ELF objects */
-#define __ELF_WORD_SIZE 32
-
 #define SECTOR_SIZE 512
 
 static int check_header(Elf_Ehdr *hdr);
@@ -33,6 +39,7 @@ static int elf_sane(Elf_Ehdr *hdr)
   }
 
   if((hdr->e_type != ET_EXEC) && (hdr->e_type != ET_DYN)) {
+     printf("libexec: bad e_type=%u\n", hdr->e_type);
      return 0;
   }
 
@@ -41,6 +48,8 @@ static int elf_sane(Elf_Ehdr *hdr)
 #if ELF_DEBUG
 	printf("libexec: peculiar phoff\n");
 #endif
+     printf("libexec: bad phoff=%lu phentsize=%u phnum=%u\n",
+         (unsigned long)hdr->e_phoff, hdr->e_phentsize, hdr->e_phnum);
      return 0;
   }
 
@@ -50,6 +59,8 @@ static int elf_sane(Elf_Ehdr *hdr)
 static int elf_ph_sane(Elf_Phdr *phdr)
 {
   if (rounddown((uintptr_t)phdr, sizeof(Elf_Addr)) != (uintptr_t)phdr) {
+     printf("libexec: phdr misaligned phdr=%p align=%lu\n",
+         phdr, (unsigned long)sizeof(Elf_Addr));
      return 0;
   }
   return 1;
@@ -59,9 +70,21 @@ static int elf_unpack(char *exec_hdr,
 	size_t hdr_len, Elf_Ehdr **hdr, Elf_Phdr **phdr)
 {
   if(hdr_len < sizeof(Elf_Ehdr))
+  {
+	printf("libexec: short header len=%lu need=%lu\n",
+	    (unsigned long)hdr_len, (unsigned long)sizeof(Elf_Ehdr));
 	return ENOEXEC;
+  }
 
   *hdr = (Elf_Ehdr *) exec_hdr;
+  printf("libexec: ehdr class=%u data=%u ver=%u phoff=%lu phentsize=%u phnum=%u entry=0x%lx\n",
+      (*hdr)->e_ident[EI_CLASS],
+      (*hdr)->e_ident[EI_DATA],
+      (*hdr)->e_ident[EI_VERSION],
+      (unsigned long)(*hdr)->e_phoff,
+      (*hdr)->e_phentsize,
+      (*hdr)->e_phnum,
+      (unsigned long)(*hdr)->e_entry);
   if(!elf_sane(*hdr)) {
   	return ENOEXEC;
   }
@@ -82,12 +105,31 @@ static int elf_unpack(char *exec_hdr,
 
 static int check_header(Elf_Ehdr *hdr)
 {
-  if (!IS_ELF(*hdr) ||
-      hdr->e_ident[EI_DATA] != ELF_TARG_DATA ||
-      hdr->e_ident[EI_VERSION] != EV_CURRENT ||
-      hdr->e_phentsize != sizeof(Elf_Phdr) ||
-      hdr->e_version != ELF_TARG_VER)
+  if (!IS_ELF(*hdr)) {
+      printf("libexec: bad ELF magic\n");
       return ENOEXEC;
+  }
+  if (hdr->e_ident[EI_DATA] != ELF_TARG_DATA) {
+      printf("libexec: bad ELF data enc=%u targ=%u\n",
+          hdr->e_ident[EI_DATA], ELF_TARG_DATA);
+      return ENOEXEC;
+  }
+  if (hdr->e_ident[EI_VERSION] != EV_CURRENT) {
+      printf("libexec: bad ELF ident version=%u\n",
+          hdr->e_ident[EI_VERSION]);
+      return ENOEXEC;
+  }
+  if (hdr->e_phentsize != sizeof(Elf_Phdr)) {
+      printf("libexec: bad phentsize=%u expected=%lu class=%u\n",
+          hdr->e_phentsize, (unsigned long)sizeof(Elf_Phdr),
+          hdr->e_ident[EI_CLASS]);
+      return ENOEXEC;
+  }
+  if (hdr->e_version != ELF_TARG_VER) {
+      printf("libexec: bad ELF version=%u targ=%u\n",
+          hdr->e_version, ELF_TARG_VER);
+      return ENOEXEC;
+  }
 
   return OK;
 }
@@ -136,6 +178,7 @@ int libexec_load_elf(struct exec_info *execi)
 	assert(execi->hdr != NULL);
 
 	if((e=elf_unpack(execi->hdr, execi->hdr_len, &hdr, &phdr)) != OK) {
+		printf("libexec: elf_unpack failed r=%d\n", e);
 		return e;
 	 }
 
@@ -144,6 +187,7 @@ int libexec_load_elf(struct exec_info *execi)
 	 */
 	i = elf_has_interpreter(execi->hdr, execi->hdr_len, NULL, 0);
 	if(i > 0) {
+	      printf("libexec: unexpected PT_INTERP\n");
 	      return ENOEXEC;
 	}
 
@@ -162,6 +206,9 @@ int libexec_load_elf(struct exec_info *execi)
 		off_t file_limit = ph->p_offset + ph->p_filesz;
 		/* sanity check binary before wiping out the target process */
 		if(execi->filesize < file_limit) {
+			printf("libexec: short file size=%lu need=%lu\n",
+				(unsigned long)execi->filesize,
+				(unsigned long)file_limit);
 			return ENOEXEC;
 		}
 	}

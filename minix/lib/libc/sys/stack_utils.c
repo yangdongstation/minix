@@ -16,6 +16,12 @@
 #include <sys/exec_elf.h>
 #include <sys/exec.h>
 
+#if defined(__riscv)
+#define STACK_ALIGN 16
+#else
+#define STACK_ALIGN (sizeof(void *))
+#endif
+
 /* Create a stack image that only needs to be patched up slightly by
  * the kernel to be used for the process to be executed.
  *
@@ -105,8 +111,8 @@ void minix_stack_params(const char *path, char * const *argv, char * const *envp
 	}
 
 	/* Compute the aligned frame size. */
-	*stack_size = (*stack_size + sizeof(void *) - 1) &
-		 ~(sizeof(void *) - 1);
+	*stack_size = (*stack_size + STACK_ALIGN - 1) &
+		~(STACK_ALIGN - 1);
 
 	if (*stack_size < min_size) {
 		/* This is possible only in case of overflow. */
@@ -119,7 +125,7 @@ void minix_stack_params(const char *path, char * const *argv, char * const *envp
  *****************************************************************************/
 void minix_stack_fill(const char *path, int argc, char * const *argv,
 	int envc, char * const *envp, size_t stack_size, char *frame,
-	int *vsp, struct ps_strings **psp)
+	vir_bytes *vsp, struct ps_strings **psp)
 {
 	char * const *p;
 
@@ -161,7 +167,7 @@ void minix_stack_fill(const char *path, int argc, char * const *argv,
 	*fpw++ = NULL;
 
 	/* Padding, because of the stack alignement. */
-	while ((size_t)fp % sizeof(void *)) *fp++= 0;
+	while ((size_t)fp % STACK_ALIGN) *fp++= 0;
 
 	/* Fill in the ps_string struct*/
 	*psp = (struct ps_strings *) fp;

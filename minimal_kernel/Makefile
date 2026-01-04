@@ -10,10 +10,10 @@ OBJDUMP = $(CROSS_COMPILE)objdump
 CFLAGS = -march=rv64imafdc -mabi=lp64d -mcmodel=medany
 CFLAGS += -ffreestanding -nostdlib -fno-builtin -fno-stack-protector
 CFLAGS += -O2 -g -Wall
-CFLAGS += -D__kernel__ -D_MINIX_SYSTEM
+CFLAGS += -D__kernel__ -D_MINIX_SYSTEM -D_KERNEL
 
 # Include paths
-INCLUDES = -I. -Iinclude -Iarch/riscv64 -Iarch/riscv64/include
+INCLUDES = -I. -Iinclude -Iarch/riscv64 -Iarch/riscv64/include -I../sys/arch/riscv/include -I../minix/include/arch/riscv64/include
 
 # Linker script
 LDFLAGS = -T arch/riscv64/kernel.lds -nostdlib

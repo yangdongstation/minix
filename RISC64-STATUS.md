@@ -1,142 +1,89 @@
-# MINIX RISC-V 64-bit Port Status Report
+# MINIX RISC-V 64-bit Port Status / MINIX RISC-V 64 位移植状态
 
-**Date**: 2026-01-02
-**Status**: Phase 1 in Progress - Kernel Buildable, User Space Partial
-**Progress**: ~65% overall (user space integration ongoing)
+**Date / 日期**: 2026-01-04  
+**Status / 状态**: Phase 1 in progress — buildable with workarounds, runtime unstable  
+**Progress / 进度**: ~60% (core kernel present; VM/clock/IO issues outstanding)
 
-## Executive Summary
+## Summary / 摘要
 
-The RISC-V 64-bit port of MINIX 3 is now buildable end-to-end with current workarounds, while user space integration is still in progress. Core kernel infrastructure is in place, and distribution builds complete with relaxed checkflist rules.
+**中文**
+- 构建可通过（需使用绕过项与特定构建变量），详见 `README-RISCV64.md`。
+- QEMU 启动可进入早期内核初始化，但用户态未稳定进入。
+- 关键风险集中在页表根传参、SATP 根地址一致性、时钟与 UART 关键链路（见 `issue.md`）。
 
-## Completed Components ✅
+**English**
+- Build passes with workaround flags; see `README-RISCV64.md` for exact commands.
+- QEMU boot reaches early kernel init; user space is not yet stable.
+- Key risks are in page-table root handoff, SATP root mapping, and clock/UART paths (see `issue.md`).
 
-### 1. Kernel Architecture Support
-- **Boot Sequence**: Complete head.S with Sv39 paging support
-- **Exception Handling**: Full trap/interrupt handling framework
-- **Memory Management**: Page table management and virtual memory
-- **SBI Interface**: Complete firmware interface for QEMU virt platform
-- **PLIC Driver**: Interrupt controller with SMP support framework
-- **Clock Support**: Basic timer and clock management via CLINT
+## Build Status / 构建状态
 
-### 2. Device Drivers
-- **UART Driver**: Complete NS16550-compatible driver
-  - Early console support (console.c)
-  - TTY integration is in progress (rs232 stub in use for riscv64)
-  - Interrupt-driven I/O with FIFO support
-  - Direct output utilities for debugging
+**中文**
+- 基线命令：使用 GCC、禁用 LLVM/C++、放宽 `checkflist`（见 `README-RISCV64.md`）。
+- 产物：`minix/kernel/obj/kernel` 与 `obj/destdir.evbriscv64`。
+- 限制：`CHECKFLIST_FLAGS='-m -e'` 为临时绕过，需在 sets 完整后移除。
 
-### 3. Build System
-- **Architecture Files**: RISC-V Makefile.inc files present for core components
-- **Libminc Support**: RISC-V 64-bit library support added
-- **Distribution Build**: Completes with GCC + `RISCV_ARCH_FLAGS` fallback, `MKPIC/MKCXX` disabled, and `CHECKFLIST_FLAGS='-m -e'`
+**English**
+- Baseline: GCC, LLVM/C++ disabled, relaxed `checkflist` (see `README-RISCV64.md`).
+- Outputs: `minix/kernel/obj/kernel` and `obj/destdir.evbriscv64`.
+- Limitation: `CHECKFLIST_FLAGS='-m -e'` is a temporary workaround until sets are complete.
 
-### 4. Testing Framework
-- **Architecture Tests**: Comprehensive test suite in `minix/tests/riscv64/`
-- **Build Verification**: Validation scripts for quick status checks
+## Runtime Status / 运行状态
 
-## Current Architecture
+**中文**
+- 观察到 `rv64: kernel_main` 等早期日志，但随后出现 `System reset...` 并重复 OpenSBI banner。
+- 运行时稳定性不足，用户态服务尚未可靠启动。
+- 该行为与 `issue.md` 中的 PTROOT 截断、SATP 根地址 VA/PA 不一致风险一致。
 
-```
-QEMU virt platform (RISC-V 64-bit)
-├── OpenSBI Firmware
-├── MINIX Kernel
-│   ├── Boot: head.S → kernel_main() → main()
-│   ├── Architecture Support (arch/riscv64/)
-│   │   ├── SBI interface (sbi.c)
-│   │   ├── PLIC interrupt controller (plic.c)
-│   │   ├── Memory management (memory.c, pg_utils.c)
-│   │   └── UART console (console.c, direct_tty_utils.c)
-│   └── Generic Kernel Code
-└── User Space (partial)
-    ├── libminc (architectural support ready)
-    └── System Services (needs completion)
-```
+**English**
+- Logs show early messages like `rv64: kernel_main`, then `System reset...` with repeated OpenSBI banner.
+- Runtime stability is insufficient; user space services are not reliably started.
+- This matches the PTROOT truncation and SATP VA/PA mismatch risks in `issue.md`.
 
-## Next Phase Priorities (Phase 2: System Integration)
+## Key Issues (Snapshot) / 关键问题（摘要）
 
-### Immediate (Week 1-2)
-1. **Complete Build System**
-   - Fix C++ library build issues
-   - Clean file lists and re-enable `MKPIC/MKCXX/MKATF`
-   - Add CI/CD pipeline
+**Critical / 严重**
+- sys_vmctl PTROOT 32-bit truncation on riscv64 (address-space handoff breaks).
+- SATP root stored as physical pointer and used as VA (invalid dereference after paging).
 
-2. **User Space Initialization**
-   - Complete libminc RISC-V 64-bit implementation
-   - System call stub completion
-   - Basic user programs (init, shell, etc.)
+**Major / 重要**
+- Timer IRQ not wired to kernel clock handler (no scheduling/timekeeping).
+- Leaf→non-leaf page table split lacks TLB flush.
+- UART blocking read returns `EDONTREPLY` without deferred reply.
+- SBI legacy IPI/fence uses VA instead of PA when paging is enabled.
 
-### Critical (Week 3-4)
-1. **Device Manager Integration**
-   - Register UART driver with device manager
-   - Create device table entries
-   - Test device enumeration
+详见 `issue.md` 的证据与修复建议 / See `issue.md` for evidence and fixes.
 
-2. **VirtIO Drivers**
-   - Network driver for Ethernet support
-   - Block device driver for storage
-   - MMIO integration
+## Evidence Sources / 证据来源
 
-3. **Testing and Validation**
-   - Run full MINIX test suite
-   - Performance benchmarking
-   - QEMU integration tests
+- `issue.md` (code review evidence with file/line references)
+- `docs/RISCV64_KERNEL_BUILD_LOG.md` (build history and commands)
+- `README-RISCV64.md` (boot/test notes and baseline procedures)
 
-## Technical Challenges Identified
+## Next Priorities / 下一阶段优先级
 
-1. **Build System Complexity**
-   - Multiple architecture support requires careful Makefile management
-   - Cross-compilation dependencies need explicit handling
+**中文**
+1) 修复 PTROOT 传参为 64-bit 并端到端更新。
+2) 使用稳定 VA 映射 SATP 根地址（或传入 `ptroot_v`）。
+3) 接入内核时钟处理函数与 UART 延迟回复。
+4) leaf→non-leaf 拆分后补齐 TLB 刷新。
 
-2. **Toolchain Compatibility**
-   - Some GCC toolchains reject `-march=rv64gc`
-   - Use `RISCV_ARCH_FLAGS` fallback until toolchains are updated
+**English**
+1) Make PTROOT 64-bit end-to-end.
+2) Use a stable KVA for SATP root (or pass `ptroot_v`).
+3) Wire the kernel clock handler and UART deferred reply.
+4) Flush TLB after leaf→non-leaf splits.
 
-3. **User Space Transition**
-   - Moving from SBI console to user space TTY system
-   - Ensuring backward compatibility
+## Success Criteria / 下一里程碑判定
 
-4. **Device Integration**
-   - MINIX's microkernel architecture requires careful driver design
-   - Message passing overhead needs optimization
+**中文**
+- QEMU 中稳定进入用户态（无 `System reset...` 循环）。
+- 时钟中断驱动调度与时间推进。
+- UART 阻塞读可正常返回。
+- sys_vmctl PTROOT 在 >4GB 物理地址下可靠切换 SATP。
 
-## Quality Metrics
-
-- **Code Coverage**: Kernel ~75%, Drivers ~60%
-- **Build Success Rate**: Buildable with current workarounds
-- **Test Pass Rate**: Architecture tests: 100%
-- **Documentation**: 80% complete for implemented components
-
-## Risk Assessment
-
-### High Risk
-- **Timeline**: User space implementation is complex and may take longer
-- **Resource**: Requires dedicated testing on RISC-V hardware
-
-### Medium Risk
-- **Performance**: Message passing overhead on RISC-V needs evaluation
-- **Compatibility**: Ensuring NetBSD compatibility layer works correctly
-
-### Low Risk
-- **Stability**: Core kernel components are well-tested
-- **Portability**: Code follows MINIX standards
-
-## Recommendations
-
-1. **Immediate Action**: Complete user space support to achieve a bootable system
-2. **Resource Allocation**: Assign dedicated developer for VirtIO drivers
-3. **Quality Focus**: Implement continuous testing to prevent regressions
-4. **Documentation**: Maintain detailed design documents for future maintenance
-
-## Success Metrics for Next Milestone
-
-1. **Functional System**: Complete MINIX system boots to shell
-2. **Network Access**: Basic TCP/IP functionality
-3. **Storage Support**: Read/write to block devices
-4. **Performance**: Comparable to other MINIX architectures
-5. **Build Hygiene**: Distribution builds without relaxed checkflist rules
-
----
-
-**Project Lead**: Development Team
-**Review Date**: Weekly reviews recommended
-**Contact**: Use project issue tracker for updates
+**English**
+- Stable boot to userland in QEMU without reset loops.
+- Timer IRQ drives scheduling/timekeeping.
+- UART blocking reads return correctly.
+- sys_vmctl PTROOT switches SATP reliably above 4GB physical roots.
