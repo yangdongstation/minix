@@ -34,6 +34,7 @@ obj
 *.worldstone.log
 .worldstone*
 boot-evbriscv64-*.log
+build-*.log
 usr.bin/mdocml/man/*.7
 etc/passwd
 etc/pwd.db
