@@ -821,6 +821,16 @@ static int deadlock(
  */
   register struct proc *xp;			/* process pointer */
   int group_size = 1;				/* start with only caller */
+#if defined(__riscv64__)
+  static int deadlock_log_count;
+  endpoint_t chain[8];
+  int chain_len = 0;
+  int chain_idx;
+
+  if (deadlock_log_count < 4) {
+      chain[chain_len++] = cp->p_endpoint;
+  }
+#endif
 #if DEBUG_ENABLE_IPC_WARNINGS
   static struct proc *processes[NR_PROCS + NR_TASKS];
   processes[0] = cp;
@@ -832,6 +842,11 @@ static int deadlock(
       xp = proc_addr(src_dst_slot);		/* follow chain of processes */
       assert(proc_ptr_ok(xp));
       assert(!RTS_ISSET(xp, RTS_SLOT_FREE));
+#if defined(__riscv64__)
+      if (deadlock_log_count < 4 && chain_len < (int)(sizeof(chain) / sizeof(chain[0]))) {
+          chain[chain_len++] = xp->p_endpoint;
+      }
+#endif
 #if DEBUG_ENABLE_IPC_WARNINGS
       processes[group_size] = xp;
 #endif
@@ -854,6 +869,44 @@ static int deadlock(
 	          return(0);			/* not a deadlock */
 	      }
 	  }
+#if defined(__riscv64__)
+	  if (deadlock_log_count < 4 && cp->p_endpoint == PM_PROC_NR) {
+	      direct_print("rv64: deadlock func=");
+	      direct_print_hex((u64_t)function);
+	      direct_print(" caller=");
+	      direct_print_hex((u64_t)cp->p_endpoint);
+	      direct_print(" chain=");
+	      for (chain_idx = 0; chain_idx < chain_len; chain_idx++) {
+	          direct_print_hex((u64_t)chain[chain_idx]);
+	          direct_print(" ");
+	      }
+	      direct_print("\n");
+	      for (chain_idx = 0; chain_idx < chain_len; chain_idx++) {
+	          int slot;
+	          if (okendpt(chain[chain_idx], &slot)) {
+	              xp = proc_addr(slot);
+	              direct_print("rv64: deadlock ep=");
+	              direct_print_hex((u64_t)chain[chain_idx]);
+	              direct_print(" rts=");
+	              direct_print_hex((u64_t)xp->p_rts_flags);
+	              direct_print(" blockedon=");
+	              direct_print_hex((u64_t)P_BLOCKEDON(xp));
+	              if (xp->p_rts_flags & RTS_SENDING) {
+	                  direct_print(" sendto=");
+	                  direct_print_hex((u64_t)xp->p_sendto_e);
+	                  direct_print(" mtype=");
+	                  direct_print_hex((u64_t)xp->p_sendmsg.m_type);
+	              }
+	              if (xp->p_rts_flags & RTS_RECEIVING) {
+	                  direct_print(" recvfrom=");
+	                  direct_print_hex((u64_t)xp->p_getfrom_e);
+	              }
+	              direct_print("\n");
+	          }
+	      }
+	      deadlock_log_count++;
+	  }
+#endif
 #if DEBUG_ENABLE_IPC_WARNINGS
 	  {
 		int i;

@@ -22,7 +22,10 @@
 #include <libexec.h>
 #include <ctype.h>
 #include <errno.h>
+#define __LIBPTHREAD_SOURCE__
 #include <sched.h>
+#undef __LIBPTHREAD_SOURCE__
+#include <minix/mthread.h>
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
@@ -123,6 +126,7 @@ int main(void)
 	r = sef_receive_status(ANY, &msg, &rcv_sts);
 	if (r != OK) {
 		if (r == EAGAIN) {
+			/* Avoid busy-waiting on single-core systems. */
 			sched_yield();
 			continue;
 		}

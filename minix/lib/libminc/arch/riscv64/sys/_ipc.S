@@ -101,7 +101,10 @@ END(_ipc_sendnb_intr)
  * Asynchronous send to multiple destinations
  */
 ENTRY(_ipc_senda_intr)
-    /* a0 = table, a1 = count (already in place) */
+    /* a0 = table, a1 = count (swap to match kernel expectations) */
+    mv      t0, a0              /* t0 = table */
+    mv      a0, a1              /* a0 = count */
+    mv      a1, t0              /* a1 = table */
     li      a2, SENDA           /* a2 = operation */
     li      a7, IPCVEC_INTR     /* a7 = IPC syscall vector */
     ecall                       /* trap to kernel */

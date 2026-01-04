@@ -36,6 +36,7 @@
 /* Mapping flags */
 #define PTF_WRITE       RISCV_PTE_W
 #define PTF_READ        RISCV_PTE_R
+#define PTF_EXEC        RISCV_PTE_X
 #define PTF_PRESENT     RISCV_PTE_V
 #define PTF_USER        RISCV_PTE_U
 #define PTF_GLOBAL      RISCV_PTE_G
@@ -58,7 +59,7 @@
 /* For arch-specific PT routines to check if no bits outside
  * the regular flags are set.
  */
-#define PTF_ALLFLAGS    (PTF_READ|PTF_WRITE|PTF_PRESENT|PTF_USER|PTF_GLOBAL|PTF_NOCACHE)
+#define PTF_ALLFLAGS    (PTF_READ|PTF_WRITE|PTF_EXEC|PTF_PRESENT|PTF_USER|PTF_GLOBAL|PTF_NOCACHE)
 
 /* Page fault error code bits (from scause/stval) */
 #define RISCV_PFE_INST  (1 << 0)    /* Instruction access fault */

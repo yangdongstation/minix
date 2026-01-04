@@ -143,6 +143,9 @@ static int sef_cb_init_fresh(int UNUSED(type), sef_init_info_t *UNUSED(info))
   register char *sig_ptr;
   message mess;
 
+  /* Avoid boot-time deadlock with RS by replying asynchronously once. */
+  sef_setcb_init_response(sef_cb_init_response_rs_asyn_once);
+
   /* Initialize process table, including timers. */
   for (rmp=&mproc[0]; rmp<&mproc[NR_PROCS]; rmp++) {
 	init_timer(&rmp->mp_timer);

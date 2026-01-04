@@ -286,9 +286,16 @@ static int safecopy(
 	endpoint_t new_granter, *src, *dst;
 	int r;
 	struct cp_sfinfo sfinfo;
+	static int safecopy_log_count;
 
 	if(granter == NONE || grantee == NONE) {
-		printf("safecopy: nonsense processes\n");
+		if (safecopy_log_count < 8) {
+			printf("safecopy: nonsense processes granter=%d grantee=%d gid=%d bytes=%zu g_off=0x%lx addr=0x%lx access=0x%x caller=%d\n",
+			    granter, grantee, grantid, bytes,
+			    (unsigned long)g_offset, (unsigned long)addr,
+			    access, caller->p_endpoint);
+			safecopy_log_count++;
+		}
 		return EFAULT;
 	}
 
@@ -368,7 +375,15 @@ static int safecopy(
 		}
 		return r;
 	}
-	return virtual_copy_vmcheck(caller, &v_src, &v_dst, bytes);
+	r = virtual_copy_vmcheck(caller, &v_src, &v_dst, bytes);
+	if (r != OK && safecopy_log_count < 8) {
+		printf("safecopy: err %d caller=%d granter=%d grantee=%d gid=%d bytes=%zu g_off=0x%lx addr=0x%lx access=0x%x v_src=0x%lx v_dst=0x%lx\n",
+		    r, caller->p_endpoint, granter, grantee, grantid, bytes,
+		    (unsigned long)g_offset, (unsigned long)addr, access,
+		    (unsigned long)v_src.offset, (unsigned long)v_dst.offset);
+		safecopy_log_count++;
+	}
+	return r;
 }
 
 /*===========================================================================*
@@ -376,10 +391,24 @@ static int safecopy(
  *===========================================================================*/
 int do_safecopy_to(struct proc * caller, message * m_ptr)
 {
-	return safecopy(caller, m_ptr->m_lsys_kern_safecopy.from_to, caller->p_endpoint,
-		(cp_grant_id_t) m_ptr->m_lsys_kern_safecopy.gid,
-		m_ptr->m_lsys_kern_safecopy.bytes, m_ptr->m_lsys_kern_safecopy.offset,
-		(vir_bytes) m_ptr->m_lsys_kern_safecopy.address, CPF_WRITE);
+	static int safecopy_to_log_count;
+	int r;
+
+	r = safecopy(caller, m_ptr->m_lsys_kern_safecopy.from_to,
+	    caller->p_endpoint, (cp_grant_id_t) m_ptr->m_lsys_kern_safecopy.gid,
+	    m_ptr->m_lsys_kern_safecopy.bytes,
+	    m_ptr->m_lsys_kern_safecopy.offset,
+	    (vir_bytes) m_ptr->m_lsys_kern_safecopy.address, CPF_WRITE);
+	if (r != OK && safecopy_to_log_count < 8) {
+		printf("do_safecopy_to: err %d caller=%d from_to=%d gid=%d bytes=%zu off=0x%lx addr=0x%lx\n",
+		    r, caller->p_endpoint, m_ptr->m_lsys_kern_safecopy.from_to,
+		    (int)m_ptr->m_lsys_kern_safecopy.gid,
+		    m_ptr->m_lsys_kern_safecopy.bytes,
+		    (unsigned long)m_ptr->m_lsys_kern_safecopy.offset,
+		    (unsigned long)m_ptr->m_lsys_kern_safecopy.address);
+		safecopy_to_log_count++;
+	}
+	return r;
 }
 
 /*===========================================================================*
@@ -387,10 +416,24 @@ int do_safecopy_to(struct proc * caller, message * m_ptr)
  *===========================================================================*/
 int do_safecopy_from(struct proc * caller, message * m_ptr)
 {
-	return safecopy(caller, m_ptr->m_lsys_kern_safecopy.from_to, caller->p_endpoint,
-		(cp_grant_id_t) m_ptr->m_lsys_kern_safecopy.gid,
-		m_ptr->m_lsys_kern_safecopy.bytes, m_ptr->m_lsys_kern_safecopy.offset,
-		(vir_bytes) m_ptr->m_lsys_kern_safecopy.address, CPF_READ);
+	static int safecopy_from_log_count;
+	int r;
+
+	r = safecopy(caller, m_ptr->m_lsys_kern_safecopy.from_to,
+	    caller->p_endpoint, (cp_grant_id_t) m_ptr->m_lsys_kern_safecopy.gid,
+	    m_ptr->m_lsys_kern_safecopy.bytes,
+	    m_ptr->m_lsys_kern_safecopy.offset,
+	    (vir_bytes) m_ptr->m_lsys_kern_safecopy.address, CPF_READ);
+	if (r != OK && safecopy_from_log_count < 8) {
+		printf("do_safecopy_from: err %d caller=%d from_to=%d gid=%d bytes=%zu off=0x%lx addr=0x%lx\n",
+		    r, caller->p_endpoint, m_ptr->m_lsys_kern_safecopy.from_to,
+		    (int)m_ptr->m_lsys_kern_safecopy.gid,
+		    m_ptr->m_lsys_kern_safecopy.bytes,
+		    (unsigned long)m_ptr->m_lsys_kern_safecopy.offset,
+		    (unsigned long)m_ptr->m_lsys_kern_safecopy.address);
+		safecopy_from_log_count++;
+	}
+	return r;
 }
 
 /*===========================================================================*
@@ -445,4 +488,3 @@ int do_vsafecopy(struct proc * caller, message * m_ptr)
 
 	return OK;
 }
-

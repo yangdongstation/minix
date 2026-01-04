@@ -2377,3 +2377,31 @@ int pt_mapkernel(pt_t *pt)
 }
 
 int get_vm_self_pages(void) { return vm_self_pages; }
+
+int pt_kern_mapping_lookup(vir_bytes addr, vir_bytes *vbase,
+	phys_bytes *pbase, phys_bytes *len, u32_t *flags)
+{
+	int i;
+
+	for (i = 0; i < kernmappings; i++) {
+		vir_bytes base = kern_mappings[i].vir_addr;
+		phys_bytes mlen = kern_mappings[i].len;
+
+		if (!(kern_mappings[i].flags & ARCH_VM_PTE_USER))
+			continue;
+		if (addr < base || addr >= base + mlen)
+			continue;
+
+		if (vbase)
+			*vbase = base;
+		if (pbase)
+			*pbase = kern_mappings[i].phys_addr;
+		if (len)
+			*len = mlen;
+		if (flags)
+			*flags = kern_mappings[i].flags;
+		return 1;
+	}
+
+	return 0;
+}

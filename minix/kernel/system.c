@@ -187,6 +187,7 @@ void kernel_call(message *m_user, struct proc * caller)
   message msg;
 #ifdef __riscv64
   static int kcall_trace_count;
+  static int kcall_safecopy_log_count;
 #endif
 
   caller->p_delivermsg_vir = (vir_bytes) m_user;
@@ -265,6 +266,30 @@ void kernel_call(message *m_user, struct proc * caller)
 #endif
 	  msg.m_source = caller->p_endpoint;
 	  result = kernel_call_dispatch(caller, &msg);
+#ifdef __riscv64
+	  if ((msg.m_type == SYS_SAFECOPYFROM ||
+	      msg.m_type == SYS_SAFECOPYTO) &&
+	      result != OK && kcall_safecopy_log_count < 8) {
+		  direct_print("rv64: kcall safecopy err=");
+		  direct_print_hex((u64_t)result);
+		  direct_print(" caller=");
+		  direct_print(caller->p_name);
+		  direct_print("/");
+		  direct_print_hex((u64_t)caller->p_endpoint);
+		  direct_print(" from_to=");
+		  direct_print_hex((u64_t)msg.m_lsys_kern_safecopy.from_to);
+		  direct_print(" gid=");
+		  direct_print_hex((u64_t)msg.m_lsys_kern_safecopy.gid);
+		  direct_print(" off=");
+		  direct_print_hex((u64_t)msg.m_lsys_kern_safecopy.offset);
+		  direct_print(" addr=");
+		  direct_print_hex((u64_t)(uintptr_t)msg.m_lsys_kern_safecopy.address);
+		  direct_print(" bytes=");
+		  direct_print_hex((u64_t)msg.m_lsys_kern_safecopy.bytes);
+		  direct_print("\n");
+		  kcall_safecopy_log_count++;
+	  }
+#endif
   }
   else {
 	  printf("WARNING wrong user pointer 0x%08x from process %s / %d\n",
@@ -750,6 +775,9 @@ void clear_ipc_refs(
 void kernel_call_resume(struct proc *caller)
 {
 	int result;
+#ifdef __riscv64
+	static int kcall_safecopy_resume_log_count;
+#endif
 
 	assert(!RTS_ISSET(caller, RTS_SLOT_FREE));
 	assert(!RTS_ISSET(caller, RTS_VMREQUEST));
@@ -766,6 +794,35 @@ void kernel_call_resume(struct proc *caller)
 	 * the call knows this is a retry.
 	 */
 	result = kernel_call_dispatch(caller, &caller->p_vmrequest.saved.reqmsg);
+#ifdef __riscv64
+	if ((caller->p_vmrequest.saved.reqmsg.m_type == SYS_SAFECOPYFROM ||
+	    caller->p_vmrequest.saved.reqmsg.m_type == SYS_SAFECOPYTO) &&
+	    result != OK && kcall_safecopy_resume_log_count < 8) {
+		direct_print("rv64: kcall resume safecopy err=");
+		direct_print_hex((u64_t)result);
+		direct_print(" caller=");
+		direct_print(caller->p_name);
+		direct_print("/");
+		direct_print_hex((u64_t)caller->p_endpoint);
+		direct_print(" from_to=");
+		direct_print_hex((u64_t)
+		    caller->p_vmrequest.saved.reqmsg.m_lsys_kern_safecopy.from_to);
+		direct_print(" gid=");
+		direct_print_hex((u64_t)
+		    caller->p_vmrequest.saved.reqmsg.m_lsys_kern_safecopy.gid);
+		direct_print(" off=");
+		direct_print_hex((u64_t)
+		    caller->p_vmrequest.saved.reqmsg.m_lsys_kern_safecopy.offset);
+		direct_print(" addr=");
+		direct_print_hex((u64_t)(uintptr_t)
+		    caller->p_vmrequest.saved.reqmsg.m_lsys_kern_safecopy.address);
+		direct_print(" bytes=");
+		direct_print_hex((u64_t)
+		    caller->p_vmrequest.saved.reqmsg.m_lsys_kern_safecopy.bytes);
+		direct_print("\n");
+		kcall_safecopy_resume_log_count++;
+	}
+#endif
 	/*
 	 * we are resuming the kernel call so we have to remove this flag so it
 	 * can be set again

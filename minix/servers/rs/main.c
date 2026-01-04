@@ -806,10 +806,10 @@ endpoint_t endpoint;
       panic("unable to complete init for service: %d", m.m_source);
   }
 
-  /* Send a reply to unblock the service, except to VM, which sent the reply
-   * asynchronously.  Synchronous replies could lead to deadlocks there.
+  /* Send a reply to unblock the service, except to VM/PM which replied
+   * asynchronously. Synchronous replies could lead to deadlocks there.
    */
-  if (m.m_source != VM_PROC_NR) {
+  if (m.m_source != VM_PROC_NR && m.m_source != PM_PROC_NR) {
       m.m_type = OK;
       reply(m.m_source, rp, &m);
   }
@@ -831,4 +831,3 @@ int *status_ptr;			/* pointer to status */
     if (OK != (r=sef_receive_status(ANY, m_ptr, status_ptr)))
         panic("sef_receive_status failed: %d", r);
 }
-

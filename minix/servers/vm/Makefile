@@ -17,7 +17,7 @@ CPPFLAGS+= -DPAE=1
 .endif
 
 DPADD+=	${LIBSYS} ${LIBEXEC}
-LDADD+=	-lsys -lexec
+LDADD+=	-lsys -lexec -lmthread
 
 CPPFLAGS+= -I${.CURDIR} -I${.CURDIR}/arch/${MACHINE_ARCH}
 CPPFLAGS+= -I${NETBSDSRCDIR}/minix

@@ -72,7 +72,7 @@
  * ps_strings struct. */
 #define STACK_MIN_SZ \
 ( \
-	sizeof(int) + sizeof(void *) * 2 + \
+	sizeof(void *) + sizeof(void *) * 2 + \
 	sizeof(AuxInfo) * PMEF_AUXVECTORS + PMEF_EXECNAMELEN1 + \
 	sizeof(struct ps_strings) \
 )
@@ -172,7 +172,7 @@ void minix_stack_fill(const char *path, int argc, char * const *argv,
 	/* Fill in the ps_string struct*/
 	*psp = (struct ps_strings *) fp;
 
-	(*psp)->ps_argvstr = (char **)(*vsp + sizeof(argc));
+	(*psp)->ps_argvstr = (char **)(*vsp + sizeof(void *));
 	(*psp)->ps_nargvstr = argc;
 	(*psp)->ps_envstr = (*psp)->ps_argvstr + argc + 1;
 	(*psp)->ps_nenvstr = envc;

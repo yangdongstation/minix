@@ -314,6 +314,8 @@ static void handle_page_fault(struct trapframe *tf, u64_t cause, u64_t addr)
     if (pr) {
         static int user_pf_log_count;
         if (user_pf_log_count < 8) {
+            u64_t satp = csr_read_satp();
+            u64_t root = (satp & SATP_PPN_MASK) << 12;
             direct_print("rv64: user pagefault ep=");
             direct_print_hex(pr->p_endpoint);
             direct_print(" name=");
@@ -328,6 +330,14 @@ static void handle_page_fault(struct trapframe *tf, u64_t cause, u64_t addr)
             direct_print_hex(addr);
             direct_print(" cause=");
             direct_print_hex(cause);
+            direct_print(" satp=");
+            direct_print_hex(satp);
+            direct_print(" root=");
+            direct_print_hex(root);
+            direct_print(" p_seg=");
+            direct_print_hex(pr->p_seg.p_satp);
+            direct_print(" p_seg_v=");
+            direct_print_hex((u64_t)(uintptr_t)pr->p_seg.p_satp_v);
             direct_print("\n");
             user_pf_log_count++;
         }

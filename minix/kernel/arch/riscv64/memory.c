@@ -459,6 +459,7 @@ int virtual_copy_f(struct proc *caller, struct vir_addr *src_addr,
     int i, r;
 #ifdef __riscv64
     static int vcopy_trace_once;
+    static int vcopy_fault_count;
     int trace = 0;
 #endif
 
@@ -564,6 +565,32 @@ int virtual_copy_f(struct proc *caller, struct vir_addr *src_addr,
             if (trace) {
                 direct_print("rv64: vcopy phys_copy fault\n");
             }
+            if (vcopy_fault_count < 8) {
+                direct_print("rv64: vcopy phys_copy fault caller=");
+                if (caller) {
+                    direct_print_hex((u64_t)caller->p_endpoint);
+                } else {
+                    direct_print("0");
+                }
+                direct_print(" src_e=");
+                direct_print_hex((u64_t)vir_addr[_SRC_]->proc_nr_e);
+                direct_print(" dst_e=");
+                direct_print_hex((u64_t)vir_addr[_DST_]->proc_nr_e);
+                direct_print(" src_phys=");
+                direct_print_hex((u64_t)src_phys);
+                direct_print(" dst_phys=");
+                direct_print_hex((u64_t)dst_phys);
+                direct_print(" src_off=");
+                direct_print_hex((u64_t)src_off);
+                direct_print(" dst_off=");
+                direct_print_hex((u64_t)dst_off);
+                direct_print(" bytes=");
+                direct_print_hex((u64_t)bytes);
+                direct_print(" chunk=");
+                direct_print_hex((u64_t)chunk);
+                direct_print("\n");
+                vcopy_fault_count++;
+            }
 #endif
             if (vmcheck && caller) {
                 vm_suspend(caller, procs[_DST_], dst_off, bytes,
@@ -631,7 +658,13 @@ void memory_init(void)
 void arch_proc_init(struct proc *pr, const u32_t ip, const u32_t sp,
 	const u32_t ps_str, char *name)
 {
+	reg_t saved_satp = pr->p_seg.p_satp;
+	reg_t *saved_satp_v = pr->p_seg.p_satp_v;
+
 	arch_proc_reset(pr);
+	/* Preserve address space root set by VM before exec. */
+	pr->p_seg.p_satp = saved_satp;
+	pr->p_seg.p_satp_v = saved_satp_v;
 	strlcpy(pr->p_name, name, sizeof(pr->p_name));
 
 	pr->p_reg.pc = ip;

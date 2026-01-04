@@ -120,6 +120,8 @@ int vm_addrok(void *vir, int write);
 int get_vm_self_pages(void);
 int pt_writable(struct vmproc *vmp, vir_bytes v);
 void pt_assert(pt_t *pt);
+int pt_kern_mapping_lookup(vir_bytes addr, vir_bytes *vbase,
+    phys_bytes *pbase, phys_bytes *len, u32_t *flags);
 
 #if SANITYCHECKS
 void pt_sanitycheck(pt_t *pt, const char *file, int line);

@@ -30,6 +30,69 @@
 #include "util.h"
 #include "region.h"
 
+#if defined(__riscv64__)
+#define VM_KERNINFO_USER_ADDR 0x100003cf8UL
+
+static void vm_trace_pte(const char *tag, struct vmproc *vmp, vir_bytes addr)
+{
+	static int trace_count;
+	pt_t *pt;
+	u64_t entry;
+	int pde, pte1, pte0;
+
+	if (trace_count++ >= 8)
+		return;
+	if (!vmp)
+		return;
+
+	pt = &vmp->vm_pt;
+	pde = ARCH_VM_PDE(addr);
+	pte1 = ARCH_VM_PTE1(addr);
+	pte0 = ARCH_VM_PTE(addr);
+
+	entry = pt->pt_dir[pde];
+	printf("vm: %s ep=%d addr=0x%lx pde=%d l2=0x%llx\n",
+	    tag, vmp->vm_endpoint, (unsigned long)addr, pde,
+	    (unsigned long long)entry);
+	if (!(entry & ARCH_VM_PDE_PRESENT)) {
+		printf("vm: %s l2 not present\n", tag);
+		return;
+	}
+	if (entry & RISCV_PTE_LEAF) {
+		printf("vm: %s l2 leaf U=%d R=%d W=%d X=%d\n",
+		    tag, !!(entry & RISCV_PTE_U), !!(entry & RISCV_PTE_R),
+		    !!(entry & RISCV_PTE_W), !!(entry & RISCV_PTE_X));
+		return;
+	}
+	if (!pt->pt_pt[pde]) {
+		printf("vm: %s l1 table missing\n", tag);
+		return;
+	}
+	entry = pt->pt_pt[pde][pte1];
+	printf("vm: %s pte1=%d l1=0x%llx\n",
+	    tag, pte1, (unsigned long long)entry);
+	if (!(entry & ARCH_VM_PDE_PRESENT)) {
+		printf("vm: %s l1 not present\n", tag);
+		return;
+	}
+	if (entry & RISCV_PTE_LEAF) {
+		printf("vm: %s l1 leaf U=%d R=%d W=%d X=%d\n",
+		    tag, !!(entry & RISCV_PTE_U), !!(entry & RISCV_PTE_R),
+		    !!(entry & RISCV_PTE_W), !!(entry & RISCV_PTE_X));
+		return;
+	}
+	if (!pt->pt_pt_l0[pde] || !pt->pt_pt_l0[pde][pte1]) {
+		printf("vm: %s l0 table missing\n", tag);
+		return;
+	}
+	entry = pt->pt_pt_l0[pde][pte1][pte0];
+	printf("vm: %s pte0=%d l0=0x%llx U=%d R=%d W=%d X=%d\n",
+	    tag, pte0, (unsigned long long)entry,
+	    !!(entry & RISCV_PTE_U), !!(entry & RISCV_PTE_R),
+	    !!(entry & RISCV_PTE_W), !!(entry & RISCV_PTE_X));
+}
+#endif
+
 struct pf_state {
         endpoint_t ep;
         vir_bytes vaddr;
@@ -101,12 +164,46 @@ static void handle_pagefault(endpoint_t ep, vir_bytes addr, u32_t err, int retry
 	vir_bytes offset;
 	int p, wr = PFERR_WRITE(err);
 	int io = 0;
+#if defined(__riscv64__)
+	vir_bytes vbase;
+	phys_bytes pbase;
+	phys_bytes mlen;
+	u32_t mflags;
+	static int pf_trace_count;
+#endif
 
 	if(vm_isokendpt(ep, &p) != OK)
 		panic("handle_pagefault: endpoint wrong: %d", ep);
 
 	vmp = &vmproc[p];
 	assert(vmp->vm_flags & VMF_INUSE);
+
+#if defined(__riscv64__)
+	if ((addr & ~(VM_PAGE_SIZE - 1)) ==
+	    (VM_KERNINFO_USER_ADDR & ~(VM_PAGE_SIZE - 1)) &&
+	    pf_trace_count < 8) {
+		vm_trace_pte("pf-before", vmp, addr);
+	}
+	if (pt_kern_mapping_lookup(addr, &vbase, &pbase, &mlen, &mflags)) {
+		int r;
+
+		r = pt_writemap(vmp, &vmp->vm_pt, vbase, pbase, mlen, mflags, 0);
+		if (r != OK)
+			panic("VM: kernmap writemap failed: %d", r);
+		pt_clearmapcache();
+		if ((addr & ~(VM_PAGE_SIZE - 1)) ==
+		    (VM_KERNINFO_USER_ADDR & ~(VM_PAGE_SIZE - 1)) &&
+		    pf_trace_count < 8) {
+			vm_trace_pte("pf-after", vmp, addr);
+		}
+		pf_trace_count++;
+		if((s=sys_vmctl(ep, VMCTL_FLUSHTLB, 0 /*unused*/)) != OK)
+			panic("do_pagefaults: sys_vmctl failed: %d", ep);
+		if((s=sys_vmctl(ep, VMCTL_CLEAR_PAGEFAULT, 0 /*unused*/)) != OK)
+			panic("do_pagefaults: sys_vmctl failed: %d", ep);
+		return;
+	}
+#endif
 
 	/* See if address is valid at all. */
 	if(!(region = map_lookup(vmp, addr, NULL))) {
@@ -259,6 +356,29 @@ static void handle_memory_final(struct hm_state *state, int result)
  *===========================================================================*/
 void do_pagefaults(message *m)
 {
+#if defined(__riscv64__)
+	{
+		static int rs_pf_log_count;
+		if (m->m_source == RS_PROC_NR && rs_pf_log_count < 8) {
+			int p;
+			u64_t raw_addr = m->m1_ull1;
+
+			printf("VM: rs pf msg src=%d type=%d addr=0x%llx "
+			    "vpfa=0x%lx flags=0x%x i1=%d i2=%d i3=%d "
+			    "hi=0x%x lo=0x%x\n",
+			    m->m_source, m->m_type,
+			    (unsigned long long)raw_addr,
+			    (unsigned long)m->VPF_ADDR, m->VPF_FLAGS,
+			    m->m1_i1, m->m1_i2, m->m1_i3,
+			    (unsigned int)(raw_addr >> 32),
+			    (unsigned int)(raw_addr & 0xffffffff));
+			if (vm_isokendpt(m->m_source, &p) == OK)
+				vm_trace_pte("rs-pf-msg", &vmproc[p],
+				    (vir_bytes)raw_addr);
+			rs_pf_log_count++;
+		}
+	}
+#endif
 	handle_pagefault(m->m_source, m->VPF_ADDR, m->VPF_FLAGS, 0);
 }
 
@@ -387,12 +507,32 @@ static int handle_memory_step(struct hm_state *hmstate, int retry)
 
 	while(hmstate->len > 0) {
 		if(!(region = map_lookup(hmstate->vmp, hmstate->mem, NULL))) {
+			static int memreq_log_count;
+			if (memreq_log_count < 8) {
+				printf("VM: memreq no region ep=%d mem=0x%lx len=0x%lx wr=%d\n",
+				    hmstate->vmp->vm_endpoint,
+				    (unsigned long)hmstate->mem,
+				    (unsigned long)hmstate->len,
+				    hmstate->wrflag);
+				memreq_log_count++;
+			}
 #if VERBOSE
 			map_printmap(hmstate->vmp);
 			printf("VM: do_memory: memory doesn't exist\n");
 #endif
 			return EFAULT;
 		} else if(!(region->flags & VR_WRITABLE) && hmstate->wrflag) {
+			static int memreq_wr_log_count;
+			if (memreq_wr_log_count < 8) {
+				printf("VM: memreq not writable ep=%d mem=0x%lx len=0x%lx region=0x%lx rlen=0x%lx flags=0x%x\n",
+				    hmstate->vmp->vm_endpoint,
+				    (unsigned long)hmstate->mem,
+				    (unsigned long)hmstate->len,
+				    (unsigned long)region->vaddr,
+				    (unsigned long)region->length,
+				    region->flags);
+				memreq_wr_log_count++;
+			}
 #if VERBOSE
 			printf("VM: do_memory: write to unwritable map\n");
 #endif
