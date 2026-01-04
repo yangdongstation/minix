@@ -80,7 +80,7 @@ void exception_handler(struct trapframe *tf)
         }
     }
 
-    if (!is_interrupt && !from_user && trap_trace_count < 32) {
+    if (!is_interrupt && !from_user && trap_trace_count < 128) {
         direct_print("rv64: trap scause=");
         direct_print_hex(cause);
         direct_print(" sepc=");
@@ -105,7 +105,7 @@ void exception_handler(struct trapframe *tf)
 #if defined(__riscv)
         {
             static int sw_log_count;
-            if (sw_log_count < 8) {
+            if (sw_log_count < 32) {
                 direct_print("rv64: exception switch_to_user\n");
                 sw_log_count++;
             }
@@ -208,7 +208,7 @@ static void handle_syscall(struct trapframe *tf)
         return;
     }
 
-    if (syscall_trace_count < 64) {
+    if (syscall_trace_count < 256) {
         direct_print("rv64: syscall a7=");
         direct_print_hex(caller->p_reg.a7);
         direct_print(" a2=");
@@ -225,7 +225,7 @@ static void handle_syscall(struct trapframe *tf)
         static int ipc_vm_trace_count;
         if (caller->p_reg.a7 == IPCVEC_INTR &&
             caller->p_reg.a0 == VM_PROC_NR &&
-            ipc_vm_trace_count < 16) {
+            ipc_vm_trace_count < 64) {
             message m;
             int cr = EFAULT;
             int op = (int)caller->p_reg.a2;
@@ -313,7 +313,8 @@ static void handle_page_fault(struct trapframe *tf, u64_t cause, u64_t addr)
     /* Don't schedule this process until pagefault is handled. */
     if (pr) {
         static int user_pf_log_count;
-        if (user_pf_log_count < 8) {
+        int log_pf = (user_pf_log_count < 64) || (addr < 0x1000);
+        if (log_pf) {
             u64_t satp = csr_read_satp();
             u64_t root = (satp & SATP_PPN_MASK) << 12;
             direct_print("rv64: user pagefault ep=");
@@ -339,7 +340,8 @@ static void handle_page_fault(struct trapframe *tf, u64_t cause, u64_t addr)
             direct_print(" p_seg_v=");
             direct_print_hex((u64_t)(uintptr_t)pr->p_seg.p_satp_v);
             direct_print("\n");
-            user_pf_log_count++;
+            if (user_pf_log_count < 64)
+                user_pf_log_count++;
         }
         RTS_SET(pr, RTS_PAGEFAULT);
 

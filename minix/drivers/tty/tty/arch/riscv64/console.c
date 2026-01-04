@@ -4,6 +4,7 @@
 #include <minix/sysutil.h>
 #include <minix/com.h>
 #include <sys/termios.h>
+#include <stdint.h>
 #include <string.h>
 #include "tty.h"
 
@@ -95,7 +96,8 @@ cons_write(tty_t *tp, int try)
             count = sizeof(buf);
 
         if (tp->tty_outcaller == KERNEL) {
-            memcpy(buf, (char *)tp->tty_outgrant + tp->tty_outcum, count);
+            const char *src = (const char *)(uintptr_t)(uint32_t)tp->tty_outgrant;
+            memcpy(buf, src + tp->tty_outcum, count);
         } else {
             result = sys_safecopyfrom(tp->tty_outcaller, tp->tty_outgrant,
                 tp->tty_outcum, (vir_bytes)buf, count);

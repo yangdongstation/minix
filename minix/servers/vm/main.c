@@ -135,7 +135,7 @@ int main(void)
 #if defined(__riscv)
 	{
 		static int vm_msg_log_count;
-		if (vm_msg_log_count < 8) {
+		if (vm_msg_log_count < 64) {
 			printf("VM: recv src=%d type=%d hex=0x%x status=0x%x i1=%d i2=%d i3=%d\n",
 			    msg.m_source, msg.m_type, (unsigned int)msg.m_type,
 			    rcv_sts, msg.m1_i1, msg.m1_i2, msg.m1_i3);
