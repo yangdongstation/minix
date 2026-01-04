@@ -102,8 +102,17 @@ void exception_handler(struct trapframe *tf)
     }
 
     if (from_user && caller != NULL) {
-        memcpy((struct stackframe_s *)tf, &caller->p_reg,
-            sizeof(caller->p_reg));
+#if defined(__riscv)
+        {
+            static int sw_log_count;
+            if (sw_log_count < 8) {
+                direct_print("rv64: exception switch_to_user\n");
+                sw_log_count++;
+            }
+        }
+#endif
+        switch_to_user();
+        NOT_REACHABLE;
     }
 }
 
@@ -303,6 +312,25 @@ static void handle_page_fault(struct trapframe *tf, u64_t cause, u64_t addr)
 
     /* Don't schedule this process until pagefault is handled. */
     if (pr) {
+        static int user_pf_log_count;
+        if (user_pf_log_count < 8) {
+            direct_print("rv64: user pagefault ep=");
+            direct_print_hex(pr->p_endpoint);
+            direct_print(" name=");
+            direct_print(pr->p_name);
+            direct_print(" pc=");
+            direct_print_hex(pr->p_reg.pc);
+            direct_print(" ra=");
+            direct_print_hex(pr->p_reg.ra);
+            direct_print(" sp=");
+            direct_print_hex(pr->p_reg.sp);
+            direct_print(" addr=");
+            direct_print_hex(addr);
+            direct_print(" cause=");
+            direct_print_hex(cause);
+            direct_print("\n");
+            user_pf_log_count++;
+        }
         RTS_SET(pr, RTS_PAGEFAULT);
 
         /* tell VM about the pagefault */

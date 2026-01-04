@@ -40,5 +40,6 @@ _ENTRY(__start)
 	 * void ___start(void (*cleanup)(void), const Obj_Entry *obj,
 	 *    struct ps_strings *ps_strings);
 	 */
+	la	gp, __global_pointer$
 	j	___start
 END(__start)

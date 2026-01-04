@@ -22,6 +22,7 @@
 #include <libexec.h>
 #include <ctype.h>
 #include <errno.h>
+#include <sched.h>
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
@@ -119,8 +120,14 @@ int main(void)
 		alloc_cycle();	/* mem alloc code wants to be called */
 	}
 
-  	if ((r=sef_receive_status(ANY, &msg, &rcv_sts)) != OK)
+	r = sef_receive_status(ANY, &msg, &rcv_sts);
+	if (r != OK) {
+		if (r == EAGAIN) {
+			sched_yield();
+			continue;
+		}
 		panic("sef_receive_status() error: %d", r);
+	}
 #if defined(__riscv)
 	{
 		static int vm_msg_log_count;

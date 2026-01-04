@@ -268,6 +268,20 @@ static void delivermsg(struct proc *rp)
 
 #if defined(__riscv)
 	{
+		static int delivermsg_log_count;
+		if (delivermsg_log_count < 16) {
+			direct_printf("rv64: delivermsg to=%d name=%s src=%d type=%d\n",
+			    (u64_t)rp->p_endpoint,
+			    rp->p_name,
+			    (u64_t)rp->p_delivermsg.m_source,
+			    (u64_t)rp->p_delivermsg.m_type);
+			delivermsg_log_count++;
+		}
+	}
+#endif
+
+#if defined(__riscv)
+	{
 		static int vm_deliver_msg_count;
 		if (rp->p_endpoint == VM_PROC_NR &&
 		    vm_deliver_msg_count < 8) {
@@ -321,6 +335,13 @@ void switch_to_user(void)
 	 * to be scheduled again.
 	 */
 	struct proc * p;
+#if defined(__riscv)
+	static int switch_log_count;
+	if (switch_log_count < 8) {
+		direct_print("rv64: switch_to_user\n");
+		switch_log_count++;
+	}
+#endif
 #ifdef CONFIG_SMP
 	int tlb_must_refresh = 0;
 #endif
@@ -658,6 +679,35 @@ int do_ipc(reg_t r1, reg_t r2, reg_t r3)
   struct proc *const caller_ptr = get_cpulocal_var(proc_ptr);	/* get pointer to caller */
   int call_nr = (int) r1;
 
+#if defined(__riscv)
+  {
+	static int pm_ipc_log_count;
+	static int vm_ipc_log_count;
+
+	if (caller_ptr->p_endpoint == PM_PROC_NR && pm_ipc_log_count < 8) {
+		direct_print("rv64: ipc pm call=");
+		direct_print_hex((u64_t)call_nr);
+		direct_print(" r2=");
+		direct_print_hex((u64_t)r2);
+		direct_print(" r3=");
+		direct_print_hex((u64_t)r3);
+		direct_print("\n");
+		pm_ipc_log_count++;
+	}
+
+	if (caller_ptr->p_endpoint == VM_PROC_NR && vm_ipc_log_count < 8) {
+		direct_print("rv64: ipc vm call=");
+		direct_print_hex((u64_t)call_nr);
+		direct_print(" r2=");
+		direct_print_hex((u64_t)r2);
+		direct_print(" r3=");
+		direct_print_hex((u64_t)r3);
+		direct_print("\n");
+		vm_ipc_log_count++;
+	}
+  }
+#endif
+
   assert(!RTS_ISSET(caller_ptr, RTS_SLOT_FREE));
 
   /* bill kernel time to this process. */
@@ -941,15 +991,14 @@ int mini_send(
 
 #if defined(__riscv)
   {
-	static int pm_vm_enter_log_count;
-	if (caller_ptr->p_endpoint == PM_PROC_NR &&
-	    dst_e == VM_PROC_NR &&
-	    pm_vm_enter_log_count < 8) {
-		direct_printf("mini_send: enter pm->vm dst_e=%d msg=%p flags=0x%x\n",
-		    (u64_t)dst_e,
+	static int vm_send_enter_log_count;
+	if (dst_e == VM_PROC_NR && vm_send_enter_log_count < 8) {
+		direct_printf("mini_send: enter to vm from=%d name=%s msg=%p flags=0x%x\n",
+		    (u64_t)caller_ptr->p_endpoint,
+		    caller_ptr->p_name,
 		    (u64_t)(unsigned long)m_ptr,
 		    (u64_t)flags);
-		pm_vm_enter_log_count++;
+		vm_send_enter_log_count++;
 	}
   }
 #endif
@@ -979,16 +1028,17 @@ int mini_send(
 	}
 #if defined(__riscv)
 	{
-		static int pm_vm_deliver_log_count;
-		if (caller_ptr->p_endpoint == PM_PROC_NR &&
-		    dst_ptr->p_endpoint == VM_PROC_NR &&
-		    pm_vm_deliver_log_count < 8) {
-			direct_print("rv64: pm->vm deliver mtype=");
+		static int vm_deliver_log_count;
+		if (dst_ptr->p_endpoint == VM_PROC_NR &&
+		    vm_deliver_log_count < 8) {
+			direct_print("rv64: to vm deliver mtype=");
 			direct_print_hex((u64_t)dst_ptr->p_delivermsg.m_type);
+			direct_print(" from=");
+			direct_print_hex((u64_t)caller_ptr->p_endpoint);
 			direct_print(" m_ptr=");
 			direct_print_hex((u64_t)(unsigned long)m_ptr);
 			direct_print("\n");
-			pm_vm_deliver_log_count++;
+			vm_deliver_log_count++;
 		}
 	}
 #endif
