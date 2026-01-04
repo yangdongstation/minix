@@ -277,6 +277,9 @@ CPPFLAGS.${i}+=	-I${LIBCDIR}/stdlib
 .endfor
 
 CPPFLAGS.malloc.c+= -D_LIBSYS
+.if ${MACHINE_ARCH} == "riscv64"
+CPPFLAGS.malloc.c+= -DMALLOC_EXTRA_SANITY
+.endif
 # Avoid magic instrumentation of the malloc data variables, since the heap is
 # reconstructed upon state transfer. We do need to instrument the malloc
 # functions, since we need to hook their mmap/munmap calls.
