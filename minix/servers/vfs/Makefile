@@ -8,7 +8,7 @@ SRCS=	main.c open.c read.c write.c pipe.c dmap.c \
 	lock.c misc.c utility.c select.c table.c \
 	vnode.c vmnt.c request.c \
 	tll.c comm.c worker.c coredump.c \
-	bdev.c cdev.c sdev.c smap.c socket.c
+	bdev.c cdev.c sdev.c smap.c socket.c gp.c
 
 .if ${MKCOVERAGE} != "no"
 SRCS+=  gcov.c
@@ -21,6 +21,9 @@ CWARNFLAGS.gcc+=	-Wno-maybe-uninitialized
 .endif # defined(__MINIX)
 
 CFLAGS+= -Wall -Wextra -Wno-sign-compare -Werror
+.if ${MACHINE_ARCH} == "riscv64" || ${MACHINE_ARCH} == "riscv"
+LDFLAGS+= -Wl,--defsym,__global_pointer$$=_gp
+.endif
 DPADD+=	${LIBSYS} ${LIBTIMERS} ${LIBEXEC}
 LDADD+=	-lsys -ltimers -lexec -lmthread
 

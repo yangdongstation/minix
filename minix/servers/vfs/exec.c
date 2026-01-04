@@ -169,6 +169,8 @@ static int vfs_memmap(struct exec_info *execi,
 
 	if(protflags & PROT_WRITE)
 		flags |= MVM_WRITABLE;
+	if(protflags & PROT_EXEC)
+		flags |= MVM_EXEC;
 
 	r = minix_vfs_mmap(execi->proc_e, foffset, len,
 	        vp->v_dev, vp->v_inode_nr, vi->vmfd, vaddr, clearend, flags);

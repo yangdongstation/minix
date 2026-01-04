@@ -244,7 +244,16 @@ int libexec_load_elf(struct exec_info *execi)
 #endif
 		}
 
+		if(ph->p_flags & PF_X) {
+			mmap_prot |= PROT_EXEC;
+#if ELF_DEBUG
+			printf("libexec: adding PROT_EXEC\n");
+#endif
+		}
+
 		if (ph->p_type != PT_LOAD || ph->p_memsz == 0) continue;
+
+		execi->seg_flags = ph->p_flags;
 
 		if((ph->p_vaddr % PAGE_SIZE) != (ph->p_offset % PAGE_SIZE)) {
 			printf("libexec: unaligned ELF program?\n");
@@ -346,6 +355,8 @@ int libexec_load_elf(struct exec_info *execi)
 			}
 		}
 	}
+
+	execi->seg_flags = PF_W;
 
 	/* Make it a stack */
 	if(execi->allocmem_ondemand(execi, stacklow, execi->stack_size) != OK) {

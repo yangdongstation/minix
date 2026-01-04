@@ -19,8 +19,11 @@
 #include <machine/param.h>
 #include <machine/vmparam.h>
 #define MALLOC_NO_SYSCALLS
-#define wrtwarning(w) printf("libminc malloc warning: %s\n", w)
-#define wrterror(w) panic("libminc malloc error: %s\n", w)
+void minix_malloc_log_dump(const char *reason);
+static void minc_wrtwarning(const char *w);
+static void minc_wrterror(const char *w);
+#define wrtwarning(w) minc_wrtwarning(w)
+#define wrterror(w) minc_wrterror(w)
 #endif
 #endif /* defined(__minix) */
 
@@ -154,6 +157,123 @@ static mutex_t thread_lock = MUTEX_INITIALIZER;
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
+#if defined(__minix) && defined(_LIBSYS)
+#define MALLOC_LOG_SIZE 128
+
+struct malloc_log_entry {
+	unsigned int seq;
+	char op;
+	void *ptr;
+	void *ptr2;
+	size_t size;
+	size_t size2;
+	void *caller;
+};
+
+static struct malloc_log_entry malloc_log[MALLOC_LOG_SIZE];
+static unsigned int malloc_log_pos;
+static unsigned int malloc_log_seq;
+static int malloc_log_enabled = -1;
+static int malloc_log_dumping;
+static int malloc_log_printing;
+
+static int
+malloc_log_should_enable(void)
+{
+	const char *prog;
+
+	if (malloc_log_enabled != -1)
+		return malloc_log_enabled;
+
+	prog = getprogname();
+	if (prog != NULL &&
+	    (strcmp(prog, "vfs") == 0 || strcmp(prog, "VFS") == 0))
+		malloc_log_enabled = 1;
+	else
+		malloc_log_enabled = 0;
+
+	return malloc_log_enabled;
+}
+
+static void
+malloc_log_add(char op, void *ptr, void *ptr2, size_t size, size_t size2,
+	void *caller)
+{
+	struct malloc_log_entry *e;
+	unsigned int pos;
+
+	if (!malloc_log_should_enable())
+		return;
+
+	pos = malloc_log_pos++ & (MALLOC_LOG_SIZE - 1);
+	e = &malloc_log[pos];
+	e->seq = malloc_log_seq++;
+	e->op = op;
+	e->ptr = ptr;
+	e->ptr2 = ptr2;
+	e->size = size;
+	e->size2 = size2;
+	e->caller = caller;
+
+	if (malloc_log_dumping || malloc_log_printing)
+		return;
+
+	malloc_log_printing = 1;
+	printf("libminc malloc op=%c seq=%u ptr=%p ptr2=%p size=%zu size2=%zu caller=%p\n",
+	    e->op, e->seq, e->ptr, e->ptr2, e->size, e->size2, e->caller);
+	malloc_log_printing = 0;
+}
+
+void
+minix_malloc_log_dump(const char *reason)
+{
+	unsigned int count, i, start;
+
+	if (!malloc_log_should_enable() || malloc_log_dumping)
+		return;
+
+	malloc_log_dumping = 1;
+	printf("libminc malloc log dump: %s\n",
+	    reason != NULL ? reason : "no reason");
+
+	count = malloc_log_pos;
+	if (count > MALLOC_LOG_SIZE)
+		count = MALLOC_LOG_SIZE;
+	start = (malloc_log_pos - count) & (MALLOC_LOG_SIZE - 1);
+
+	for (i = 0; i < count; i++) {
+		struct malloc_log_entry *e;
+		unsigned int idx = (start + i) & (MALLOC_LOG_SIZE - 1);
+
+		e = &malloc_log[idx];
+		printf("libminc malloc log #%u op=%c ptr=%p ptr2=%p size=%zu size2=%zu caller=%p\n",
+		    e->seq, e->op, e->ptr, e->ptr2, e->size, e->size2,
+		    e->caller);
+	}
+	malloc_log_dumping = 0;
+}
+
+#if defined(__GNUC__) || defined(__clang__)
+#define MALLOC_LOG_CALLER() __builtin_return_address(0)
+#else
+#define MALLOC_LOG_CALLER() NULL
+#endif
+
+static void
+minc_wrtwarning(const char *w)
+{
+	minix_malloc_log_dump("malloc warning");
+	printf("libminc malloc warning: %s\n", w);
+}
+
+static void
+minc_wrterror(const char *w)
+{
+	minix_malloc_log_dump("malloc error");
+	panic("libminc malloc error: %s\n", w);
+}
+#endif
 
 /*
  * This structure describes a page worth of chunks.
@@ -1243,19 +1363,25 @@ void *
 malloc(size_t size)
 {
 
-    return pubrealloc(NULL, size, " in malloc():");
+	void *r;
+
+	r = pubrealloc(NULL, size, " in malloc():");
+#if defined(__minix) && defined(_LIBSYS)
+	malloc_log_add('M', r, NULL, size, 0, MALLOC_LOG_CALLER());
+#endif
+	return r;
 }
 
 int
 posix_memalign(void **memptr, size_t alignment, size_t size)
 {
-    int err;
-    void *result;
+	int err;
+	void *result;
 
-    if (!malloc_started) {
-	    malloc_init();
-	    malloc_started = 1;
-    }
+	if (!malloc_started) {
+		malloc_init();
+		malloc_started = 1;
+	}
     /* Make sure that alignment is a large enough power of 2. */
     if (((alignment - 1) & alignment) != 0 || alignment < sizeof(void *) ||
 	alignment > malloc_pagesize)
@@ -1269,44 +1395,59 @@ posix_memalign(void **memptr, size_t alignment, size_t size)
     result = pubrealloc(NULL, (size | alignment), " in posix_memalign()");
     errno = err;
 
-    if (result == NULL)
-	return ENOMEM;
+	if (result == NULL)
+		return ENOMEM;
 
-    *memptr = result;
-    return 0;
+	*memptr = result;
+#if defined(__minix) && defined(_LIBSYS)
+	malloc_log_add('A', result, NULL, alignment, size, MALLOC_LOG_CALLER());
+#endif
+	return 0;
 }
 
 void *
 calloc(size_t num, size_t size)
 {
-    void *ret;
+	void *ret;
 
-    if (size != 0 && (num * size) / size != num) {
-	/* size_t overflow. */
-	errno = ENOMEM;
-	return (NULL);
-    }
+	if (size != 0 && (num * size) / size != num) {
+		/* size_t overflow. */
+		errno = ENOMEM;
+		return (NULL);
+	}
 
-    ret = pubrealloc(NULL, num * size, " in calloc():");
+	ret = pubrealloc(NULL, num * size, " in calloc():");
 
-    if (ret != NULL)
-	memset(ret, 0, num * size);
+	if (ret != NULL)
+		memset(ret, 0, num * size);
+#if defined(__minix) && defined(_LIBSYS)
+	malloc_log_add('C', ret, NULL, num, size, MALLOC_LOG_CALLER());
+#endif
 
-    return ret;
+	return ret;
 }
 
 void
 free(void *ptr)
 {
 
-    pubrealloc(ptr, 0, " in free():");
+	pubrealloc(ptr, 0, " in free():");
+#if defined(__minix) && defined(_LIBSYS)
+	malloc_log_add('F', ptr, NULL, 0, 0, MALLOC_LOG_CALLER());
+#endif
 }
 
 void *
 realloc(void *ptr, size_t size)
 {
 
-    return pubrealloc(ptr, size, " in realloc():");
+	void *r;
+
+	r = pubrealloc(ptr, size, " in realloc():");
+#if defined(__minix) && defined(_LIBSYS)
+	malloc_log_add('R', ptr, r, size, 0, MALLOC_LOG_CALLER());
+#endif
+	return r;
 }
 
 /*

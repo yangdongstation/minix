@@ -15,6 +15,7 @@
 #include <minix/safecopies.h>
 #include <minix/bitmap.h>
 #include <minix/debug.h>
+#include <minix/vm.h>
 
 #include <machine/vmparam.h>
 
@@ -84,7 +85,8 @@ static struct vir_region *mmap_region(struct vmproc *vmp, vir_bytes addr,
 static int mmap_file(struct vmproc *vmp,
 	int vmfd, off_t file_offset, int flags,
 	ino_t ino, dev_t dev, u64_t filesize, vir_bytes addr, vir_bytes len,
-	vir_bytes *retaddr, u16_t clearend, int writable, int mayclosefd)
+	vir_bytes *retaddr, u16_t clearend, int writable, int exec,
+	int mayclosefd)
 {
 /* VFS has replied to a VMVFSREQ_FDLOOKUP request. */
 	struct vir_region *vr;
@@ -93,6 +95,7 @@ static int mmap_file(struct vmproc *vmp,
 	u32_t vrflags = 0;
 
 	if(writable) vrflags |= VR_WRITABLE;
+	if(exec) vrflags |= VR_EXEC;
 
 	/* Do some page alignments. */
 	if((page_offset = (file_offset % VM_PAGE_SIZE))) {
@@ -138,12 +141,15 @@ int do_vfs_mmap(message *m)
 	struct vmproc *vmp;
 	int r, n;
 	u16_t clearend, flags = 0;
+	int writable, exec;
 
 	/* It might be disabled */
 	if(!enable_filemap) return ENXIO;
 
 	clearend = m->m_vm_vfs_mmap.clearend;
 	flags = m->m_vm_vfs_mmap.flags;
+	writable = (flags & MVM_WRITABLE) != 0;
+	exec = (flags & MVM_EXEC) != 0;
 
 	if((r=vm_isokendpt(m->m_vm_vfs_mmap.who, &n)) != OK)
 		panic("bad ep %d from vfs", m->m_vm_vfs_mmap.who);
@@ -154,7 +160,7 @@ int do_vfs_mmap(message *m)
 		m->m_vm_vfs_mmap.ino, m->m_vm_vfs_mmap.dev,
 		(u64_t) LONG_MAX * VM_PAGE_SIZE,
 		m->m_vm_vfs_mmap.vaddr, m->m_vm_vfs_mmap.len, &v,
-		clearend, flags, 0);
+		clearend, writable, exec, 0);
 }
 
 static void mmap_file_cont(struct vmproc *vmp, message *replymsg, void *cbarg,
@@ -164,10 +170,13 @@ static void mmap_file_cont(struct vmproc *vmp, message *replymsg, void *cbarg,
 	message mmap_reply;
 	int result;
 	int writable = 0;
+	int exec = 0;
 	vir_bytes v = (vir_bytes) MAP_FAILED;
 
 	if(origmsg->m_mmap.prot & PROT_WRITE)
 		writable = 1;
+	if(origmsg->m_mmap.prot & PROT_EXEC)
+		exec = 1;
 
 	if(replymsg->VMV_RESULT != OK) {
 #if 0   /* Noisy diagnostic for mmap() by ld.so */
@@ -182,7 +191,7 @@ static void mmap_file_cont(struct vmproc *vmp, message *replymsg, void *cbarg,
 			replymsg->VMV_INO, replymsg->VMV_DEV,
 			(u64_t) replymsg->VMV_SIZE_PAGES*PAGE_SIZE,
 			(vir_bytes) origmsg->m_mmap.addr,
-			origmsg->m_mmap.len, &v, 0, writable, 1);
+			origmsg->m_mmap.len, &v, 0, writable, exec, 1);
 	}
 
 	/* Unblock requesting process. */
@@ -232,6 +241,12 @@ int do_mmap(message *m)
 	if(m->m_mmap.fd == -1 || (m->m_mmap.flags & MAP_ANON)) {
 		/* actual memory in some form */
 		mem_type_t *mt = NULL;
+		u32_t vrflags = VR_ANON;
+
+		if(m->m_mmap.prot & PROT_WRITE)
+			vrflags |= VR_WRITABLE;
+		if(m->m_mmap.prot & PROT_EXEC)
+			vrflags |= VR_EXEC;
 
 		if(m->m_mmap.fd != -1) {
 			printf("VM: mmap: fd %d, len 0x%zx\n", m->m_mmap.fd, len);
@@ -248,7 +263,7 @@ int do_mmap(message *m)
 		} else	mt = &mem_type_anon;
 
 		if(!(vr = mmap_region(vmp, addr, m->m_mmap.flags, len,
-			VR_WRITABLE | VR_ANON, mt, execpriv))) {
+			vrflags, mt, execpriv))) {
 			return ENOMEM;
 		}
 	} else {
@@ -570,4 +585,3 @@ int do_munmap(message *m)
 
 	return map_unmap_range(vmp, addr, len);
 }
-

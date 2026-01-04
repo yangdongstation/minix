@@ -18,6 +18,7 @@
 #include <minix/vfsif.h>
 
 #include <sys/exec.h>
+#include <machine/elf.h>
 
 #include <libexec.h>
 #include <ctype.h>
@@ -328,10 +329,13 @@ static void boot_alloc(struct exec_info *execi, off_t vaddr,
 	size_t len, int flags)
 {
 	struct vmproc *vmp = ((struct vm_exec_info *) execi->opaque)->vmp;
+	u16_t vrflags = VR_ANON | VR_WRITABLE | VR_UNINITIALIZED;
+
+	if(execi->seg_flags & PF_X)
+		vrflags |= VR_EXEC;
 
 	if(!(map_page_region(vmp, vaddr, 0, len,
-		VR_ANON | VR_WRITABLE | VR_UNINITIALIZED, flags,
-		&mem_type_anon))) {
+		vrflags, flags, &mem_type_anon))) {
 		panic("VM: exec: map_page_region for boot process failed");
 	}
 }

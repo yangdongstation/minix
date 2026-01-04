@@ -47,6 +47,9 @@ static int unblock(struct fproc *rfp);
 static void sef_local_startup(void);
 static int sef_cb_init_fresh(int type, sef_init_info_t *info);
 static int sef_cb_init_lu(int type, sef_init_info_t *info);
+static void sef_cb_signal_handler(int signo);
+
+extern void minix_malloc_log_dump(const char *reason);
 
 /*===========================================================================*
  *				main					     *
@@ -383,8 +386,31 @@ static void sef_local_startup(void)
   sef_setcb_lu_state_changed(sef_cb_lu_state_changed);
   sef_setcb_lu_state_isvalid(sef_cb_lu_state_isvalid_standard);
 
+  /* Register signal callbacks. */
+	sef_setcb_signal_handler(sef_cb_signal_handler);
+
   /* Let SEF perform startup. */
   sef_startup();
+}
+
+/*===========================================================================*
+ *				sef_cb_signal_handler			     *
+ *===========================================================================*/
+static void sef_cb_signal_handler(int signo)
+{
+	switch (signo) {
+	case SIGSEGV:
+	case SIGILL:
+#ifdef SIGBUS
+	case SIGBUS:
+#endif
+		minix_malloc_log_dump("vfs fatal signal");
+		break;
+	default:
+		break;
+	}
+
+	sef_cb_signal_handler_posix_default(signo);
 }
 
 /*===========================================================================*
@@ -452,8 +478,25 @@ static int sef_cb_init_fresh(int UNUSED(type), sef_init_info_t *info)
   init_smap();			/* Initialize socket table. */
 
   /* Map all the services in the boot image. */
-  if ((s = sys_safecopyfrom(RS_PROC_NR, info->rproctab_gid, 0,
-			    (vir_bytes) rprocpub, sizeof(rprocpub))) != OK){
+  {
+	vir_bytes dst = (vir_bytes) rprocpub;
+	vir_bytes end = dst + sizeof(rprocpub);
+	vir_bytes sp = (vir_bytes) &s;
+	printf("VFS: sizeof(vir_bytes)=%d sizeof(void*)=%d sizeof(long)=%d\n",
+		(int) sizeof(vir_bytes), (int) sizeof(void *),
+		(int) sizeof(long));
+	printf("VFS: rprocpub gid=%d bytes=%d\n", info->rproctab_gid,
+		(int) sizeof(rprocpub));
+	printf("VFS: rprocpub dst=0x%lx end=0x%lx sp=0x%lx\n",
+		(unsigned long) dst, (unsigned long) end,
+		(unsigned long) sp);
+  }
+  s = sys_safecopyfrom(RS_PROC_NR, info->rproctab_gid, 0,
+	(vir_bytes) rprocpub, sizeof(rprocpub));
+  if (s != OK) {
+	printf("VFS: sys_safecopyfrom failed: %d gid=%d bytes=%d dst=0x%lx\n",
+		s, info->rproctab_gid, (int) sizeof(rprocpub),
+		(unsigned long)(vir_bytes) rprocpub);
 	panic("sys_safecopyfrom failed: %d", s);
   }
   for (i = 0; i < NR_BOOT_PROCS; i++) {

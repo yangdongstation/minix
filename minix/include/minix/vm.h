@@ -32,6 +32,7 @@ int minix_vfs_mmap(endpoint_t who, off_t offset, size_t len,
 
 /* minix vfs mmap flags */
 #define MVM_WRITABLE	0x8000
+#define MVM_EXEC	0x4000
 
 /* VM kernel request types. */
 #define VMPTYPE_NONE		0
@@ -93,4 +94,3 @@ int vm_clear_cache(dev_t dev);
 #define VMSF_ONCE		0x01	/* discard block after one-time use */
 
 #endif /* _MINIX_VM_H */
-

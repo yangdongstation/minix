@@ -18,10 +18,23 @@
 #include <sys/mman.h>
 #include <machine/elf.h>
 
+static int
+execi_mmap_prot(const struct exec_info *execi)
+{
+	int prot = PROT_READ | PROT_WRITE;
+
+	if(execi->seg_flags & PF_X)
+		prot |= PROT_EXEC;
+
+	return prot;
+}
+
 int libexec_alloc_mmap_prealloc_junk(struct exec_info *execi, vir_bytes vaddr, size_t len)
 {
+	int prot = execi_mmap_prot(execi);
+
 	if(minix_mmap_for(execi->proc_e, (void *) vaddr, len,
-		PROT_READ|PROT_WRITE|PROT_EXEC,
+		prot,
 		MAP_ANON|MAP_PREALLOC|MAP_UNINITIALIZED|MAP_FIXED, -1, 0) == MAP_FAILED) {
 		return ENOMEM;
 	}
@@ -31,8 +44,10 @@ int libexec_alloc_mmap_prealloc_junk(struct exec_info *execi, vir_bytes vaddr, s
 
 int libexec_alloc_mmap_prealloc_cleared(struct exec_info *execi, vir_bytes vaddr, size_t len)
 {
+	int prot = execi_mmap_prot(execi);
+
 	if(minix_mmap_for(execi->proc_e, (void *) vaddr, len,
-		PROT_READ|PROT_WRITE|PROT_EXEC,
+		prot,
 		MAP_ANON|MAP_PREALLOC|MAP_FIXED, -1, 0) == MAP_FAILED) {
 		return ENOMEM;
 	}
@@ -42,8 +57,10 @@ int libexec_alloc_mmap_prealloc_cleared(struct exec_info *execi, vir_bytes vaddr
 
 int libexec_alloc_mmap_ondemand(struct exec_info *execi, vir_bytes vaddr, size_t len)
 {
+	int prot = execi_mmap_prot(execi);
+
 	if(minix_mmap_for(execi->proc_e, (void *) vaddr, len,
-		PROT_READ|PROT_WRITE|PROT_EXEC,
+		prot,
 		MAP_ANON|MAP_FIXED, -1, 0) == MAP_FAILED) {
 		return ENOMEM;
 	}

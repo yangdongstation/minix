@@ -67,6 +67,7 @@ typedef struct vir_region {
 
 /* Mapping flags: */
 #define VR_WRITABLE	0x001	/* Process may write here. */
+#define VR_EXEC		0x002	/* Process may execute here. */
 #define VR_PHYS64K	0x004	/* Physical memory must be 64k aligned. */
 #define VR_LOWER16MB	0x008
 #define VR_LOWER1MB	0x010
@@ -82,4 +83,3 @@ typedef struct vir_region {
 #define MF_PREALLOC    0x01
 
 #endif
-

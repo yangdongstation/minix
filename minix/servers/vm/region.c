@@ -278,8 +278,8 @@ int map_ph_writept(struct vmproc *vmp, struct vir_region *vr,
 		flags |= PTF_READ;
 
 #if defined(__riscv64__)
-	/* RISC-V requires X for instruction fetch; VM doesn't track exec yet. */
-	flags |= PTF_EXEC;
+	if(vr->flags & VR_EXEC)
+		flags |= PTF_EXEC;
 #endif
 
 
