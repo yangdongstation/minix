@@ -118,3 +118,22 @@ This file records concrete issues in the RISC-V 64-bit port with evidence and su
 - `minimal_kernel/proto.h:175` uses `reg_t` for `arch_set_secondary_ipc_return` to avoid RV64 truncation
   (matches `minix/kernel/proto.h` and arch implementations).  
   `minimal_kernel/proto.h:175` 已改为 `reg_t`，避免 RV64 截断（与 `minix/kernel/proto.h` 及架构实现一致）。
+
+## Vision / 愿景: pkgsrc on MINIX RV64
+
+Goal / 目标: enable pkgsrc source builds on MINIX RV64 (not NetBSD binaries).  
+在 MINIX RV64 上可源码构建 pkgsrc（非直接运行 NetBSD 二进制）。
+
+Milestones / 里程碑:
+1) Boot stability: QEMU boots to shell, PM/VM/RS/VFS stable, fork/exec/wait OK.  
+   启动稳定：QEMU 进 shell，PM/VM/RS/VFS 稳定，fork/exec/wait 正常。
+2) Userland ABI: RV64 ELF loading, ld.so relocations, syscalls/errno/signals OK.  
+   用户态 ABI：RV64 ELF 装载、ld.so 重定位、syscall/errno/信号链路正确。
+3) Toolchain & base tools: build tools + sysroot ready, bmake/sh/awk/sed/tar/gzip usable.  
+   工具链与基础工具：交叉/本地工具链与 sysroot 就绪，bmake/sh/awk/sed/tar/gzip 可用。
+4) pkgsrc port: MINIX/riscv64 mk files, bootstrap works, pkg_install/pkgconf builds.  
+   pkgsrc 端口化：MINIX/riscv64 平台文件完善，bootstrap 完成，pkg_install/pkgconf 可构建。
+5) Core libs: zlib/libarchive/libiconv/ncurses/libutil OK; networking if needed.  
+   常用库：zlib/libarchive/libiconv/ncurses/libutil 可用；需要时补齐网络栈。
+6) Regression & tests: smoke set + POSIX/VM/signals, QEMU automation.  
+   回归与测试：smoke 套件 + POSIX/VM/信号测试，QEMU 自动化。
