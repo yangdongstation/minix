@@ -211,26 +211,36 @@ static void handle_syscall(struct trapframe *tf)
         direct_print("\n");
         syscall_trace_count++;
     }
-#if defined(__riscv64__) || defined(__riscv64)
+#if defined(__riscv)
     {
         static int ipc_vm_trace_count;
         if (caller->p_reg.a7 == IPCVEC_INTR &&
-            caller->p_reg.a2 == SENDREC &&
             caller->p_reg.a0 == VM_PROC_NR &&
-            ipc_vm_trace_count < 8) {
+            ipc_vm_trace_count < 16) {
             message m;
-            int cr = data_copy_vmcheck(caller, caller->p_endpoint,
-                (vir_bytes)caller->p_reg.a1, KERNEL,
-                (vir_bytes)&m, sizeof(m));
-            direct_print("rv64: ipc sendrec to vm from=");
+            int cr = EFAULT;
+            int op = (int)caller->p_reg.a2;
+
+            if ((op == SEND || op == SENDREC || op == SENDNB) &&
+                caller->p_reg.a1 != 0) {
+                cr = data_copy_vmcheck(caller, caller->p_endpoint,
+                    (vir_bytes)caller->p_reg.a1, KERNEL,
+                    (vir_bytes)&m, sizeof(m));
+            }
+
+            direct_print("rv64: ipc vm op=");
+            direct_print_hex((u64_t)op);
+            direct_print(" src=");
             direct_print_hex((u64_t)caller->p_endpoint);
             direct_print(" ptr=");
             direct_print_hex((u64_t)caller->p_reg.a1);
-            if (cr == OK) {
+            if (op == SEND || op == SENDREC || op == SENDNB) {
                 direct_print(" mtype=");
-                direct_print_hex((u64_t)m.m_type);
-            } else {
-                direct_print(" mtype=copyfail");
+                if (cr == OK) {
+                    direct_print_hex((u64_t)m.m_type);
+                } else {
+                    direct_print("copyfail");
+                }
             }
             direct_print("\n");
             ipc_vm_trace_count++;

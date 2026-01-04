@@ -264,7 +264,7 @@ reply(
   rmp = &mproc[proc_nr];
   rmp->mp_reply.m_type = result;
 
-#if defined(__riscv64__)
+#if defined(__riscv)
   {
 	static int reply_vm_log_count;
 	if (rmp->mp_endpoint == VM_PROC_NR && reply_vm_log_count < 8) {

@@ -10,12 +10,12 @@
 int _taskcall(endpoint_t who, int syscallnr, message *msgptr)
 {
   int status;
-#if defined(__riscv64__) || defined(__riscv64)
+#if defined(__riscv)
   static int vm_taskcall_log_count;
 #endif
 
   msgptr->m_type = syscallnr;
-#if defined(__riscv64__) || defined(__riscv64)
+#if defined(__riscv)
   if (who == VM_PROC_NR && vm_taskcall_log_count < 8) {
 	char buf[80];
 	int len = snprintf(buf, sizeof(buf),

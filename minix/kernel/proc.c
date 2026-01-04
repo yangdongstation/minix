@@ -266,7 +266,7 @@ static void delivermsg(struct proc *rp)
         assert(rp->p_misc_flags & MF_DELIVERMSG);
         assert(rp->p_delivermsg.m_source != NONE);
 
-#if defined(__riscv64__) || defined(__riscv64)
+#if defined(__riscv)
 	{
 		static int vm_deliver_msg_count;
 		if (rp->p_endpoint == VM_PROC_NR &&
@@ -521,7 +521,7 @@ static int do_sync_ipc(struct proc * caller_ptr, /* who made the call */
 	return(ETRAPDENIED);		/* trap denied by mask or kernel */
   }
 
-#if defined(__riscv64__) || defined(__riscv64)
+#if defined(__riscv)
   {
 	static int bad_priv_logged;
 	struct priv *pp = priv(caller_ptr);
@@ -571,7 +571,7 @@ static int do_sync_ipc(struct proc * caller_ptr, /* who made the call */
 	 */
 	if (call_nr != RECEIVE)
 	{
-#if defined(__riscv64__) || defined(__riscv64)
+#if defined(__riscv)
 		{
 			static int bad_dst_priv_logged;
 			struct proc *dst_ptr = proc_addr(src_dst_p);
@@ -939,7 +939,7 @@ int mini_send(
   register struct proc **xpp;
   int dst_p;
 
-#if defined(__riscv64__) || defined(__riscv64)
+#if defined(__riscv)
   {
 	static int pm_vm_enter_log_count;
 	if (caller_ptr->p_endpoint == PM_PROC_NR &&
@@ -977,7 +977,7 @@ int mini_send(
 		dst_ptr->p_delivermsg = *m_ptr;
 		IPC_STATUS_ADD_FLAGS(dst_ptr, IPC_FLG_MSG_FROM_KERNEL);
 	}
-#if defined(__riscv64__) || defined(__riscv64)
+#if defined(__riscv)
 	{
 		static int pm_vm_deliver_log_count;
 		if (caller_ptr->p_endpoint == PM_PROC_NR &&
@@ -995,7 +995,7 @@ int mini_send(
 
 	dst_ptr->p_delivermsg.m_source = caller_ptr->p_endpoint;
 	dst_ptr->p_misc_flags |= MF_DELIVERMSG;
-#if defined(__riscv64__) || defined(__riscv64)
+#if defined(__riscv)
 	{
 		static int vm_deliver_log_count;
 		if (dst_ptr->p_endpoint == VM_PROC_NR &&
@@ -1047,7 +1047,7 @@ int mini_send(
 		 */
 		caller_ptr->p_misc_flags |= MF_SENDING_FROM_KERNEL;
 	}
-#if defined(__riscv64__) || defined(__riscv64)
+#if defined(__riscv)
 	{
 		static int pm_vm_queue_log_count;
 		if (caller_ptr->p_endpoint == PM_PROC_NR &&
@@ -1062,7 +1062,7 @@ int mini_send(
 		}
 	}
 #endif
-#if defined(__riscv64__) || defined(__riscv64)
+#if defined(__riscv)
 	{
 		static int pm_vm_send_log_count;
 		if (caller_ptr->p_endpoint == PM_PROC_NR &&
@@ -1111,7 +1111,7 @@ int mini_send(
 	caller_ptr->p_sendto_e = dst_e;
 
 	/* Process is now blocked.  Put in on the destination's queue. */
-#if defined(__riscv64__) || defined(__riscv64)
+#if defined(__riscv)
 	{
 		static int qlink_log_count;
 		if (caller_ptr->p_q_link != NULL && qlink_log_count < 8) {
@@ -1264,7 +1264,7 @@ static int mini_receive(struct proc * caller_ptr,
 	    BuildNotifyMessage(&caller_ptr->p_delivermsg, src_proc_nr, caller_ptr);
 	    caller_ptr->p_delivermsg.m_source = sender_e;
 	    caller_ptr->p_misc_flags |= MF_DELIVERMSG;
-#if defined(__riscv64__) || defined(__riscv64)
+#if defined(__riscv)
 	    {
 		static int vm_notify_log_count;
 		if (caller_ptr->p_endpoint == VM_PROC_NR &&
@@ -1291,7 +1291,7 @@ static int mini_receive(struct proc * caller_ptr,
         	r = try_async(caller_ptr);
 
 	if (r == OK) {
-#if defined(__riscv64__) || defined(__riscv64)
+#if defined(__riscv)
 		{
 			static int vm_async_log_count;
 			if (caller_ptr->p_endpoint == VM_PROC_NR &&
@@ -1318,7 +1318,7 @@ static int mini_receive(struct proc * caller_ptr,
             int call;
 	    assert(!RTS_ISSET(sender, RTS_SLOT_FREE));
 	    assert(!RTS_ISSET(sender, RTS_NO_ENDPOINT));
-#if defined(__riscv64__) || defined(__riscv64)
+#if defined(__riscv)
 	    if (caller_ptr->p_endpoint == VM_PROC_NR) {
 		static int vm_recv_log_count2;
 		if (vm_recv_log_count2 < 8) {
@@ -1331,7 +1331,7 @@ static int mini_receive(struct proc * caller_ptr,
 		}
 	    }
 #endif
-#if defined(__riscv64__) || defined(__riscv64)
+#if defined(__riscv)
 	    {
 		static int vm_recv_log_count;
 		if (caller_ptr->p_endpoint == VM_PROC_NR &&

@@ -121,7 +121,7 @@ int main(void)
 
   	if ((r=sef_receive_status(ANY, &msg, &rcv_sts)) != OK)
 		panic("sef_receive_status() error: %d", r);
-#if defined(__riscv64__)
+#if defined(__riscv)
 	{
 		static int vm_msg_log_count;
 		if (vm_msg_log_count < 8) {
