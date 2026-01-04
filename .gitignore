@@ -33,6 +33,7 @@ obj
 .svn
 *.worldstone.log
 .worldstone*
+boot-evbriscv64-*.log
 usr.bin/mdocml/man/*.7
 etc/passwd
 etc/pwd.db
