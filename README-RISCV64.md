@@ -25,15 +25,15 @@ targeting the QEMU virt platform.
 **中文**
 - 构建：可通过（需使用 workaround 组合，见本文构建命令与 `RISC64-STATUS.md`）
 - 运行：内核可进入早期初始化，但尚未稳定进入用户态
-- 关键风险：PTROOT 32 位截断、SATP 根地址 VA/PA 不一致、时钟未接入内核、UART 阻塞读缺少回复（详见 `issue.md`）
-- 进度估计：约 60%（内核基础具备，VM/时钟/IO 关键链路仍待修复）
+- 关键风险：PTROOT 32 位截断、UART 阻塞读缺少回复、leaf->non-leaf 拆分后 TLB 刷新缺失、SBI legacy IPI/fence 传递 VA（详见 `issue.md`）
+- 进度估计：约 60%（内核基础具备，VM/IO 关键链路仍待修复）
 
 **English**
 - Build: passes with workaround flags (see commands below and `RISC64-STATUS.md`)
 - Runtime: kernel reaches early init; user space not yet stable
-- Key risks: PTROOT 32-bit truncation, SATP root VA/PA mismatch, missing kernel clock hookup,
-  UART blocking read reply (see `issue.md`)
-- Progress estimate: ~60% (core kernel in place; VM/clock/IO still pending)
+- Key risks: PTROOT 32-bit truncation, UART blocking read reply, missing TLB flush after
+  leaf->non-leaf splits, SBI legacy IPI/fence VA usage (see `issue.md`)
+- Progress estimate: ~60% (core kernel in place; VM/IO still pending)
 
 ## 系统要求 / System Requirements
 
@@ -211,13 +211,13 @@ MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
 **中文（截至 2026-01-06）**
 - 用户态编译测试：全部通过（脚本已自动使用 in-tree toolchain + sysroot，并统一 `-std=gnu99`）。
 - 内核启动测试：失败，QEMU 中出现 `rv64: kernel_main` 后触发 `System reset...`，详见 `/tmp/boot_test.log`。
-  该失败与地址空间切换/时钟链路等关键问题高度相关（详见 `issue.md`）。
+  该失败与地址空间切换等关键问题高度相关（详见 `issue.md`）。
 - SMP initialization：当前脚本固定标记为跳过（not yet implemented）。
 
 **English (as of 2026-01-06)**
 - Userland compile tests: pass (script uses in-tree toolchain + sysroot and `-std=gnu99`).
 - Kernel boot test: fails; QEMU shows `rv64: kernel_main` then `System reset...` (see `/tmp/boot_test.log`).
-  This correlates with address-space handoff/clock issues (see `issue.md`).
+  This correlates with address-space handoff and other critical issues (see `issue.md`).
 - SMP initialization: script marks as skipped (not yet implemented).
 
 #### 5.1 内核启动复位排查记录 / Boot Reset Investigation
@@ -295,25 +295,7 @@ Current status: pass criteria not met (see `issue.md` and `RISC64-STATUS.md`).
    - Cause: `SVMCTL_PTROOT` is 32-bit; riscv64 high bits lost  
    - Fix: make PTROOT 64-bit end-to-end (VM/kernel/syslib)
 
-2. **SATP 根地址 VA/PA 不一致**  
-   - 表现：启用分页后内核访问页表根发生异常  
-   - 原因：`p_satp_v` 保存物理地址并当作 VA 使用  
-   - 建议：使用 `ptroot_v` 或建立稳定的内核虚拟映射  
-   **SATP root VA/PA mismatch**  
-   - Symptom: kernel faults when accessing page-table root after paging  
-   - Cause: `p_satp_v` stores PA but used as VA  
-   - Fix: use `ptroot_v` or a stable KVA mapping
-
-3. **时钟中断未接入内核时钟**  
-   - 表现：调度/时间不前进  
-   - 原因：`arch_clock_handler` 未调用内核 clock handler  
-   - 建议：接入 MINIX 内核时钟处理函数  
-   **Timer IRQ not wired to kernel clock**  
-   - Symptom: no scheduling/timekeeping  
-   - Cause: `arch_clock_handler` misses kernel clock handler  
-   - Fix: call the kernel clock handler
-
-4. **UART 阻塞读缺少回复**  
+2. **UART 阻塞读缺少回复**  
    - 表现：用户态 read 卡住  
    - 原因：驱动返回 `EDONTREPLY` 但中断路径未回复  
    - 建议：保存请求并在 RX 中断时回复  
@@ -322,7 +304,7 @@ Current status: pass criteria not met (see `issue.md` and `RISC64-STATUS.md`).
    - Cause: driver returns `EDONTREPLY` without reply on RX interrupt  
    - Fix: store pending read and reply on RX IRQ
 
-5. **leaf → non-leaf 变换未刷新 TLB**  
+3. **leaf → non-leaf 变换未刷新 TLB**  
    - 表现：映射不一致/偶发错误  
    - 原因：页表拆分后未进行 SFENCE  
    - 建议：在拆分后刷新 TLB  
@@ -330,6 +312,15 @@ Current status: pass criteria not met (see `issue.md` and `RISC64-STATUS.md`).
    - Symptom: inconsistent mappings  
    - Cause: missing SFENCE after split  
    - Fix: flush TLB after split
+
+4. **SBI legacy IPI/fence 仍传递 VA**  
+   - 表现：SMP IPI 或远程 fence 可能失效  
+   - 原因：SBI v0.1 legacy 调用传参为 VA 而非 PA  
+   - 建议：切换到 SBI v0.2+ 扩展或传递 PA  
+   **SBI legacy IPI/fence passes VA**  
+   - Symptom: SMP IPIs or remote fences may fail  
+   - Cause: SBI v0.1 legacy calls pass VA, not PA  
+   - Fix: move to SBI v0.2+ extensions or pass PA
 
 详细证据与文件行号见 `issue.md`。  
 See `issue.md` for evidence and file/line references.

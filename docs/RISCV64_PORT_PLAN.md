@@ -1351,7 +1351,8 @@ void exception_handler(struct trapframe *tf)
 ### 3.2 时钟驱动 / Timer and Clock Driver
 
 **Status / 状态**: Partial  
-**Evidence / 证据**: `minix/kernel/arch/riscv64/arch_clock.c`; missing kernel clock handler (see `issue.md`)
+**Evidence / 证据**: `minix/kernel/arch/riscv64/arch_clock.c` wires `arch_clock_handler()` to `timer_int_handler()`;
+timer IRQ dispatches through `minix/kernel/arch/riscv64/exception.c` (runtime validation pending).
 
 **文件 / File**: `minix/kernel/arch/riscv64/arch_clock.c`
 
@@ -1371,33 +1372,25 @@ static uint64_t ticks_per_hz;
 
 void arch_init_clock(void)
 {
-    ticks_per_hz = CLOCK_FREQ / DEFAULT_HZ;
-
-    /* 设置第一次定时器中断 */
-    sbi_set_timer(csr_read_time() + ticks_per_hz);
-
-    /* 启用定时器中断 */
+    ticks_per_interrupt = timer_freq / system_hz;
+    next_timer_deadline = csr_read_time() + ticks_per_interrupt;
+    sbi_set_timer(next_timer_deadline);
     csr_set_sie(SIE_STIE);
 }
 
-void arch_stop_clock(void)
+int arch_clock_handler(void)
 {
-    csr_clear_sie(SIE_STIE);
+    return timer_int_handler();
 }
 
-int arch_clock_handler(struct trapframe *tf)
+void arch_timer_int_handler(void)
 {
-    /* 设置下一次定时器中断 */
-    sbi_set_timer(csr_read_time() + ticks_per_hz);
-
-    /* 调用通用时钟处理 */
-    return clock_handler();
-}
-
-/* 获取高精度时间戳 */
-uint64_t arch_get_timestamp(void)
-{
-    return csr_read_time();
+    u64_t now = csr_read_time();
+    next_timer_deadline += ticks_per_interrupt;
+    if (next_timer_deadline <= now)
+        next_timer_deadline = now + ticks_per_interrupt;
+    sbi_set_timer(next_timer_deadline);
+    total_ticks++;
 }
 ```
 

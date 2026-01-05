@@ -206,12 +206,13 @@ MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
 ## 10. Known Issues / 已知问题
 
 **中文**
-详见 `issue.md` 与 `RISC64-STATUS.md`，其中包含 SATP root 传参截断、TLB 刷新缺失、
-时钟未接入内核等关键问题与状态摘要。
+详见 `issue.md` 与 `RISC64-STATUS.md`，其中包含 PTROOT 传参截断、TLB 刷新缺失、
+UART 延迟回复缺口、SBI legacy IPI/fence 传参问题等关键问题与状态摘要。
 
 **English**
 See `issue.md` and `RISC64-STATUS.md` for detailed issues and status snapshots, including
-SATP root truncation, missing TLB flushes, clock integration gaps, and others.
+PTROOT truncation, missing TLB flushes, UART deferred reply gaps, SBI legacy IPI/fence issues,
+and others.
 
 ---
 
@@ -238,15 +239,15 @@ Recommended cadence:
 ## 12. Quick Checklist for Changes / 变更检查清单
 
 **中文**
-- sys_vmctl 传参是否全 64-bit？
-- SATP root 是否有稳定的虚拟映射？
+- sys_vmctl PTROOT 传参是否全 64-bit？
 - leaf→non-leaf 转换后是否刷新 TLB？
-- 时钟中断是否调用内核 clock handler？
+- UART 阻塞读是否有延迟回复路径？
+- SBI legacy IPI/fence 是否改为 v0.2+ 或传递 PA？
 - IPC 返回寄存器是否一致（a0/a1）？
 
 **English**
 - Are sys_vmctl PTROOT parameters 64-bit end-to-end?
-- Does SATP root have a valid kernel VA mapping?
 - Is TLB flushed after leaf→non-leaf splits?
-- Does timer IRQ call the kernel clock handler?
+- Does UART blocking read have a deferred reply path?
+- Are SBI legacy IPI/fence calls on v0.2+ or passing PA?
 - Are IPC return registers consistent (a0/a1)?

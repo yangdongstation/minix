@@ -11,12 +11,12 @@ This file records concrete issues in the RISC-V 64-bit port with evidence and su
 
 ### A1) Userland services stuck in user pagefault loop during boot / 用户态服务启动期反复缺页
 - Evidence / 证据:
-  - VFS: `sef_receive_status` at `minix/lib/libsys/sef.c:151`, `mthread_trampoline` at `minix/lib/libmthread/allocate.c:532`,
-    `malloc_bytes` at `lib/libc/stdlib/malloc.c:792`, `memset` at `common/lib/libc/string/memset.c:156`
-  - MFS: `extend_pgdir` at `lib/libc/stdlib/malloc.c:464`, `imalloc` at `lib/libc/stdlib/malloc.c:831`,
-    `kdoprnt` at `sys/lib/libsa/subr_prf.c:328`
-  - DS: `_regcomp` at `lib/libc/regex/regcomp.c:333`, `extend_pgdir` at `lib/libc/stdlib/malloc.c:464`,
-    `imalloc` at `lib/libc/stdlib/malloc.c:831`, `kdoprnt` at `sys/lib/libsa/subr_prf.c:224`
+  - VFS: `sef_receive_status` at `minix/lib/libsys/sef.c:150`, `mthread_trampoline` at `minix/lib/libmthread/allocate.c:531`,
+    `malloc_bytes` at `lib/libc/stdlib/malloc.c:875`, `memset` at `common/lib/libc/string/memset.c:156`
+  - MFS: `extend_pgdir` at `lib/libc/stdlib/malloc.c:534`, `imalloc` at `lib/libc/stdlib/malloc.c:934`,
+    `kdoprnt` at `sys/lib/libsa/subr_prf.c:189`
+  - DS: `_regcomp` at `lib/libc/regex/regcomp.c:333`, `extend_pgdir` at `lib/libc/stdlib/malloc.c:534`,
+    `imalloc` at `lib/libc/stdlib/malloc.c:934`, `kdoprnt` at `sys/lib/libsa/subr_prf.c:189`
 - Impact / 影响:
   - Boot does not reach stable userland; init dies and services spin on faults. / 启动无法进入稳定用户态；init 退出且服务反复缺页。
 - Hypothesis / 假设:
@@ -39,7 +39,7 @@ This file records concrete issues in the RISC-V 64-bit port with evidence and su
 - Impact / 影响:
   - Kernel has RV64 U-mode + ELF64 exec plumbing, but user processes are not reliably runnable yet. / 内核具备基础通路，但 RV64 进程尚不可稳定运行。
 - Suggested fix / 修复建议:
-  - Resolve A1 + Critical items (PTROOT truncation, SATP VA/PA mismatch, clock/IRQ paths), then validate exec with a minimal ELF64 user binary + ld.so. / 先修复 A1 与严重问题，再用最小 ELF64 用户程序验证 exec/ld.so。
+  - Resolve A1 + Critical items (PTROOT truncation) and top Major issues, then validate exec with a minimal ELF64 user binary + ld.so. / 先修复 A1 与严重问题（PTROOT 截断）及主要问题，再用最小 ELF64 用户程序验证 exec/ld.so。
   - Validation checklist (doc-only): / 验证清单（文档）:
     1) Confirm target ELF64/EM_RISCV via `readelf -h` on the test binary. / 通过 `readelf -h` 确认 ELF64/EM_RISCV。
     2) Prefer a minimal static executable if available; otherwise verify `PT_INTERP` points to `/libexec/ld.elf_so`. / 尽量使用静态可执行文件；否则确认 `PT_INTERP` 指向 `/libexec/ld.elf_so`。  
@@ -52,10 +52,10 @@ This file records concrete issues in the RISC-V 64-bit port with evidence and su
 
 ### 1) 64-bit page table root truncated to 32-bit in sys_vmctl path / sys_vmctl 路径 PTROOT 32 位截断
 - Evidence / 证据:
-  - `minix/include/minix/com.h:381` defines `SVMCTL_PTROOT` as `m1_i3` (32-bit)
-  - `minix/lib/libsys/sys_vmctl.c:30-40` packs `phys_bytes ptroot` into `m.SVMCTL_PTROOT`
-  - `minix/kernel/arch/riscv64/arch_do_vmctl.c:75` casts `m_ptr->SVMCTL_PTROOT` to `u32_t`
-  - `minix/servers/vm/pagetable.c:2186` passes `pt->pt_dir_phys` to `sys_vmctl_set_addrspace`
+  - `minix/include/minix/com.h:372` defines `SVMCTL_VALUE` as `m1_i3` (32-bit), and `minix/include/minix/com.h:386` defines `SVMCTL_PTROOT` as `m1_i3` (32-bit)
+  - `minix/lib/libsys/sys_vmctl.c:16-26` exposes `u32_t` PDBR, and `minix/lib/libsys/sys_vmctl.c:30-40` packs `phys_bytes ptroot` into `m.SVMCTL_PTROOT`
+  - `minix/kernel/arch/riscv64/arch_do_vmctl.c:64-68` truncates `SVMCTL_VALUE`, and `minix/kernel/arch/riscv64/arch_do_vmctl.c:78` casts `SVMCTL_PTROOT` to `u32_t`
+  - `minix/servers/vm/pagetable.c:2208` passes `pt->pt_dir_phys` to `sys_vmctl_set_addrspace`
 - Impact / 影响:
   - Page table roots above 4GB are truncated, causing wrong SATP and hangs. / 4GB 以上页表根被截断，SATP 错误并导致切换挂起。
   - Matches observed “pt_bind then SATP switch timeout.” / 与“pt_bind 后 SATP 切换超时”现象一致。
@@ -63,31 +63,11 @@ This file records concrete issues in the RISC-V 64-bit port with evidence and su
   - Make PTROOT transport 64-bit end-to-end (split hi/lo or new message). / 端到端改为 64-bit 传参（拆分高低位或新增消息字段）。
   - Update `sys_vmctl_set_addrspace`, kernel handler, and `sys_vmctl_get_pdbr`. / 同步更新 `sys_vmctl_set_addrspace`、内核处理与 `sys_vmctl_get_pdbr`。
 
-### 2) SATP root virtual pointer stored as physical address / SATP 根地址以物理指针保存
-- Evidence / 证据:
-  - `minix/kernel/arch/riscv64/arch_do_vmctl.c:19-21` sets `p->p_seg.p_satp_v = (reg_t *)root`
-  - `minix/kernel/arch/riscv64/memory.c:52-56` uses `p_seg.p_satp_v` as a virtual pointer
-  - `minix/servers/vm/pagetable.c:2174-2186` computes `ptroot_v` but kernel ignores it
-- Impact / 影响:
-  - Kernel dereferences a physical address as VA after paging is enabled. / 启用分页后内核将物理地址当作 VA 解引用。
-  - Can crash or hang during address-space handoff. / 地址空间切换可能崩溃或挂起。
-- Suggested fix / 修复建议:
-  - Store and use `ptroot_v`, or establish a stable KVA mapping for PT roots. / 保存并使用 `ptroot_v`，或建立稳定 KVA 映射。
-
 ## Major / 重要
-
-### 3) Timer interrupt does not drive kernel clock/scheduler / 时钟中断未驱动内核时钟
-- Evidence / 证据:
-  - `minix/kernel/arch/riscv64/arch_clock.c:82-102` increments `total_ticks` but does not call the
-    generic kernel clock handler (commented TODO).
-- Impact / 影响:
-  - No periodic scheduling or timekeeping after boot. / 启动后无周期调度与时间推进。
-- Suggested fix / 修复建议:
-  - Call the kernel clock handler (e.g., `clock_handler()` or MINIX clock entry). / 接入内核时钟处理函数。
 
 ### 4) Leaf → non-leaf page table split lacks TLB flush / 叶子页拆分后未刷新 TLB
 - Evidence / 证据:
-  - `minix/servers/vm/pagetable.c:50-125` (`pt_l0alloc`) and `129-170` (`pt_l1alloc`) convert
+  - `minix/servers/vm/pagetable.c:50-147` (`pt_l0alloc`) and `150-193` (`pt_l1alloc`) convert
     leaf mappings to non-leaf PTEs without a TLB invalidation.
 - Impact / 影响:
   - Stale large-page TLB entries may persist, causing wrong mappings. / 旧的大页 TLB 项可能继续生效，导致映射错误。
@@ -122,7 +102,7 @@ This file records concrete issues in the RISC-V 64-bit port with evidence and su
 
 ### 8) Breakpoint exception always advances PC by 2 bytes / 断点异常固定前移 2 字节
 - Evidence / 证据:
-  - `minix/kernel/arch/riscv64/exception.c:164-166`
+  - `minix/kernel/arch/riscv64/exception.c:149-152`
 - Impact / 影响:
   - Non-compressed `ebreak` is 4 bytes; advancing by 2 breaks instruction flow. / 非压缩 `ebreak` 为 4 字节，前移 2 字节会跳入指令中间。
 - Suggested fix / 修复建议:
@@ -130,11 +110,20 @@ This file records concrete issues in the RISC-V 64-bit port with evidence and su
 
 ### 9) Software interrupts (IPI) not enabled in SIE / SIE 中未开启 SSIE
 - Evidence / 证据:
-  - `minix/kernel/arch/riscv64/exception.c:61-62` enables only STIE/SEIE
+  - `minix/kernel/arch/riscv64/exception.c:60-61` enables only STIE/SEIE
 - Impact / 影响:
   - SMP IPIs will not be delivered even if SBI works. / 即使 SBI 正常，SMP IPI 也不会送达。
 - Suggested fix / 修复建议:
   - Enable `SIE_SSIE` when SMP is configured. / SMP 场景下开启 `SIE_SSIE`。
+
+### 12) FPU context save/restore is stubbed / FPU 上下文保存/恢复为占位
+- Evidence / 证据:
+  - `minix/kernel/arch/riscv64/klib.S:87-106` has TODOs for saving/restoring f-registers
+  - `minix/kernel/arch/riscv64/arch_system.c:116-128` calls `save_fpu()` but the implementation is empty
+- Impact / 影响:
+  - Floating-point registers can be corrupted across context switches. / 浮点寄存器在切换时可能被破坏。
+- Suggested fix / 修复建议:
+  - Implement FPU save/restore (f0-f31 + fcsr) and track `SSTATUS_FS` for lazy/eager context switching. / 实现 FPU 保存/恢复（f0-f31 + fcsr），并管理 `SSTATUS_FS`。
 
 ## Moderate / 中等
 
@@ -155,6 +144,23 @@ This file records concrete issues in the RISC-V 64-bit port with evidence and su
 - Suggested fix / 修复建议:
   - Add RISC-V support in minimal kernel headers or exclude it from RISC-V builds. / 在 minimal kernel 增加 RISC-V 支持或在 RISC-V 构建中排除。
 
+### 13) phys_copy fault handler not registered / phys_copy 缺少故障处理注册
+- Evidence / 证据:
+  - `minix/kernel/arch/riscv64/phys_copy.S:71-74` leaves a TODO to register the fault handler
+- Impact / 影响:
+  - Faulting physical copies can trap instead of returning an error. / 物理复制缺页可能直接陷入异常而非返回错误。
+- Suggested fix / 修复建议:
+  - Hook into the arch fault-handling mechanism (as in other architectures) for safe phys_copy. / 接入架构故障处理机制以安全执行 phys_copy。
+
+### 14) Device tree parsing is stubbed (memory/CPU/timebase defaults) / 设备树解析为占位（内存/CPU/时钟默认值）
+- Evidence / 证据:
+  - `minix/kernel/arch/riscv64/bsp/virt/bsp_init.c:31-50` keeps TODOs and hard-codes memory/CPU/timer defaults
+  - `minix/kernel/arch/riscv64/memory.c:75` notes missing DT-driven memory layout
+- Impact / 影响:
+  - Non-default QEMU configurations can misreport memory size, CPU count, or timer frequency. / 非默认 QEMU 配置可能导致内存/CPU/时钟参数错误。
+- Suggested fix / 修复建议:
+  - Parse FDT (libfdt) for memory and timebase, then feed `arch_set_timer_freq` and `bsp_get_memory`. / 解析 FDT 获取内存与 timebase，并回填 `arch_set_timer_freq` 与 `bsp_get_memory`。
+
 ## Technical Debt / 技术债务
 
 ### TD1) Static RISC-V links require per-binary __global_pointer$ workaround / 静态链接需要每个二进制打补丁
@@ -165,6 +171,22 @@ This file records concrete issues in the RISC-V 64-bit port with evidence and su
   - Requires per-binary patches; easy to miss. / 需要逐个二进制打补丁，容易遗漏。
 - Suggested fix / 修复建议:
 - Define `__global_pointer$` in crt0 or linker script globally, then remove per-binary gp.c/LDFLAGS. / 在 crt0 或链接脚本中全局定义 `__global_pointer$`，再移除各二进制 gp.c/LDFLAGS。
+
+### TD2) SMP support is scaffolded but not fully tested / SMP 支持尚未完整验证
+- Evidence / 证据:
+  - `minix/kernel/arch/riscv64/README.md:156` lists SMP as not fully tested
+- Impact / 影响:
+  - SMP-related paths may regress silently without coverage. / SMP 路径可能在无覆盖情况下回归。
+- Suggested fix / 修复建议:
+  - Add SMP boot/interrupt/regression tests and document known-good configurations. / 增加 SMP 启动/中断/回归测试并记录可用配置。
+
+### TD3) Debug registers (hardware breakpoints) not supported / 调试寄存器（硬件断点）未支持
+- Evidence / 证据:
+  - `minix/kernel/arch/riscv64/README.md:158` notes missing debug register support
+- Impact / 影响:
+  - Kernel/user debugging via hardware breakpoints is unavailable. / 无法使用硬件断点调试内核/用户态。
+- Suggested fix / 修复建议:
+  - Implement RISC-V debug CSR handling and integrate with exception flow. / 实现 RISC-V 调试 CSR 支持并接入异常流程。
 
 ## Enhancement / 增强提案
 
@@ -188,6 +210,13 @@ This file records concrete issues in the RISC-V 64-bit port with evidence and su
 - `minimal_kernel/proto.h:175` uses `reg_t` for `arch_set_secondary_ipc_return` to avoid RV64 truncation
   (matches `minix/kernel/proto.h` and arch implementations).  
   `minimal_kernel/proto.h:175` 已改为 `reg_t`，避免 RV64 截断（与 `minix/kernel/proto.h` 及架构实现一致）。
+- Former Critical #2: SATP root VA pointer is now passed via `SVMCTL_PTROOT_V` and used by the kernel (`minix/lib/libsys/sys_vmctl.c:30-40`,
+  `minix/servers/vm/pagetable.c:2199-2208`, `minix/kernel/arch/riscv64/arch_do_vmctl.c:19-24`,
+  `minix/kernel/arch/riscv64/memory.c:52-56`).  
+  SATP 根地址 VA 指针已通过 `SVMCTL_PTROOT_V` 传递并被内核使用。
+- Former Major #3: Timer interrupts now drive the kernel clock path (`minix/kernel/arch/riscv64/exception.c:110-112`,
+  `minix/kernel/arch/riscv64/arch_clock.c:82-85`).  
+  时钟中断已接入内核时钟路径。
 
 ## Vision / 愿景: pkgsrc on MINIX RV64
 
