@@ -75,6 +75,17 @@ cdev_get(dev_t dev, devminor_t * minor_dev)
 	/* Determine the driver endpoint. */
 	dp = &dmap[major(dev)];
 
+#if defined(__riscv) || defined(__riscv64__)
+	if (major(dev) == TTY_MAJOR && minor(dev) == 0) {
+		static int dmap_log_count;
+		if (dmap_log_count < 8) {
+			printf("VFS: cdev_get tty driver=%d label=%s\n",
+			    dp->dmap_driver, dp->dmap_label);
+			dmap_log_count++;
+		}
+	}
+#endif
+
 	/* See if driver is roughly valid. */
 	if (dp->dmap_driver == NONE) return NULL;
 

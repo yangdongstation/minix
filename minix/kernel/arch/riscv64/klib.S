@@ -141,7 +141,8 @@ cpu_number:
     .globl halt_cpu
     .type halt_cpu, @function
 halt_cpu:
-    csrci   CSR_SSTATUS, SSTATUS_SIE  /* Disable interrupts */
-.Lhalt_loop:
+    /* Enable interrupts while waiting, return with interrupts disabled. */
+    csrsi   CSR_SSTATUS, SSTATUS_SIE
     .word   RISCV_WFI_INSN
-    j       .Lhalt_loop
+    csrci   CSR_SSTATUS, SSTATUS_SIE
+    ret

@@ -135,6 +135,17 @@ void chardriver_reply_task(endpoint_t endpt, cdev_id_t id, int r)
  */
   message m_reply;
 
+#if defined(__riscv) || defined(__riscv64__)
+  {
+	static int reply_task_log_count;
+	if (reply_task_log_count < 16) {
+		printf("chardriver: reply_task endpt=%d id=%d r=%d\n",
+		    endpt, id, r);
+		reply_task_log_count++;
+	}
+  }
+#endif
+
   if (r == EDONTREPLY || r == SUSPEND)
 	panic("chardriver: bad task reply: %d", r);
 
@@ -501,13 +512,35 @@ void chardriver_process(const struct chardriver *cdp, message *m_ptr,
 	if (OK != r)
 		return;
 
+#if defined(__riscv) || defined(__riscv64__)
+	if (m_ptr->m_type == CDEV_WRITE) {
+		static int cdev_write_log_count;
+		if (cdev_write_log_count < 16) {
+			printf("chardriver: CDEV_WRITE minor=%d open=%d src=%d\n",
+			    minor, is_open_dev(minor), m_ptr->m_source);
+			cdev_write_log_count++;
+		}
+	}
+#endif
+
 	/* We might get spurious requests if the driver has been restarted.
 	 * Deny any requests on devices that have not previously been opened.
 	 */
 	if (!is_open_dev(minor)) {
 		/* Ignore spurious requests for unopened devices. */
-		if (m_ptr->m_type != CDEV_OPEN)
+		if (m_ptr->m_type != CDEV_OPEN) {
+#if defined(__riscv) || defined(__riscv64__)
+			if (m_ptr->m_type == CDEV_WRITE) {
+				static int cdev_write_drop_log_count;
+				if (cdev_write_drop_log_count < 8) {
+					printf("chardriver: drop CDEV_WRITE minor=%d\n",
+					    minor);
+					cdev_write_drop_log_count++;
+				}
+			}
+#endif
 			return; /* do not send a reply */
+		}
 
 		/* Mark the device as opened otherwise. */
 		set_open_dev(minor);
@@ -528,6 +561,16 @@ void chardriver_process(const struct chardriver *cdp, message *m_ptr,
 		cdp->cdr_other(m_ptr, ipc_status);
 	return; /* do not send a reply */
   }
+
+#if defined(__riscv) || defined(__riscv64__)
+  if (m_ptr->m_type == CDEV_WRITE) {
+	static int cdev_write_ret_log_count;
+	if (cdev_write_ret_log_count < 16) {
+		printf("chardriver: CDEV_WRITE r=%d\n", r);
+		cdev_write_ret_log_count++;
+	}
+  }
+#endif
 
   chardriver_reply(m_ptr, ipc_status, r);
 }

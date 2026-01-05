@@ -81,25 +81,7 @@ int register_local_timer_handler(const irq_handler_t handler)
  */
 int arch_clock_handler(void)
 {
-    u64_t now = csr_read_time();
-
-    /* Clear timer interrupt by setting next deadline */
-    next_timer_deadline += ticks_per_interrupt;
-
-    /* Handle wraparound or missed ticks */
-    if (next_timer_deadline <= now) {
-        next_timer_deadline = now + ticks_per_interrupt;
-    }
-
-    sbi_set_timer(next_timer_deadline);
-
-    /* Increment tick counter */
-    total_ticks++;
-
-    /* Call kernel clock handler */
-    /* TODO: clock_handler() from MINIX kernel */
-
-    return 1;
+    return timer_int_handler();
 }
 
 /*
@@ -167,6 +149,20 @@ void write_cpu_flags(u32_t flags)
 
 void arch_timer_int_handler(void)
 {
+    u64_t now = csr_read_time();
+
+    /* Clear timer interrupt by setting next deadline */
+    next_timer_deadline += ticks_per_interrupt;
+
+    /* Handle wraparound or missed ticks */
+    if (next_timer_deadline <= now) {
+        next_timer_deadline = now + ticks_per_interrupt;
+    }
+
+    sbi_set_timer(next_timer_deadline);
+
+    /* Increment tick counter */
+    total_ticks++;
 }
 
 void cycles_accounting_init(void)

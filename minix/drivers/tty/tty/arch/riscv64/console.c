@@ -3,7 +3,9 @@
 #include <minix/ipc.h>
 #include <minix/sysutil.h>
 #include <minix/com.h>
+#include <minix/vm.h>
 #include <sys/termios.h>
+#include <sys/mman.h>
 #include <stdint.h>
 #include <string.h>
 #include "tty.h"
@@ -15,6 +17,33 @@ void riscv_cons_putc(int c);
 static int cons_write(tty_t *tp, int try);
 static void cons_echo(tty_t *tp, int c);
 static int cons_read(tty_t *tp, int try);
+
+/* UART MMIO base address (QEMU virt). */
+#define UART_BASE 0x10000000UL
+#define UART_SIZE 0x100
+
+/* UART register offsets. */
+#define UART_RBR 0x00
+#define UART_THR 0x00
+#define UART_LSR 0x05
+
+/* UART line status bits. */
+#define LSR_DR 0x01
+#define LSR_THRE 0x20
+
+static volatile u8_t *uart_base;
+
+static inline int
+uart_rx_ready(void)
+{
+	return uart_base != NULL && (uart_base[UART_LSR] & LSR_DR) != 0;
+}
+
+static inline int
+uart_tx_ready(void)
+{
+	return uart_base != NULL && (uart_base[UART_LSR] & LSR_THRE) != 0;
+}
 
 /* Video operations (no-op for serial console) */
 void
@@ -59,23 +88,54 @@ con_loadfont(endpoint_t endpt, cp_grant_id_t grant)
 void
 riscv_cons_init(void)
 {
-    /* No hardware init needed for SBI console. */
+	if (uart_base != NULL)
+		return;
+
+	uart_base = vm_map_phys(SELF, (void *)UART_BASE, UART_SIZE);
+	if (uart_base == MAP_FAILED)
+		uart_base = NULL;
 }
 
 void
 riscv_cons_putc(int c)
 {
-    ser_putc((char)c);
+	if (uart_base == NULL)
+		riscv_cons_init();
+
+	if (uart_base == NULL) {
+		ser_putc((char)c);
+		return;
+	}
+
+	while (!uart_tx_ready())
+		;
+	uart_base[UART_THR] = (u8_t)c;
 }
 
 static int
 cons_read(tty_t *tp, int try)
 {
-    /* No keyboard support yet; keep the line active for output. */
-    (void)tp;
-    if (try)
-        return 0;
-    return 0;
+	char buf[64];
+	int count;
+
+	if (uart_base == NULL)
+		riscv_cons_init();
+
+	if (try)
+		return uart_rx_ready();
+
+	if (uart_base == NULL)
+		return 0;
+
+	count = 0;
+	while (count < (int)sizeof(buf) && uart_rx_ready()) {
+		buf[count++] = (char)uart_base[UART_RBR];
+	}
+
+	if (count > 0)
+		in_process(tp, buf, count);
+
+	return 0;
 }
 
 static int

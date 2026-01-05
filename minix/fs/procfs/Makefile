@@ -2,7 +2,8 @@
 .include <bsd.own.mk>
 
 PROG=	procfs
-SRCS=	buf.c cpuinfo.c main.c pid.c root.c service.c tree.c util.c
+SRCS=	buf.c cpuinfo.c main.c pid.c root.c service.c tree.c util.c gp.c
+LDFLAGS+= -Wl,--defsym,__global_pointer$$=_gp
 
 CPPFLAGS+= -I${NETBSDSRCDIR}/minix
 CPPFLAGS+= -I${NETBSDSRCDIR}/minix/fs

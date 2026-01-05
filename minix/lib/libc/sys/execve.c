@@ -11,6 +11,12 @@
 #include <sys/exec_elf.h>
 #include <sys/exec.h>
 
+static void
+execve_debug(const char *msg)
+{
+	(void)write(2, msg, strlen(msg));
+}
+
 int execve(const char *path, char * const *argv, char * const *envp)
 {
 	message m;
@@ -27,12 +33,14 @@ int execve(const char *path, char * const *argv, char * const *envp)
 
 	/* The party is off if there is an overflow. */
 	if (overflow) {
+		execve_debug("execve: stack overflow\n");
 		errno = E2BIG;
 		return -1;
 	}
 
 	/* Allocate space for the stack frame. */
 	if ((frame = (char *) sbrk(frame_size)) == (char *) -1) {
+		execve_debug("execve: sbrk failed\n");
 		errno = E2BIG;
 		return -1;
 	}
@@ -50,7 +58,9 @@ int execve(const char *path, char * const *argv, char * const *envp)
 	m.m_lc_pm_exec.framelen = frame_size;
 	m.m_lc_pm_exec.ps_str = (vir_bytes)(vsp + ((char *)psp - frame));
 
+	execve_debug("execve: calling PM_EXEC\n");
 	(void) _syscall(PM_PROC_NR, PM_EXEC, &m);
+	execve_debug("execve: PM_EXEC returned\n");
 
 	/* Failure, return the memory used for the frame and exit. */
 	(void) sbrk(-frame_size);

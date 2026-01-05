@@ -558,25 +558,6 @@ void cause_sig(proc_nr_t proc_nr, int sig_nr)
   /* If the target is the signal manager of itself, send the signal directly. */
   if(rp->p_endpoint == sig_mgr) {
        if(SIGS_IS_LETHAL(sig_nr)) {
-#ifdef __riscv64
-           {
-               static int sigabort_trace_count;
-               if (sig_nr == SIGABRT && sigabort_trace_count < 4) {
-                   direct_print("rv64: cause_sig target=");
-                   direct_print(rp->p_name);
-                   direct_print("/");
-                   direct_print_hex((u64_t)rp->p_endpoint);
-                   direct_print(" pc=");
-                   direct_print_hex((u64_t)rp->p_reg.pc);
-                   direct_print(" sp=");
-                   direct_print_hex((u64_t)rp->p_reg.sp);
-                   direct_print(" ra=");
-                   direct_print_hex((u64_t)rp->p_reg.ra);
-                   direct_print("\n");
-                   sigabort_trace_count++;
-               }
-           }
-#endif
            /* If the signal is lethal, see if a backup signal manager exists. */
            sig_mgr = priv(rp)->s_bak_sig_mgr;
            if(sig_mgr != NONE && isokendpt(sig_mgr, &sig_mgr_proc_nr)) {

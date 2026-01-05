@@ -1,7 +1,7 @@
 #	$OpenBSD: Makefile,v 1.6 2003/06/25 15:00:04 millert Exp $
 
 PROG=	grep
-SRCS=	binary.c file.c grep.c mmfile.c queue.c util.c
+SRCS=	binary.c file.c grep.c mmfile.c queue.c util.c gp.c
 LINKS=	${BINDIR}/grep ${BINDIR}/egrep \
 	${BINDIR}/grep ${BINDIR}/fgrep \
 	${BINDIR}/grep ${BINDIR}/zgrep \
@@ -18,5 +18,6 @@ CFLAGS+= -Wall
 
 LDADD=	-lz
 DPADD=	${LIBZ}
+LDFLAGS+= -Wl,--defsym,__global_pointer$$=_gp
 
 .include <bsd.prog.mk>

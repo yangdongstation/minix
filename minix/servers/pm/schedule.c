@@ -22,6 +22,9 @@ void sched_init(void)
 	struct mproc *trmp;
 	endpoint_t parent_e;
 	int proc_nr, s;
+#if defined(__riscv) || defined(__riscv64__)
+	static int sched_init_log_done;
+#endif
 
 	for (proc_nr=0, trmp=mproc; proc_nr < NR_PROCS; proc_nr++, trmp++) {
 		/* Don't take over system processes. When the system starts,
@@ -41,6 +44,13 @@ void sched_init(void)
 				USER_QUANTUM, 		/* quantum */
 				-1,			/* don't change cpu */
 				&trmp->mp_scheduler);	/* *newsched_e */
+#if defined(__riscv) || defined(__riscv64__)
+			if (!sched_init_log_done) {
+				printf("PM: sched_start init ep=%d r=%d\n",
+					trmp->mp_endpoint, s);
+				sched_init_log_done = 1;
+			}
+#endif
 			if (s != OK) {
 				printf("PM: SCHED denied taking over scheduling of %s: %d\n",
 					trmp->mp_name, s);

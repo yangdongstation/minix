@@ -77,6 +77,27 @@ main(void)
 	mp = &mproc[who_p];	/* process slot of caller */
 	call_nr = m_in.m_type;	/* system call number */
 
+#if defined(__riscv) || defined(__riscv64__)
+	{
+		static int pm_init_log_count;
+		if (who_p == INIT_PROC_NR && pm_init_log_count < 64) {
+			printf("PM: from init call=%d hex=0x%x\n",
+				call_nr, (unsigned int)call_nr);
+			pm_init_log_count++;
+		}
+		if (mp->mp_parent == INIT_PROC_NR &&
+		    mp->mp_endpoint != INIT_PROC_NR) {
+			static int pm_child_log_count;
+			if (pm_child_log_count < 64) {
+				printf("PM: from init child ep=%d call=%d hex=0x%x\n",
+				    mp->mp_endpoint, call_nr,
+				    (unsigned int)call_nr);
+				pm_child_log_count++;
+			}
+		}
+	}
+#endif
+
 	/* Drop delayed calls from exiting processes. */
 	if (mp->mp_flags & EXITING)
 		continue;

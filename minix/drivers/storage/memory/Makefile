@@ -4,7 +4,7 @@
 USE_BITCODE:=no
 
 PROG=	memory
-SRCS=	memory.c imgrd.mfs
+SRCS=	memory.c imgrd.mfs gp.c
 OBJS=	${SRCS:N*.h:R:S/$/.o/g}
 MKBUILDEXT2RD?=	no
 
@@ -18,6 +18,10 @@ DPADD+=	${LIBBLOCKDRIVER} ${LIBCHARDRIVER}
 LDADD+=	-lblockdriver -lchardriver
 
 CPPFLAGS.memory.c+=	-I${NETBSDSRCDIR}/minix
+
+.if ${MACHINE_ARCH} == "riscv64" || ${MACHINE_ARCH} == "riscv"
+LDFLAGS+= -Wl,--defsym,__global_pointer$$=_gp
+.endif
 
 imgrd.d: touch-genfiles
 touch-genfiles:

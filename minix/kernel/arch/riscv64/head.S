@@ -220,15 +220,6 @@ trap_from_kernel:
     csrr    t0, CSR_STVAL
     sd      t0, TF_STVAL(sp)
 
-    /* Trap debug: emit 'K' after saving temporaries. */
-    li      t0, VIRT_UART0_BASE
-9:
-    lbu     t1, UART_LSR(t0)
-    andi    t1, t1, UART_LSR_THRE
-    beqz    t1, 9b
-    li      t1, 'K'
-    sb      t1, UART_THR(t0)
-
     /* Call C handler */
     mv      a0, sp
     call    exception_handler

@@ -182,6 +182,14 @@ int req_create(
 //  vmp = find_vmnt(fs_e);
 
   len = strlen(path) + 1;
+  {
+	static int req_create_call_log;
+	if (req_create_call_log < 8) {
+		printf("VFS: req_create call path=\"%s\" dir_ino=%llu fs=%d len=%zu\n",
+		    path, (unsigned long long)inode_nr, fs_e, len);
+		req_create_call_log++;
+	}
+  }
   grant_id = cpf_grant_direct(fs_e, (vir_bytes) path, len, CPF_READ);
   if (grant_id == -1)
 	panic("req_create: cpf_grant_direct failed");
@@ -198,7 +206,15 @@ int req_create(
   /* Send/rec request */
   r = fs_sendrec(fs_e, &m);
   cpf_revoke(grant_id);
-  if (r != OK) return(r);
+  if (r != OK) {
+	static int req_create_log_count;
+	if (req_create_log_count < 16) {
+		printf("VFS: req_create path=\"%s\" dir_ino=%llu fs=%d err=%d len=%zu\n",
+		    path, (unsigned long long)inode_nr, fs_e, r, len);
+		req_create_log_count++;
+	}
+	return(r);
+  }
 
   /* Fill in response structure */
   res->fs_e	= m.m_source;
@@ -488,6 +504,26 @@ int req_lookup(
   r = fs_sendrec(fs_e, &m);
   cpf_revoke(grant_id);
   if(rfp->fp_ngroups > 0) cpf_revoke(grant_id2);
+
+  if (strcmp(resolve->l_path, "/bin/sh") == 0 ||
+      strcmp(resolve->l_path, "/etc/rc") == 0) {
+	static int lookup_prog_log_count;
+	if (lookup_prog_log_count < 16) {
+		printf("VFS: req_lookup path=\"%s\" r=%d\n",
+		    resolve->l_path, r);
+		lookup_prog_log_count++;
+	}
+  }
+
+  if (r == ENOENT) {
+	static int lookup_err_log_count;
+	if (lookup_err_log_count < 16) {
+		printf("VFS: req_lookup ENOENT path=\"%s\" dir_ino=%llu root_ino=%llu fs=%d flags=0x%x\n",
+		    resolve->l_path, (unsigned long long)dir_ino,
+		    (unsigned long long)root_ino, fs_e, flags);
+		lookup_err_log_count++;
+	}
+  }
 
   /* Fill in response according to the return value */
   res->fs_e = m.m_source;

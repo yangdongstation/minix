@@ -1,6 +1,6 @@
 # Makefile for Data Store Server (DS)
 PROG=	ds
-SRCS=	main.c store.c
+SRCS=	main.c store.c gp.c
 
 DPADD+=	${LIBSYS}
 LDADD+=	-lsys
@@ -11,5 +11,9 @@ LDADD+=	-lsys
 # not picked up by the linker in the first (instrumentation) pass. With
 # these definitions we force the first pass to include them.
 CPPFLAGS.store.c+= -Dregcomp=_regcomp -Dregfree=_regfree
+
+.if ${MACHINE_ARCH} == "riscv64" || ${MACHINE_ARCH} == "riscv"
+LDFLAGS+= -Wl,--defsym,__global_pointer$$=_gp
+.endif
 
 .include <minix.service.mk>

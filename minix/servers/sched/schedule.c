@@ -220,6 +220,17 @@ int do_start_scheduling(message *m_ptr)
 			rmp->endpoint, rv);
 		return rv;
 	}
+#if defined(__riscv) || defined(__riscv64__)
+	{
+		static int sched_init_log_count;
+		if (rmp->endpoint == INIT_PROC_NR && sched_init_log_count < 8) {
+			printf("Sched: start init ep=%d rv=%d prio=%d q=%d\n",
+				rmp->endpoint, rv, rmp->priority,
+				rmp->time_slice);
+			sched_init_log_count++;
+		}
+	}
+#endif
 	rmp->flags = IN_USE;
 
 	/* Schedule the process, giving it some quantum */

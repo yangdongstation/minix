@@ -439,24 +439,10 @@ void *arg;
 		mthread_panic("unable to overmap stack space for guard");
 	tcb->m_context.uc_stack.ss_sp = guard_end;
   } else
-  	tcb->m_context.uc_stack.ss_sp = stackaddr;
+  tcb->m_context.uc_stack.ss_sp = stackaddr;
 
   tcb->m_context.uc_stack.ss_size = stacksize;
-  tcb->m_context.uc_mcontext.mc_magic = MCF_MAGIC;
   makecontext(&(tcb->m_context), mthread_trampoline, 0);
-
-#if defined(__riscv) || defined(__riscv64__)
-  printf("mthread: tid=%d ucp=%p mctx=%p gregs=%p off_gregs=%ld pc=0x%lx ra=0x%lx sp=0x%lx\n",
-      thread,
-      (void *)&tcb->m_context,
-      (void *)&tcb->m_context.uc_mcontext,
-      (void *)&tcb->m_context.uc_mcontext.__gregs[0],
-      (long)((char *)&tcb->m_context.uc_mcontext.__gregs[0] -
-          (char *)&tcb->m_context),
-      (unsigned long)tcb->m_context.uc_mcontext.__gregs[_REG_PC],
-      (unsigned long)tcb->m_context.uc_mcontext.__gregs[_REG_RA],
-      (unsigned long)tcb->m_context.uc_mcontext.__gregs[_REG_SP]);
-#endif
 
   mthread_unsuspend(thread); /* Make thread runnable */
 }

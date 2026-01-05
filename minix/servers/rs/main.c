@@ -790,6 +790,16 @@ endpoint_t endpoint;
   message m;
   struct rproc *rp;
   int result;
+#if defined(__riscv) || defined(__riscv64__)
+  static int rs_init_log_count;
+#endif
+
+#if defined(__riscv) || defined(__riscv64__)
+  if (rs_init_log_count < 64) {
+	printf("RS: wait init ready ep=%d\n", endpoint);
+	rs_init_log_count++;
+  }
+#endif
 
   /* Receive init ready message. */
   if ((r = sef_receive_status(endpoint, &m, &ipc_status)) != OK) {
@@ -805,6 +815,13 @@ endpoint_t endpoint;
   if(result != OK) {
       panic("unable to complete init for service: %d", m.m_source);
   }
+
+#if defined(__riscv) || defined(__riscv64__)
+  if (rs_init_log_count < 64) {
+	printf("RS: got init ready ep=%d result=%d\n", m.m_source, result);
+	rs_init_log_count++;
+  }
+#endif
 
   /* Send a reply to unblock the service, except to VM/PM which replied
    * asynchronously. Synchronous replies could lead to deadlocks there.

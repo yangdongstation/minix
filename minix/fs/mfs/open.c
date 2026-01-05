@@ -30,6 +30,12 @@ int fs_create(ino_t dir_nr, char *name, mode_t mode, uid_t uid, gid_t gid,
 
   /* If an error occurred, release inode. */
   if (r != OK) {
+	static int fs_create_log_count;
+	if (fs_create_log_count < 16) {
+		printf("MFS: create err=%d dir=%llu name=\"%s\"\n",
+		    r, (unsigned long long)dir_nr, name);
+		fs_create_log_count++;
+	}
 	  put_inode(ldirp);
 	  put_inode(rip);
 	  return(r);

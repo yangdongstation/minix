@@ -6,6 +6,47 @@
 本文件记录 RISC-V 64 位移植的具体问题与证据（含文件/行号），并给出修复建议。  
 This file records concrete issues in the RISC-V 64-bit port with evidence and suggested fixes.
 
+## Active Investigation / 当前主问题跟踪
+
+### A1) Userland services stuck in user pagefault loop during boot / 用户态服务启动期反复缺页
+- Evidence / 证据:
+  - VFS: `sef_receive_status` at `minix/lib/libsys/sef.c:151`, `mthread_trampoline` at `minix/lib/libmthread/allocate.c:532`,
+    `malloc_bytes` at `lib/libc/stdlib/malloc.c:792`, `memset` at `common/lib/libc/string/memset.c:156`
+  - MFS: `extend_pgdir` at `lib/libc/stdlib/malloc.c:464`, `imalloc` at `lib/libc/stdlib/malloc.c:831`,
+    `kdoprnt` at `sys/lib/libsa/subr_prf.c:328`
+  - DS: `_regcomp` at `lib/libc/regex/regcomp.c:333`, `extend_pgdir` at `lib/libc/stdlib/malloc.c:464`,
+    `imalloc` at `lib/libc/stdlib/malloc.c:831`, `kdoprnt` at `sys/lib/libsa/subr_prf.c:224`
+- Impact / 影响:
+  - Boot does not reach stable userland; init dies and services spin on faults. / 启动无法进入稳定用户态；init 退出且服务反复缺页。
+- Hypothesis / 假设:
+  - RV64 heap growth or page table extension path (`extend_pgdir` / `malloc_pages`) maps invalid VA. / RV64 堆扩展或页表扩展路径可能映射了非法 VA。
+  - May be related to PTROOT truncation issue (#1). / 可能与 PTROOT 截断问题（#1）相关。
+- Next steps / 下一步:
+  - Capture faulting `addr` with matching `pc` to confirm heap boundaries. / 采集 fault addr 与 pc 对应关系以确认堆边界。
+  - Audit `malloc.c` + VM mappings on RV64; verify `brk`/`sbrk` flow and VM map permissions. / 审核 RV64 的 `malloc.c` 与 VM 映射；核对 `brk`/`sbrk` 路径与权限。
+
+### A2) RV64 process support exists in loader/CPU mode but is not stable end-to-end / RV64 进程支持具备基础但端到端不稳定
+- Evidence / 证据:
+  - U-mode is configured by clearing `SSTATUS_SPP` in `prot_init`. / 内核已配置 U-mode 入口。  
+    Evidence: `minix/kernel/arch/riscv64/protect.c:48`
+  - VM boot loader expects ELF64/EM_RISCV for the VM image. / VM 引导加载器按 ELF64/EM_RISCV 校验。  
+    Evidence: `minix/kernel/arch/riscv64/protect.c:138`
+  - Exec loader is built as 64-bit on `__riscv64__`, and ELF target class is 64 for RISC-V. / exec 加载器按 RV64 构建并期望 ELF64。  
+    Evidence: `minix/lib/libexec/exec_elf.c:4`, `sys/arch/riscv/include/elf_machdep.h:24`
+  - Current status explicitly says userland is not yet stable. / 现状明确用户态仍不稳定。  
+    Evidence: `README-RISCV64.md:27`
+- Impact / 影响:
+  - Kernel has RV64 U-mode + ELF64 exec plumbing, but user processes are not reliably runnable yet. / 内核具备基础通路，但 RV64 进程尚不可稳定运行。
+- Suggested fix / 修复建议:
+  - Resolve A1 + Critical items (PTROOT truncation, SATP VA/PA mismatch, clock/IRQ paths), then validate exec with a minimal ELF64 user binary + ld.so. / 先修复 A1 与严重问题，再用最小 ELF64 用户程序验证 exec/ld.so。
+  - Validation checklist (doc-only): / 验证清单（文档）:
+    1) Confirm target ELF64/EM_RISCV via `readelf -h` on the test binary. / 通过 `readelf -h` 确认 ELF64/EM_RISCV。
+    2) Prefer a minimal static executable if available; otherwise verify `PT_INTERP` points to `/libexec/ld.elf_so`. / 尽量使用静态可执行文件；否则确认 `PT_INTERP` 指向 `/libexec/ld.elf_so`。  
+       Evidence: `minix/drivers/storage/ramdisk/proto.common.dynamic:2`, `minix/servers/vfs/exec.c:282`
+    3) Ensure dynamic loader is mapped below stack as per VFS logic. / 确认动态加载器按 VFS 逻辑映射到栈下。  
+       Evidence: `minix/servers/vfs/exec.c:306`
+    4) Keep the test binary minimal (single `main`, no threads) to isolate VM/exec issues. / 测试程序保持最小化以隔离 VM/exec 问题。
+
 ## Critical / 严重
 
 ### 1) 64-bit page table root truncated to 32-bit in sys_vmctl path / sys_vmctl 路径 PTROOT 32 位截断
@@ -112,6 +153,34 @@ This file records concrete issues in the RISC-V 64-bit port with evidence and su
   - `minimal_kernel/` cannot be used for RISC-V minimal boot tests. / `minimal_kernel/` 无法用于 RISC-V 最小化测试。
 - Suggested fix / 修复建议:
   - Add RISC-V support in minimal kernel headers or exclude it from RISC-V builds. / 在 minimal kernel 增加 RISC-V 支持或在 RISC-V 构建中排除。
+
+## Technical Debt / 技术债务
+
+### TD1) Static RISC-V links require per-binary __global_pointer$ workaround / 静态链接需要每个二进制打补丁
+- Evidence / 证据:
+  - Link failure without workaround: `crt0.o: undefined reference to '__global_pointer$'`
+  - Workarounds in `minix/servers/vfs/gp.c` + `minix/servers/vfs/Makefile` (and similarly in DS/MFS).
+- Impact / 影响:
+  - Requires per-binary patches; easy to miss. / 需要逐个二进制打补丁，容易遗漏。
+- Suggested fix / 修复建议:
+- Define `__global_pointer$` in crt0 or linker script globally, then remove per-binary gp.c/LDFLAGS. / 在 crt0 或链接脚本中全局定义 `__global_pointer$`，再移除各二进制 gp.c/LDFLAGS。
+
+## Enhancement / 增强提案
+
+### E2) LiteOS-M + LiteOS-A Emulation (QEMU-based) / LiteOS-M 与 LiteOS-A 全系统仿真（QEMU）
+- Tags / 标签: `enhancement`, `emulation`, `qemu`, `epic`
+- Priority / 优先级: P0
+- Owner / 负责人: @yangdongstation
+- Target / 目标版本: Emulation platform (host OS) / 仿真平台（宿主系统）
+- Summary / 简述:
+  - Build a host-based full emulation stack using QEMU + HAL + kernel logic + API mapping for LiteOS-M and LiteOS-A. / 采用 QEMU + HAL + 内核功能层 + API 映射构建全系统仿真。
+- Feasibility / 可行性评估:
+  - Upstream LiteOS-M dynlink expects ELF `ET_DYN`; RISC-V dynlink is ELF32 and arch tree is RV32-only. / 上游 LiteOS-M 动态加载为 ELF32 且 RISC-V 仅 RV32。  
+    Evidence: `https://gitee.com/openharmony/kernel_liteos_m/blob/master/components/dynlink/los_dynlink.c#L103-L112`, `https://gitee.com/openharmony/kernel_liteos_m/blob/master/components/dynlink/los_dynlink.h#L44-L64`, `https://gitee.com/openharmony/kernel_liteos_m/blob/master/README.md#L23-L40`
+  - QEMU riscv32_virt uses `gcc_riscv32` and outputs `OHOS_Image`, making RV32 the practical starting point. / QEMU riscv32_virt 工具链与产物指向 RV32 起步。  
+    Evidence: `https://gitee.com/openharmony/device_qemu/blob/master/riscv32_virt/README_zh.md#L15-L18`, `https://gitee.com/openharmony/device_qemu/blob/master/riscv32_virt/README_zh.md#L41-L46`
+- Architecture doc / 架构文档:
+  - `docs/liteos-emulation-architecture.md`
 
 ## Fixed in Current Working Tree / 已在当前工作区修复
 

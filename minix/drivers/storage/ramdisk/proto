@@ -16,6 +16,7 @@ d--755 0 0
 	$
 	sbin d--755 0 0
 		minix-service ---755 0 0 minix-service
+		sysenv ---755 0 0 sysenv
 	$
 	service d--755 0 0
 #ifdef __i386__
@@ -49,6 +50,7 @@ d--755 0 0
 	$
 	dev d--755 0 0
 #include "proto.dev"
+		constty c--600 0 4 4 0
 	$
 #include "proto.common.etc"
 #if RAMDISK_DYNAMIC == 1

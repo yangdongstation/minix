@@ -335,13 +335,6 @@ void switch_to_user(void)
 	 * to be scheduled again.
 	 */
 	struct proc * p;
-#if defined(__riscv)
-	static int switch_log_count;
-	if (switch_log_count < 8) {
-		direct_print("rv64: switch_to_user\n");
-		switch_log_count++;
-	}
-#endif
 #ifdef CONFIG_SMP
 	int tlb_must_refresh = 0;
 #endif

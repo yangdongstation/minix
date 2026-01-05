@@ -34,6 +34,22 @@ fsdriver_process(const struct fsdriver * __restrict fdp,
 	transid = TRNS_GET_ID(m_ptr->m_type);
 	call_nr = TRNS_DEL_ID(m_ptr->m_type);
 
+#if defined(__riscv) || defined(__riscv64__)
+	int log_this = 0;
+	unsigned int full_call = call_nr;
+	{
+		static int fsdriver_msg_log_count;
+		if (fsdriver_msg_log_count < 64) {
+			log_this = 1;
+			printf("fsdriver: vfs src=%d type=%d hex=0x%x call=%u trans=%d mounted=%d\n",
+			    m_ptr->m_source, m_ptr->m_type,
+			    (unsigned int)m_ptr->m_type, full_call,
+			    transid, fsdriver_mounted);
+			fsdriver_msg_log_count++;
+		}
+	}
+#endif
+
 	memset(&m_out, 0, sizeof(m_out));
 
 	if (fsdriver_mounted || call_nr == REQ_READSUPER) {
@@ -45,6 +61,13 @@ fsdriver_process(const struct fsdriver * __restrict fdp,
 			r = ENOSYS;
 	} else
 		r = EINVAL;
+
+#if defined(__riscv) || defined(__riscv64__)
+	if (log_this) {
+		printf("fsdriver: vfs reply call=%u trans=%d r=%d mounted=%d\n",
+		    full_call, transid, r, fsdriver_mounted);
+	}
+#endif
 
 	/* Send a reply. */
 	m_out.m_type = TRNS_ADD_ID(r, transid);

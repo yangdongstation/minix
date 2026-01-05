@@ -161,6 +161,8 @@ void arch_proc_reset(struct proc *pr)
 	pr->p_reg.psr = SSTATUS_SPIE;
 	if (iskerneln(pr->p_nr))
 		pr->p_reg.psr |= SSTATUS_SPP;
+	/* Allow userland FPU instructions (e.g., _setjmp) from first entry. */
+	pr->p_reg.psr |= SSTATUS_FS_INITIAL;
 
 	pr->p_seg.p_satp = 0;
 	pr->p_seg.p_satp_v = NULL;

@@ -1,0 +1,1671 @@
+Boot modules (12):
+  obj/destdir.evbriscv64/service/ds @ 0x81000000
+  obj/destdir.evbriscv64/service/rs @ 0x8101a000
+  obj/destdir.evbriscv64/service/pm @ 0x81192000
+  obj/destdir.evbriscv64/service/sched @ 0x81320000
+  obj/destdir.evbriscv64/service/vfs @ 0x81411000
+  obj/destdir.evbriscv64/service/memory @ 0x8155c000
+  obj/destdir.evbriscv64/service/tty @ 0x818ea000
+  obj/destdir.evbriscv64/service/mib @ 0x819f1000
+  obj/destdir.evbriscv64/service/vm @ 0x81a0f000
+  obj/destdir.evbriscv64/service/pfs @ 0x81b75000
+  obj/destdir.evbriscv64/service/mfs @ 0x81b89000
+  obj/destdir.evbriscv64/sbin/init @ 0x81d34000
+Starting QEMU with: qemu-system-riscv64 -machine virt -cpu rv64 -smp 4 -m 256M -nographic -bios default -kernel minix/kernel/obj/kernel -device loader,file=/tmp/minix-rv64-modinfo.ABQLxE,addr=0x80f00000,force-raw=on -device loader,file=obj/destdir.evbriscv64/service/ds,addr=0x81000000,force-raw=on -device loader,file=obj/destdir.evbriscv64/service/rs,addr=0x8101a000,force-raw=on -device loader,file=obj/destdir.evbriscv64/service/pm,addr=0x81192000,force-raw=on -device loader,file=obj/destdir.evbriscv64/service/sched,addr=0x81320000,force-raw=on -device loader,file=obj/destdir.evbriscv64/service/vfs,addr=0x81411000,force-raw=on -device loader,file=obj/destdir.evbriscv64/service/memory,addr=0x8155c000,force-raw=on -device loader,file=obj/destdir.evbriscv64/service/tty,addr=0x818ea000,force-raw=on -device loader,file=obj/destdir.evbriscv64/service/mib,addr=0x819f1000,force-raw=on -device loader,file=obj/destdir.evbriscv64/service/vm,addr=0x81a0f000,force-raw=on -device loader,file=obj/destdir.evbriscv64/service/pfs,addr=0x81b75000,force-raw=on -device loader,file=obj/destdir.evbriscv64/service/mfs,addr=0x81b89000,force-raw=on -device loader,file=obj/destdir.evbriscv64/sbin/init,addr=0x81d34000,force-raw=on -serial mon:stdio -device virtio-rng-device
+
+OpenSBI v1.6
+   ____                    _____ ____ _____
+  / __ \                  / ____|  _ \_   _|
+ | |  | |_ __   ___ _ __ | (___ | |_) || |
+ | |  | | '_ \ / _ \ '_ \ \___ \|  _ < | |
+ | |__| | |_) |  __/ | | |____) | |_) || |_
+  \____/| .__/ \___|_| |_|_____/|____/_____|
+        | |
+        |_|
+
+Platform Name               : riscv-virtio,qemu
+Platform Features           : medeleg
+Platform HART Count         : 4
+Platform IPI Device         : aclint-mswi
+Platform Timer Device       : aclint-mtimer @ 10000000Hz
+Platform Console Device     : uart8250
+Platform HSM Device         : ---
+Platform PMU Device         : ---
+Platform Reboot Device      : syscon-reboot
+Platform Shutdown Device    : syscon-poweroff
+Platform Suspend Device     : ---
+Platform CPPC Device        : ---
+Firmware Base               : 0x80000000
+Firmware Size               : 361 KB
+Firmware RW Offset          : 0x40000
+Firmware RW Size            : 105 KB
+Firmware Heap Offset        : 0x4e000
+Firmware Heap Size          : 49 KB (total), 3 KB (reserved), 13 KB (used), 32 KB (free)
+Firmware Scratch Size       : 4096 B (total), 440 B (used), 3656 B (free)
+Runtime SBI Version         : 2.0
+Standard SBI Extensions     : ipi,pmu,srst,hsm,rfnc,time,base,legacy,dbcn
+Experimental SBI Extensions : sse,fwft,dbtr
+
+Domain0 Name                : root
+Domain0 Boot HART           : 0
+Domain0 HARTs               : 0*,1*,2*,3*
+Domain0 Region00            : 0x0000000000100000-0x0000000000100fff M: (I,R,W) S/U: (R,W)
+Domain0 Region01            : 0x0000000010000000-0x0000000010000fff M: (I,R,W) S/U: (R,W)
+Domain0 Region02            : 0x0000000002000000-0x000000000200ffff M: (I,R,W) S/U: ()
+Domain0 Region03            : 0x0000000080040000-0x000000008005ffff M: (R,W) S/U: ()
+Domain0 Region04            : 0x0000000080000000-0x000000008003ffff M: (R,X) S/U: ()
+Domain0 Region05            : 0x000000000c400000-0x000000000c5fffff M: (I,R,W) S/U: (R,W)
+Domain0 Region06            : 0x000000000c000000-0x000000000c3fffff M: (I,R,W) S/U: (R,W)
+Domain0 Region07            : 0x0000000000000000-0xffffffffffffffff M: () S/U: (R,W,X)
+Domain0 Next Address        : 0x0000000080200000
+Domain0 Next Arg1           : 0x000000008fe00000
+Domain0 Next Mode           : S-mode
+Domain0 SysReset            : yes
+Domain0 SysSuspend          : yes
+
+Boot HART ID                : 0
+Boot HART Domain            : root
+Boot HART Priv Version      : v1.12
+Boot HART Base ISA          : rv64imafdch
+Boot HART ISA Extensions    : sstc,zicntr,zihpm,zicboz,zicbom,sdtrig,svadu
+Boot HART PMP Count         : 16
+Boot HART PMP Granularity   : 2 bits
+Boot HART PMP Address Bits  : 54
+Boot HART MHPM Info         : 16 (0x0007fff8)
+Boot HART Debug Triggers    : 2 triggers
+Boot HART MIDELEG           : 0x0000000000001666
+Boot HART MEDELEG           : 0x0000000000f4b509
+rv64: kernel_main
+rv64: kmain entry
+rv64: kinfo copy
+rv64: kmess copy
+rv64: board_id
+rv64: may_alloc
+rv64: boot_procs
+rv64: cstart
+rv64: init_clock
+rv64: after cstart
+rv64: after BKL
+rv64: proc_init
+rv64: ipcf_init
+rv64: mods_count=12
+rv64: boot procs init start
+rv64: get_priv proc=18446744073709551611 ep=18446744073709551611 priv=0x80322e50
+rv64: get_priv proc=18446744073709551612 ep=18446744073709551612 priv=0x803232a0
+rv64: get_priv proc=18446744073709551613 ep=18446744073709551613 priv=0x803236f0
+rv64: get_priv proc=18446744073709551614 ep=18446744073709551614 priv=0x80323b40
+rv64: get_priv proc=18446744073709551615 ep=18446744073709551615 priv=0x80323f90
+rv64: get_priv proc=2 ep=2 priv=0x80324c80
+rv64: preassign PM priv=0x803243e0
+rv64: get_priv proc=8 ep=8 priv=0x80326660
+rv64: arch_boot_proc VM
+rv64: load_vm_elf start
+rv64: boot_pgdir synced
+rv64: load_vm_elf map segs
+rv64: load_vm_elf map stack
+rv64: load_vm_elf pg_load
+ABCrv64: pg_load leave
+rv64: load_vm_elf copy segs
+rv64: map va=0x800000 pte=0x21fffcdf pa=0x87fff000 L0
+rv64: map va=0xefffff00 pte=0x21e748d7 pa=0x879d2f00 L0
+rv64: load_vm_elf done
+rv64: VM loaded
+rv64: boot procs init done
+rv64: boot p_priv PM=0x803243e0 RS=0x80324c80 VM=0x80326660
+rv64: boot procs updated
+rv64: arch_post_init start
+rv64: arch_post_init
+rv64: memory_init start
+rv64: memory_init
+rv64: system_init start
+rv64: system_init done
+rv64: add_memmap
+rv64: bsp_finish_booting
+rv64: finish_booting start
+rv64: finish_booting announce
+rv64: finish_booting announce done
+rv64: finish_booting schedule
+rv64: finish_booting timer
+rv64: finish_booting timer done
+rv64: finish_booting switch
+rv64: switch_to_user
+rv64: syscall a7=0x8 a2=0x6 a0=0x0 a1=0x0
+rv64: ipc vm call=0x6 r2=0x0 r3=0x0
+rv64: exception switch_to_user
+rv64: switch_to_user
+rv64: syscall a7=0x9 a2=0x0 a0=0xeffffad8 a1=0xeffffad8
+rv64: kcall m_ptr=0xeffffad8 type=0x61a src=0x0 req=0xb
+rv64: kcall GETINFO req=0xb res=0x0
+rv64: exception switch_to_user
+rv64: switch_to_user
+rv64: syscall a7=0x9 a2=0x0 a0=0xeffffaa8 a1=0xeffffaa8
+rv64: kcall m_ptr=0xeffffaa8 type=0x61a src=0x828fb0 req=0x0
+rv64: kcall GETINFO req=0x0 res=0x0
+rv64: exception switch_to_user
+rv64: switch_to_user
+rv64: syscall a7=0x9 a2=0x80 a0=0xeffff948 a1=0xeffff948
+rv64: kcall m_ptr=0xeffff948 type=0x61a src=0x0 req=0x4
+rv64: getinfo MONPARAMS val_ptr=0xb7b200 len=0x400 max=0x400
+rv64: vcopy start dst=0xb7b200 src=0x8024d5f0 bytes=0x400 vmcheck=0x1
+rv64: vcopy src_phys=0x8024d5f0 src_off=0x8024d5f0 chunk=0x400
+rv64: vcopy dst_phys=0x87c82200 dst_off=0xb7b200
+Ccrv64: vcopy done
+rv64: getinfo MONPARAMS res=0x0
+rv64: kcall GETINFO req=0x4 res=0x0
+rv64: exception switch_to_user
+rv64: switch_to_user
+rv64: exception switch_to_user
+rv64: switch_to_user
+rv64: syscall a7=0x9 a2=0x23 a0=0xefffd968 a1=0xefffd968
+rv64: kcall m_ptr=0xefffd968 type=0x62c src=0x8171c4
+VM: mapping 480 static spare pages
+rv64: exception switch_to_user
+rv64: switch_to_user
+rv64: syscall a7=0x9 a2=0x89a000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0x829510
+rv64: exception switch_to_user
+rv64: switch_to_user
+rv64: syscall a7=0x9 a2=0x89b000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x89c000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x89d000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x89e000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x89f000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x8a0000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x8a1000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x8a2000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x8a3000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x8a4000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x8a5000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x8a6000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x8a7000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x8a8000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x8a9000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x8aa000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x8ab000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x8ac000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x8ad000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x8ae000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x8af000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x8b0000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x8b1000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x8b2000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x8b3000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: exception switch_to_user
+rv64: syscall a7=0x9 a2=0x8b4000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8b5000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8b6000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8b7000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8b8000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8b9000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8ba000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8bb000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8bc000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8bd000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8be000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8bf000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8c0000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8c1000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8c2000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8c3000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8c4000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8c5000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8c6000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8c7000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8c8000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8c9000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8ca000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8cb000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8cc000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8cd000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8ce000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8cf000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8d0000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8d1000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8d2000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8d3000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8d4000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8d5000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: kcall m_ptr=0xefffd9e8 type=0x60e src=0xfffffffffffffffe
+rv64: syscall a7=0x9 a2=0x8d6000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8d7000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8d8000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8d9000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8da000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8db000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8dc000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8dd000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8de000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8df000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8e0000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8e1000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8e2000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8e3000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8e4000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8e5000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8e6000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8e7000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8e8000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8e9000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8ea000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8eb000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8ec000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8ed000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8ee000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8ef000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8f0000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8f1000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8f2000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8f3000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8f4000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8f5000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8f6000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8f7000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8f8000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8f9000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8fa000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8fb000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8fc000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8fd000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8fe000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x8ff000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x900000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x901000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x902000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x903000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x904000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x905000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x906000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x907000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x908000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x909000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x90a000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x90b000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x90c000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x90d000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x90e000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x90f000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x910000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x911000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x912000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x913000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x914000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x915000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x916000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x917000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x918000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x919000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x91a000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x91b000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x91c000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x91d000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x91e000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x91f000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x920000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x921000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x922000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x923000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x924000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x925000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x926000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x927000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x928000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x929000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x92a000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x92b000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x92c000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x92d000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x92e000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x92f000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x930000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x931000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x932000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x933000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x934000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x935000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x936000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x937000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x938000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x939000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x93a000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x93b000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x93c000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x93d000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x93e000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x93f000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x940000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x941000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x942000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x943000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x944000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x945000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x946000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x947000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x948000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x949000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x94a000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x94b000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x94c000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x94d000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x94e000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x94f000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x950000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x951000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x952000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x953000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x954000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x955000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x956000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x957000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x958000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x959000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x95a000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x95b000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x95c000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x95d000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x95e000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x95f000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x960000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x961000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x962000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x963000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x964000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x965000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x966000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x967000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x968000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x969000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x96a000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x96b000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x96c000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x96d000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x96e000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x96f000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x970000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x971000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x972000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x973000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x974000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x975000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x976000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x977000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x978000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x979000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x97a000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x97b000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x97c000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x97d000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x97e000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x97f000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x980000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x981000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x982000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x983000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x984000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x985000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x986000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x987000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x988000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x989000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x98a000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x98b000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x98c000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x98d000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x98e000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x98f000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x990000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x991000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x992000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x993000 a0=0xefffd9e8 a1=0xefffd9e8
+rv64: syscall a7=0x9 a2=0x994000 a0=0xefffd9e8 a1=0xefffd9e8
+VM: static spare pages mapped
+rv64: kcall VMCTL param=0x1b who=0x2 res=0x0
+VM: kernmap set flags=0x13 userflag=0x10
+VM: kernmap user pindex=0 phys=0x8024a000 len=0x4000 flags=0x2 vir=0x100000000
+rv64: phys_map_reply idx=0x0 addr=0x100000000 usermapped_start=0x8024a000
+rv64: phys_map_reply offset=0x7fdb6000 kerninfo_user=0x100003cf8
+rv64: kcall VMCTL param=0x1c who=0x7bfe res=0x0
+rv64: kcall VMCTL param=0x1b who=0x7bfe res=0xffffffffffffffea
+VM: pt_init kernel mapped page tables allocated
+VM: pt_init newpt alloc
+VM: pt_init newpt ready
+rv64: kcall VMCTL param=0xd who=0x7bfe res=0x0
+VM: pt_init copy pagetables start
+VM: pt_init copy pde 0
+VM: pt_init copy pde 128
+VM: pt_init copy pde 256
+VM: pt_init copy pde 384
+VM: pt_init copy pagetables end
+VM: pt_init pte2=0x200000ef kern_pde=510 val=0x200000ef
+VM: pt_init pte2_phys=0x200000ef
+VM: pt_init pd_phys=0x87d8e000 check=0x87d8e000
+VM: pt_init before pt_bind
+rv64: vmctl setaddrspace ep=0x8 root=0x87d8e000 root_v=0x140008000
+rv64: setaddrspace switch
+rv64: setaddrspace fn=0x8024f8d8 pgdir_fn=0x8024f8bc
+rv64: setaddrspace switched
+rv64: setaddrspace tlb
+rv64: kcall VMCTL param=0x1d who=0x8 res=0x0
+VM: pt_bind set_addrspace r=0
+rv64: kcall VMCTL param=0xd who=0x7bfe res=0x0
+VM: pt_init bound newpt
+rv64: kcall VMCTL param=0x1a who=0x7bfe res=0x0
+rv64: kcall VMCTL param=0x1a who=0x7bfe res=0x0
+rv64: vmctl setaddrspace ep=0x8 root=0x87d8e000 root_v=0x140008000
+rv64: setaddrspace switch
+rv64: setaddrspace fn=0x8024f8d8 pgdir_fn=0x8024f8bc
+rv64: setaddrspace switched
+rv64: setaddrspace tlb
+VM: pt_bind set_addrspace r=0
+rv64: vmctl setaddrspace ep=0x8 root=0x84011000 root_v=0x140008000
+rv64: setaddrspace switch
+rv64: setaddrspace fn=0x8024f8d8 pgdir_fn=0x8024f8bc
+rv64: setaddrspace switched
+rv64: setaddrspace tlb
+VM: pt_bind set_addrspace r=0
+VM: kernmap check i=0 vir=0x100000000 flags=0x13
+VM: kernmap pte vir=0x100000000 entry=0x200928d3
+VM: pt_init end
+rv64: ipc vm call=0x6 r2=0x0 r3=0x0
+rv64: vmctl setaddrspace ep=0x6 root=0x83f69000 root_v=0x140006000
+VM: pt_bind set_addrspace r=0
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+vm: handle_memory_once enter ep=6 mem=0xeffffa70 len=0x590 wr=1
+vm: handle_memory_once pdbr=0x84011000 vm_pt=0x84011000 tgt_pt=0x83f69000 ep=6 r=0
+rv64: vmctl setaddrspace ep=0x2 root=0x81019000 root_v=0x140002000
+VM: pt_bind set_addrspace r=0
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+vm: handle_memory_once enter ep=2 mem=0xeffffa70 len=0x590 wr=1
+vm: handle_memory_once pdbr=0x84011000 vm_pt=0x84011000 tgt_pt=0x81019000 ep=2 r=0
+rv64: vmctl setaddrspace ep=0x0 root=0x81191000 root_v=0x140000000
+VM: pt_bind set_addrspace r=0
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+vm: handle_memory_once enter ep=0 mem=0xeffffa70 len=0x590 wr=1
+vm: handle_memory_once pdbr=0x84011000 vm_pt=0x84011000 tgt_pt=0x81191000 ep=0 r=0
+rv64: vmctl setaddrspace ep=0x4 root=0x8131f000 root_v=0x140004000
+VM: pt_bind set_addrspace r=0
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+vm: handle_memory_once enter ep=4 mem=0xeffffa70 len=0x590 wr=1
+vm: handle_memory_once pdbr=0x84011000 vm_pt=0x84011000 tgt_pt=0x8131f000 ep=4 r=0
+rv64: vmctl setaddrspace ep=0x1 root=0x81410000 root_v=0x140001000
+VM: pt_bind set_addrspace r=0
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+vm: handle_memory_once enter ep=1 mem=0xeffffa70 len=0x590 wr=1
+vm: handle_memory_once pdbr=0x84011000 vm_pt=0x84011000 tgt_pt=0x81410000 ep=1 r=0
+VM: pt_bind set_addrspace r=0
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+vm: handle_memory_once enter ep=3 mem=0xeffffa70 len=0x590 wr=1
+vm: handle_memory_once pdbr=0x84011000 vm_pt=0x84011000 tgt_pt=0x8155b000 ep=3 r=0
+VM: pt_bind set_addrspace r=0
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+vm: handle_memory_once enter ep=5 mem=0xeffffa70 len=0x590 wr=1
+vm: handle_memory_once pdbr=0x84011000 vm_pt=0x84011000 tgt_pt=0x818e9000 ep=5 r=0
+VM: pt_bind set_addrspace r=0
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+vm: handle_memory_once enter ep=7 mem=0xeffffa70 len=0x590 wr=1
+vm: handle_memory_once pdbr=0x84011000 vm_pt=0x84011000 tgt_pt=0x819f0000 ep=7 r=0
+VM: pt_bind set_addrspace r=0
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+VM: pt_bind set_addrspace r=0
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+VM: pt_bind set_addrspace r=0
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+rv64: kcall GETINFO req=0x8 res=0x0
+rv64: ipc vm call=0x2 r2=0x7c00 r3=0xeffffb58
+rv64: kcall GETINFO req=0x2 res=0x0
+rv64: kcall GETINFO req=0x4 res=0x0
+rv64: kcall GETINFO req=0x12 res=0x0
+rv64: kcall GETINFO req=0x1 res=0x0
+rv64: kcall GETINFO req=0x11 res=0x0
+rv64: kcall GETINFO req=0x11 res=0x0
+privctl:set_sys pre req=3 caller=2 target=0 priv_id=5 r=0 p_priv=0x803243e0 satp=0x8000000000081019
+privctl:set_sys reuse req=3 caller=2 target=0 priv_id=5 r=0 p_priv=0x803243e0 satp=0x8000000000081019
+privctl:set_sys post req=3 caller=2 target=0 priv_id=5 r=0 p_priv=0x803243e0 satp=0x8000000000081019
+privctl:set_sys done req=3 caller=2 target=0 priv_id=5 r=0 p_priv=0x803243e0 satp=0x8000000000081019
+rv64: kcall GETINFO req=0x11 res=0x0
+privctl:set_sys pre req=3 caller=2 target=4 priv_id=9 r=0 p_priv=0x0 satp=0x8000000000081019
+rv64: kcall GETINFO req=0x11 res=0x0
+privctl:set_sys pre req=3 caller=2 target=1 priv_id=6 r=0 p_priv=0x0 satp=0x8000000000081019
+rv64: kcall GETINFO req=0x11 res=0x0
+privctl:set_sys pre req=3 caller=2 target=6 priv_id=11 r=0 p_priv=0x0 satp=0x8000000000081019
+rv64: kcall GETINFO req=0x11 res=0x0
+privctl:set_sys pre req=3 caller=2 target=5 priv_id=10 r=0 p_priv=0x0 satp=0x8000000000081019
+rv64: kcall GETINFO req=0x11 res=0x0
+privctl:set_sys pre req=3 caller=2 target=3 priv_id=8 r=0 p_priv=0x0 satp=0x8000000000081019
+rv64: kcall GETINFO req=0x11 res=0x0
+privctl:set_sys pre req=3 caller=2 target=7 priv_id=12 r=0 p_priv=0x0 satp=0x8000000000081019
+rv64: kcall GETINFO req=0x11 res=0x0
+privctl:set_sys pre req=3 caller=2 target=9 priv_id=14 r=0 p_priv=0x0 satp=0x8000000000081019
+rv64: kcall GETINFO req=0x11 res=0x0
+privctl:set_sys pre req=3 caller=2 target=10 priv_id=15 r=0 p_priv=0x0 satp=0x8000000000081019
+rv64: kcall GETINFO req=0x11 res=0x0
+privctl:set_sys pre req=3 caller=2 target=11 priv_id=16 r=0 p_priv=0x0 satp=0x8000000000081019
+rv64: kcall GETINFO req=0x11 res=0x0
+privctl:allow req=1 caller=2 target=0 priv_id=0 r=0 p_priv=0x803243e0 satp=0x8000000000081019
+rv64: ipc vm op=0x10 src=0x2 ptr=0x81e378
+RS: wait init ready ep=31744
+rv64: delivermsg to=8 name=vm src=2 type=1812
+rv64: delivermsg vm src=0x2 mtype=0x714 vir=0xeffffb58 misc=0x40
+VM: recv src=2 type=1812 hex=0x714 status=0x10 i1=1 i2=31743 i3=1
+SEF: rs_init gid=1 type=0 flags=0x0
+rv64: ipc vm call=0x10 r2=0x1 r3=0xb7b678
+rv64: ipc vm call=0x10 r2=0x1 r3=0xb7b678
+rv64: ipc vm call=0x2 r2=0x7c00 r3=0xeffffb58
+rv64: ipc pm call=0x6 r2=0x0 r3=0x0
+rv64: kcall GETINFO req=0x0 res=0x0
+rv64: ipc pm call=0x2 r2=0x2 r3=0xeffff908
+rv64: delivermsg to=0 name=pm src=2 type=1812
+SEF: rs_init gid=1 type=0 flags=0x0
+rv64: kcall GETINFO req=0x4 res=0x0
+rv64: kcall GETINFO req=0x1 res=0x0
+rv64: ipc pm call=0x1 r2=0x1 r3=0xeffff718
+rv64: kcall GETINFO req=0x4 res=0x0
+rv64: delivermsg to=4 name=sched src=2 type=1812
+SEF: rs_init gid=1 type=0 flags=0x0
+rv64: kcall GETINFO req=0xc res=0x0
+rv64: kcall GETINFO req=0x12 res=0x0
+rv64: kcall GETINFO req=0x1 res=0x0
+rv64: delivermsg to=1 name=vfs src=2 type=1812
+rv64: user pagefault ep=0x1 name=vfs pc=0x81a604 ra=0x800400 sp=0xefffda70 addr=0xefffda98 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+mini_send: enter to vm from=1 name=vfs msg=0x802ad000 flags=0x0x100
+rv64: to vm deliver mtype=0xcff from=0x1 m_ptr=0x802ad000
+mini_send: deliver to vm from=1 name=vfs mtype=3327 rts=0x8 misc=0x40
+rv64: kcall GETINFO req=0x6 res=0x0
+rv64: delivermsg to=6 name=ds src=2 type=1812
+rv64: user pagefault ep=0x6 name=ds pc=0x801cfc ra=0x800884 sp=0xefffdb10 addr=0xefffdb20 cause=0xf satp=0x8000000000083f69 root=0x83f69000 p_seg=0x83f69000 p_seg_v=0x140006000
+mini_send: enter to vm from=6 name=ds msg=0x802ad000 flags=0x0x100
+rv64: kcall GETINFO req=0x5 res=0x0
+rv64: delivermsg to=5 name=tty src=2 type=1812
+SEF: rs_init gid=1 type=0 flags=0x0
+rv64: kcall GETINFO req=0xc res=0x0
+rv64: kcall GETINFO req=0x4 res=0x0
+rv64: kcall GETINFO req=0x4 res=0x0
+rv64: kcall GETINFO req=0x12 res=0x0
+rv64: kcall GETINFO req=0x3 res=0x0
+rv64: delivermsg to=3 name=memory src=2 type=1812
+rv64: kcall GETINFO req=0x7 res=0x0
+rv64: delivermsg to=7 name=mib src=2 type=1812
+rv64: kcall GETINFO req=0x9 res=0x0
+rv64: delivermsg to=9 name=pfs src=2 type=1812
+rv64: kcall GETINFO req=0xa res=0x0
+rv64: delivermsg to=10 name=mfs src=2 type=1812
+SEF: rs_init gid=1 type=0 flags=0x0
+rv64: ipc vm op=0x3 src=0xa ptr=0xeffff6e8 mtype=0xc0a
+mini_send: enter to vm from=10 name=mfs msg=0xeffff6e8 flags=0x0x0
+rv64: delivermsg to=2 name=rs src=8 type=1812
+RS: got init ready ep=8 result=0
+RS: wait init ready ep=31744
+rv64: delivermsg to=2 name=rs src=4 type=1812
+RS: got init ready ep=4 result=0
+RS: wait init ready ep=31744
+rv64: delivermsg to=2 name=rs src=5 type=1812
+RS: got init ready ep=5 result=0
+RS: wait init ready ep=31744
+rv64: delivermsg to=2 name=rs src=7 type=1812
+RS: got init ready ep=7 result=0
+RS: wait init ready ep=31744
+rv64: delivermsg to=8 name=vm src=1 type=3327
+rv64: delivermsg vm src=0x1 mtype=0xcff vir=0xeffffb58 misc=0x40
+VM: recv src=1 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+rv64: ipc vm call=0x2 r2=0x7c00 r3=0xeffffb58
+rv64: vm recv from=0x6 mtype=0xcff
+mini_receive: vm from=6 name=ds mtype=3327 src_rts=0x404 dst_getfrom=31744
+rv64: delivermsg to=8 name=vm src=6 type=3327
+rv64: delivermsg vm src=0x6 mtype=0xcff vir=0xeffffb58 misc=0x40
+VM: recv src=6 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+rv64: ipc vm call=0x2 r2=0x7c00 r3=0xeffffb58
+rv64: vm recv from=0xa mtype=0xc0a
+mini_receive: vm from=10 name=mfs mtype=3082 src_rts=0xc dst_getfrom=31744
+rv64: delivermsg vm src=0xa mtype=0xc0a vir=0xeffffb58 misc=0x40
+VM: recv src=10 type=3082 hex=0xc0a status=0x3 i1=0 i2=0 i3=4096
+rv64: user pagefault ep=0x5 name=tty pc=0x80aae0 ra=0x8019c4 sp=0xefffcdc0 addr=0xefffd120 cause=0xf satp=0x80000000000818e9 root=0x818e9000 p_seg=0x818e9000 p_seg_v=0x140005000
+mini_send: enter to vm from=5 name=tty msg=0x802ad000 flags=0x0x100
+rv64: to vm deliver mtype=0xcff from=0x5 m_ptr=0x802ad000
+mini_send: deliver to vm from=5 name=tty mtype=3327 rts=0x8 misc=0x40
+rv64: kcall safecopy err=0xfffffffffffffc1c caller=ds/0x6 from_to=0x2 gid=0x1 off=0x0 addr=0xefffdb98 bytes=0x1be4
+rv64: user pagefault ep=0xa name=mfs pc=0x812c34 ra=0x813048 sp=0xeffff740 addr=0xefbfe030 cause=0xd satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+mini_send: enter to vm from=10 name=mfs msg=0x802ad000 flags=0x0x100
+rv64: delivermsg vm src=0x5 mtype=0xcff vir=0xeffffb58 misc=0x40
+VM: recv src=5 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+mini_receive: vm notify from=18446744073709551614 name=system
+rv64: delivermsg vm src=0xfffffffffffffffe mtype=0x1000 vir=0xeffffb58 misc=0x40
+rv64: vm recv from=0xa mtype=0xcff
+mini_receive: vm from=10 name=mfs mtype=3327 src_rts=0x404 dst_getfrom=31744
+rv64: delivermsg vm src=0xa mtype=0xcff vir=0xeffffb58 misc=0x40
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=13 i3=0
+rv64: ipc pm call=0x1 r2=0x1 r3=0xeffff718
+rv64: ipc pm call=0x1 r2=0x1 r3=0xeffff718
+rv64: user pagefault ep=0x5 name=tty pc=0x80aae0 ra=0x8019c4 sp=0xefffcdc0 addr=0xefffe000 cause=0xf satp=0x80000000000818e9 root=0x818e9000 p_seg=0x818e9000 p_seg_v=0x140005000
+mini_send: enter to vm from=5 name=tty msg=0x802ad000 flags=0x0x100
+rv64: to vm deliver mtype=0xcff from=0x5 m_ptr=0x802ad000
+mini_send: deliver to vm from=5 name=tty mtype=3327 rts=0x8 misc=0x40
+rv64: ipc vm op=0x3 src=0xa ptr=0xeffff628 mtype=0xc02
+mini_send: enter to vm from=10 name=mfs msg=0xeffff628 flags=0x0x0
+rv64: delivermsg vm src=0x5 mtype=0xcff vir=0xeffffb58 misc=0x40
+VM: recv src=5 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+rv64: vm recv from=0xa mtype=0xc02
+mini_receive: vm from=10 name=mfs mtype=3074 src_rts=0xc dst_getfrom=31744
+VM: recv src=10 type=3074 hex=0xc02 status=0x3 i1=0 i2=0 i3=0
+RS: got init ready ep=6 result=0
+RS: wait init ready ep=31744
+rv64: ipc pm call=0x1 r2=0x1 r3=0xeffff718
+rv64: ipc pm call=0x1 r2=0x1 r3=0xeffff718
+rv64: user pagefault ep=0x5 name=tty pc=0x801784 ra=0x801a80 sp=0xefffcd80 addr=0xefffcdb0 cause=0xf satp=0x80000000000818e9 root=0x818e9000 p_seg=0x818e9000 p_seg_v=0x140005000
+mini_send: enter to vm from=5 name=tty msg=0x802ad000 flags=0x0x100
+rv64: to vm deliver mtype=0xcff from=0x5 m_ptr=0x802ad000
+mini_send: deliver to vm from=5 name=tty mtype=3327 rts=0x8 misc=0x40
+rv64: ipc vm op=0x3 src=0xa ptr=0xeffff628 mtype=0xc02
+VM: recv src=5 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+rv64: vm recv from=0xa mtype=0xc02
+mini_receive: vm from=10 name=mfs mtype=3074 src_rts=0xc dst_getfrom=31744
+VM: recv src=10 type=3074 hex=0xc02 status=0x3 i1=0 i2=0 i3=0
+rv64: ipc pm call=0x1 r2=0x1 r3=0xeffff718
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff6c0 addr=0x846000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+rv64: to vm deliver mtype=0xcff from=0xa m_ptr=0x802ad000
+mini_send: deliver to vm from=10 name=mfs mtype=3327 rts=0x8 misc=0x40
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+rv64: ipc vm op=0x3 src=0xa ptr=0xeffff6a8 mtype=0xc02
+rv64: to vm deliver mtype=0xc02 from=0xa m_ptr=0xeffff6a8
+mini_send: deliver to vm from=10 name=mfs mtype=3074 rts=0x8 misc=0x40
+VM: recv src=10 type=3074 hex=0xc02 status=0x3 i1=0 i2=0 i3=0
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x847000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+rv64: to vm deliver mtype=0xcff from=0xa m_ptr=0x802ad000
+mini_send: deliver to vm from=10 name=mfs mtype=3327 rts=0x8 misc=0x40
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x848000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+rv64: to vm deliver mtype=0xcff from=0xa m_ptr=0x802ad000
+mini_send: deliver to vm from=10 name=mfs mtype=3327 rts=0x8 misc=0x40
+RS: got init ready ep=3 result=0
+RS: wait init ready ep=31744
+rv64: kcall GETINFO req=0x12 res=0x0
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+rv64: kcall GETINFO req=0x12 res=0x0
+rv64: ipc vm op=0x3 src=0x6 ptr=0xeffff638 mtype=0xc0a
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x849000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+Sched: start init ep=11 rv=0 prio=7 q=200
+VM: recv src=6 type=3082 hex=0xc0a status=0x3 i1=0 i2=0 i3=4096
+rv64: vm recv from=0xa mtype=0xcff
+mini_receive: vm from=10 name=mfs mtype=3327 src_rts=0x404 dst_getfrom=31744
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+PM: sched_start init ep=11 r=0
+PM: from init call=28 hex=0x1c
+rv64: user pagefault ep=0x6 name=ds pc=0x80d5d4 ra=0x80d9d8 sp=0xeffff690 addr=0xefbfe030 cause=0xd satp=0x8000000000083f69 root=0x83f69000 p_seg=0x83f69000 p_seg_v=0x140006000
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x84a000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+RS: got init ready ep=0 result=0
+RS: wait init ready ep=31744
+VM: recv src=6 type=3327 hex=0xcff status=0x10001 i1=0 i2=13 i3=0
+rv64: vm recv from=0xa mtype=0xcff
+mini_receive: vm from=10 name=mfs mtype=3327 src_rts=0x404 dst_getfrom=31744
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+PM: from init call=6 hex=0x6
+rv64: ipc vm op=0x3 src=0x6 ptr=0xeffff578 mtype=0xc02
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x84b000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+VM: recv src=6 type=3074 hex=0xc02 status=0x3 i1=0 i2=0 i3=0
+rv64: vm recv from=0xa mtype=0xcff
+mini_receive: vm from=10 name=mfs mtype=3327 src_rts=0x404 dst_getfrom=31744
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+PM: from init call=4 hex=0x4
+rv64: ipc vm op=0x3 src=0x6 ptr=0xeffff578 mtype=0xc02
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x84c000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+VM: recv src=6 type=3074 hex=0xc02 status=0x3 i1=0 i2=0 i3=0
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+PM: from init call=15 hex=0xf
+rv64: user pagefault ep=0x6 name=ds pc=0x80d76c ra=0x80d714 sp=0xeffff690 addr=0x834010 cause=0xf satp=0x8000000000083f69 root=0x83f69000 p_seg=0x83f69000 p_seg_v=0x140006000
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x84d000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+rv64: user pagefault ep=0xb name=init pc=0x8205b8 ra=0x8207c8 sp=0xefffe960 addr=0xefffe9a8 cause=0xf satp=0x8000000000081d33 root=0x81d33000 p_seg=0x81d33000 p_seg_v=0x14000b000
+VM: recv src=6 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+VM: recv src=11 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+rv64: ipc vm op=0x3 src=0x6 ptr=0xeffff5a8 mtype=0xc02
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x84e000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+VM: recv src=6 type=3074 hex=0xc02 status=0x3 i1=0 i2=0 i3=0
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+rv64: ipc vm op=0x3 src=0x6 ptr=0xeffff558 mtype=0xc02
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x84f000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+VM: recv src=6 type=3074 hex=0xc02 status=0x3 i1=0 i2=0 i3=0
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+rv64: user pagefault ep=0x6 name=ds pc=0x80d76c ra=0x80d714 sp=0xeffff670 addr=0x836010 cause=0xf satp=0x8000000000083f69 root=0x83f69000 p_seg=0x83f69000 p_seg_v=0x140006000
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x850000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+VM: recv src=6 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+rv64: ipc vm op=0x3 src=0x6 ptr=0xeffff588 mtype=0xc02
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x851000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+VM: recv src=6 type=3074 hex=0xc02 status=0x3 i1=0 i2=0 i3=0
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+rv64: user pagefault ep=0x6 name=ds pc=0x80ead8 ra=0x80df14 sp=0xeffff730 addr=0x837000 cause=0xf satp=0x8000000000083f69 root=0x83f69000 p_seg=0x83f69000 p_seg_v=0x140006000
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x852000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+VM: recv src=6 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+rv64: user pagefault ep=0x6 name=ds pc=0x80accc ra=0x80ac84 sp=0xeffff750 addr=0x835068 cause=0xf satp=0x8000000000083f69 root=0x83f69000 p_seg=0x83f69000 p_seg_v=0x140006000
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x853000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+VM: recv src=6 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+rv64: ipc vm op=0x3 src=0x6 ptr=0xeffff458 mtype=0xc02
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x854000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+VM: recv src=6 type=3074 hex=0xc02 status=0x3 i1=0 i2=0 i3=0
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+rv64: user pagefault ep=0x6 name=ds pc=0x80ead8 ra=0x808ce8 sp=0xeffff640 addr=0x838100 cause=0xf satp=0x8000000000083f69 root=0x83f69000 p_seg=0x83f69000 p_seg_v=0x140006000
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x855000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+VM: recv src=6 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+rv64: ipc vm op=0x3 src=0x6 ptr=0xeffff5a8 mtype=0xc02
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x856000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+VM: recv src=6 type=3074 hex=0xc02 status=0x3 i1=0 i2=0 i3=0
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+rv64: user pagefault ep=0x6 name=ds pc=0x80d76c ra=0x80d714 sp=0xeffff6c0 addr=0x839010 cause=0xf satp=0x8000000000083f69 root=0x83f69000 p_seg=0x83f69000 p_seg_v=0x140006000
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x857000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+VM: recv src=6 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x858000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd998 mtype=0xc0a
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+VM: recv src=1 type=3082 hex=0xc0a status=0x3 i1=0 i2=0 i3=4096
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x859000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+rv64: user pagefault ep=0x1 name=vfs pc=0x821dd0 ra=0x8221e4 sp=0xefffd9f0 addr=0xefbfe030 cause=0xd satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+VM: recv src=1 type=3327 hex=0xcff status=0x10001 i1=0 i2=13 i3=0
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x85a000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd8d8 mtype=0xc02
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+VM: recv src=1 type=3074 hex=0xc02 status=0x3 i1=0 i2=0 i3=0
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x85b000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd8d8 mtype=0xc02
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+VM: recv src=1 type=3074 hex=0xc02 status=0x3 i1=0 i2=0 i3=0
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x85c000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+rv64: user pagefault ep=0x1 name=vfs pc=0x823818 ra=0x821ae4 sp=0xefffd970 addr=0x981000 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+VM: recv src=1 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+rv64: ipc vm op=0x3 src=0xa ptr=0xeffff6a8 mtype=0xc02
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd908 mtype=0xc02
+VM: recv src=10 type=3074 hex=0xc02 status=0x3 i1=0 i2=0 i3=0
+VM: recv src=1 type=3074 hex=0xc02 status=0x3 i1=0 i2=0 i3=0
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x85d000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+rv64: user pagefault ep=0x1 name=vfs pc=0x823818 ra=0x821ae4 sp=0xefffd9a0 addr=0x982000 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+VM: recv src=1 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+rv64: user pagefault ep=0xa name=mfs pc=0x8140b4 ra=0x812948 sp=0xeffff740 addr=0x85e000 cause=0xf satp=0x8000000000081b88 root=0x81b88000 p_seg=0x81b88000 p_seg_v=0x14000a000
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd918 mtype=0xc02
+VM: recv src=10 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+VM: recv src=1 type=3074 hex=0xc02 status=0x3 i1=0 i2=0 i3=0
+rv64: user pagefault ep=0x1 name=vfs pc=0x823818 ra=0x821ae4 sp=0xefffd9b0 addr=0x983000 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+RS: got init ready ep=10 result=0
+RS: wait init ready ep=31744
+VM: recv src=1 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd8a8 mtype=0xc02
+VM: recv src=1 type=3074 hex=0xc02 status=0x3 i1=0 i2=0 i3=0
+rv64: user pagefault ep=0x1 name=vfs pc=0x823818 ra=0x821ae4 sp=0xefffd940 addr=0x984000 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+VM: recv src=1 type=3327 hex=0xcff status=0x10001 i1=0 i2=15 i3=0
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd9a8 mtype=0xc0a
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd9a8 mtype=0xc0a
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd9a8 mtype=0xc0a
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd9a8 mtype=0xc0a
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd9a8 mtype=0xc0a
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd9a8 mtype=0xc0a
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd9a8 mtype=0xc0a
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd9a8 mtype=0xc0a
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd9a8 mtype=0xc0a
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd9a8 mtype=0xc0a
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd9a8 mtype=0xc0a
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd9a8 mtype=0xc0a
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd9a8 mtype=0xc0a
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd9a8 mtype=0xc0a
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd9a8 mtype=0xc0a
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd9a8 mtype=0xc0a
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd8a8 mtype=0xc02
+rv64: user pagefault ep=0x1 name=vfs pc=0x823818 ra=0x821ae4 sp=0xefffd940 addr=0x985000 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd8a8 mtype=0xc02
+rv64: user pagefault ep=0x1 name=vfs pc=0x823818 ra=0x821ae4 sp=0xefffd940 addr=0x986000 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd9a8 mtype=0xc0a
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd9a8 mtype=0xc0a
+rv64: user pagefault ep=0x1 name=vfs pc=0x81ea98 ra=0x823280 sp=0xefbfcff0 addr=0xefbfcff8 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+rv64: user pagefault ep=0x1 name=vfs pc=0x81ea98 ra=0x823280 sp=0xefbf3ff0 addr=0xefbf3ff8 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+rv64: user pagefault ep=0x1 name=vfs pc=0x81ea98 ra=0x823280 sp=0xefbeaff0 addr=0xefbeaff8 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+rv64: user pagefault ep=0x1 name=vfs pc=0x81ea98 ra=0x823280 sp=0xefbe1ff0 addr=0xefbe1ff8 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+rv64: user pagefault ep=0x1 name=vfs pc=0x81ea98 ra=0x823280 sp=0xefbd8ff0 addr=0xefbd8ff8 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+rv64: user pagefault ep=0x1 name=vfs pc=0x81ea98 ra=0x823280 sp=0xefbcfff0 addr=0xefbcfff8 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+rv64: user pagefault ep=0x1 name=vfs pc=0x81ea98 ra=0x823280 sp=0xefbc6ff0 addr=0xefbc6ff8 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+rv64: user pagefault ep=0x1 name=vfs pc=0x81ea98 ra=0x823280 sp=0xefbbdff0 addr=0xefbbdff8 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+rv64: user pagefault ep=0x1 name=vfs pc=0x81ea98 ra=0x823280 sp=0xefbb4ff0 addr=0xefbb4ff8 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd8f8 mtype=0xc02
+rv64: user pagefault ep=0x1 name=vfs pc=0x823818 ra=0x821ae4 sp=0xefffd990 addr=0x987000 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+rv64: kcall safecopy err=0xfffffffffffffc1c caller=vfs/0x1 from_to=0x2 gid=0x1 off=0x0 addr=0xefffdb58 bytes=0x1be4
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd928 mtype=0xc02
+rv64: user pagefault ep=0x1 name=vfs pc=0x823818 ra=0x821ae4 sp=0xefffd9c0 addr=0x988000 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd928 mtype=0xc02
+rv64: user pagefault ep=0x1 name=vfs pc=0x823818 ra=0x821ae4 sp=0xefffd9c0 addr=0x989000 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd908 mtype=0xc02
+rv64: user pagefault ep=0x1 name=vfs pc=0x823818 ra=0x821ae4 sp=0xefffd9a0 addr=0x98a000 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd908 mtype=0xc02
+rv64: user pagefault ep=0x1 name=vfs pc=0x823818 ra=0x821ae4 sp=0xefffd9a0 addr=0x98b000 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd908 mtype=0xc02
+rv64: user pagefault ep=0x1 name=vfs pc=0x823818 ra=0x821ae4 sp=0xefffd9a0 addr=0x98c000 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd908 mtype=0xc02
+rv64: user pagefault ep=0x1 name=vfs pc=0x823818 ra=0x821ae4 sp=0xefffd9a0 addr=0x98d000 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd908 mtype=0xc02
+rv64: user pagefault ep=0x1 name=vfs pc=0x823818 ra=0x821ae4 sp=0xefffd9a0 addr=0x98e000 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd908 mtype=0xc02
+rv64: user pagefault ep=0x1 name=vfs pc=0x823818 ra=0x821ae4 sp=0xefffd9a0 addr=0x98f000 cause=0xf satp=0x8000000000081410 root=0x81410000 p_seg=0x81410000 p_seg_v=0x140001000
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd908 mtype=0xc02
+rv64: ipc vm op=0x3 src=0x1 ptr=0xefffd908 mtype=0xc02
+RS: got init ready ep=1 result=0
+RS: wait init ready ep=31744
+Started VFS: 9 worker thread(s)
+VFS: init_root start
+VFS: recv src=6 type=4096 hex=0x1000 proc=6
+VFS: recv src=0 type=2305 hex=0x901 proc=0
+VFS: recv src=11 type=257 hex=0x101 proc=11
+RS: got init ready ep=9 result=0
+PM: from init child ep=2 call=45 hex=0x2d
+VFS: recv src=9 type=2817 hex=0xb01 proc=9
+VFS: init_root pfs mounted
+fsdriver: vfs src=1 type=169609985 hex=0xa1c0b01 call=2588 trans=2817 mounted=0
+PM: from init child ep=2 call=45 hex=0x2d
+PM: from init child ep=2 call=45 hex=0x2d
+rv64: ipc vm op=0x3 src=0xa ptr=0xeffff648 mtype=0xc0a
+PM: from init child ep=2 call=45 hex=0x2d
+PM: from init child ep=2 call=45 hex=0x2d
+rv64: ipc vm op=0x3 src=0xa ptr=0xeffff6e8 mtype=0xc11
+PM: from init child ep=2 call=45 hex=0x2d
+rv64: ipc vm op=0x3 src=0xa ptr=0xeffff618 mtype=0xc02
+PM: from init child ep=2 call=45 hex=0x2d
+taskcall: who=8 call=3112
+rv64: ipc vm op=0x3 src=0xa ptr=0xeffff6e8 mtype=0xc28
+PM: from init child ep=2 call=45 hex=0x2d
+taskcall: who=8 call=3098
+rv64: ipc vm op=0x3 src=0xa ptr=0xeffff628 mtype=0xc1a
+PM: from init child ep=2 call=45 hex=0x2d
+rv64: ipc vm op=0x3 src=0xa ptr=0xeffff5f8 mtype=0xc0a
+PM: from init child ep=2 call=45 hex=0x2d
+PM: from init child ep=2 call=45 hex=0x2d
+taskcall: who=8 call=3099
+rv64: ipc vm op=0x3 src=0xa ptr=0xeffff6a8 mtype=0xc1b
+PM: from init child ep=2 call=45 hex=0x2d
+rv64: kcall GETINFO req=0xc res=0x0
+taskcall: who=8 call=3112
+rv64: ipc vm op=0x3 src=0xa ptr=0xeffff6f8 mtype=0xc28
+rv64: ipc vm op=0x3 src=0xa ptr=0xeffff698 mtype=0xc11
+rv64: ipc vm op=0x3 src=0xa ptr=0xeffff528 mtype=0xc02
+rv64: ipc vm op=0x3 src=0xa ptr=0xeffff5c8 mtype=0xc02
+taskcall: who=8 call=3098
+rv64: ipc vm op=0x3 src=0xa ptr=0xeffff648 mtype=0xc1a
+rv64: ipc vm op=0x3 src=0xa ptr=0xeffff618 mtype=0xc0a
+taskcall: who=8 call=3099
+taskcall: who=8 call=3098
+taskcall: who=8 call=3099
+fsdriver: vfs reply call=2588 trans=2817 r=0 mounted=1
+VFS: recv src=10 type=2817 hex=0xb01 proc=10
+fsdriver: vfs src=1 type=168430337 hex=0xa0a0b01 call=2570 trans=2817 mounted=1
+fsdriver: vfs reply call=2570 trans=2817 r=0 mounted=1
+VFS: recv src=10 type=2817 hex=0xb01 proc=10
+VFS: init_root mount_fs r=0
+VFS: init_root done
+VFS: recv src=11 type=257 hex=0x101 proc=11
+PM: from init call=31 hex=0x1f
+VFS: recv src=11 type=276 hex=0x114 proc=11
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=-2 mounted=1
+VFS: recv src=10 type=-128255 hex=0xfffe0b01 proc=10
+VFS: req_lookup ENOENT path="/etc/malloc.conf" dir_ino=1 root_ino=1 fs=10 flags=0x8
+PM: from init call=31 hex=0x1f
+VFS: recv src=11 type=259 hex=0x103 proc=11
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=-2 mounted=1
+VFS: recv src=10 type=-128255 hex=0xfffe0b01 proc=10
+VFS: req_lookup ENOENT path="/usr/share/nls/nls.alias.db" dir_ino=1 root_ino=1 fs=10 flags=0x0
+VFS: recv src=11 type=259 hex=0x103 proc=11
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=-2 mounted=1
+VFS: recv src=10 type=-128255 hex=0xfffe0b01 proc=10
+VFS: req_lookup ENOENT path="/usr/share/nls/nls.alias" dir_ino=1 root_ino=1 fs=10 flags=0x0
+VFS: recv src=11 type=259 hex=0x103 proc=11
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=-2 mounted=1
+VFS: recv src=10 type=-128255 hex=0xfffe0b01 proc=10
+VFS: req_lookup ENOENT path="/usr/share/nls/C/libc.cat" dir_ino=1 root_ino=1 fs=10 flags=0x0
+VFS: recv src=11 type=259 hex=0x103 proc=11
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=-2 mounted=1
+VFS: recv src=10 type=-128255 hex=0xfffe0b01 proc=10
+VFS: req_lookup ENOENT path="/usr/share/nls/libc/C" dir_ino=1 root_ino=1 fs=10 flags=0x0
+VFS: recv src=11 type=271 hex=0x10f proc=11
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=0 mounted=1
+VFS: recv src=10 type=2817 hex=0xb01 proc=10
+fsdriver: vfs src=1 type=167906049 hex=0xa020b01 call=2562 trans=2817 mounted=1
+fsdriver: vfs reply call=2562 trans=2817 r=0 mounted=1
+VFS: recv src=10 type=2817 hex=0xb01 proc=10
+PM: from init call=20 hex=0x14
+PM: from init call=20 hex=0x14
+PM: from init call=20 hex=0x14
+PM: from init call=20 hex=0x14
+PM: from init call=20 hex=0x14
+PM: from init call=20 hex=0x14
+PM: from init call=20 hex=0x14
+PM: from init call=20 hex=0x14
+PM: from init call=20 hex=0x14
+PM: from init call=20 hex=0x14
+PM: from init call=23 hex=0x17
+PM: from init call=20 hex=0x14
+PM: from init call=20 hex=0x14
+VFS: recv src=11 type=261 hex=0x105 proc=11
+VFS: recv src=11 type=261 hex=0x105 proc=11
+VFS: recv src=11 type=261 hex=0x105 proc=11
+VFS: recv src=11 type=259 hex=0x103 proc=11
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=0 mounted=1
+VFS: recv src=10 type=2817 hex=0xb01 proc=10
+VFS: cdev_get tty driver=5 label=tty
+TTY: recv CDEV_OPEN src=1 minor=0 access=0x6
+TTY: do_open minor=0 access=0x6 user=11
+VFS: recv src=5 type=1152 hex=0x480 proc=5
+VFS: open /dev/console ep=11 flags=0x1 r=0
+VFS: recv src=11 type=281 hex=0x119 proc=11
+VFS: recv src=11 type=261 hex=0x105 proc=11
+VFS: recv src=11 type=281 hex=0x119 proc=11
+VFS: recv src=11 type=281 hex=0x119 proc=11
+VFS: recv src=11 type=261 hex=0x105 proc=11
+VFS: recv src=11 type=281 hex=0x119 proc=11
+VFS: recv src=11 type=259 hex=0x103 proc=11
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=0 mounted=1
+VFS: recv src=10 type=2817 hex=0xb01 proc=10
+VFS: cdev_get tty driver=5 label=tty
+TTY: recv CDEV_OPEN src=1 minor=0 access=0x6
+TTY: do_open minor=0 access=0x6 user=11
+VFS: recv src=5 type=1152 hex=0x480 proc=5
+VFS: open /dev/console ep=11 flags=0x1 r=3
+VFS: recv src=11 type=257 hex=0x101 proc=11
+VFS: write /dev/console ep=11 size=12
+VFS: cdev_get tty driver=5 label=tty
+VFS: write /dev/console cdev_io r=-998
+TTY: recv CDEV_WRITE src=1 minor=0
+chardriver: CDEV_WRITE minor=0 open=1 src=1
+TTY: write ep=1 minor=0 size=12
+chardriver: reply_task endpt=1 id=11 r=12
+chardriver: CDEV_WRITE r=-203
+VFS: recv src=5 type=1152 hex=0x480 proc=5
+VFS: recv src=11 type=261 hex=0x105 proc=11
+VFS: cdev_get tty driver=5 label=tty
+VFS: recv src=5 type=1152 hex=0x480 proc=5
+VFS: recv src=11 type=259 hex=0x103 proc=11
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=0 mounted=1
+VFS: recv src=10 type=2817 hex=0xb01 proc=10
+VFS: cdev_get tty driver=5 label=tty
+TTY: recv CDEV_OPEN src=1 minor=0 access=0x6
+TTY: do_open minor=0 access=0x6 user=11
+VFS: recv src=5 type=1152 hex=0x480 proc=5
+VFS: open /dev/console ep=11 flags=0x1 r=3
+VFS: recv src=11 type=257 hex=0x101 proc=11
+VFS: write /dev/console ep=11 size=19
+VFS: cdev_get tty driver=5 label=tty
+VFS: write /dev/console cdev_io r=-998
+TTY: recv CDEV_WRITE src=1 minor=0
+chardriver: CDEV_WRITE minor=0 open=1 src=1
+TTY: write ep=1 minor=0 size=19
+chardriver: reply_task endpt=1 id=11 r=19
+chardriver: CDEV_WRITE r=-203
+VFS: recv src=5 type=1152 hex=0x480 proc=5
+VFS: recv src=11 type=261 hex=0x105 proc=11
+VFS: cdev_get tty driver=5 label=tty
+VFS: recv src=5 type=1152 hex=0x480 proc=5
+VFS: recv src=11 type=259 hex=0x103 proc=11
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=0 mounted=1
+VFS: recv src=10 type=2817 hex=0xb01 proc=10
+VFS: cdev_get tty driver=5 label=tty
+TTY: recv CDEV_OPEN src=1 minor=0 access=0x6
+TTY: do_open minor=0 access=0x6 user=11
+VFS: recv src=5 type=1152 hex=0x480 proc=5
+VFS: open /dev/console ep=11 flags=0x1 r=3
+VFS: recv src=11 type=257 hex=0x101 proc=11
+VFS: write /dev/console ep=11 size=27
+VFS: write /dev/console cdev_io r=-998
+TTY: recv CDEV_WRITE src=1 minor=0
+chardriver: CDEV_WRITE minor=0 open=1 src=1
+TTY: write ep=1 minor=0 size=27
+chardriver: reply_task endpt=1 id=11 r=27
+chardriver: CDEV_WRITE r=-203
+VFS: recv src=5 type=1152 hex=0x480 proc=5
+VFS: recv src=11 type=261 hex=0x105 proc=11
+VFS: recv src=5 type=1152 hex=0x480 proc=5
+PM: from init call=2 hex=0x2
+taskcall: who=8 call=3073
+VM: pt_bind set_addrspace r=0
+PM: init fork child ep=32780 pid=14 slot=12
+VFS: recv src=0 type=2311 hex=0x907 proc=0
+VFS: PM fork parent=11 child=32780 pid=14
+PM: from init child ep=32780 call=20 hex=0x14
+PM: from init call=3 hex=0x3
+PM: from init child ep=32780 call=20 hex=0x14
+PM: from init child ep=32780 call=15 hex=0xf
+VFS: recv src=0 type=2307 hex=0x903 proc=0
+VFS: recv src=32780 type=286 hex=0x11e proc=12
+VFS: select ep=32780 nfds=0 timeout=0.000250 block=1 now=60
+libsys: setalarm exp=61 abs=1 r=0
+KVFS: recv src=-3 type=4096 hex=0x1000 proc=-3
+VFS: CLOCK notify ts=61
+VFS: select timeout ep=32780 slot=0
+VFS: recv src=32780 type=259 hex=0x103 proc=12
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=0 mounted=1
+VFS: recv src=10 type=2817 hex=0xb01 proc=10
+TTY: recv CDEV_OPEN src=1 minor=0 access=0x3
+TTY: do_open minor=0 access=0x3 user=32780
+VFS: recv src=5 type=1152 hex=0x480 proc=5
+VFS: open /dev/console ep=32780 flags=0x2 r=3
+PM: from init child ep=32780 call=15 hex=0xf
+rv64: user pagefault ep=0x800c name=init*F pc=0x8347d8 ra=0x8347cc sp=0xeffff720 addr=0x85bb90 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+VFS: recv src=32780 type=280 hex=0x118 proc=12
+TTY: TIOCSCTTY ep=32780 minor=0
+VFS: recv src=5 type=1152 hex=0x480 proc=5
+VFS: recv src=32780 type=281 hex=0x119 proc=12
+VFS: recv src=32780 type=261 hex=0x105 proc=12
+PM: from init child ep=32780 call=23 hex=0x17
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=0 mounted=1
+TTY: recv CDEV_OPEN src=1 minor=0 access=0x6
+TTY: do_open minor=0 access=0x6 user=32780
+VFS: open /dev/console ep=32780 flags=0x1 r=3
+VFS: write /dev/console ep=32780 size=27
+VFS: write /dev/console cdev_io r=-998
+TTY: recv CDEV_WRITE src=1 minor=0
+chardriver: CDEV_WRITE minor=0 open=1 src=1
+TTY: write ep=1 minor=0 size=27
+chardriver: reply_task endpt=1 id=32780 r=27
+chardriver: CDEV_WRITE r=-203
+rv64: user pagefault ep=0x800c name=init*F pc=0x812e74 ra=0x812e6c sp=0xeffff680 addr=0x851f20 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=init*F pc=0x80fd48 ra=0x80fd3c sp=0xeffff6c0 addr=0x85f000 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+PM: from init child ep=32780 call=14 hex=0xe
+PM: exec request from ep=32780
+VFS: PM exec request ep=32780
+VFS: exec path="/bin/sh" ep=32780
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=0 mounted=1
+VFS: req_lookup path="/bin/sh" r=0
+fsdriver: vfs src=1 type=168299265 hex=0xa080b01 call=2568 trans=2817 mounted=1
+fsdriver: vfs reply call=2568 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=169020161 hex=0xa130b01 call=2579 trans=2817 mounted=1
+fsdriver: vfs reply call=2579 trans=2817 r=0 mounted=1
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+taskcall: who=8 call=3117
+VM: pt_bind set_addrspace r=0
+fsdriver: vfs src=1 type=169020161 hex=0xa130b01 call=2579 trans=2817 mounted=1
+fsdriver: vfs reply call=2579 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=169020161 hex=0xa130b01 call=2579 trans=2817 mounted=1
+fsdriver: vfs reply call=2579 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=167906049 hex=0xa020b01 call=2562 trans=2817 mounted=1
+fsdriver: vfs reply call=2562 trans=2817 r=0 mounted=1
+PM: from init child ep=32780 call=6 hex=0x6
+PM: from init child ep=32780 call=13 hex=0xd
+PM: from init child ep=32780 call=31 hex=0x1f
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=-2 mounted=1
+VFS: req_lookup ENOENT path="/etc/malloc.conf" dir_ino=1 root_ino=1 fs=10 flags=0x8
+PM: from init child ep=32780 call=31 hex=0x1f
+rv64: user pagefault ep=0x800c name=sh pc=0x845914 ra=0x845f30 sp=0xeffff720 addr=0xefbfe030 cause=0xd satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x845a7c ra=0x845a24 sp=0xeffff720 addr=0x8b0010 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x845a7c ra=0x845a24 sp=0xeffff7b0 addr=0x8b2010 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+PM: from init child ep=32780 call=4 hex=0x4
+rv64: user pagefault ep=0x800c name=sh pc=0x845a7c ra=0x845a24 sp=0xeffff7a0 addr=0x8b1010 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+PM: from init child ep=32780 call=6 hex=0x6
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=168299265 hex=0xa080b01 call=2568 trans=2817 mounted=1
+fsdriver: vfs reply call=2568 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=168299265 hex=0xa080b01 call=2568 trans=2817 mounted=1
+fsdriver: vfs reply call=2568 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=0 mounted=1
+VFS: req_lookup path="/etc/rc" r=0
+fsdriver: vfs src=1 type=169020161 hex=0xa130b01 call=2579 trans=2817 mounted=1
+fsdriver: vfs reply call=2579 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=168233729 hex=0xa070b01 call=2567 trans=2817 mounted=1
+fsdriver: vfs reply call=2567 trans=2817 r=0 mounted=1
+PM: from init child ep=32780 call=6 hex=0x6
+PM: from init child ep=32780 call=13 hex=0xd
+PM: from init child ep=32780 call=6 hex=0x6
+PM: from init child ep=32780 call=6 hex=0x6
+PM: from init child ep=32780 call=13 hex=0xd
+PM: from init child ep=32780 call=13 hex=0xd
+PM: from init child ep=32780 call=20 hex=0x14
+PM: from init child ep=32780 call=20 hex=0x14
+PM: from init child ep=32780 call=20 hex=0x14
+PM: from init child ep=32780 call=20 hex=0x14
+PM: from init child ep=32780 call=23 hex=0x17
+PM: from init child ep=32780 call=20 hex=0x14
+PM: from init child ep=32780 call=20 hex=0x14
+PM: from init child ep=32780 call=23 hex=0x17
+PM: from init child ep=32780 call=20 hex=0x14
+PM: from init child ep=32780 call=20 hex=0x14
+PM: from init child ep=32780 call=20 hex=0x14
+PM: from init child ep=32780 call=20 hex=0x14
+PM: from init child ep=32780 call=23 hex=0x17
+fsdriver: vfs src=1 type=169020161 hex=0xa130b01 call=2579 trans=2817 mounted=1
+fsdriver: vfs reply call=2579 trans=2817 r=0 mounted=1
+rv64: user pagefault ep=0x800c name=sh pc=0x80a808 ra=0x80ab1c sp=0xeffff200 addr=0x8b3000 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x80fecc ra=0x812144 sp=0xefffef20 addr=0xefffef58 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x80a808 ra=0x80ab1c sp=0xeffff090 addr=0x8b4000 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+fsdriver: vfs src=1 type=169020161 hex=0xa130b01 call=2579 trans=2817 mounted=1
+fsdriver: vfs reply call=2579 trans=2817 r=0 mounted=1
+rv64: user pagefault ep=0x800c name=sh pc=0x806e94 ra=0x8073fc sp=0xeffff430 addr=0x8b5000 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+PM: from init child ep=32780 call=2 hex=0x2
+taskcall: who=8 call=3073
+VM: pt_bind set_addrspace r=0
+rv64: user pagefault ep=0x800d name=sh*F pc=0x80b8b4 ra=0x80c91c sp=0xeffff300 addr=0x8ad310 cause=0xf satp=0x80000000000817af root=0x817af000 p_seg=0x817af000 p_seg_v=0x14000d000
+rv64: user pagefault ep=0x800c name=sh pc=0x80c884 ra=0x802fb0 sp=0xeffff320 addr=0x8b50d8 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x80c758 ra=0x80c8a8 sp=0xeffff2f0 addr=0x8ad2a0 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800d name=sh*F pc=0x80b8f4 ra=0x80b8c8 sp=0xeffff300 addr=0x8a76a4 cause=0xf satp=0x80000000000817af root=0x817af000 p_seg=0x817af000 p_seg_v=0x14000d000
+rv64: user pagefault ep=0x800d name=sh*F pc=0x802fb4 ra=0x802fb0 sp=0xeffff350 addr=0x8acc84 cause=0xf satp=0x80000000000817af root=0x817af000 p_seg=0x817af000 p_seg_v=0x14000d000
+rv64: user pagefault ep=0x800c name=sh pc=0x803030 ra=0x80301c sp=0xeffff350 addr=0x8acc84 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x80d1c4 ra=0x803050 sp=0xeffff330 addr=0x8a74a8 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800d name=sh*F pc=0x86d618 ra=0x86d60c sp=0xeffff290 addr=0x8af098 cause=0xf satp=0x80000000000817af root=0x817af000 p_seg=0x817af000 p_seg_v=0x14000d000
+rv64: user pagefault ep=0x800d name=sh*F pc=0x80300c ra=0x802ffc sp=0xeffff350 addr=0x8a6aaa cause=0xf satp=0x80000000000817af root=0x817af000 p_seg=0x817af000 p_seg_v=0x14000d000
+rv64: user pagefault ep=0x800d name=sh*F pc=0x8085d8 ra=0x8088a4 sp=0xeffff040 addr=0x8b4a60 cause=0xf satp=0x80000000000817af root=0x817af000 p_seg=0x817af000 p_seg_v=0x14000d000
+rv64: user pagefault ep=0x800d name=sh*F pc=0x80508c ra=0x803508 sp=0xefffefd0 addr=0xefffefd8 cause=0xf satp=0x80000000000817af root=0x817af000 p_seg=0x817af000 p_seg_v=0x14000d000
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=-2 mounted=1
+VFS: req_lookup ENOENT path="/sbin/sysenv" dir_ino=1 root_ino=1 fs=10 flags=0x0
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=-2 mounted=1
+VFS: req_lookup ENOENT path="/usr/sbin/sysenv" dir_ino=1 root_ino=1 fs=10 flags=0x0
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=168299265 hex=0xa080b01 call=2568 trans=2817 mounted=1
+fsdriver: vfs reply call=2568 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=167906049 hex=0xa020b01 call=2562 trans=2817 mounted=1
+fsdriver: vfs reply call=2562 trans=2817 r=0 mounted=1
+rv64: user pagefault ep=0x800d name=sh*F pc=0x845978 ra=0x8462e8 sp=0xefffef00 addr=0x8b1018 cause=0xf satp=0x80000000000817af root=0x817af000 p_seg=0x817af000 p_seg_v=0x14000d000
+rv64: user pagefault ep=0x800d name=sh*F pc=0x842124 ra=0x842118 sp=0xefffef40 addr=0x8b6000 cause=0xf satp=0x80000000000817af root=0x817af000 p_seg=0x817af000 p_seg_v=0x14000d000
+VFS: write /dev/console ep=32781 size=24
+VFS: write /dev/console cdev_io r=-998
+TTY: recv CDEV_WRITE src=1 minor=0
+chardriver: CDEV_WRITE minor=0 open=1 src=1
+TTY: write ep=1 minor=0 size=24
+chardriver: reply_task endpt=1 id=32781 r=24
+chardriver: CDEV_WRITE r=-203
+PM: exec request from ep=32781
+VFS: PM exec request ep=32781
+VFS: exec path="/bin/sysenv" ep=32781
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=168299265 hex=0xa080b01 call=2568 trans=2817 mounted=1
+fsdriver: vfs reply call=2568 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=169020161 hex=0xa130b01 call=2579 trans=2817 mounted=1
+fsdriver: vfs reply call=2579 trans=2817 r=0 mounted=1
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+taskcall: who=8 call=3117
+VM: pt_bind set_addrspace r=0
+fsdriver: vfs src=1 type=169020161 hex=0xa130b01 call=2579 trans=2817 mounted=1
+fsdriver: vfs reply call=2579 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=169020161 hex=0xa130b01 call=2579 trans=2817 mounted=1
+fsdriver: vfs reply call=2579 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=167906049 hex=0xa020b01 call=2562 trans=2817 mounted=1
+fsdriver: vfs reply call=2562 trans=2817 r=0 mounted=1
+taskcall: who=8 call=3077
+taskcall: who=8 call=3072
+PM: from init child ep=32780 call=3 hex=0x3
+rv64: user pagefault ep=0x800c name=sh pc=0x8088c4 ra=0x8088a4 sp=0xeffff5a0 addr=0x8b4a59 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x845978 ra=0x8462e8 sp=0xeffff3d0 addr=0x8b1018 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x803784 ra=0x803740 sp=0xeffff5d0 addr=0x8aebb8 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x8452c4 ra=0x8462b8 sp=0xeffff750 addr=0xefbfe048 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x845144 ra=0x845334 sp=0xeffff750 addr=0x8b0090 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x8453dc ra=0x845334 sp=0xeffff750 addr=0x8a90d8 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x845978 ra=0x8462e8 sp=0xeffff190 addr=0x8b2018 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x80a808 ra=0x80ab1c sp=0xeffff200 addr=0x8b3000 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x80fecc ra=0x812144 sp=0xefffef20 addr=0xefffef58 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+PM: from init child ep=32780 call=2 hex=0x2
+taskcall: who=8 call=3073
+VM: pt_bind set_addrspace r=0
+rv64: user pagefault ep=0x800e name=sh*F pc=0x80b8b4 ra=0x80c91c sp=0xeffff300 addr=0x8ad310 cause=0xf satp=0x80000000000817a6 root=0x817a6000 p_seg=0x817a6000 p_seg_v=0x14000e000
+rv64: user pagefault ep=0x800c name=sh pc=0x80c884 ra=0x802fb0 sp=0xeffff320 addr=0x8b50d8 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x80c758 ra=0x80c8a8 sp=0xeffff2f0 addr=0x8ad2a0 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800e name=sh*F pc=0x80b8f4 ra=0x80b8c8 sp=0xeffff300 addr=0x8a76a4 cause=0xf satp=0x80000000000817a6 root=0x817a6000 p_seg=0x817a6000 p_seg_v=0x14000e000
+rv64: user pagefault ep=0x800e name=sh*F pc=0x802fb4 ra=0x802fb0 sp=0xeffff350 addr=0x8acc84 cause=0xf satp=0x80000000000817a6 root=0x817a6000 p_seg=0x817a6000 p_seg_v=0x14000e000
+rv64: user pagefault ep=0x800c name=sh pc=0x803030 ra=0x80301c sp=0xeffff350 addr=0x8acc84 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x80d1c4 ra=0x803050 sp=0xeffff330 addr=0x8a74a8 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800e name=sh*F pc=0x86d618 ra=0x86d60c sp=0xeffff290 addr=0x8af098 cause=0xf satp=0x80000000000817a6 root=0x817a6000 p_seg=0x817a6000 p_seg_v=0x14000e000
+rv64: user pagefault ep=0x800e name=sh*F pc=0x80300c ra=0x802ffc sp=0xeffff350 addr=0x8a6aaa cause=0xf satp=0x80000000000817a6 root=0x817a6000 p_seg=0x817a6000 p_seg_v=0x14000e000
+rv64: user pagefault ep=0x800e name=sh*F pc=0x8085d8 ra=0x8088a4 sp=0xeffff040 addr=0x8b3328 cause=0xf satp=0x80000000000817a6 root=0x817a6000 p_seg=0x817a6000 p_seg_v=0x14000e000
+rv64: user pagefault ep=0x800e name=sh*F pc=0x80508c ra=0x803508 sp=0xefffefd0 addr=0xefffefd8 cause=0xf satp=0x80000000000817a6 root=0x817a6000 p_seg=0x817a6000 p_seg_v=0x14000e000
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=-2 mounted=1
+VFS: req_lookup ENOENT path="/sbin/sysenv" dir_ino=1 root_ino=1 fs=10 flags=0x0
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=-2 mounted=1
+VFS: req_lookup ENOENT path="/usr/sbin/sysenv" dir_ino=1 root_ino=1 fs=10 flags=0x0
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=168299265 hex=0xa080b01 call=2568 trans=2817 mounted=1
+fsdriver: vfs reply call=2568 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=167906049 hex=0xa020b01 call=2562 trans=2817 mounted=1
+fsdriver: vfs reply call=2562 trans=2817 r=0 mounted=1
+rv64: user pagefault ep=0x800e name=sh*F pc=0x845978 ra=0x8462e8 sp=0xefffef00 addr=0x8b1018 cause=0xf satp=0x80000000000817a6 root=0x817a6000 p_seg=0x817a6000 p_seg_v=0x14000e000
+rv64: user pagefault ep=0x800e name=sh*F pc=0x842124 ra=0x842118 sp=0xefffef40 addr=0x8b6000 cause=0xf satp=0x80000000000817a6 root=0x817a6000 p_seg=0x817a6000 p_seg_v=0x14000e000
+VFS: write /dev/console ep=32782 size=24
+VFS: write /dev/console cdev_io r=-998
+TTY: recv CDEV_WRITE src=1 minor=0
+chardriver: CDEV_WRITE minor=0 open=1 src=1
+TTY: write ep=1 minor=0 size=24
+chardriver: reply_task endpt=1 id=32782 r=24
+chardriver: CDEV_WRITE r=-203
+PM: exec request from ep=32782
+VFS: PM exec request ep=32782
+VFS: exec path="/bin/sysenv" ep=32782
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=168299265 hex=0xa080b01 call=2568 trans=2817 mounted=1
+fsdriver: vfs reply call=2568 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=169020161 hex=0xa130b01 call=2579 trans=2817 mounted=1
+fsdriver: vfs reply call=2579 trans=2817 r=0 mounted=1
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+taskcall: who=8 call=3117
+VM: pt_bind set_addrspace r=0
+fsdriver: vfs src=1 type=169020161 hex=0xa130b01 call=2579 trans=2817 mounted=1
+fsdriver: vfs reply call=2579 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=169020161 hex=0xa130b01 call=2579 trans=2817 mounted=1
+fsdriver: vfs reply call=2579 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=167906049 hex=0xa020b01 call=2562 trans=2817 mounted=1
+fsdriver: vfs reply call=2562 trans=2817 r=0 mounted=1
+taskcall: who=8 call=3077
+taskcall: who=8 call=3072
+PM: from init child ep=32780 call=3 hex=0x3
+rv64: user pagefault ep=0x800c name=sh pc=0x8088c4 ra=0x8088a4 sp=0xeffff5a0 addr=0x8b3321 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x805278 ra=0x805148 sp=0xeffff4a0 addr=0x8b12d2 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x803784 ra=0x803740 sp=0xeffff5d0 addr=0x8aebb8 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x8452c4 ra=0x8462b8 sp=0xeffff750 addr=0xefbfe048 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x845978 ra=0x8453fc sp=0xeffff700 addr=0x8b0018 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=168299265 hex=0xa080b01 call=2568 trans=2817 mounted=1
+fsdriver: vfs reply call=2568 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=167906049 hex=0xa020b01 call=2562 trans=2817 mounted=1
+fsdriver: vfs reply call=2562 trans=2817 r=0 mounted=1
+PM: from init child ep=32780 call=2 hex=0x2
+taskcall: who=8 call=3073
+VM: pt_bind set_addrspace r=0
+rv64: user pagefault ep=0x800f name=sh*F pc=0x80b8b4 ra=0x80c91c sp=0xeffff580 addr=0x8ad310 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+rv64: user pagefault ep=0x800c name=sh pc=0x80c884 ra=0x803408 sp=0xeffff5a0 addr=0x8b50d8 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x80c758 ra=0x80c8a8 sp=0xeffff570 addr=0x8ad2a0 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800f name=sh*F pc=0x80b8f4 ra=0x80b8c8 sp=0xeffff580 addr=0x8a76a4 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+rv64: user pagefault ep=0x800c name=sh pc=0x80bf64 ra=0x803d84 sp=0xeffff5b0 addr=0x8acc84 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800f name=sh*F pc=0x8035cc ra=0x803408 sp=0xeffff5d0 addr=0x8acc84 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+PM: from init child ep=32780 call=3 hex=0x3
+rv64: user pagefault ep=0x800f name=sh*F pc=0x814134 ra=0x81410c sp=0xeffff5c0 addr=0x8b30d0 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+rv64: user pagefault ep=0x800f name=sh*F pc=0x8467f4 ra=0x8467ec sp=0xeffff3d0 addr=0x8a6ca0 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+rv64: user pagefault ep=0x800f name=sh*F pc=0x842124 ra=0x842118 sp=0xeffff410 addr=0x8b6000 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+VFS: write /dev/console ep=32783 size=24
+VFS: write /dev/console cdev_io r=-998
+TTY: recv CDEV_WRITE src=1 minor=0
+chardriver: CDEV_WRITE minor=0 open=1 src=1
+TTY: write ep=1 minor=0 size=24
+chardriver: reply_task endpt=1 id=32783 r=24
+chardriver: CDEV_WRITE r=-203
+PM: exec request from ep=32783
+VFS: PM exec request ep=32783
+VFS: exec path="/sbin/minix-service" ep=32783
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=168299265 hex=0xa080b01 call=2568 trans=2817 mounted=1
+fsdriver: vfs reply call=2568 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=169020161 hex=0xa130b01 call=2579 trans=2817 mounted=1
+fsdriver: vfs reply call=2579 trans=2817 r=0 mounted=1
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+taskcall: who=8 call=3117
+VM: pt_bind set_addrspace r=0
+fsdriver: vfs src=1 type=169020161 hex=0xa130b01 call=2579 trans=2817 mounted=1
+fsdriver: vfs reply call=2579 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=169020161 hex=0xa130b01 call=2579 trans=2817 mounted=1
+fsdriver: vfs reply call=2579 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=167906049 hex=0xa020b01 call=2562 trans=2817 mounted=1
+fsdriver: vfs reply call=2562 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=169478913 hex=0xa1a0b01 call=2586 trans=2817 mounted=1
+fsdriver: vfs reply call=2586 trans=2817 r=0 mounted=1
+fsdriver: vfs src=1 type=168299265 hex=0xa080b01 call=2568 trans=2817 mounted=1
+fsdriver: vfs reply call=2568 trans=2817 r=0 mounted=1
+rv64: kcall GETINFO req=0x12 res=0x0
+rv64: user pagefault ep=0x800f name=minix-service pc=0x826548 ra=0x8262e4 sp=0xefffef60 addr=0xefffefd0 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+VFS: req_lookup ENOENT path="/etc/malloc.conf" dir_ino=1 root_ino=1 fs=10 flags=0x8
+rv64: user pagefault ep=0x800f name=minix-service pc=0x807964 ra=0x807f80 sp=0xeffff140 addr=0xefbfe030 cause=0xd satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+rv64: user pagefault ep=0x800f name=minix-service pc=0x807acc ra=0x807a74 sp=0xeffff140 addr=0x850010 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+rv64: user pagefault ep=0x800f name=minix-service pc=0x807acc ra=0x807a74 sp=0xeffff1d0 addr=0x852010 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+rv64: user pagefault ep=0x800f name=minix-service pc=0x826a68 ra=0x823e2c sp=0xefffeaa0 addr=0x851011 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+VFS: req_lookup ENOENT path="/usr/pkg/etc/system.conf.d/procfs" dir_ino=1 root_ino=1 fs=10 flags=0x0
+VFS: req_lookup ENOENT path="/etc/system.conf.d/procfs" dir_ino=1 root_ino=1 fs=10 flags=0x0
+rv64: user pagefault ep=0x800f name=minix-service pc=0x802974 ra=0x802950 sp=0xeffff230 addr=0x853000 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+rv64: user pagefault ep=0x800f name=minix-service pc=0x807acc ra=0x807a74 sp=0xeffff0f0 addr=0x854010 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+rv64: user pagefault ep=0x800f name=minix-service pc=0x807acc ra=0x807a74 sp=0xeffff0f0 addr=0x855010 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+rv64: user pagefault ep=0x800f name=minix-service pc=0x807acc ra=0x807a74 sp=0xeffff0f0 addr=0x856010 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+rv64: user pagefault ep=0x800f name=minix-service pc=0x807acc ra=0x807a74 sp=0xeffff0f0 addr=0x857010 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+rv64: user pagefault ep=0x800f name=minix-service pc=0x807acc ra=0x807a74 sp=0xeffff0a0 addr=0x858010 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+rv64: user pagefault ep=0x800f name=minix-service pc=0x807acc ra=0x807a74 sp=0xeffff0f0 addr=0x859010 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+rv64: user pagefault ep=0x800f name=minix-service pc=0x807acc ra=0x807a74 sp=0xeffff0f0 addr=0x85a010 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+rv64: user pagefault ep=0x800f name=minix-service pc=0x807acc ra=0x807a74 sp=0xeffff0f0 addr=0x85b010 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+rv64: user pagefault ep=0x800f name=minix-service pc=0x807acc ra=0x807a74 sp=0xeffff0f0 addr=0x85c010 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+rv64: user pagefault ep=0x800f name=minix-service pc=0x802974 ra=0x802950 sp=0xeffff230 addr=0x85d000 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+rv64: user pagefault ep=0x800f name=minix-service pc=0x807acc ra=0x807a74 sp=0xeffff0f0 addr=0x85e010 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+VFS: req_lookup ENOENT path="/etc/nsswitch.conf" dir_ino=1 root_ino=1 fs=10 flags=0x0
+rv64: user pagefault ep=0x800f name=minix-service pc=0x81c370 ra=0x81c364 sp=0xeffff060 addr=0x85f008 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+rv64: user pagefault ep=0x800f name=minix-service pc=0x826c88 ra=0x8085d8 sp=0xeffff140 addr=0x860000 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+rv64: user pagefault ep=0x800f name=minix-service pc=0x826c88 ra=0x8085d8 sp=0xeffff180 addr=0x861000 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+rv64: user pagefault ep=0x800f name=minix-service pc=0x826c88 ra=0x8085d8 sp=0xeffff180 addr=0x862000 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+rv64: user pagefault ep=0x800f name=minix-service pc=0x826c88 ra=0x8085d8 sp=0xefffec70 addr=0x863000 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+VFS: req_lookup ENOENT path="/etc/nsswitch.conf" dir_ino=1 root_ino=1 fs=10 flags=0x0
+PM: from init child ep=2 call=45 hex=0x2d
+PM: from init child ep=2 call=41 hex=0x29
+VM: pt_bind set_addrspace r=0
+PM: from init child ep=2 call=46 hex=0x2e
+VM: rs pf msg src=2 type=3327 addr=0x840240 vpfa=0x840240 flags=0xf i1=0 i2=15 i3=0 hi=0x0 lo=0x840240
+vm: rs-pf-msg ep=2 addr=0x840240 pde=0 l2=0x20406001
+vm: rs-pf-msg pte1=4 l1=0x20fbbc01
+vm: rs-pf-msg pte0=64 l0=0x20fab4d3 U=1 R=1 W=0 X=0
+VM: rs pf msg src=2 type=3327 addr=0x82f418 vpfa=0x82f418 flags=0xf i1=0 i2=15 i3=0 hi=0x0 lo=0x82f418
+vm: rs-pf-msg ep=2 addr=0x82f418 pde=0 l2=0x20406001
+vm: rs-pf-msg pte1=4 l1=0x20fbbc01
+vm: rs-pf-msg pte0=47 l0=0x20faf8d3 U=1 R=1 W=0 X=0
+VM: rs pf msg src=2 type=3327 addr=0x834a10 vpfa=0x834a10 flags=0xf i1=0 i2=15 i3=0 hi=0x0 lo=0x834a10
+vm: rs-pf-msg ep=2 addr=0x834a10 pde=0 l2=0x20406001
+vm: rs-pf-msg pte1=4 l1=0x20fbbc01
+vm: rs-pf-msg pte0=52 l0=0x20fae4d3 U=1 R=1 W=0 X=0
+rv64: kcall GETINFO req=0x11 res=0x0
+VM: rs pf msg src=2 type=3327 addr=0x81d988 vpfa=0x81d988 flags=0xf i1=0 i2=15 i3=0 hi=0x0 lo=0x81d988
+vm: rs-pf-msg ep=2 addr=0x81d988 pde=0 l2=0x20406001
+vm: rs-pf-msg pte1=4 l1=0x20fbbc01
+vm: rs-pf-msg pte0=29 l0=0x20fb44d3 U=1 R=1 W=0 X=0
+VM: rs pf msg src=2 type=3327 addr=0xefbfe030 vpfa=0xefbfe030 flags=0xd i1=0 i2=13 i3=0 hi=0x0 lo=0xefbfe030
+vm: rs-pf-msg ep=2 addr=0xefbfe030 pde=3 l2=0x20f9e801
+vm: rs-pf-msg pte1=381 l1=0x0
+vm: rs-pf-msg l1 not present
+VM: rs pf msg src=2 type=3327 addr=0x870000 vpfa=0x870000 flags=0xf i1=0 i2=15 i3=0 hi=0x0 lo=0x870000
+vm: rs-pf-msg ep=2 addr=0x870000 pde=0 l2=0x20406001
+vm: rs-pf-msg pte1=4 l1=0x20fbbc01
+vm: rs-pf-msg pte0=112 l0=0x0 U=0 R=0 W=0 X=0
+VM: rs pf msg src=2 type=3327 addr=0x86fe48 vpfa=0x86fe48 flags=0xf i1=0 i2=15 i3=0 hi=0x0 lo=0x86fe48
+vm: rs-pf-msg ep=2 addr=0x86fe48 pde=0 l2=0x20406001
+vm: rs-pf-msg pte1=4 l1=0x20fbbc01
+vm: rs-pf-msg pte0=111 l0=0x20f9f8d3 U=1 R=1 W=0 X=0
+VM: rs pf msg src=2 type=3327 addr=0x871000 vpfa=0x871000 flags=0xf i1=0 i2=15 i3=0 hi=0x0 lo=0x871000
+vm: rs-pf-msg ep=2 addr=0x871000 pde=0 l2=0x20406001
+vm: rs-pf-msg pte1=4 l1=0x20fbbc01
+vm: rs-pf-msg pte0=113 l0=0x0 U=0 R=0 W=0 X=0
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+taskcall: who=8 call=3117
+VM: pt_bind set_addrspace r=0
+PM: from init child ep=2 call=43 hex=0x2b
+PM: from init child ep=2 call=44 hex=0x2c
+taskcall: who=8 call=3114
+PM: from init child ep=2 call=5 hex=0x5
+taskcall: who=8 call=3109
+rv64: cause_sig segv target=procfs/0x1000d pc=0x80eda0 sp=0xeffffa30 ra=0x80ef68
+rv64: user pagefault ep=0x800f name=minix-service pc=0x813bfc ra=0x8129f8 sp=0xefffde00 addr=0xefffde48 cause=0xf satp=0x80000000000817a4 root=0x817a4000 p_seg=0x817a4000 p_seg_v=0x14000f000
+PM: from init child ep=2 call=42 hex=0x2a
+VFS: req_lookup ENOENT path="/usr/share/nls/nls.alias.db" dir_ino=1 root_ino=1 fs=10 flags=0x0
+PM: from init child ep=2 call=3 hex=0x3
+PM: from init child ep=2 call=3 hex=0x3
+VFS: write /dev/console ep=32783 size=72
+VFS: write /dev/console cdev_io r=-998
+TTY: recv CDEV_WRITE src=1 minor=0
+chardriver: CDEV_WRITE minor=0 open=1 src=1
+TTY: write ep=1 minor=0 size=72
+chardriver: reply_task endpt=1 id=32783 r=72
+chardriver: CDEV_WRITE r=-203
+rv64: user pagefault ep=0x800c name=sh pc=0x80d1c4 ra=0x803460 sp=0xeffff5b0 addr=0x8a74a8 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x8085d8 ra=0x8088a4 sp=0xeffff510 addr=0x8b3058 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: pm->vm queue mtype=0xc00 m_ptr=0xeffff888
+mini_send: pm->vm send mtype=3072 src=0 dst=8 msg=0xeffff888
+rv64: user pagefault ep=0x800c name=sh pc=0x845978 ra=0x8462e8 sp=0xeffff3d0 addr=0x8b1018 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x803784 ra=0x803740 sp=0xeffff5d0 addr=0x8aebb8 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x8017e0 ra=0x801788 sp=0xeffff570 addr=0x8a6c08 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+VFS: write /dev/console ep=32780 size=31
+VFS: write /dev/console cdev_io r=-998
+TTY: recv CDEV_WRITE src=1 minor=0
+chardriver: CDEV_WRITE minor=0 open=1 src=1
+TTY: write ep=1 minor=0 size=31
+chardriver: reply_task endpt=1 id=32780 r=31
+chardriver: CDEV_WRITE r=-203
+rv64: user pagefault ep=0x800c name=sh pc=0x8452c4 ra=0x8462b8 sp=0xeffff750 addr=0xefbfe048 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x845144 ra=0x845334 sp=0xeffff750 addr=0x8b0090 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x8456f4 ra=0x845a24 sp=0xeffff270 addr=0x8a90d8 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x80a808 ra=0x80ab1c sp=0xeffff390 addr=0x8b4000 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x80fecc ra=0x812144 sp=0xefffef20 addr=0xefffef58 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x86d618 ra=0x86d60c sp=0xeffff400 addr=0x8af098 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+PM: from init child ep=32780 call=2 hex=0x2
+VM: pt_bind set_addrspace r=0
+rv64: user pagefault ep=0x8010 name=sh*F pc=0x80b8b4 ra=0x80c91c sp=0xeffff580 addr=0x8ad310 cause=0xf satp=0x80000000000817a2 root=0x817a2000 p_seg=0x817a2000 p_seg_v=0x140010000
+rv64: user pagefault ep=0x800c name=sh pc=0x80c884 ra=0x803408 sp=0xeffff5a0 addr=0x8b50d8 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x80c758 ra=0x80c8a8 sp=0xeffff570 addr=0x8ad2a0 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x8010 name=sh*F pc=0x80b8f4 ra=0x80b8c8 sp=0xeffff580 addr=0x8a76a4 cause=0xf satp=0x80000000000817a2 root=0x817a2000 p_seg=0x817a2000 p_seg_v=0x140010000
+rv64: user pagefault ep=0x800c name=sh pc=0x80bf64 ra=0x803d84 sp=0xeffff5b0 addr=0x8acc84 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x8010 name=sh*F pc=0x8035cc ra=0x803408 sp=0xeffff5d0 addr=0x8acc84 cause=0xf satp=0x80000000000817a2 root=0x817a2000 p_seg=0x817a2000 p_seg_v=0x140010000
+PM: from init child ep=32780 call=3 hex=0x3
+rv64: user pagefault ep=0x8010 name=sh*F pc=0x814134 ra=0x81410c sp=0xeffff5c0 addr=0x8b3488 cause=0xf satp=0x80000000000817a2 root=0x817a2000 p_seg=0x817a2000 p_seg_v=0x140010000
+rv64: user pagefault ep=0x8010 name=sh*F pc=0x8467f4 ra=0x8467ec sp=0xeffff3d0 addr=0x8a6ca0 cause=0xf satp=0x80000000000817a2 root=0x817a2000 p_seg=0x817a2000 p_seg_v=0x140010000
+rv64: user pagefault ep=0x8010 name=sh*F pc=0x842124 ra=0x842118 sp=0xeffff410 addr=0x8b6000 cause=0xf satp=0x80000000000817a2 root=0x817a2000 p_seg=0x817a2000 p_seg_v=0x140010000
+VFS: write /dev/console ep=32784 size=24
+VFS: write /dev/console cdev_io r=-998
+TTY: recv CDEV_WRITE src=1 minor=0
+chardriver: CDEV_WRITE minor=0 open=1 src=1
+TTY: write ep=1 minor=0 size=24
+chardriver: reply_task endpt=1 id=32784 r=24
+chardriver: CDEV_WRITE r=-203
+PM: exec request from ep=32784
+VFS: PM exec request ep=32784
+VFS: exec path="/bin/sysenv" ep=32784
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+taskcall: who=8 call=3117
+VM: pt_bind set_addrspace r=0
+rv64: user pagefault ep=0x800c name=sh pc=0x80d1c4 ra=0x803460 sp=0xeffff5b0 addr=0x8a74a8 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x8085d8 ra=0x8088a4 sp=0xeffff4b0 addr=0x8b3418 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x805278 ra=0x805148 sp=0xeffff440 addr=0x8b12f2 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+PM: from init child ep=32780 call=2 hex=0x2
+VM: pt_bind set_addrspace r=0
+rv64: user pagefault ep=0x8011 name=sh*F pc=0x80b8b4 ra=0x80c91c sp=0xeffff520 addr=0x8ad310 cause=0xf satp=0x80000000000817a1 root=0x817a1000 p_seg=0x817a1000 p_seg_v=0x140011000
+rv64: user pagefault ep=0x800c name=sh pc=0x80c884 ra=0x803408 sp=0xeffff540 addr=0x8b50d8 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x80c758 ra=0x80c8a8 sp=0xeffff510 addr=0x8ad2a0 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x8011 name=sh*F pc=0x80b8f4 ra=0x80b8c8 sp=0xeffff520 addr=0x8a76a4 cause=0xf satp=0x80000000000817a1 root=0x817a1000 p_seg=0x817a1000 p_seg_v=0x140011000
+rv64: user pagefault ep=0x800c name=sh pc=0x80bf64 ra=0x803d84 sp=0xeffff550 addr=0x8acc84 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x8011 name=sh*F pc=0x8035cc ra=0x803408 sp=0xeffff570 addr=0x8acc84 cause=0xf satp=0x80000000000817a1 root=0x817a1000 p_seg=0x817a1000 p_seg_v=0x140011000
+PM: from init child ep=32780 call=3 hex=0x3
+rv64: user pagefault ep=0x8011 name=sh*F pc=0x814134 ra=0x81410c sp=0xeffff560 addr=0x8b3488 cause=0xf satp=0x80000000000817a1 root=0x817a1000 p_seg=0x817a1000 p_seg_v=0x140011000
+rv64: user pagefault ep=0x8011 name=sh*F pc=0x8467f4 ra=0x8467ec sp=0xeffff370 addr=0x8a6ca0 cause=0xf satp=0x80000000000817a1 root=0x817a1000 p_seg=0x817a1000 p_seg_v=0x140011000
+rv64: user pagefault ep=0x8011 name=sh*F pc=0x842124 ra=0x842118 sp=0xeffff3b0 addr=0x8b6000 cause=0xf satp=0x80000000000817a1 root=0x817a1000 p_seg=0x817a1000 p_seg_v=0x140011000
+VFS: write /dev/console ep=32785 size=24
+VFS: write /dev/console cdev_io r=-998
+TTY: recv CDEV_WRITE src=1 minor=0
+chardriver: CDEV_WRITE minor=0 open=1 src=1
+TTY: write ep=1 minor=0 size=24
+chardriver: reply_task endpt=1 id=32785 r=24
+chardriver: CDEV_WRITE r=-203
+PM: exec request from ep=32785
+VFS: PM exec request ep=32785
+VFS: exec path="/bin/sysenv" ep=32785
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+taskcall: who=8 call=3117
+VM: pt_bind set_addrspace r=0
+rv64: user pagefault ep=0x800c name=sh pc=0x80d1c4 ra=0x803460 sp=0xeffff550 addr=0x8a74a8 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x8085d8 ra=0x8088a4 sp=0xeffff4b0 addr=0x8b3418 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x805278 ra=0x805148 sp=0xeffff440 addr=0x8b12f2 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+PM: from init child ep=32780 call=2 hex=0x2
+VM: pt_bind set_addrspace r=0
+rv64: user pagefault ep=0x8012 name=sh*F pc=0x80b8b4 ra=0x80c91c sp=0xeffff520 addr=0x8ad310 cause=0xf satp=0x800000000008179f root=0x8179f000 p_seg=0x8179f000 p_seg_v=0x140012000
+rv64: user pagefault ep=0x800c name=sh pc=0x80c884 ra=0x803408 sp=0xeffff540 addr=0x8b50d8 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x80c758 ra=0x80c8a8 sp=0xeffff510 addr=0x8ad2a0 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x8012 name=sh*F pc=0x80b8f4 ra=0x80b8c8 sp=0xeffff520 addr=0x8a76a4 cause=0xf satp=0x800000000008179f root=0x8179f000 p_seg=0x8179f000 p_seg_v=0x140012000
+rv64: user pagefault ep=0x800c name=sh pc=0x80bf64 ra=0x803d84 sp=0xeffff550 addr=0x8acc84 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x8012 name=sh*F pc=0x8035cc ra=0x803408 sp=0xeffff570 addr=0x8acc84 cause=0xf satp=0x800000000008179f root=0x8179f000 p_seg=0x8179f000 p_seg_v=0x140012000
+PM: from init child ep=32780 call=3 hex=0x3
+rv64: user pagefault ep=0x8012 name=sh*F pc=0x814134 ra=0x81410c sp=0xeffff560 addr=0x8b3488 cause=0xf satp=0x800000000008179f root=0x8179f000 p_seg=0x8179f000 p_seg_v=0x140012000
+rv64: user pagefault ep=0x8012 name=sh*F pc=0x8467f4 ra=0x8467ec sp=0xeffff370 addr=0x8a6ca0 cause=0xf satp=0x800000000008179f root=0x8179f000 p_seg=0x8179f000 p_seg_v=0x140012000
+rv64: user pagefault ep=0x8012 name=sh*F pc=0x842124 ra=0x842118 sp=0xeffff3b0 addr=0x8b6000 cause=0xf satp=0x800000000008179f root=0x8179f000 p_seg=0x8179f000 p_seg_v=0x140012000
+VFS: write /dev/console ep=32786 size=24
+VFS: write /dev/console cdev_io r=-998
+TTY: recv CDEV_WRITE src=1 minor=0
+chardriver: CDEV_WRITE minor=0 open=1 src=1
+TTY: write ep=1 minor=0 size=24
+chardriver: reply_task endpt=1 id=32786 r=24
+chardriver: CDEV_WRITE r=-203
+PM: exec request from ep=32786
+VFS: PM exec request ep=32786
+VFS: exec path="/bin/sysenv" ep=32786
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+libexec: ehdr class=2 data=1 ver=1 phoff=64 phentsize=56 phnum=3 entry=0x800120
+taskcall: who=8 call=3117
+VM: pt_bind set_addrspace r=0
+rv64: user pagefault ep=0x800c name=sh pc=0x80d1c4 ra=0x803460 sp=0xeffff550 addr=0x8a74a8 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x8085d8 ra=0x8088a4 sp=0xeffff4d0 addr=0x8b3418 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x805278 ra=0x805148 sp=0xeffff460 addr=0x8b1292 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: user pagefault ep=0x800c name=sh pc=0x803784 ra=0x803740 sp=0xeffff590 addr=0x8aebb8 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+rv64: pm->vm queue mtype=0xc00 m_ptr=0xeffff888
+mini_send: pm->vm send mtype=3072 src=0 dst=8 msg=0xeffff888
+rv64: user pagefault ep=0x800c name=sh pc=0x8017e0 ra=0x801788 sp=0xeffff530 addr=0x8a6c08 cause=0xf satp=0x8000000000081c9c root=0x81c9c000 p_seg=0x81c9c000 p_seg_v=0x14000c000
+VFS: write /dev/console ep=32780 size=20
+VFS: write /dev/console cdev_io r=-998
+TTY: recv CDEV_WRITE src=1 minor=0
+chardriver: CDEV_WRITE minor=0 open=1 src=1
+TTY: write ep=1 minor=0 size=20
+chardriver: reply_task endpt=1 id=32780 r=20
+chardriver: CDEV_WRITE r=-203
+PM: child exit ep=32780 pid=14 status=1 sig=0 flags=0x1
+VFS: PM exit ep=32780
+PM: from init call=20 hex=0x14
+PM: from init call=20 hex=0x14
+PM: from init call=2 hex=0x2
+VM: pt_bind set_addrspace r=0
+PM: init fork child ep=32787 pid=22 slot=19
+VFS: PM fork parent=11 child=32787 pid=22
+PM: from init call=3 hex=0x3
+rv64: user pagefault ep=0x8013 name=init*F pc=0x8347d8 ra=0x8347cc sp=0xeffff7a0 addr=0x85bb90 cause=0xf satp=0x8000000000081c93 root=0x81c93000 p_seg=0x81c93000 p_seg_v=0x140013000
+VFS: select ep=32787 nfds=0 timeout=0.000250 block=1 now=64
+libsys: setalarm exp=65 abs=1 r=0
+KVFS: CLOCK notify ts=65
+VFS: select timeout ep=32787 slot=0
+TTY: recv CDEV_OPEN src=1 minor=0 access=0x3
+TTY: do_open minor=0 access=0x3 user=32787
+VFS: open /dev/console ep=32787 flags=0x2 r=3
+TTY: TIOCSCTTY ep=32787 minor=0
+rv64: user pagefault ep=0x8013 name=init*F pc=0x807738 ra=0x807df8 sp=0xeffff2e0 addr=0x852890 cause=0xf satp=0x8000000000081c93 root=0x81c93000 p_seg=0x81c93000 p_seg_v=0x140013000
+rv64: user pagefault ep=0x8013 name=init*F pc=0x8205b8 ra=0x81f3b4 sp=0xefffe900 addr=0xefffe948 cause=0xf satp=0x8000000000081c93 root=0x81c93000 p_seg=0x81c93000 p_seg_v=0x140013000
+rv64: user pagefault ep=0x8013 name=init*F pc=0x830c2c ra=0x830d18 sp=0xeffff200 addr=0x85acd8 cause=0xf satp=0x8000000000081c93 root=0x81c93000 p_seg=0x81c93000 p_seg_v=0x140013000
+rv64: user pagefault ep=0x8013 name=init*F pc=0x830c5c ra=0x830d18 sp=0xeffff200 addr=0x859810 cause=0xf satp=0x8000000000081c93 root=0x81c93000 p_seg=0x81c93000 p_seg_v=0x140013000
+rv64: user pagefault ep=0x8013 name=init*F pc=0x80a20c ra=0x80ae54 sp=0xeffff600 addr=0x857028 cause=0xf satp=0x8000000000081c93 root=0x81c93000 p_seg=0x81c93000 p_seg_v=0x140013000
+rv64: user pagefault ep=0x8013 name=init*F pc=0x811c58 ra=0x8120a4 sp=0xeffff290 addr=0x85c060 cause=0xf satp=0x8000000000081c93 root=0x81c93000 p_seg=0x81c93000 p_seg_v=0x140013000
+rv64: user pagefault ep=0x8013 name=init*F pc=0x811cac ra=0x8120a4 sp=0xeffff290 addr=0xefbfe068 cause=0xf satp=0x8000000000081c93 root=0x81c93000 p_seg=0x81c93000 p_seg_v=0x140013000
+rv64: user pagefault ep=0x8013 name=init*F pc=0x8120fc ra=0x8120a4 sp=0xeffff2c0 addr=0x85e010 cause=0xf satp=0x8000000000081c93 root=0x81c93000 p_seg=0x81c93000 p_seg_v=0x140013000
+rv64: user pagefault ep=0x8013 name=init*F pc=0x833648 ra=0x812c08 sp=0xeffff3a0 addr=0x85d000 cause=0xf satp=0x8000000000081c93 root=0x81c93000 p_seg=0x81c93000 p_seg_v=0x140013000
+rv64: user pagefault ep=0x8013 name=init*F pc=0x812e74 ra=0x812e6c sp=0xeffff1c0 addr=0x851f20 cause=0xf satp=0x8000000000081c93 root=0x81c93000 p_seg=0x81c93000 p_seg_v=0x140013000
+rv64: user pagefault ep=0x8013 name=init*F pc=0x833648 ra=0x812c08 sp=0xeffff370 addr=0x85f000 cause=0xf satp=0x8000000000081c93 root=0x81c93000 p_seg=0x81c93000 p_seg_v=0x140013000
+rv64: user pagefault ep=0x8013 name=init*F pc=0x828d2c ra=0x828d20 sp=0xeffff3c0 addr=0x860008 cause=0xf satp=0x8000000000081c93 root=0x81c93000 p_seg=0x81c93000 p_seg_v=0x140013000
+rv64: user pagefault ep=0x8013 name=init*F pc=0x833648 ra=0x812c08 sp=0xeffff4a0 addr=0x861000 cause=0xf satp=0x8000000000081c93 root=0x81c93000 p_seg=0x81c93000 p_seg_v=0x140013000
+rv64: user pagefault ep=0x8013 name=init*F pc=0x833648 ra=0x812c08 sp=0xeffff4e0 addr=0x862000 cause=0xf satp=0x8000000000081c93 root=0x81c93000 p_seg=0x81c93000 p_seg_v=0x140013000
+rv64: user pagefault ep=0x8013 name=init*F pc=0x833648 ra=0x812c08 sp=0xeffff4e0 addr=0x863000 cause=0xf satp=0x8000000000081c93 root=0x81c93000 p_seg=0x81c93000 p_seg_v=0x140013000
+rv64: user pagefault ep=0x8013 name=init*F pc=0x833648 ra=0x812c08 sp=0xefffefd0 addr=0x864000 cause=0xf satp=0x8000000000081c93 root=0x81c93000 p_seg=0x81c93000 p_seg_v=0x140013000
+KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKqemu-system-riscv64: terminating on signal 15 from pid 3154117 (timeout)

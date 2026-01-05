@@ -2,6 +2,7 @@
 #	@(#)Makefile	8.1 (Berkeley) 7/19/93
 
 PROG=	init
+SRCS=	init.c gp.c
 MAN=	init.8
 DPADD=	${LIBUTIL}
 LDADD=	-lutil
@@ -15,6 +16,10 @@ CPPFLAGS+=	-DLETS_GET_SMALL
 CPPFLAGS+=	-DALTSHELL -DSECURE -DCHROOT
 DPADD+=		${LIBCRYPT}
 LDADD+=		-lcrypt
+.endif
+
+.if ${MACHINE_ARCH} == "riscv64" || ${MACHINE_ARCH} == "riscv"
+LDFLAGS+= -Wl,--defsym,__global_pointer$$=_gp
 .endif
 
 .include <bsd.prog.mk>

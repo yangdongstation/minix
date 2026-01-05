@@ -1,10 +1,11 @@
 #!/bin/sh
-set -e
+set +e
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 
 FSCK=/bin/fsck_mfs
 ACPI=/service/acpi
+ramroot=no
 
 if [ X`sysenv arch` = Xi386 ]
 then	if [ -e $ACPI -a -n "`sysenv acpi`" ]
@@ -57,8 +58,9 @@ if sysenv rootdevname >/dev/null
 then	rootdevname=/dev/`sysenv rootdevname`
 else
 	if ! sysenv cdproberoot >/dev/null && ! sysenv bootramdisk >/dev/null
-	then	echo "rootdevname not set"
-		exit 1
+	then	echo "rootdevname not set, staying on ramdisk"
+		rootdevname=/dev/ram
+		ramroot=yes
 	fi
 fi
 
@@ -85,9 +87,14 @@ fi
 if sysenv bootramdisk >/dev/null
 then
 	rootdevname=imgrd
+	ramroot=yes
 fi
 
 echo "Root device name is $rootdevname"
+
+case "$rootdevname" in
+	/dev/ram*|imgrd) ramroot=yes ;;
+esac
 
 if ! sysenv cdproberoot >/dev/null
 then
@@ -97,20 +104,27 @@ then
 fi
 
 # Change root from temporary boot ramdisk to the configure root device
-if ! sysenv bootramdisk >/dev/null; then
-	mount -n $bin_img"$rootdevname" /
+if [ "$ramroot" != "yes" ]; then
+	if ! mount -n $bin_img"$rootdevname" /; then
+		echo "WARNING: mount $rootdevname failed, staying on ramdisk"
+		ramroot=yes
+	fi
 
-	# Reopen standard file descriptors, so that we can unmount the ramdisk.
-	# That is essentially a VFS shortcoming that should be fixed, though..
-	exec >/dev/log
-	exec 2>/dev/log
-	exec </dev/console
+	if [ "$ramroot" != "yes" ]; then
+		# Reopen standard file descriptors, so that we can unmount the ramdisk.
+		# That is essentially a VFS shortcoming that should be fixed, though..
+		exec >/dev/log
+		exec 2>/dev/log
+		exec </dev/console
+	fi
 fi
 
 # Mount the ProcFS instance that was loaded from the ramdisk, on the root FS.
 mount -e -n -t procfs none /proc || echo "WARNING: couldn't mount procfs"
 
-# Start the NetBSD rc infrastructure
-if ! sysenv bootramdisk >/dev/null; then
-	exec sh /etc/rc "$@"
+# Start the NetBSD rc infrastructure, or drop to a shell if we're on the
+# boot ramdisk.
+if [ "$ramroot" = "yes" ]; then
+	exec sh
 fi
+exec sh /etc/rc "$@"

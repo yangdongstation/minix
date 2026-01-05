@@ -76,6 +76,16 @@ int fetch_name(vir_bytes path, size_t len, char *dest)
   /* String is not contained in the message.  Get it from user space. */
   r = sys_datacopy_wrapper(who_e, path, VFS_PROC_NR, (vir_bytes) dest, len);
   if (r != OK) {
+#if defined(__riscv) || defined(__riscv64__)
+	if (r == ESRCH) {
+		static int fetch_name_log_count;
+		if (fetch_name_log_count < 8) {
+			printf("VFS: fetch_name ESRCH src=%d call=%d len=%zu\n",
+			    who_e, job_call_nr, len);
+			fetch_name_log_count++;
+		}
+	}
+#endif
 	err_code = EINVAL;
 	return(r);
   }
@@ -183,4 +193,3 @@ int sys_datacopy_wrapper(endpoint_t src, vir_bytes srcv,
 
 	return r;
 }
-

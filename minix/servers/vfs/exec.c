@@ -245,6 +245,13 @@ int pm_exec(vir_bytes path, size_t path_len, vir_bytes frame, size_t frame_len,
 
   /* Get the exec file name. */
   FAILCHECK(fetch_name(path, path_len, fullpath));
+  {
+	static int exec_log_count;
+	if (exec_log_count < 32) {
+		printf("VFS: exec path=\"%s\" ep=%d\n", fullpath, fp->fp_endpoint);
+		exec_log_count++;
+	}
+  }
   strlcpy(finalexec, fullpath, PATH_MAX);
   strlcpy(firstexec, fullpath, PATH_MAX);
 

@@ -70,7 +70,6 @@ void exception_handler(struct trapframe *tf)
     int is_interrupt = (cause >> 63) & 1;
     struct proc *caller = NULL;
     int from_user = (tf->tf_sstatus & SSTATUS_SPP) == 0;
-    static int trap_trace_count;
 
     if (from_user) {
         caller = get_cpulocal_var(proc_ptr);
@@ -78,19 +77,6 @@ void exception_handler(struct trapframe *tf)
             memcpy(&caller->p_reg, (struct stackframe_s *)tf,
                 sizeof(caller->p_reg));
         }
-    }
-
-    if (!is_interrupt && !from_user && trap_trace_count < 128) {
-        direct_print("rv64: trap scause=");
-        direct_print_hex(cause);
-        direct_print(" sepc=");
-        direct_print_hex(tf->tf_sepc);
-        direct_print(" stval=");
-        direct_print_hex(tf->tf_stval);
-        direct_print(" sstatus=");
-        direct_print_hex(tf->tf_sstatus);
-        direct_print("\n");
-        trap_trace_count++;
     }
 
     cause &= ~(1UL << 63);  /* Clear interrupt bit */
@@ -102,15 +88,6 @@ void exception_handler(struct trapframe *tf)
     }
 
     if (from_user && caller != NULL) {
-#if defined(__riscv)
-        {
-            static int sw_log_count;
-            if (sw_log_count < 32) {
-                direct_print("rv64: exception switch_to_user\n");
-                sw_log_count++;
-            }
-        }
-#endif
         switch_to_user();
         NOT_REACHABLE;
     }
@@ -201,61 +178,11 @@ static void handle_exception(struct trapframe *tf, u64_t cause)
 static void handle_syscall(struct trapframe *tf)
 {
     struct proc *caller = get_cpulocal_var(proc_ptr);
-    static int syscall_trace_count;
 
     if (caller == NULL) {
         tf->tf_a0 = (u64_t)-1;
         return;
     }
-
-    if (syscall_trace_count < 256) {
-        direct_print("rv64: syscall a7=");
-        direct_print_hex(caller->p_reg.a7);
-        direct_print(" a2=");
-        direct_print_hex(caller->p_reg.a2);
-        direct_print(" a0=");
-        direct_print_hex(caller->p_reg.a0);
-        direct_print(" a1=");
-        direct_print_hex(caller->p_reg.a1);
-        direct_print("\n");
-        syscall_trace_count++;
-    }
-#if defined(__riscv)
-    {
-        static int ipc_vm_trace_count;
-        if (caller->p_reg.a7 == IPCVEC_INTR &&
-            caller->p_reg.a0 == VM_PROC_NR &&
-            ipc_vm_trace_count < 64) {
-            message m;
-            int cr = EFAULT;
-            int op = (int)caller->p_reg.a2;
-
-            if ((op == SEND || op == SENDREC || op == SENDNB) &&
-                caller->p_reg.a1 != 0) {
-                cr = data_copy_vmcheck(caller, caller->p_endpoint,
-                    (vir_bytes)caller->p_reg.a1, KERNEL,
-                    (vir_bytes)&m, sizeof(m));
-            }
-
-            direct_print("rv64: ipc vm op=");
-            direct_print_hex((u64_t)op);
-            direct_print(" src=");
-            direct_print_hex((u64_t)caller->p_endpoint);
-            direct_print(" ptr=");
-            direct_print_hex((u64_t)caller->p_reg.a1);
-            if (op == SEND || op == SENDREC || op == SENDNB) {
-                direct_print(" mtype=");
-                if (cr == OK) {
-                    direct_print_hex((u64_t)m.m_type);
-                } else {
-                    direct_print("copyfail");
-                }
-            }
-            direct_print("\n");
-            ipc_vm_trace_count++;
-        }
-    }
-#endif
 
     /* Skip ecall instruction */
     caller->p_reg.pc += 4;
@@ -312,37 +239,6 @@ static void handle_page_fault(struct trapframe *tf, u64_t cause, u64_t addr)
 
     /* Don't schedule this process until pagefault is handled. */
     if (pr) {
-        static int user_pf_log_count;
-        int log_pf = (user_pf_log_count < 64) || (addr < 0x1000);
-        if (log_pf) {
-            u64_t satp = csr_read_satp();
-            u64_t root = (satp & SATP_PPN_MASK) << 12;
-            direct_print("rv64: user pagefault ep=");
-            direct_print_hex(pr->p_endpoint);
-            direct_print(" name=");
-            direct_print(pr->p_name);
-            direct_print(" pc=");
-            direct_print_hex(pr->p_reg.pc);
-            direct_print(" ra=");
-            direct_print_hex(pr->p_reg.ra);
-            direct_print(" sp=");
-            direct_print_hex(pr->p_reg.sp);
-            direct_print(" addr=");
-            direct_print_hex(addr);
-            direct_print(" cause=");
-            direct_print_hex(cause);
-            direct_print(" satp=");
-            direct_print_hex(satp);
-            direct_print(" root=");
-            direct_print_hex(root);
-            direct_print(" p_seg=");
-            direct_print_hex(pr->p_seg.p_satp);
-            direct_print(" p_seg_v=");
-            direct_print_hex((u64_t)(uintptr_t)pr->p_seg.p_satp_v);
-            direct_print("\n");
-            if (user_pf_log_count < 64)
-                user_pf_log_count++;
-        }
         RTS_SET(pr, RTS_PAGEFAULT);
 
         /* tell VM about the pagefault */

@@ -38,7 +38,7 @@ static int pipe_open(int fd, struct vnode *vp, mode_t bits, int oflags);
 int do_open(void)
 {
 /* Perform the open(name, flags) system call with O_CREAT *not* set. */
-  int open_flags;
+  int open_flags, r;
   char fullpath[PATH_MAX];
 
   open_flags = job_m_in.m_lc_vfs_path.flags;
@@ -49,7 +49,16 @@ int do_open(void)
   if (copy_path(fullpath, sizeof(fullpath)) != OK)
 	return(err_code);
 
-  return common_open(fullpath, open_flags, 0 /*omode*/, FALSE /*for_exec*/);
+  r = common_open(fullpath, open_flags, 0 /*omode*/, FALSE /*for_exec*/);
+  if (strcmp(fullpath, "/dev/console") == 0) {
+	static int console_open_log_count;
+	if (console_open_log_count < 16) {
+		printf("VFS: open /dev/console ep=%d flags=0x%x r=%d\n",
+		    fp->fp_endpoint, open_flags, r);
+		console_open_log_count++;
+	}
+  }
+  return r;
 }
 
 /*===========================================================================*
@@ -310,8 +319,10 @@ static struct vnode *new_node(struct lookup *resolve, int oflags, mode_t bits)
   struct node_details res;
   struct lookup findnode;
   char *path;
+  char orig_path[PATH_MAX];
 
   path = resolve->l_path;	/* For easy access */
+  strlcpy(orig_path, path, sizeof(orig_path));
 
   lookup_init(&findnode, path, resolve->l_flags, &dir_vmp, &dirp);
   findnode.l_vmnt_lock = VMNT_WRITE;
@@ -366,6 +377,16 @@ static struct vnode *new_node(struct lookup *resolve, int oflags, mode_t bits)
 		/* Can't create inode either due to permissions or some other
 		 * problem. In case r is EEXIST, we might be dealing with a
 		 * dangling symlink.*/
+		{
+			static int create_err_log_count;
+			if (create_err_log_count < 16) {
+				printf("VFS: req_create err=%d ep=%d path=\"%s\" full=\"%s\" dir_ino=%llu fs=%d\n",
+				    r, fp->fp_endpoint, path, orig_path,
+				    (unsigned long long)dirp->v_inode_nr,
+				    dirp->v_fs_e);
+				create_err_log_count++;
+			}
+		}
 
 		/* Downgrade lock to prevent deadlock during symlink resolving*/
 		downgrade_vmnt_lock(dir_vmp);

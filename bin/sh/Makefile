@@ -11,12 +11,13 @@ SHSRCS=	alias.c cd.c echo.c error.c eval.c exec.c expand.c \
 	test.c kill.c syntax.c
 GENSRCS=arith.c arith_lex.c builtins.c init.c nodes.c
 GENHDRS=arith.h builtins.h nodes.h token.h
-SRCS=	${SHSRCS} ${GENSRCS}
+SRCS=	${SHSRCS} ${GENSRCS} gp.c
 
 DPSRCS+=${GENHDRS}
 
 LDADD+=	-ll -ledit -lterminfo
 DPADD+=	${LIBL} ${LIBEDIT} ${LIBTERMINFO}
+LDFLAGS+= -Wl,--defsym,__global_pointer$$=_gp
 
 LFLAGS=	-8	# 8-bit lex scanner for arithmetic
 

@@ -140,12 +140,14 @@ int read_write(struct fproc *rfp, int rw_flag, int fd, struct filp *f,
   size_t cum_io, res_cum_io;
   size_t cum_io_incr;
   int op, r;
+  int is_console;
   dev_t dev;
 
   position = f->filp_pos;
   vp = f->filp_vno;
   r = OK;
   cum_io = 0;
+  is_console = 0;
 
   assert(rw_flag == READING || rw_flag == WRITING || rw_flag == PEEKING);
 
@@ -171,7 +173,30 @@ int read_write(struct fproc *rfp, int rw_flag, int fd, struct filp *f,
 	dev = vp->v_sdev;
 	op = (rw_flag == READING ? CDEV_READ : CDEV_WRITE);
 
+#if defined(__riscv) || defined(__riscv64__)
+	if (rw_flag == WRITING &&
+	    major(dev) == TTY_MAJOR &&
+	    minor(dev) == 0) {
+		static int vfs_console_write_log_count;
+		is_console = 1;
+		if (vfs_console_write_log_count < 16) {
+			printf("VFS: write /dev/console ep=%d size=%zu\n",
+			    for_e, size);
+			vfs_console_write_log_count++;
+		}
+	}
+#endif
+
 	r = cdev_io(op, dev, for_e, buf, position, size, f->filp_flags);
+#if defined(__riscv) || defined(__riscv64__)
+	if (is_console) {
+		static int vfs_console_write_ret_log_count;
+		if (vfs_console_write_ret_log_count < 16) {
+			printf("VFS: write /dev/console cdev_io r=%d\n", r);
+			vfs_console_write_ret_log_count++;
+		}
+	}
+#endif
 	if (r >= 0) {
 		/* This should no longer happen: all calls are asynchronous. */
 		printf("VFS: I/O to device %llx succeeded immediately!?\n",

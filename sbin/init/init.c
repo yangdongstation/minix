@@ -152,6 +152,7 @@ static enum { AUTOBOOT, FASTBOOT } runcom_mode = AUTOBOOT;
 
 static void transition(state_t);
 static void setctty(const char *);
+static void dbg_console(const char *msg);
 
 typedef struct init_session {
 	int	se_index;		/* index of entry in ttys file */
@@ -339,6 +340,14 @@ main(int argc, char **argv)
 	(void)close(0);
 	(void)close(1);
 	(void)close(2);
+	{
+		int fd = open(_PATH_CONSOLE, O_WRONLY);
+		if (fd >= 0) {
+			(void)dup2(fd, 1);
+			(void)dup2(fd, 2);
+		}
+	}
+	dbg_console("init: start\n");
 
 #if !defined(LETS_GET_SMALL) && defined(CHROOT)
 	/* Create "init.root" sysctl node. */
@@ -463,6 +472,20 @@ warning(const char *message, ...)
 	vsyslog(LOG_ALERT, message, ap);
 	va_end(ap);
 	closelog();
+}
+
+static void
+dbg_console(const char *msg)
+{
+	int fd;
+	size_t len;
+
+	fd = open(_PATH_CONSOLE, O_WRONLY);
+	if (fd == -1)
+		return;
+	len = strlen(msg);
+	(void)write(fd, msg, len);
+	(void)close(fd);
 }
 
 /*
@@ -670,6 +693,7 @@ static void
 setctty(const char *name)
 {
 	int fd;
+	int tries;
 
 #if !defined(__minix)
 	(void)revoke(name);
@@ -678,7 +702,14 @@ setctty(const char *name)
 		warn("child setsid() failed");
 #endif /* !defined(__minix) */
 	(void)nanosleep(&dtrtime, NULL);	/* leave DTR low for a bit */
-	if ((fd = open(name, O_RDWR)) == -1) {
+	fd = -1;
+	for (tries = 0; tries < 10; tries++) {
+		fd = open(name, O_RDWR);
+		if (fd >= 0)
+			break;
+		(void)sleep(1);
+	}
+	if (fd == -1) {
 		stall("can't open %s: %m", name);
 		_exit(1);
 	}
@@ -884,6 +915,12 @@ runetcrc(int trychroot)
 	const char *argv[4];
 	struct sigaction sa;
 
+	{
+		char buf[64];
+		snprintf(buf, sizeof(buf), "init: runetcrc trychroot=%d\n",
+		    trychroot);
+		dbg_console(buf);
+	}
 	switch ((pid = fork())) {
 	case 0:
 		(void)sigemptyset(&sa.sa_mask);
@@ -910,7 +947,14 @@ runetcrc(int trychroot)
 			}
 #endif /* CHROOT */
 
+		dbg_console("init: exec /bin/sh /etc/rc\n");
 		(void)execv(INIT_BSHELL, __UNCONST(argv));
+		{
+			char buf[96];
+			snprintf(buf, sizeof(buf),
+			    "init: exec failed errno=%d\n", errno);
+			dbg_console(buf);
+		}
 		stall("can't exec `%s' for `%s': %m", INIT_BSHELL, _PATH_RUNCOM);
 		_exit(5);	/* force single user mode */
 		/*NOTREACHED*/
@@ -976,6 +1020,7 @@ runcom(void)
 {
 	state_func_t next_step;
 
+	dbg_console("init: runcom start\n");
 	/* Run /etc/rc and choose next state depending on the result. */
 	next_step = runetcrc(0);
 	if (next_step != (state_func_t)read_ttys)
@@ -1226,6 +1271,7 @@ read_ttys(void)
 	session_t *sp, *snext;
 	struct ttyent *typ;
 
+	dbg_console("init: read_ttys start\n");
 #ifdef SUPPORT_UTMPX
 	if (sessions == NULL) {
 		struct stat st;

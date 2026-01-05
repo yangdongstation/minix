@@ -166,6 +166,21 @@ int do_select(void)
 	se->block = 0;
   se->expiry = 0;	/* no timer set (yet) */
 
+#if defined(__riscv) || defined(__riscv64__)
+  {
+	clock_t now = getticks();
+	static int select_log_count;
+	if (select_log_count < 16) {
+		printf("VFS: select ep=%d nfds=%d timeout=%ld.%06ld block=%d now=%lu\n",
+		    who_e, nfds,
+		    do_timeout ? (long)timeout.tv_sec : -1L,
+		    do_timeout ? (long)timeout.tv_usec : 0L,
+		    se->block, (unsigned long)now);
+		select_log_count++;
+	}
+  }
+#endif
+
   /* We are going to lock filps, and that means that while locking a second
    * filp, we might already get the results for the first one. In that case,
    * the incoming results must not cause the select call to finish prematurely.
@@ -871,6 +886,16 @@ void select_timeout_check(int s)
   if (se->requestor == NULL) return;
   if (se->expiry == 0) return;	/* Strange, did we even ask for a timeout? */
   se->expiry = 0;
+#if defined(__riscv) || defined(__riscv64__)
+  {
+	static int select_timeout_log_count;
+	if (select_timeout_log_count < 16) {
+		printf("VFS: select timeout ep=%d slot=%d\n",
+		    se->req_endpt, s);
+		select_timeout_log_count++;
+	}
+  }
+#endif
   if (!is_deferred(se))
 	select_return(se);
   else

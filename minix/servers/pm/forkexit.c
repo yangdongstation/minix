@@ -119,6 +119,17 @@ do_fork(void)
   new_pid = get_free_pid();
   rmc->mp_pid = new_pid;	/* assign pid to child */
 
+#if defined(__riscv) || defined(__riscv64__)
+  {
+	static int init_fork_log_count;
+	if (rmp->mp_endpoint == INIT_PROC_NR && init_fork_log_count < 8) {
+		printf("PM: init fork child ep=%d pid=%d slot=%d\n",
+		    rmc->mp_endpoint, rmc->mp_pid, (int)(rmc - mproc));
+		init_fork_log_count++;
+	}
+  }
+#endif
+
   memset(&m, 0, sizeof(m));
   m.m_type = VFS_PM_FORK;
   m.VFS_PM_ENDPT = rmc->mp_endpoint;
@@ -293,6 +304,18 @@ exit_proc(
 
   proc_nr = (int) (rmp - mproc);	/* get process slot number */
   proc_nr_e = rmp->mp_endpoint;
+
+#if defined(__riscv) || defined(__riscv64__)
+  {
+	static int init_child_exit_log_count;
+	if (rmp->mp_parent == INIT_PROC_NR && init_child_exit_log_count < 16) {
+		printf("PM: child exit ep=%d pid=%d status=%d sig=%d flags=0x%x\n",
+		    rmp->mp_endpoint, rmp->mp_pid, exit_status,
+		    rmp->mp_sigstatus, rmp->mp_flags);
+		init_child_exit_log_count++;
+	}
+  }
+#endif
 
   /* Remember a session leader's process group. */
   procgrp = (rmp->mp_pid == mp->mp_procgrp) ? mp->mp_procgrp : 0;
@@ -804,4 +827,3 @@ cleanup(
   rmp->mp_child_stime = 0;
   procs_in_use--;
 }
-

@@ -38,6 +38,12 @@ int
 do_exec(void)
 {
 	message m;
+	static int exec_log_count;
+
+	if (exec_log_count < 16) {
+		printf("PM: exec request from ep=%d\n", mp->mp_endpoint);
+		exec_log_count++;
+	}
 
 	/* Forward call to VFS */
 	memset(&m, 0, sizeof(m));
@@ -197,4 +203,3 @@ void exec_restart(struct mproc *rmp, int result, vir_bytes pc, vir_bytes sp,
 	r = sys_exec(rmp->mp_endpoint, sp, (vir_bytes)rmp->mp_name, pc, ps_str);
 	if (r != OK) panic("sys_exec failed: %d", r);
 }
-

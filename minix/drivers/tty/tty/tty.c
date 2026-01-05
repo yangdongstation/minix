@@ -25,6 +25,7 @@
 #include <assert.h>
 #include <minix/drivers.h>
 #include <minix/driver.h>
+#include <minix/com.h>
 #include <termios.h>
 #include <sys/kbdio.h>
 #include <sys/ttycom.h>
@@ -127,6 +128,19 @@ static struct winsize winsize_defaults;	/* = all zeroes */
 
 /* Global variables for the TTY task (declared extern in tty.h). */
 tty_t tty_table[NR_CONS+NR_RS_LINES];
+
+#if defined(__riscv) || defined(__riscv64__)
+#define CONS_POLL_TICKS ((system_hz / 20) > 0 ? (system_hz / 20) : 1)
+static minix_timer_t cons_poll_tmr;
+
+static void
+cons_poll_tmr_cb(int arg)
+{
+  (void)arg;
+  tty_table[0].tty_events = 1;
+  set_timer(&cons_poll_tmr, CONS_POLL_TICKS, cons_poll_tmr_cb, 0);
+}
+#endif
 int ccurrent;			/* currently active console */
 struct machine machine;		/* kernel environment variables */
 u32_t system_hz;
@@ -165,6 +179,32 @@ int main(void)
 	r= driver_receive(ANY, &tty_mess, &ipc_status);
 	if (r != 0)
 		panic("driver_receive failed with: %d", r);
+
+#if defined(__riscv) || defined(__riscv64__)
+	if (!is_ipc_notify(ipc_status) &&
+	    tty_mess.m_source == VFS_PROC_NR &&
+	    tty_mess.m_type == CDEV_WRITE) {
+		static int tty_recv_log_count;
+		if (tty_recv_log_count < 16) {
+			printf("TTY: recv CDEV_WRITE src=%d minor=%d\n",
+			    tty_mess.m_source,
+			    tty_mess.m_vfs_lchardriver_readwrite.minor);
+			tty_recv_log_count++;
+		}
+	}
+	if (!is_ipc_notify(ipc_status) &&
+	    tty_mess.m_source == VFS_PROC_NR &&
+	    tty_mess.m_type == CDEV_OPEN) {
+		static int tty_open_log_count;
+		if (tty_open_log_count < 16) {
+			printf("TTY: recv CDEV_OPEN src=%d minor=%d access=0x%x\n",
+			    tty_mess.m_source,
+			    tty_mess.m_vfs_lchardriver_openclose.minor,
+			    tty_mess.m_vfs_lchardriver_openclose.access);
+			tty_open_log_count++;
+		}
+	}
+#endif
 
 	/* First handle all kernel notification types that the TTY supports. 
 	 *  - An alarm went off, expire all timers and handle the events. 
@@ -331,6 +371,10 @@ static int sef_cb_init_fresh(int UNUSED(type), sef_init_info_t *UNUSED(info))
   /* Final one-time keyboard initialization. */
   kb_init_once();
 
+#if defined(__riscv) || defined(__riscv64__)
+  set_timer(&cons_poll_tmr, CONS_POLL_TICKS, cons_poll_tmr_cb, 0);
+#endif
+
   /* Register for diagnostics notifications. */
   sys_diagctl_register();
 
@@ -474,8 +518,16 @@ static ssize_t do_read(devminor_t minor, u64_t UNUSED(position),
   tty_t *tp;
   int r;
 
-  if ((tp = line2tty(minor)) == NULL)
+  if ((tp = line2tty(minor)) == NULL) {
+#if defined(__riscv) || defined(__riscv64__)
+	static int tty_read_noline_log_count;
+	if (tty_read_noline_log_count < 8) {
+		printf("TTY: read no line minor=%d\n", minor);
+		tty_read_noline_log_count++;
+	}
+#endif
 	return ENXIO;
+  }
 
   /* Check if there is already a process hanging in a read, check if the
    * parameters are correct, do I/O.
@@ -543,8 +595,27 @@ static ssize_t do_write(devminor_t minor, u64_t UNUSED(position),
   tty_t *tp;
   int r;
 
-  if ((tp = line2tty(minor)) == NULL)
+  if ((tp = line2tty(minor)) == NULL) {
+#if defined(__riscv) || defined(__riscv64__)
+	static int tty_write_noline_log_count;
+	if (tty_write_noline_log_count < 8) {
+		printf("TTY: write no line minor=%d\n", minor);
+		tty_write_noline_log_count++;
+	}
+#endif
 	return ENXIO;
+  }
+
+#if defined(__riscv) || defined(__riscv64__)
+  if (minor == 0 && endpt != KERNEL) {
+	static int tty_write_log_count;
+	if (tty_write_log_count < 16) {
+		printf("TTY: write ep=%d minor=%d size=%zu\n",
+		    endpt, minor, size);
+		tty_write_log_count++;
+	}
+  }
+#endif
 
   /* Check if there is already a process hanging in a write, check if the
    * parameters are correct, do I/O.
@@ -700,6 +771,16 @@ static int do_ioctl(devminor_t minor, unsigned long request, endpoint_t endpt,
 
     case TIOCSCTTY:
 	/* Process sets this tty as its controlling tty */
+#if defined(__riscv) || defined(__riscv64__)
+	if (minor == 0) {
+		static int ctty_log_count;
+		if (ctty_log_count < 16) {
+			printf("TTY: TIOCSCTTY ep=%d minor=%d\n",
+			    user_endpt, minor);
+			ctty_log_count++;
+		}
+	}
+#endif
 	tp->tty_pgrp = user_endpt;
 	break;
 	
@@ -727,8 +808,28 @@ static int do_open(devminor_t minor, int access, endpoint_t user_endpt)
   tty_t *tp;
   int r = OK;
 
-  if ((tp = line2tty(minor)) == NULL)
+#if defined(__riscv) || defined(__riscv64__)
+  if (minor == 0) {
+	static int tty_do_open_log_count;
+	if (tty_do_open_log_count < 16) {
+		printf("TTY: do_open minor=%d access=0x%x user=%d\n",
+		    minor, access, user_endpt);
+		tty_do_open_log_count++;
+	}
+  }
+#endif
+
+  if ((tp = line2tty(minor)) == NULL) {
+#if defined(__riscv) || defined(__riscv64__)
+	static int tty_open_noline_log_count;
+	if (tty_open_noline_log_count < 8) {
+		printf("TTY: open no line minor=%d access=0x%x\n",
+		    minor, access);
+		tty_open_noline_log_count++;
+	}
+#endif
 	return ENXIO;
+  }
 
   if (minor == LOG_MINOR && isconsole(tp)) {
 	/* The log device is a write-only diagnostics device. */

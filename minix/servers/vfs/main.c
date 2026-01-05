@@ -43,13 +43,14 @@ static int get_work(void);
 static void service_pm(void);
 static int unblock(struct fproc *rfp);
 
+#if defined(__riscv) || defined(__riscv64__)
+static endpoint_t last_init_child_ep = NONE;
+#endif
+
 /* SEF functions and variables. */
 static void sef_local_startup(void);
 static int sef_cb_init_fresh(int type, sef_init_info_t *info);
 static int sef_cb_init_lu(int type, sef_init_info_t *info);
-static void sef_cb_signal_handler(int signo);
-
-extern void minix_malloc_log_dump(const char *reason);
 
 /*===========================================================================*
  *				main					     *
@@ -112,6 +113,16 @@ int main(void)
 			break;
 		case CLOCK:
 			/* Timer expired. Used only for select(). Check it. */
+#if defined(__riscv) || defined(__riscv64__)
+			{
+				static int vfs_clock_log_count;
+				if (vfs_clock_log_count < 8) {
+					printf("VFS: CLOCK notify ts=%lu\n",
+					    (unsigned long)m_in.m_notify.timestamp);
+					vfs_clock_log_count++;
+				}
+			}
+#endif
 			expire_timers(m_in.m_notify.timestamp);
 			break;
 		default:
@@ -386,31 +397,8 @@ static void sef_local_startup(void)
   sef_setcb_lu_state_changed(sef_cb_lu_state_changed);
   sef_setcb_lu_state_isvalid(sef_cb_lu_state_isvalid_standard);
 
-  /* Register signal callbacks. */
-	sef_setcb_signal_handler(sef_cb_signal_handler);
-
   /* Let SEF perform startup. */
   sef_startup();
-}
-
-/*===========================================================================*
- *				sef_cb_signal_handler			     *
- *===========================================================================*/
-static void sef_cb_signal_handler(int signo)
-{
-	switch (signo) {
-	case SIGSEGV:
-	case SIGILL:
-#ifdef SIGBUS
-	case SIGBUS:
-#endif
-		minix_malloc_log_dump("vfs fatal signal");
-		break;
-	default:
-		break;
-	}
-
-	sef_cb_signal_handler_posix_default(signo);
 }
 
 /*===========================================================================*
@@ -478,25 +466,9 @@ static int sef_cb_init_fresh(int UNUSED(type), sef_init_info_t *info)
   init_smap();			/* Initialize socket table. */
 
   /* Map all the services in the boot image. */
-  {
-	vir_bytes dst = (vir_bytes) rprocpub;
-	vir_bytes end = dst + sizeof(rprocpub);
-	vir_bytes sp = (vir_bytes) &s;
-	printf("VFS: sizeof(vir_bytes)=%d sizeof(void*)=%d sizeof(long)=%d\n",
-		(int) sizeof(vir_bytes), (int) sizeof(void *),
-		(int) sizeof(long));
-	printf("VFS: rprocpub gid=%d bytes=%d\n", info->rproctab_gid,
-		(int) sizeof(rprocpub));
-	printf("VFS: rprocpub dst=0x%lx end=0x%lx sp=0x%lx\n",
-		(unsigned long) dst, (unsigned long) end,
-		(unsigned long) sp);
-  }
   s = sys_safecopyfrom(RS_PROC_NR, info->rproctab_gid, 0,
 	(vir_bytes) rprocpub, sizeof(rprocpub));
   if (s != OK) {
-	printf("VFS: sys_safecopyfrom failed: %d gid=%d bytes=%d dst=0x%lx\n",
-		s, info->rproctab_gid, (int) sizeof(rprocpub),
-		(unsigned long)(vir_bytes) rprocpub);
 	panic("sys_safecopyfrom failed: %d", s);
   }
   for (i = 0; i < NR_BOOT_PROCS; i++) {
@@ -546,11 +518,18 @@ static void do_init_root(void)
   char *mount_type, *mount_label;
   int r;
 
+#if defined(__riscv) || defined(__riscv64__)
+  printf("VFS: init_root start\n");
+#endif
+
   /* Disallow requests from e.g. init(8) while doing the initial mounting. */
   worker_allow(FALSE);
 
   /* Mount the pipe file server. */
   mount_pfs();
+#if defined(__riscv) || defined(__riscv64__)
+  printf("VFS: init_root pfs mounted\n");
+#endif
 
   /* Mount the root file system. */
   mount_type = "mfs";       /* FIXME: use boot image process name instead */
@@ -558,11 +537,17 @@ static void do_init_root(void)
 
   r = mount_fs(DEV_IMGRD, "bootramdisk", "/", MFS_PROC_NR, 0, mount_type,
 	mount_label);
+#if defined(__riscv) || defined(__riscv64__)
+  printf("VFS: init_root mount_fs r=%d\n", r);
+#endif
   if (r != OK)
 	panic("Failed to initialize root");
 
   /* All done with mounting, allow requests now. */
   worker_allow(TRUE);
+#if defined(__riscv) || defined(__riscv64__)
+  printf("VFS: init_root done\n");
+#endif
 }
 
 /*===========================================================================*
@@ -648,6 +633,18 @@ static int get_work(void)
 	proc_p = _ENDPOINT_P(m_in.m_source);
 	if (proc_p < 0 || proc_p >= NR_PROCS) fp = NULL;
 	else fp = &fproc[proc_p];
+
+#if defined(__riscv)
+	{
+		static int vfs_msg_log_count;
+		if (vfs_msg_log_count < 64) {
+			printf("VFS: recv src=%d type=%d hex=0x%x proc=%d\n",
+				m_in.m_source, m_in.m_type,
+				(unsigned int)m_in.m_type, proc_p);
+			vfs_msg_log_count++;
+		}
+	}
+#endif
 
 	/* Negative who_p is never used to access the fproc array. Negative
 	 * numbers (kernel tasks) are treated in a special way.
@@ -747,6 +744,17 @@ void service_pm_postponed(void)
 	proc_e = job_m_in.VFS_PM_ENDPT;
 
 	assert(proc_e == fp->fp_endpoint);
+
+#if defined(__riscv) || defined(__riscv64__)
+	if (_ENDPOINT_P(proc_e) == INIT_PROC_NR ||
+	    proc_e == last_init_child_ep) {
+		static int pm_exit_log_count;
+		if (pm_exit_log_count < 16) {
+			printf("VFS: PM exit ep=%d\n", proc_e);
+			pm_exit_log_count++;
+		}
+	}
+#endif
 
 	pm_exit();
 
@@ -874,6 +882,13 @@ static void service_pm(void)
   case VFS_PM_UNPAUSE:
 	{
 		endpoint_t proc_e = m_in.VFS_PM_ENDPT;
+		if (call_nr == VFS_PM_EXEC) {
+			static int pm_exec_log_count;
+			if (pm_exec_log_count < 16) {
+				printf("VFS: PM exec request ep=%d\n", proc_e);
+				pm_exec_log_count++;
+			}
+		}
 
 		if(isokendpt(proc_e, &slot) != OK) {
 			printf("VFS: proc ep %d not ok\n", proc_e);
@@ -903,6 +918,18 @@ static void service_pm(void)
 		child_pid = m_in.VFS_PM_CPID;
 		reuid = m_in.VFS_PM_REUID;
 		regid = m_in.VFS_PM_REGID;
+
+#if defined(__riscv) || defined(__riscv64__)
+		if (_ENDPOINT_P(pproc_e) == INIT_PROC_NR) {
+			static int pm_fork_log_count;
+			if (pm_fork_log_count < 8) {
+				printf("VFS: PM fork parent=%d child=%d pid=%d\n",
+				    pproc_e, proc_e, child_pid);
+				pm_fork_log_count++;
+			}
+			last_init_child_ep = proc_e;
+		}
+#endif
 
 		pm_fork(pproc_e, proc_e, child_pid);
 		m_out.m_type = VFS_PM_FORK_REPLY;
