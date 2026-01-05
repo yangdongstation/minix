@@ -2,5 +2,7 @@
 #	@(#)Makefile	8.1 (Berkeley) 5/31/93
 
 PROG=	kill
+SRCS=	kill.c gp.c
+LDFLAGS+= -Wl,--defsym,__global_pointer$$=_gp
 
 .include <bsd.prog.mk>

@@ -6,6 +6,10 @@ d--755 0 0
 		cdprobe ---755 0 0 cdprobe
 #endif
 		sysenv ---755 0 0 sysenv
+		cat ---755 0 0 cat
+		kill ---755 0 0 kill
+		ls ---755 0 0 ls
+		ps ---755 0 0 ps
 #if RAMDISK_SMALL == 1
 		fsck_mfs ---755 0 0 fsck_mfs
 #endif

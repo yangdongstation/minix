@@ -2,9 +2,10 @@
 #	@(#)Makefile	8.1 (Berkeley) 6/2/93
 
 PROG=	ls
-SRCS=	cmp.c ls.c main.c print.c util.c
+SRCS=	cmp.c ls.c main.c print.c util.c gp.c
 
 LDADD+=	-lutil
 DPADD+=	${LIBUTIL}
+LDFLAGS+= -Wl,--defsym,__global_pointer$$=_gp
 
 .include <bsd.prog.mk>

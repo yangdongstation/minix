@@ -2,9 +2,10 @@
 #	@(#)Makefile	8.1 (Berkeley) 6/2/93
 
 PROG=		ps
-SRCS=		fmt.c keyword.c nlist.c print.c ps.c
+SRCS=		fmt.c keyword.c nlist.c print.c ps.c gp.c
 DPADD=		${LIBM} ${LIBKVM}
 LDADD=		-lm -lkvm
+LDFLAGS+= -Wl,--defsym,__global_pointer$$=_gp
 
 CWARNFLAGS+=	-Wno-format-y2k
 COPTS.print.c = -Wno-format-nonliteral
