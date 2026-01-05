@@ -1,6 +1,7 @@
 # MINIX RISC-V 64-bit Port Status / MINIX RISC-V 64 位移植状态
 
-**Date / 日期**: 2026-01-04  
+**Date / 日期**: 2026-01-06  
+**Version / 版本**: 1.0  
 **Status / 状态**: Phase 1 in progress — buildable with workarounds, runtime unstable  
 **Progress / 进度**: ~60% (core kernel present; VM/clock/IO issues outstanding)
 

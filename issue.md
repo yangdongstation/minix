@@ -1,6 +1,7 @@
 # MINIX RISC-V Port Issues / MINIX RISC-V 移植问题清单
 
-**Date / 日期**: 2026-01-04  
+**Date / 日期**: 2026-01-06  
+**Version / 版本**: 1.0  
 **Scope / 范围**: RISC-V 64-bit port, evidence includes file/line references.
 
 本文件记录 RISC-V 64 位移植的具体问题与证据（含文件/行号），并给出修复建议。  

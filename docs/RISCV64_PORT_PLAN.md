@@ -1,7 +1,8 @@
 # MINIX 3 RISC-V 64 Port Plan / MINIX 3 RISC-V 64 移植项目计划（可执行版）
 
 **Document Info / 文档信息**
-- Last updated / 最后更新: 2026-01-04
+- Last updated / 最后更新: 2026-01-06
+- Version / 版本: 1.0
 - Scope / 范围: evbriscv64 on QEMU virt
 - Purpose / 用途: actionable checklist; do not re-apply steps already present in tree
 

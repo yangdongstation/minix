@@ -9,18 +9,18 @@ targeting the QEMU virt platform.
 ## 文档信息 / Document Info
 
 **中文**
-- 版本：0.3
-- 最后更新：2026-01-04
+- 版本：1.0
+- 最后更新：2026-01-06
 - 适用范围：evbriscv64（QEMU virt）
 - 文档性质：构建/运行/测试操作手册，不是开发计划
 
 **English**
-- Version: 0.3
-- Last updated: 2026-01-04
+- Version: 1.0
+- Last updated: 2026-01-06
 - Scope: evbriscv64 (QEMU virt)
 - Doc type: build/run/test manual, not a development plan
 
-## 当前状态（截至 2026-01-04）/ Current Status (as of 2026-01-04)
+## 当前状态（截至 2026-01-06）/ Current Status (as of 2026-01-06)
 
 **中文**
 - 构建：可通过（需使用 workaround 组合，见本文构建命令与 `RISC64-STATUS.md`）
@@ -208,13 +208,13 @@ MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
 ./minix/tests/riscv64/run_tests.sh all
 ```
 
-**中文（截至 2026-01-04）**
+**中文（截至 2026-01-06）**
 - 用户态编译测试：全部通过（脚本已自动使用 in-tree toolchain + sysroot，并统一 `-std=gnu99`）。
 - 内核启动测试：失败，QEMU 中出现 `rv64: kernel_main` 后触发 `System reset...`，详见 `/tmp/boot_test.log`。
   该失败与地址空间切换/时钟链路等关键问题高度相关（详见 `issue.md`）。
 - SMP initialization：当前脚本固定标记为跳过（not yet implemented）。
 
-**English (as of 2026-01-04)**
+**English (as of 2026-01-06)**
 - Userland compile tests: pass (script uses in-tree toolchain + sysroot and `-std=gnu99`).
 - Kernel boot test: fails; QEMU shows `rv64: kernel_main` then `System reset...` (see `/tmp/boot_test.log`).
   This correlates with address-space handoff/clock issues (see `issue.md`).
@@ -480,5 +480,5 @@ MINIX 3 is licensed under BSD. See LICENSE in the source tree.
 
 ---
 
-**最后更新 / Last updated**：2026-01-04  
-**版本 / Version**：0.3
+**最后更新 / Last updated**：2026-01-06  
+**版本 / Version**：1.0

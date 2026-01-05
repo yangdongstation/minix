@@ -4,7 +4,9 @@ This repository contains the full MINIX 3 source tree plus an active RISC-V 64-b
 (evbriscv64) port targeting the QEMU virt platform.
 本仓库包含完整的 MINIX 3 源码树，以及面向 QEMU virt 平台的 RISC-V 64 位移植版本。
 
-## Current Status / 当前状态（as of 2026-01-04 / 截至 2026-01-04）
+**Documentation Version / 文档版本**: 1.0 (2026-01-06)
+
+## Current Status / 当前状态（as of 2026-01-06 / 截至 2026-01-06）
 
 - Build: passes with workaround flags; exact commands are in `README-RISCV64.md`.
   构建：使用绕过项后可通过，具体命令见 `README-RISCV64.md`。

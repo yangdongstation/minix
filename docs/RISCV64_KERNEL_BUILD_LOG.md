@@ -1,6 +1,7 @@
 # RISC-V MINIX Kernel Build Log / RISC-V MINIX 内核构建日志
 
-**Last updated / 最后更新**: 2026-01-04  
+**Last updated / 最后更新**: 2026-01-06  
+**Version / 版本**: 1.0  
 **Purpose / 用途**: Append-only record of build commands and outcomes. / 记录构建命令与结果（追加式）。
 
 ## Log Entries / 日志条目
@@ -53,3 +54,6 @@ MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
 
 ### Entry 3 — Doc Update Only (2026-01-04) / 仅更新文档
 **Action / 动作**: Documentation updates; no new build executed. / 仅更新文档，未执行新的构建。
+
+### Entry 4 — Doc Major Version (2026-01-06) / 文档大版本更新
+**Action / 动作**: Promoted docs to version 1.0; no new build executed. / 文档升级为 1.0，未执行新的构建。
