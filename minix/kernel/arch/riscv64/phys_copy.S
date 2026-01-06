@@ -68,6 +68,19 @@ phys_copy:
     /* Check for zero length */
     beqz    a2, .Lcopy_done
 
+    /* Translate physical addresses to kernel virtual */
+    li      t0, VIRT_DRAM_BASE
+    bltu    a0, t0, 1f
+    li      t1, KERNEL_BASE
+    sub     a0, a0, t0
+    add     a0, a0, t1
+1:
+    bltu    a1, t0, 2f
+    li      t1, KERNEL_BASE
+    sub     a1, a1, t0
+    add     a1, a1, t1
+2:
+
     /* Set up fault handler */
     la      t0, .Lcopy_fault
     /* TODO: Register fault handler */
@@ -141,6 +154,14 @@ phys_copy:
 phys_memset:
     /* Check for zero length */
     beqz    a2, .Lmemset_done
+
+    /* Translate physical address to kernel virtual */
+    li      t0, VIRT_DRAM_BASE
+    bltu    a0, t0, 1f
+    li      t1, KERNEL_BASE
+    sub     a0, a0, t0
+    add     a0, a0, t1
+1:
 
     /* Create byte pattern */
     andi    a1, a1, 0xFF

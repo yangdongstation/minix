@@ -4,9 +4,9 @@ This repository contains the full MINIX 3 source tree plus an active RISC-V 64-b
 (evbriscv64) port targeting the QEMU virt platform.
 本仓库包含完整的 MINIX 3 源码树，以及面向 QEMU virt 平台的 RISC-V 64 位移植版本。
 
-**Documentation Version / 文档版本**: 1.0 (2026-01-06)
+**Documentation Version / 文档版本**: 1.1 (2026-01-07)
 
-## Current Status / 当前状态（as of 2026-01-06 / 截至 2026-01-06）
+## Current Status / 当前状态（as of 2026-01-07 / 截至 2026-01-07）
 
 - Build: passes with workaround flags; exact commands are in `README-RISCV64.md`.
   构建：使用绕过项后可通过，具体命令见 `README-RISCV64.md`。
@@ -14,6 +14,8 @@ This repository contains the full MINIX 3 source tree plus an active RISC-V 64-b
   运行：内核可进入早期初始化，用户态尚不稳定，详见 `RISC64-STATUS.md`。
 - Risk tracking: code-review issues with file/line evidence are in `issue.md`.
   风险跟踪：带文件/行号证据的评审问题见 `issue.md`。
+- Status refresh: documentation sync only; no new build/test run since 2026-01-06.
+  状态更新：本次仅同步文档，自 2026-01-06 起未重新构建或测试。
 
 ## Quick Links / 快速链接
 
@@ -73,5 +75,8 @@ MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
   `README-RISCV64.md` if the baseline command changes.
   构建/测试变更：追加到 `docs/RISCV64_KERNEL_BUILD_LOG.md`，若基线命令变化则同步更新
   `README-RISCV64.md`。
+- Doc-only refresh: append a note to `docs/RISCV64_KERNEL_BUILD_LOG.md` and bump
+  doc dates where applicable.
+  仅文档更新：在 `docs/RISCV64_KERNEL_BUILD_LOG.md` 记录说明并同步更新文档日期。
 - Reading notes: add findings to `docs/RISCV64_PORTING_GUIDE.md`.
   阅读记录：补充到 `docs/RISCV64_PORTING_GUIDE.md`。

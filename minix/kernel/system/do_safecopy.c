@@ -20,7 +20,7 @@
 
 #define MAX_INDIRECT_DEPTH 5	/* up to how many indirect grants to follow? */
 
-#define MEM_TOP 0xFFFFFFFFUL
+#define MEM_TOP (~(vir_bytes)0)
 
 static int safecopy(struct proc *, endpoint_t, endpoint_t,
 	cp_grant_id_t, size_t, vir_bytes, vir_bytes, int);

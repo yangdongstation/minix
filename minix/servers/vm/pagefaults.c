@@ -163,6 +163,7 @@ static void handle_pagefault(endpoint_t ep, vir_bytes addr, u32_t err, int retry
 	struct vir_region *region;
 	vir_bytes offset;
 	int p, wr = PFERR_WRITE(err);
+	int exec = PFERR_EXEC(err);
 	int io = 0;
 #if defined(__riscv64__)
 	vir_bytes vbase;
@@ -226,6 +227,17 @@ static void handle_pagefault(endpoint_t ep, vir_bytes addr, u32_t err, int retry
 	/* If process was writing, see if it's writable. */
 	if(!(region->flags & VR_WRITABLE) && wr) {
 		printf("VM: pagefault: SIGSEGV %d ro map 0x%lx %s\n",
+				ep, addr, pf_errstr(err));
+		if((s=sys_kill(vmp->vm_endpoint, SIGSEGV)) != OK)
+			panic("sys_kill failed: %d", s);
+		if((s=sys_vmctl(ep, VMCTL_CLEAR_PAGEFAULT, 0 /*unused*/)) != OK)
+			panic("do_pagefaults: sys_vmctl failed: %d", ep);
+		return;
+	}
+
+	/* If process was executing, see if it's executable. */
+	if(!(region->flags & VR_EXEC) && exec) {
+		printf("VM: pagefault: SIGSEGV %d noexec map 0x%lx %s\n",
 				ep, addr, pf_errstr(err));
 		if((s=sys_kill(vmp->vm_endpoint, SIGSEGV)) != OK)
 			panic("sys_kill failed: %d", s);

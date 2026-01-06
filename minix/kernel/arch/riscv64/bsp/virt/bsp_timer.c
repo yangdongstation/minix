@@ -65,7 +65,7 @@ void bsp_timer_intr(void)
     sbi_set_timer(now + ticks_per_hz);
 
     /* Call kernel clock handler */
-    /* TODO: clock_handler() */
+    arch_clock_handler();
 }
 
 /*

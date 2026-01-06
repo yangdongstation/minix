@@ -567,44 +567,48 @@ int virtual_copy_f(struct proc *caller, struct vir_addr *src_addr,
             return EFAULT_DST;
         }
 
-        if (phys_copy(src_phys, dst_phys, chunk) != 0) {
+        {
+            phys_bytes pfa;
+            PHYS_COPY_CATCH(src_phys, dst_phys, chunk, pfa);
+            if (pfa != 0) {
 #ifdef __riscv64
-            if (trace) {
-                direct_print("rv64: vcopy phys_copy fault\n");
-            }
-            if (vcopy_fault_count < 8) {
-                direct_print("rv64: vcopy phys_copy fault caller=");
-                if (caller) {
-                    direct_print_hex((u64_t)caller->p_endpoint);
-                } else {
-                    direct_print("0");
+                if (trace) {
+                    direct_print("rv64: vcopy phys_copy fault\n");
                 }
-                direct_print(" src_e=");
-                direct_print_hex((u64_t)vir_addr[_SRC_]->proc_nr_e);
-                direct_print(" dst_e=");
-                direct_print_hex((u64_t)vir_addr[_DST_]->proc_nr_e);
-                direct_print(" src_phys=");
-                direct_print_hex((u64_t)src_phys);
-                direct_print(" dst_phys=");
-                direct_print_hex((u64_t)dst_phys);
-                direct_print(" src_off=");
-                direct_print_hex((u64_t)src_off);
-                direct_print(" dst_off=");
-                direct_print_hex((u64_t)dst_off);
-                direct_print(" bytes=");
-                direct_print_hex((u64_t)bytes);
-                direct_print(" chunk=");
-                direct_print_hex((u64_t)chunk);
-                direct_print("\n");
-                vcopy_fault_count++;
-            }
+                if (vcopy_fault_count < 8) {
+                    direct_print("rv64: vcopy phys_copy fault caller=");
+                    if (caller) {
+                        direct_print_hex((u64_t)caller->p_endpoint);
+                    } else {
+                        direct_print("0");
+                    }
+                    direct_print(" src_e=");
+                    direct_print_hex((u64_t)vir_addr[_SRC_]->proc_nr_e);
+                    direct_print(" dst_e=");
+                    direct_print_hex((u64_t)vir_addr[_DST_]->proc_nr_e);
+                    direct_print(" src_phys=");
+                    direct_print_hex((u64_t)src_phys);
+                    direct_print(" dst_phys=");
+                    direct_print_hex((u64_t)dst_phys);
+                    direct_print(" src_off=");
+                    direct_print_hex((u64_t)src_off);
+                    direct_print(" dst_off=");
+                    direct_print_hex((u64_t)dst_off);
+                    direct_print(" bytes=");
+                    direct_print_hex((u64_t)bytes);
+                    direct_print(" chunk=");
+                    direct_print_hex((u64_t)chunk);
+                    direct_print("\n");
+                    vcopy_fault_count++;
+                }
 #endif
-            if (vmcheck && caller) {
-                vm_suspend(caller, procs[_DST_], dst_off, bytes,
-                    VMSTYPE_KERNELCALL, 1);
-                return VMSUSPEND;
+                if (vmcheck && caller) {
+                    vm_suspend(caller, procs[_DST_], dst_off, bytes,
+                        VMSTYPE_KERNELCALL, 1);
+                    return VMSUSPEND;
+                }
+                return EFAULT;
             }
-            return EFAULT;
         }
 
         left -= chunk;

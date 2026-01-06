@@ -258,6 +258,38 @@ void pg_map(phys_bytes phys, vir_bytes virt, size_t size, u64_t flags)
 	pg_flush_tlb();
 }
 
+void pg_protect(vir_bytes virt, size_t size, u64_t flags)
+{
+	vir_bytes vaddr;
+	size_t left;
+	u64_t pte_flags;
+
+	if (size == 0)
+		return;
+
+	vaddr = rounddown(virt, PAGE_SIZE);
+	left = roundup(size + (virt - vaddr), PAGE_SIZE);
+
+	pte_flags = flags | PTE_V | PTE_A | PTE_D;
+
+	while (left > 0) {
+		u64_t *pte;
+		phys_bytes pa;
+
+		pte = pg_walk(_boot_pgdir, vaddr, 0);
+		if (pte == NULL || !(*pte & PTE_V))
+			panic("pg_protect: no pte for 0x%lx", vaddr);
+
+		pa = PTE_TO_PA(*pte);
+		*pte = PA_TO_PTE(pa) | pte_flags;
+
+		vaddr += PAGE_SIZE;
+		left -= PAGE_SIZE;
+	}
+
+	pg_flush_tlb();
+}
+
 /*
  * Unmap virtual address range
  */

@@ -71,6 +71,7 @@
 #define PFERR_PROT(e)   (((e) & 0xF) >= 1 && ((e) & 0xF) <= 7)    /* Access fault */
 #define PFERR_WRITE(e)  (((e) & 0xF) == 15 || ((e) & 0xF) == 7)   /* Store fault */
 #define PFERR_READ(e)   (((e) & 0xF) == 13 || ((e) & 0xF) == 5)   /* Load fault */
+#define PFERR_EXEC(e)   (((e) & 0xF) == 12 || ((e) & 0xF) == 1)   /* Inst fault */
 
 #define VM_PAGE_SIZE    4096
 

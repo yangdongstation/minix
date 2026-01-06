@@ -1,7 +1,7 @@
 # MINIX RISC-V 64-bit Port Status / MINIX RISC-V 64 位移植状态
 
-**Date / 日期**: 2026-01-06  
-**Version / 版本**: 1.0  
+**Date / 日期**: 2026-01-07  
+**Version / 版本**: 1.1  
 **Status / 状态**: Phase 1 in progress — buildable with workarounds, runtime unstable  
 **Progress / 进度**: ~60% (core kernel present; VM/IO issues outstanding)
 
@@ -11,11 +11,13 @@
 - 构建可通过（需使用绕过项与特定构建变量），详见 `README-RISCV64.md`。
 - QEMU 启动可进入早期内核初始化，但用户态未稳定进入。
 - 关键风险集中在页表根传参、UART、TLB 刷新与 SBI IPI/fence 路径（见 `issue.md`）。
+- 本次仅同步文档，自 2026-01-06 起未重新构建或测试，状态沿用。
 
 **English**
 - Build passes with workaround flags; see `README-RISCV64.md` for exact commands.
 - QEMU boot reaches early kernel init; user space is not yet stable.
 - Key risks are in page-table root handoff, UART, TLB flush, and SBI IPI/fence paths (see `issue.md`).
+- Documentation sync only; no new build/test run since 2026-01-06; status unchanged.
 
 ## Build Status / 构建状态
 

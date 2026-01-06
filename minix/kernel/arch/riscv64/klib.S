@@ -24,7 +24,16 @@
     .type restore_user_context, @function
 restore_user_context:
     /* Reset kernel stack pointer for next trap. */
+    beqz    tp, 1f
+    la      t0, _secondary_stacks
+    li      t1, STACK_SIZE
+    mul     t2, tp, t1
+    add     t0, t0, t2
+    add     t0, t0, t1
+    j       2f
+1:
     la      t0, _boot_stack_top
+2:
     csrw    CSR_SSCRATCH, t0
 
     /* Load trapframe pointer */

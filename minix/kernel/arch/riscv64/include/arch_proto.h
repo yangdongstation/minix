@@ -79,6 +79,7 @@ void prot_set_kern_seg_limit(vir_bytes limit);
 
 /* pg_utils.c */
 void pg_map(phys_bytes phys, vir_bytes virt, size_t size, u64_t flags);
+void pg_protect(vir_bytes virt, size_t size, u64_t flags);
 void pg_unmap(vir_bytes virt, size_t size);
 void pg_identity_map(phys_bytes start, phys_bytes end);
 void pg_flush_tlb(void);

@@ -3,12 +3,11 @@
  */
 
 #include <string.h>
+#include <signal.h>
 
 #include "kernel/kernel.h"
 #include "archconst.h"
 #include "arch_proto.h"
-
-static message m_pagefault;
 
 void proc_stacktrace(struct proc *proc)
 {
@@ -129,6 +128,9 @@ static void handle_interrupt(struct trapframe *tf, u64_t cause)
  */
 static void handle_exception(struct trapframe *tf, u64_t cause)
 {
+    struct proc *pr = get_cpulocal_var(proc_ptr);
+    int from_user = (tf->tf_sstatus & SSTATUS_SPP) == 0;
+
     switch (cause) {
     case EXC_ECALL_U:
         /* System call from user mode */
@@ -144,24 +146,36 @@ static void handle_exception(struct trapframe *tf, u64_t cause)
 
     case EXC_ILLEGAL_INST:
         /* Illegal instruction (may be FPU use with FS=OFF) */
-        if (!(tf->tf_sstatus & SSTATUS_SPP) &&
+        if (from_user &&
             ((tf->tf_sstatus & SSTATUS_FS_MASK) == SSTATUS_FS_OFF)) {
             copr_not_available_handler();
             NOT_REACHABLE;
+        }
+        if (from_user && pr != NULL) {
+            cause_sig(proc_nr(pr), SIGILL);
+            return;
         }
         panic("Illegal instruction at %p: %p", (void *)tf->tf_sepc,
             (void *)tf->tf_stval);
         break;
 
     case EXC_BREAKPOINT:
-        /* Breakpoint - skip instruction */
-        tf->tf_sepc += 2;  /* Compressed instruction */
+        if (from_user && pr != NULL) {
+            cause_sig(proc_nr(pr), SIGEMT);
+            return;
+        }
+        /* Breakpoint in kernel - skip instruction */
+        tf->tf_sepc += 4;
         break;
 
     case EXC_INST_MISALIGNED:
     case EXC_LOAD_MISALIGNED:
     case EXC_STORE_MISALIGNED:
         /* Misaligned access */
+        if (from_user && pr != NULL) {
+            cause_sig(proc_nr(pr), SIGBUS);
+            return;
+        }
         panic("Misaligned access at %p: addr %p", (void *)tf->tf_sepc,
             (void *)tf->tf_stval);
         break;
@@ -170,6 +184,10 @@ static void handle_exception(struct trapframe *tf, u64_t cause)
     case EXC_LOAD_ACCESS:
     case EXC_STORE_ACCESS:
         /* Access fault */
+        if (from_user && pr != NULL) {
+            cause_sig(proc_nr(pr), SIGSEGV);
+            return;
+        }
         panic("Access fault at %p: addr %p", (void *)tf->tf_sepc,
             (void *)tf->tf_stval);
         break;
@@ -218,6 +236,7 @@ static void handle_page_fault(struct trapframe *tf, u64_t cause, u64_t addr)
     struct proc *pr = get_cpulocal_var(proc_ptr);
     int in_physcopy = 0;
     int err;
+    message m_pagefault;
 
     in_physcopy = (tf->tf_sepc > (vir_bytes)phys_copy) &&
         (tf->tf_sepc < (vir_bytes)phys_copy_fault);

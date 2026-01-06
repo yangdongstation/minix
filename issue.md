@@ -1,11 +1,14 @@
 # MINIX RISC-V Port Issues / MINIX RISC-V 移植问题清单
 
-**Date / 日期**: 2026-01-06  
-**Version / 版本**: 1.0  
+**Date / 日期**: 2026-01-07  
+**Version / 版本**: 1.1  
 **Scope / 范围**: RISC-V 64-bit port, evidence includes file/line references.
 
 本文件记录 RISC-V 64 位移植的具体问题与证据（含文件/行号），并给出修复建议。  
 This file records concrete issues in the RISC-V 64-bit port with evidence and suggested fixes.
+
+**复核说明**：2026-01-07 文档同步，新增 Major #15（RV64 SMP 核心缺失）；其余状态沿用 2026-01-06。  
+**Review note**: 2026-01-07 doc sync; added Major #15 (RV64 SMP core missing); other status unchanged since 2026-01-06.
 
 ## Active Investigation / 当前主问题跟踪
 
@@ -124,6 +127,17 @@ This file records concrete issues in the RISC-V 64-bit port with evidence and su
   - Floating-point registers can be corrupted across context switches. / 浮点寄存器在切换时可能被破坏。
 - Suggested fix / 修复建议:
   - Implement FPU save/restore (f0-f31 + fcsr) and track `SSTATUS_FS` for lazy/eager context switching. / 实现 FPU 保存/恢复（f0-f31 + fcsr），并管理 `SSTATUS_FS`。
+
+### 15) RISC-V SMP core missing (arch_smp + smp.c not implemented) / RISC-V SMP 核心缺失
+- Evidence / 证据:
+  - `minix/kernel/arch/riscv64/include/arch_proto.h:143-151` declares SMP entrypoints with no riscv64 definitions
+  - `minix/kernel/arch/riscv64/head.S:149-152` calls `smp_ap_entry` when `CONFIG_SMP` is enabled
+  - `docs/RISCV64_PORT_PLAN.md:1618-1621` and `README-RISCV64.md:213-218` state SMP core is planned/skip-marked
+- Impact / 影响:
+  - CONFIG_SMP builds will not link or will only boot BSP; AP bring-up and IPI paths are missing. / 打开 CONFIG_SMP 时无法链接或仅能启动 BSP；从核启动与 IPI 路径缺失。
+- Suggested fix / 修复建议:
+  - Add `minix/kernel/arch/riscv64/smp.c` with `smp_init`, `smp_ap_entry`, `smp_send_ipi`, `smp_broadcast_ipi`, `smp_ipi_handler`, `arch_send_smp_schedule_ipi`, `arch_smp_halt_cpu`. / 增加 riscv64 `smp.c` 并实现上述入口。
+  - Add `minix/kernel/arch/riscv64/include/arch_smp.h` with SMP `cpuid` definition, plus per-CPU PLIC/timer init and `SIE_SSIE` enablement. / 增加 riscv64 `arch_smp.h`，定义 SMP `cpuid`，并接入每 CPU 的 PLIC/定时器初始化及 `SIE_SSIE` 使能。
 
 ## Moderate / 中等
 

@@ -5,10 +5,11 @@ This document is a practical, code-driven porting guide that emphasizes an itera
 **read-code → write-doc** workflow.
 
 **Document Info / 文档信息**
-- Last updated / 最后更新: 2026-01-06
-- Version / 版本: 1.0
+- Last updated / 最后更新: 2026-01-07
+- Version / 版本: 1.1
 - Scope / 范围: evbriscv64 on QEMU virt; kernel + VM + UART + build pipeline
 - Update rule / 更新规则: append notes after code review; file issues in `issue.md`
+- Change note / 变更说明: 2026-01-07 文档同步，未重新构建或测试。
 
 ---
 

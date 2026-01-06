@@ -218,6 +218,24 @@ static int load_vm_elf(multiboot_module_t *mod, vir_bytes stack_high,
 	}
 	disable_user_access();
 
+	for (i = 0; i < ehdr->e_phnum; i++) {
+		Elf64_Phdr *ph = &phdr[i];
+		u64_t flags = RISCV_PTE_U;
+
+		if (ph->p_type != PT_LOAD || ph->p_memsz == 0)
+			continue;
+
+		if (ph->p_flags & PF_R)
+			flags |= RISCV_PTE_R;
+		if (ph->p_flags & PF_W)
+			flags |= RISCV_PTE_W;
+		if (ph->p_flags & PF_X)
+			flags |= RISCV_PTE_X;
+
+		pg_protect((vir_bytes)ph->p_vaddr,
+			(size_t)ph->p_memsz, flags);
+	}
+
 	direct_print("rv64: load_vm_elf done\n");
 	*entry = (vir_bytes)ehdr->e_entry;
 	return OK;
