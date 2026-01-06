@@ -696,7 +696,7 @@ static void free_proc(int flags)
 		if (vp->v_sdev != dev) continue;
 		lock_filp(rfilp, VNODE_READ);
 		(void) cdev_close(dev); /* Ignore any errors. */
-		/* FIXME: missing select check */
+		select_wakeup_filp(rfilp);
 		rfilp->filp_mode = FILP_CLOSED;
 		unlock_filp(rfilp);
           }

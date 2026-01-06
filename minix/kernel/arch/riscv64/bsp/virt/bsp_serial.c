@@ -58,6 +58,96 @@ static volatile u8_t *uart_base = (volatile u8_t *)VIRT_UART0_BASE;
 /* UART initialized flag */
 static int uart_initialized = 0;
 
+/* UART register access */
+static inline u8_t uart_read(int reg);
+static inline void uart_write(int reg, u8_t val);
+
+/* Simple RX/TX ring buffers for interrupt-driven I/O */
+#define UART_RX_BUF_SIZE 256
+#define UART_TX_BUF_SIZE 256
+
+static u8_t uart_rx_buf[UART_RX_BUF_SIZE];
+static unsigned int uart_rx_head;
+static unsigned int uart_rx_tail;
+static unsigned int uart_rx_count;
+
+static u8_t uart_tx_buf[UART_TX_BUF_SIZE];
+static unsigned int uart_tx_head;
+static unsigned int uart_tx_tail;
+static unsigned int uart_tx_count;
+
+static inline int uart_irq_save(void)
+{
+    int enabled = !intr_disabled();
+    if (enabled)
+        intr_disable();
+    return enabled;
+}
+
+static inline void uart_irq_restore(int enabled)
+{
+    if (enabled)
+        intr_enable();
+}
+
+static int uart_rx_enqueue(u8_t c)
+{
+    if (uart_rx_count >= UART_RX_BUF_SIZE)
+        return -1;
+
+    uart_rx_buf[uart_rx_head] = c;
+    uart_rx_head = (uart_rx_head + 1) % UART_RX_BUF_SIZE;
+    uart_rx_count++;
+    return 0;
+}
+
+static int uart_rx_dequeue(u8_t *c)
+{
+    if (uart_rx_count == 0)
+        return -1;
+
+    *c = uart_rx_buf[uart_rx_tail];
+    uart_rx_tail = (uart_rx_tail + 1) % UART_RX_BUF_SIZE;
+    uart_rx_count--;
+    return 0;
+}
+
+static int uart_tx_enqueue(u8_t c)
+{
+    if (uart_tx_count >= UART_TX_BUF_SIZE)
+        return -1;
+
+    uart_tx_buf[uart_tx_head] = c;
+    uart_tx_head = (uart_tx_head + 1) % UART_TX_BUF_SIZE;
+    uart_tx_count++;
+    return 0;
+}
+
+static int uart_tx_dequeue(u8_t *c)
+{
+    if (uart_tx_count == 0)
+        return -1;
+
+    *c = uart_tx_buf[uart_tx_tail];
+    uart_tx_tail = (uart_tx_tail + 1) % UART_TX_BUF_SIZE;
+    uart_tx_count--;
+    return 0;
+}
+
+static void uart_enable_tx_intr(void)
+{
+    u8_t ier = uart_read(UART_IER);
+    if (!(ier & IER_ETBEI))
+        uart_write(UART_IER, ier | IER_ETBEI);
+}
+
+static void uart_disable_tx_intr(void)
+{
+    u8_t ier = uart_read(UART_IER);
+    if (ier & IER_ETBEI)
+        uart_write(UART_IER, ier & ~IER_ETBEI);
+}
+
 /*
  * Read UART register
  */
@@ -99,6 +189,13 @@ void bsp_serial_init(void)
     /* Enable receive interrupt */
     uart_write(UART_IER, IER_ERBFI);
 
+    uart_rx_head = 0;
+    uart_rx_tail = 0;
+    uart_rx_count = 0;
+    uart_tx_head = 0;
+    uart_tx_tail = 0;
+    uart_tx_count = 0;
+
     uart_initialized = 1;
 }
 
@@ -107,18 +204,54 @@ void bsp_serial_init(void)
  */
 void bsp_serial_putc(int c)
 {
+    u8_t ch = (u8_t)c;
+
     if (!uart_initialized) {
         /* Fall back to SBI console */
         sbi_console_putchar(c);
         return;
     }
 
-    /* Wait for transmit buffer to be empty */
+    if (intr_disabled()) {
+        u8_t pending;
+
+        while (uart_tx_dequeue(&pending) == 0) {
+            while ((uart_read(UART_LSR) & LSR_THRE) == 0)
+                ;
+            uart_write(UART_THR, pending);
+        }
+
+        /* Wait for transmit buffer to be empty */
+        while ((uart_read(UART_LSR) & LSR_THRE) == 0)
+            ;
+
+        /* Send character */
+        uart_write(UART_THR, ch);
+        return;
+    }
+
+    {
+        int enabled = uart_irq_save();
+
+        if (uart_tx_count == 0 && (uart_read(UART_LSR) & LSR_THRE)) {
+            uart_write(UART_THR, ch);
+            uart_irq_restore(enabled);
+            return;
+        }
+
+        if (uart_tx_enqueue(ch) == 0) {
+            uart_enable_tx_intr();
+            uart_irq_restore(enabled);
+            return;
+        }
+
+        uart_irq_restore(enabled);
+    }
+
+    /* Fallback to polling if the TX buffer is full. */
     while ((uart_read(UART_LSR) & LSR_THRE) == 0)
         ;
-
-    /* Send character */
-    uart_write(UART_THR, c);
+    uart_write(UART_THR, ch);
 }
 
 /*
@@ -127,8 +260,19 @@ void bsp_serial_putc(int c)
  */
 int bsp_serial_getc(void)
 {
+    u8_t ch;
+
     if (!uart_initialized) {
         return sbi_console_getchar();
+    }
+
+    {
+        int enabled = uart_irq_save();
+        if (uart_rx_dequeue(&ch) == 0) {
+            uart_irq_restore(enabled);
+            return ch;
+        }
+        uart_irq_restore(enabled);
     }
 
     /* Check if data is ready */
@@ -143,6 +287,8 @@ int bsp_serial_getc(void)
  */
 int bsp_serial_tx_ready(void)
 {
+    if (uart_tx_count > 0)
+        return 0;
     if (!uart_initialized)
         return 1;
     return (uart_read(UART_LSR) & LSR_THRE) != 0;
@@ -153,6 +299,8 @@ int bsp_serial_tx_ready(void)
  */
 int bsp_serial_rx_ready(void)
 {
+    if (uart_rx_count > 0)
+        return 1;
     if (!uart_initialized)
         return 0;
     return (uart_read(UART_LSR) & LSR_DR) != 0;
@@ -163,26 +311,48 @@ int bsp_serial_rx_ready(void)
  */
 void bsp_serial_intr(void)
 {
-    u8_t iir = uart_read(UART_IIR);
-
-    /* Check interrupt pending bit (0 = pending) */
-    if (iir & 0x01)
+    if (!uart_initialized)
         return;
 
-    /* Handle based on interrupt type */
-    switch ((iir >> 1) & 0x07) {
-    case 0x02:  /* Received Data Available */
-    case 0x06:  /* Character Timeout */
-        /* Read character to clear interrupt */
-        /* TODO: Pass to TTY driver */
-        (void)uart_read(UART_RBR);
-        break;
+    for (;;) {
+        u8_t iir = uart_read(UART_IIR);
+        u8_t reason;
 
-    case 0x01:  /* Transmit Holding Register Empty */
-        /* TODO: Send next character from buffer */
-        break;
+        /* Check interrupt pending bit (0 = pending) */
+        if (iir & 0x01)
+            break;
 
-    default:
-        break;
+        reason = (iir >> 1) & 0x07;
+        switch (reason) {
+        case 0x02:  /* Received Data Available */
+        case 0x06:  /* Character Timeout */
+            while (uart_read(UART_LSR) & LSR_DR) {
+                u8_t ch = uart_read(UART_RBR);
+                (void)uart_rx_enqueue(ch);
+            }
+            break;
+
+        case 0x01:  /* Transmit Holding Register Empty */
+            while ((uart_read(UART_LSR) & LSR_THRE) != 0) {
+                u8_t ch;
+                if (uart_tx_dequeue(&ch) != 0)
+                    break;
+                uart_write(UART_THR, ch);
+            }
+            if (uart_tx_count == 0)
+                uart_disable_tx_intr();
+            break;
+
+        case 0x03:  /* Receiver Line Status */
+            (void)uart_read(UART_LSR);
+            break;
+
+        case 0x00:  /* Modem Status */
+            (void)uart_read(UART_MSR);
+            break;
+
+        default:
+            break;
+        }
     }
 }

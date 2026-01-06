@@ -52,6 +52,8 @@ static inline void *pg_phys_to_virt(phys_bytes pa)
 	return (void *)(vir_bytes)(KERNEL_BASE + (pa - VIRT_DRAM_BASE));
 }
 
+static phys_bytes pg_free_list;
+
 static inline void early_uart_putc(int c)
 {
 	volatile u8_t *uart = (volatile u8_t *)VIRT_UART0_BASE;
@@ -65,6 +67,13 @@ static phys_bytes pg_alloc_page(kinfo_t *cbi)
 {
 	int m;
 	multiboot_memory_map_t *mmap;
+	phys_bytes page;
+
+	if (pg_free_list != 0) {
+		page = pg_free_list;
+		pg_free_list = *(phys_bytes *)pg_phys_to_virt(page);
+		return page;
+	}
 
 	for (m = cbi->mmap_size - 1; m >= 0; m--) {
 		mmap = &cbi->memmap[m];
@@ -80,6 +89,12 @@ static phys_bytes pg_alloc_page(kinfo_t *cbi)
 	}
 
 	panic("can't find free memory");
+}
+
+static void pg_free_page(phys_bytes page)
+{
+	*(phys_bytes *)pg_phys_to_virt(page) = pg_free_list;
+	pg_free_list = page;
 }
 
 static u64_t *pg_walk(u64_t *pgdir, vir_bytes va, int create)
@@ -392,13 +407,37 @@ phys_bytes pg_create(void)
 	return pgdir;
 }
 
+static void pg_free_pt_level(u64_t *pt, int level)
+{
+	int i;
+
+	for (i = 0; i < RISCV_PTES_PER_PT; i++) {
+		u64_t pte = pt[i];
+
+		if (!(pte & PTE_V))
+			continue;
+		if (pte & (PTE_R | PTE_W | PTE_X))
+			continue;
+		if (level == 0)
+			continue;
+
+		pg_free_pt_level((u64_t *)pg_phys_to_virt(PTE_TO_PA(pte)),
+			level - 1);
+		pg_free_page(PTE_TO_PA(pte));
+		pt[i] = 0;
+	}
+}
+
 /*
  * Destroy page table
  */
 void pg_destroy(phys_bytes pgdir)
 {
-    /* TODO: Free all page table pages */
-    (void)pgdir;
+	if (pgdir == 0 || pgdir == (phys_bytes)_boot_pgdir)
+		return;
+
+	pg_free_pt_level((u64_t *)pg_phys_to_virt(pgdir), 2);
+	pg_free_page(pgdir);
 }
 
 void add_memmap(kinfo_t *cbi, u64_t addr, u64_t len)

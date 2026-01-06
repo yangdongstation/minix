@@ -313,7 +313,7 @@ phys_bytes umap_local(struct proc *p, int seg, vir_bytes vir, vir_bytes bytes)
         if (level == 0)
             return 0;
 
-        pt = (u64_t *)PTE_TO_PA(pte);
+        pt = (u64_t *)pt_phys_to_virt(PTE_TO_PA(pte));
     }
 
     return 0;

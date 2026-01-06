@@ -976,6 +976,39 @@ void select_unsuspend_by_endpt(endpoint_t proc_e)
 }
 
 /*===========================================================================*
+ *				select_wakeup_filp			     *
+ *===========================================================================*/
+void select_wakeup_filp(struct filp *f)
+{
+/* Wake up any blocked select/poll calls that include this filp. */
+  int fd, s, restart;
+  struct selectentry *se;
+
+  if (f == NULL)
+	return;
+
+  for (s = 0; s < MAXSELECTS; s++) {
+	se = &selecttab[s];
+	if (se->requestor == NULL)
+		continue;
+
+	restart = FALSE;
+
+	for (fd = 0; fd < se->nfds; fd++) {
+		if (se->filps[fd] != f)
+			continue;
+		ops2tab(SEL_RD | SEL_WR, fd, se);
+		se->filps[fd] = NULL;
+		select_cancel_filp(f);
+		restart = TRUE;
+	}
+
+	if (restart)
+		restart_proc(se);
+  }
+}
+
+/*===========================================================================*
  *				select_reply1				     *
  *===========================================================================*/
 static void select_reply1(struct filp *f, int status)

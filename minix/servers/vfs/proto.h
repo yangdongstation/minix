@@ -405,6 +405,7 @@ void select_cdev_reply2(endpoint_t driver_e, devminor_t minor, int status);
 void select_sdev_reply1(dev_t dev, int status);
 void select_sdev_reply2(dev_t dev, int status);
 void select_unsuspend_by_endpt(endpoint_t proc);
+void select_wakeup_filp(struct filp *f);
 void select_dump(void);
 
 /* worker.c */
