@@ -216,7 +216,20 @@ static void handle_page_fault(struct trapframe *tf, u64_t cause, u64_t addr)
     int write_fault = (cause == EXC_STORE_PAGE_FAULT);
     int exec_fault = (cause == EXC_INST_PAGE_FAULT);
     struct proc *pr = get_cpulocal_var(proc_ptr);
+    int in_physcopy = 0;
     int err;
+
+    in_physcopy = (tf->tf_sepc > (vir_bytes)phys_copy) &&
+        (tf->tf_sepc < (vir_bytes)phys_copy_fault);
+
+    if (catch_pagefaults && in_physcopy) {
+        if (tf->tf_sstatus & SSTATUS_SPP) {
+            tf->tf_sepc = (u64_t)phys_copy_fault_in_kernel;
+        } else if (pr != NULL) {
+            pr->p_reg.pc = (reg_t)phys_copy_fault;
+        }
+        return;
+    }
 
     /* Check if we're in kernel mode */
     if (tf->tf_sstatus & SSTATUS_SPP) {
