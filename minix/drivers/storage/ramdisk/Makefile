@@ -16,17 +16,23 @@ all:
 RAMDISK_INC_ACPI=	0
 RAMDISK_SMALL=		0
 RAMDISK_DYNAMIC=	0
+RAMDISK_TESTS?=		0
 
 RAMDISK_DEFINES= \
 	-DRAMDISK_INC_ACPI=${RAMDISK_INC_ACPI} \
 	-DRAMDISK_SMALL=${RAMDISK_SMALL} \
-	-DRAMDISK_DYNAMIC=${RAMDISK_DYNAMIC}
+	-DRAMDISK_DYNAMIC=${RAMDISK_DYNAMIC} \
+	-DRAMDISK_TESTS=${RAMDISK_TESTS}
 
 # The name of the proto file to use
 PROTO=			proto
 
 # Common to all architectures
 ETC=			system.conf group ttys
+SYSTEM_CONF_SRC=	${NETBSDSRCDIR}/etc/system.conf
+.if ${MACHINE_ARCH} == "riscv64" || ${MACHINE_ARCH} == "riscv"
+SYSTEM_CONF_SRC=	${NETBSDSRCDIR}/minix/releasetools/riscv64/system.conf
+.endif
 EXTRA=			rc
 PROTO_FILES=		proto.common.etc
 PROTO_FILES+=		proto.common.dynamic
@@ -104,6 +110,19 @@ PROGRAMS+=		mmc
 dir.mmc:=	minix/drivers/storage/mmc
 .endif # ${MACHINE_ARCH} == "earm"
 
+.if ${MACHINE_ARCH} == "riscv64" || ${MACHINE_ARCH} == "riscv"
+PROGRAMS+=		dd
+dir.dd:=	bin/dd
+PROGRAMS+=		cmp
+dir.cmp:=	usr.bin/cmp
+PROGRAMS+=		virtio_blk_mmio
+dir.virtio_blk_mmio:= minix/drivers/storage/virtio_blk_mmio
+.if ${RAMDISK_TESTS} == "1"
+PROGRAMS+=		test_virtio_blk_mmio
+dir.test_virtio_blk_mmio:= minix/tests/riscv64
+.endif
+.endif # ${MACHINE_ARCH} == "riscv64" || ${MACHINE_ARCH} == "riscv"
+
 .if ${LDSTATIC} == "-dynamic"
 RAMDISK_DYNAMIC=	 1
 PROGRAMS+=		ld.elf_so
@@ -138,9 +157,15 @@ PROGSUFFIX:=
 
 # Generate dependencies rules for config files
 .for etc in ${ETC}
+.if ${etc} == "system.conf"
+etc/${etc}: ${SYSTEM_CONF_SRC}
+	mkdir -p ${.OBJDIR}/etc
+	${INSTALL} $> $@
+.else
 etc/${etc}: ${NETBSDSRCDIR}/etc/${etc}
 	mkdir -p ${.OBJDIR}/etc
 	${INSTALL} $> $@
+.endif
 .endfor
 
 # LSC Force the regeneration of the proto file as it seems sometimes 

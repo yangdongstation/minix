@@ -8,6 +8,7 @@
 
 #include <assert.h>
 #include <errno.h>
+#include <sys/mman.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -52,6 +53,17 @@ struct virtio_mmio_dev {
     int threads;
     int version;                /* VirtIO version (1 or 2) */
 };
+
+static int virtio_mmio_allow_mem(void)
+{
+    struct minix_mem_range mr;
+
+    mr.mr_base = VIRTIO_MMIO_BASE;
+    mr.mr_limit = VIRTIO_MMIO_BASE +
+        (VIRTIO_MMIO_STRIDE * VIRTIO_MMIO_NUM_DEVICES) - 1;
+
+    return sys_privctl(SELF, SYS_PRIV_ADD_MEM, &mr);
+}
 
 /*
  * MMIO register access
@@ -104,27 +116,45 @@ void virtio_mmio_config_write32(struct virtio_mmio_dev *dev, u32_t offset, u32_t
  */
 static int exchange_features(struct virtio_mmio_dev *dev)
 {
-    u32_t host_features, guest_features;
+    u32_t host_features_lo, host_features_hi;
+    u32_t guest_features_lo = 0;
+    u32_t guest_features_hi = 0;
     int i;
 
     /* Read host features */
     virtio_mmio_write32(dev, VIRTIO_MMIO_HOST_FEATURES_SEL, 0);
-    host_features = virtio_mmio_read32(dev, VIRTIO_MMIO_HOST_FEATURES);
+    host_features_lo = virtio_mmio_read32(dev, VIRTIO_MMIO_HOST_FEATURES);
+    virtio_mmio_write32(dev, VIRTIO_MMIO_HOST_FEATURES_SEL, 1);
+    host_features_hi = virtio_mmio_read32(dev, VIRTIO_MMIO_HOST_FEATURES);
 
     /* Check which features we support */
-    guest_features = 0;
     for (i = 0; i < dev->num_features; i++) {
-        if (host_features & (1U << dev->features[i].bit)) {
-            dev->features[i].host_support = 1;
-            if (dev->features[i].guest_support) {
-                guest_features |= (1U << dev->features[i].bit);
+        u8_t bit = dev->features[i].bit;
+        if (bit < 32) {
+            if (host_features_lo & (1U << bit)) {
+                dev->features[i].host_support = 1;
+                if (dev->features[i].guest_support)
+                    guest_features_lo |= (1U << bit);
+            }
+        } else if (bit < 64) {
+            u8_t shift = bit - 32;
+            if (host_features_hi & (1U << shift)) {
+                dev->features[i].host_support = 1;
+                if (dev->features[i].guest_support)
+                    guest_features_hi |= (1U << shift);
             }
         }
     }
 
+    /* VirtIO 1.0 devices require VIRTIO_F_VERSION_1 (bit 32). */
+    if (dev->version >= 2 && (host_features_hi & 1U))
+        guest_features_hi |= 1U;
+
     /* Write guest features */
     virtio_mmio_write32(dev, VIRTIO_MMIO_GUEST_FEATURES_SEL, 0);
-    virtio_mmio_write32(dev, VIRTIO_MMIO_GUEST_FEATURES, guest_features);
+    virtio_mmio_write32(dev, VIRTIO_MMIO_GUEST_FEATURES, guest_features_lo);
+    virtio_mmio_write32(dev, VIRTIO_MMIO_GUEST_FEATURES_SEL, 1);
+    virtio_mmio_write32(dev, VIRTIO_MMIO_GUEST_FEATURES, guest_features_hi);
 
     return OK;
 }
@@ -221,9 +251,16 @@ struct virtio_mmio_dev *virtio_mmio_setup(u32_t device_type,
     u32_t magic, version, devid;
     int i, found = 0;
     phys_bytes mmio_addr;
+    int r;
 
     if (name == NULL || threads <= 0)
         return NULL;
+
+    r = virtio_mmio_allow_mem();
+    if (r != OK) {
+        printf("%s: unable to add mmio mem range (%d)\n", name, r);
+        return NULL;
+    }
 
     /* Scan for device */
     for (i = 0; i < VIRTIO_MMIO_NUM_DEVICES && !found; i++) {

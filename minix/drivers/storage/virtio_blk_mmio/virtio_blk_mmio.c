@@ -74,6 +74,10 @@ static int virtio_blk_ioctl(devminor_t minor, unsigned long req,
 static struct device *virtio_blk_part(devminor_t minor);
 static void virtio_blk_geometry(devminor_t minor, struct part_geom *entry);
 static void virtio_blk_intr(unsigned int irqs);
+static int virtio_blk_device(devminor_t minor, device_id_t *id);
+static int prepare_bufs(struct vumap_phys *phys, int cnt, int write);
+static int prepare_vir_vec(endpoint_t endpt, struct vumap_vir *vir,
+    iovec_s_t *iv, int cnt, vir_bytes *size);
 
 static struct blockdriver virtio_blk_tab = {
     .bdr_type       = BLOCKDRIVER_TYPE_DISK,
@@ -84,6 +88,7 @@ static struct blockdriver virtio_blk_tab = {
     .bdr_part       = virtio_blk_part,
     .bdr_geometry   = virtio_blk_geometry,
     .bdr_intr       = virtio_blk_intr,
+    .bdr_device     = virtio_blk_device,
 };
 
 /*
@@ -119,6 +124,51 @@ static void virtio_blk_free_requests(void)
         free_contig(status_vir, VIRTIO_BLK_NUM_THREADS * sizeof(*status_vir));
         status_vir = NULL;
     }
+}
+
+static int prepare_bufs(struct vumap_phys *phys, int cnt, int write)
+{
+    for (int i = 0; i < cnt; i++) {
+        if (phys[i].vp_addr & 1) {
+            dprintf(("byte aligned %08lx", phys[i].vp_addr));
+            return EINVAL;
+        }
+
+        phys[i].vp_addr |= !write;
+    }
+
+    return OK;
+}
+
+static int prepare_vir_vec(endpoint_t endpt, struct vumap_vir *vir,
+    iovec_s_t *iv, int cnt, vir_bytes *size)
+{
+    vir_bytes s, total = 0;
+
+    for (int i = 0; i < cnt; i++) {
+        s = iv[i].iov_size;
+
+        if (s == 0 || (s % VIRTIO_BLK_BLOCK_SIZE) || s > LONG_MAX) {
+            dprintf(("bad iv[%d].iov_size (%lu) from %d", i, s, endpt));
+            return EINVAL;
+        }
+
+        total += s;
+        if (total > LONG_MAX) {
+            dprintf(("total overflow from %d", endpt));
+            return EINVAL;
+        }
+
+        if (endpt == SELF)
+            vir[i].vv_addr = (vir_bytes)iv[i].iov_grant;
+        else
+            vir[i].vv_grant = iv[i].iov_grant;
+
+        vir[i].vv_size = iv[i].iov_size;
+    }
+
+    *size = total;
+    return OK;
 }
 
 /*
@@ -201,7 +251,11 @@ static int virtio_blk_open(devminor_t minor, int access)
 
     if (open_count == 0) {
         /* First open - read partition table */
+        memset(part, 0, sizeof(part));
+        memset(subpart, 0, sizeof(subpart));
+        part[0].dv_size = blk_config.capacity * VIRTIO_BLK_BLOCK_SIZE;
         partition(&virtio_blk_tab, 0, P_PRIMARY, 0);
+        blockdriver_mt_set_workers(0, VIRTIO_BLK_NUM_THREADS);
     }
 
     open_count++;
@@ -225,12 +279,14 @@ static ssize_t virtio_blk_transfer(devminor_t minor, int write, u64_t position,
     endpoint_t endpt, iovec_t *iovec, unsigned int cnt, int flags)
 {
     struct device *dev;
-    struct vumap_phys phys[3];
+    struct vumap_vir vir[NR_IOREQS];
+    struct vumap_phys phys[NR_IOREQS + 2];
     u64_t sector;
-    size_t size, total;
+    vir_bytes total = 0;
     thread_id_t tid;
-    int r;
+    int r, pcnt, access;
     void *data;
+    iovec_s_t *iv = (iovec_s_t *)iovec;
 
     dev = virtio_blk_part(minor);
     if (dev == NULL)
@@ -238,6 +294,9 @@ static ssize_t virtio_blk_transfer(devminor_t minor, int write, u64_t position,
 
     if (write && virtio_mmio_host_supports(blk_dev, VIRTIO_BLK_F_RO))
         return EACCES;
+
+    if (cnt > NR_IOREQS)
+        return EINVAL;
 
     tid = blockdriver_mt_get_tid();
 
@@ -252,31 +311,32 @@ static ssize_t virtio_blk_transfer(devminor_t minor, int write, u64_t position,
     /* Setup status */
     status_vir[tid] = write ? 0 : 1;  /* 1 = writable */
 
-    /* Map user buffer */
-    total = 0;
-    for (unsigned int i = 0; i < cnt; i++) {
-        total += iovec[i].iov_size;
+    r = prepare_vir_vec(endpt, vir, iv, cnt, &total);
+    if (r != OK)
+        return r;
+
+    access = write ? VUA_READ : VUA_WRITE;
+    pcnt = NR_IOREQS;
+    r = sys_vumap(endpt, vir, cnt, 0, access, &phys[1], &pcnt);
+    if (r != OK) {
+        dprintf(("Unable to map memory from %d (%d)", endpt, r));
+        return r;
     }
 
-    /* TODO: Proper scatter-gather support */
-    /* For now, just handle single buffer case */
+    r = prepare_bufs(&phys[1], pcnt, write);
+    if (r != OK)
+        return r;
 
     /* Queue: header, data, status */
     phys[0].vp_addr = hdrs_phys + tid * sizeof(*hdrs_vir);
     phys[0].vp_size = sizeof(struct virtio_blk_outhdr);
 
-    /* Data buffer - need to map from user space */
-    /* Simplified: assume single contiguous buffer */
-    phys[1].vp_addr = 0;  /* TODO: Get physical address of user buffer */
-    phys[1].vp_size = total;
-    if (!write)
-        phys[1].vp_addr |= 1;  /* Mark as writable */
-
-    phys[2].vp_addr = (status_phys + tid * sizeof(*status_vir)) | 1;
-    phys[2].vp_size = sizeof(u8_t);
+    phys[pcnt + 1].vp_addr = (status_phys + tid * sizeof(*status_vir)) | 1;
+    phys[pcnt + 1].vp_size = sizeof(u8_t);
 
     /* Submit request */
-    r = virtio_mmio_to_queue(blk_dev, 0, phys, 3, (void *)(uintptr_t)tid);
+    r = virtio_mmio_to_queue(blk_dev, 0, phys, pcnt + 2,
+        (void *)(uintptr_t)tid);
     if (r != OK)
         return r;
 
@@ -357,6 +417,17 @@ static void virtio_blk_intr(unsigned int irqs)
     virtio_mmio_irq_enable(blk_dev);
 }
 
+static int virtio_blk_device(devminor_t minor, device_id_t *id)
+{
+    struct device *dev = virtio_blk_part(minor);
+
+    if (dev == NULL)
+        return ENXIO;
+
+    *id = 0;
+    return OK;
+}
+
 /*
  * SEF init
  */
@@ -387,11 +458,11 @@ static void sef_cb_signal(int signo)
     }
 }
 
-void sef_startup(void)
+static void sef_local_startup(void)
 {
     sef_setcb_init_fresh(sef_cb_init);
     sef_setcb_signal_handler(sef_cb_signal);
-    sef_startup_default();
+    sef_startup();
 }
 
 /*
@@ -399,7 +470,7 @@ void sef_startup(void)
  */
 int main(void)
 {
-    sef_startup();
+    sef_local_startup();
     blockdriver_mt_task(&virtio_blk_tab);
     return 0;
 }

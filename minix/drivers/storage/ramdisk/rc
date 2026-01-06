@@ -49,6 +49,12 @@ then	echo Starting the mmc driver
 	minix-service -c up /service/mmc -dev /dev/c0d0
 fi
 
+if [ -x /service/virtio_blk_mmio ]
+then	echo Starting virtio_blk_mmio
+	minix-service -c up /service/virtio_blk_mmio -dev /dev/c0d0 || \
+		echo "WARNING: couldn't start virtio_blk_mmio"
+fi
+
 # Load ProcFS from the ramdisk to minimize the chance of a desync with the boot
 # image services from which it obtains data structures directly.  As we move to
 # the MIB service, this will eventually become obsolete.

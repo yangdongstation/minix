@@ -14,10 +14,16 @@ d--755 0 0
 		fsck_mfs ---755 0 0 fsck_mfs
 #endif
 		mount ---755 0 0 mount
-		umount ---755 0 0 umount
-		grep ---755 0 0 grep
-		sh ---755 0 0 sh
-	$
+	umount ---755 0 0 umount
+	grep ---755 0 0 grep
+	sh ---755 0 0 sh
+#if defined(__riscv) || defined(__riscv_xlen)
+	dd ---755 0 0 dd
+#if RAMDISK_TESTS == 1
+	test_virtio_blk_mmio ---755 0 0 test_virtio_blk_mmio
+#endif
+#endif
+$
 	sbin d--755 0 0
 		minix-service ---755 0 0 minix-service
 		sysenv ---755 0 0 sysenv
@@ -41,6 +47,9 @@ d--755 0 0
 #ifdef __arm__
 		mmc ---755 0 0 mmc
 #endif
+#if defined(__riscv) || defined(__riscv_xlen)
+		virtio_blk_mmio ---755 0 0 virtio_blk_mmio
+#endif
 		mfs ---755 0 0 mfs
 		procfs ---755 0 0 procfs
 		input ---755 0 0 input
@@ -48,6 +57,9 @@ d--755 0 0
 	usr d--755 0 0
 		bin d--755 0 0
 			loadramdisk ---755 0 0 loadramdisk
+#if defined(__riscv) || defined(__riscv_xlen)
+			cmp ---755 0 0 cmp
+#endif
 		$
 	$
 	proc d--755 0 0

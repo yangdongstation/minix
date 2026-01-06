@@ -7,9 +7,10 @@ This document summarizes the top-level, git-tracked contents of `minix/tests/ris
 ### Directories (0)
 - (none)
 
-### Files (11)
+### Files (13)
 - `Makefile`
 - `arch.md`
+- `qemu_io_smoke.py`
 - `run_tests.sh`
 - `test_atomic.c`
 - `test_csr.c`
@@ -18,6 +19,7 @@ This document summarizes the top-level, git-tracked contents of `minix/tests/ris
 - `test_sbi.c`
 - `test_timer.c`
 - `test_trap.c`
+- `test_virtio_blk_mmio.c`
 - `test_vm.c`
 
 ## Notes

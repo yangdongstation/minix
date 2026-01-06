@@ -14,7 +14,8 @@ TESTS=	test_csr \
 	test_ipc \
 	test_vm \
 	test_timer \
-	test_atomic
+	test_atomic \
+	test_virtio_blk_mmio
 
 CC=	riscv64-unknown-elf-gcc
 CFLAGS=	-march=rv64gc -mabi=lp64d -O2 -Wall
@@ -46,6 +47,9 @@ test_timer: test_timer.c
 	$(CC) $(CFLAGS) -o $@ $<
 
 test_atomic: test_atomic.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+test_virtio_blk_mmio: test_virtio_blk_mmio.c
 	$(CC) $(CFLAGS) -o $@ $<
 
 clean:
