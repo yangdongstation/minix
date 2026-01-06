@@ -82,6 +82,7 @@ void pg_map(phys_bytes phys, vir_bytes virt, size_t size, u64_t flags);
 void pg_unmap(vir_bytes virt, size_t size);
 void pg_identity_map(phys_bytes start, phys_bytes end);
 void pg_flush_tlb(void);
+void pg_extend_kernel_map(phys_bytes start, phys_bytes size);
 void pg_load(struct proc *p);
 void pg_dump_mapping(vir_bytes va);
 phys_bytes pg_create(void);

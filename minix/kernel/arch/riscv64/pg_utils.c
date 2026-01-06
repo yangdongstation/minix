@@ -28,6 +28,7 @@
 #define UART_LSR_THRE   0x20
 
 #define PAGE_SIZE RISCV_PAGE_SIZE
+#define RISCV_GIGA_PAGE_SIZE (1UL << 30)
 
 /* Extract VPN fields from virtual address */
 #define VPN0(va)    (((va) >> 12) & 0x1FF)
@@ -43,6 +44,13 @@ extern u64_t _boot_pgdir[];
 #ifndef MULTIBOOT_MEMORY_AVAILABLE
 #define MULTIBOOT_MEMORY_AVAILABLE 1
 #endif
+
+static inline void *pg_phys_to_virt(phys_bytes pa)
+{
+	if (pa < VIRT_DRAM_BASE)
+		return (void *)(vir_bytes)pa;
+	return (void *)(vir_bytes)(KERNEL_BASE + (pa - VIRT_DRAM_BASE));
+}
 
 static inline void early_uart_putc(int c)
 {
@@ -97,7 +105,7 @@ static u64_t *pg_walk(u64_t *pgdir, vir_bytes va, int create)
 				return NULL;
 
 			new_pt = pg_alloc_page(&kinfo);
-			memset((void *)new_pt, 0, PAGE_SIZE);
+			memset(pg_phys_to_virt(new_pt), 0, PAGE_SIZE);
 			pt[idx] = PA_TO_PTE(new_pt) | PTE_V;
 			pte = pt[idx];
 		} else if (pte & (PTE_R | PTE_W | PTE_X)) {
@@ -112,7 +120,7 @@ static u64_t *pg_walk(u64_t *pgdir, vir_bytes va, int create)
 
 			/* Split large-page leaf so we can map smaller pages. */
 			new_pt = pg_alloc_page(&kinfo);
-			memset((void *)new_pt, 0, PAGE_SIZE);
+			memset(pg_phys_to_virt(new_pt), 0, PAGE_SIZE);
 
 			base = PTE_TO_PA(pte);
 			flags = pte & (PTE_R | PTE_W | PTE_X | PTE_U |
@@ -121,7 +129,7 @@ static u64_t *pg_walk(u64_t *pgdir, vir_bytes va, int create)
 				(RISCV_PAGE_SHIFT + (level - 1) * RISCV_PTE_SHIFT);
 
 			for (i = 0; i < RISCV_PTES_PER_PT; i++) {
-				((u64_t *)new_pt)[i] =
+				((u64_t *)pg_phys_to_virt(new_pt))[i] =
 					PA_TO_PTE(base + (phys_bytes)i * child_size) |
 					flags | PTE_V;
 			}
@@ -130,7 +138,7 @@ static u64_t *pg_walk(u64_t *pgdir, vir_bytes va, int create)
 			pte = pt[idx];
 		}
 
-		pt = (u64_t *)PTE_TO_PA(pte);
+		pt = (u64_t *)pg_phys_to_virt(PTE_TO_PA(pte));
 	}
 
 	return &pt[VPN0(va)];
@@ -163,6 +171,35 @@ void pg_early_init(void)
     /* Also map first 1GB for device MMIO */
     /* VPN[2] for 0x00000000 = 0 */
     pgdir[0] = (0UL << 10) | flags;
+}
+
+void pg_extend_kernel_map(phys_bytes start, phys_bytes size)
+{
+	u64_t flags = PTE_V | PTE_R | PTE_W | PTE_X | PTE_A | PTE_D | PTE_G;
+	phys_bytes map_size;
+	phys_bytes map_base;
+	int entries;
+	int i;
+
+	if (size == 0)
+		return;
+
+	map_base = rounddown(start, RISCV_GIGA_PAGE_SIZE);
+	map_size = roundup(size + (start - map_base), RISCV_GIGA_PAGE_SIZE);
+	if (map_size > KERNEL_SIZE)
+		map_size = KERNEL_SIZE;
+
+	entries = map_size / RISCV_GIGA_PAGE_SIZE;
+	for (i = 0; i < entries; i++) {
+		vir_bytes va = KERNEL_BASE +
+			(vir_bytes)i * RISCV_GIGA_PAGE_SIZE;
+		int idx = VPN2(va);
+
+		_boot_pgdir[idx] = PA_TO_PTE(map_base +
+			(phys_bytes)i * RISCV_GIGA_PAGE_SIZE) | flags;
+	}
+
+	pg_flush_tlb();
 }
 
 /*
@@ -338,7 +375,7 @@ void pg_dump_mapping(vir_bytes va)
 			return;
 		}
 
-		pt = (u64_t *)PTE_TO_PA(pte);
+		pt = (u64_t *)pg_phys_to_virt(PTE_TO_PA(pte));
 	}
 }
 
@@ -351,7 +388,7 @@ phys_bytes pg_create(void)
 	phys_bytes pgdir;
 
 	pgdir = pg_alloc_page(&kinfo);
-	memset((void *)pgdir, 0, PAGE_SIZE);
+	memset(pg_phys_to_virt(pgdir), 0, PAGE_SIZE);
 	return pgdir;
 }
 

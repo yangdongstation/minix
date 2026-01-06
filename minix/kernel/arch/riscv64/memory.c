@@ -49,6 +49,13 @@ static phys_bytes mem_high;     /* End of usable memory */
 /* Simple page allocator */
 static phys_bytes free_page_list;
 
+static inline void *pt_phys_to_virt(phys_bytes pa)
+{
+    if (pa < VIRT_DRAM_BASE)
+        return (void *)(vir_bytes)pa;
+    return (void *)(vir_bytes)(KERNEL_BASE + (pa - VIRT_DRAM_BASE));
+}
+
 static u64_t *get_pgdir(struct proc *p)
 {
     if (p && p->p_seg.p_satp_v)
@@ -85,7 +92,7 @@ static phys_bytes page_alloc(void)
     if (free_page_list != 0) {
         /* Get from free list */
         page = free_page_list;
-        free_page_list = *(phys_bytes *)page;
+        free_page_list = *(phys_bytes *)pt_phys_to_virt(page);
         return page;
     }
 
@@ -104,7 +111,7 @@ static phys_bytes page_alloc(void)
  */
 static void page_free(phys_bytes page)
 {
-    *(phys_bytes *)page = free_page_list;
+    *(phys_bytes *)pt_phys_to_virt(page) = free_page_list;
     free_page_list = page;
 }
 
@@ -137,7 +144,7 @@ static u64_t *walk_pt(u64_t *pgdir, vir_bytes va, int create)
                 return NULL;
 
             /* Clear new page table */
-            memset((void *)new_pt, 0, PAGE_SIZE);
+            memset(pt_phys_to_virt(new_pt), 0, PAGE_SIZE);
 
             /* Install in parent */
             pt[idx] = PA_TO_PTE(new_pt);
@@ -157,7 +164,7 @@ static u64_t *walk_pt(u64_t *pgdir, vir_bytes va, int create)
             if (new_pt == 0)
                 return NULL;
 
-            memset((void *)new_pt, 0, PAGE_SIZE);
+            memset(pt_phys_to_virt(new_pt), 0, PAGE_SIZE);
 
             base = PTE_TO_PA(pte);
             flags = pte & (PTE_R | PTE_W | PTE_X | PTE_U |
@@ -166,7 +173,7 @@ static u64_t *walk_pt(u64_t *pgdir, vir_bytes va, int create)
                 (RISCV_PAGE_SHIFT + (level - 1) * RISCV_PTE_SHIFT);
 
             for (i = 0; i < PT_ENTRIES; i++) {
-                ((u64_t *)new_pt)[i] =
+                ((u64_t *)pt_phys_to_virt(new_pt))[i] =
                     PA_TO_PTE(base + (phys_bytes)i * child_size) |
                     flags;
             }
@@ -176,7 +183,7 @@ static u64_t *walk_pt(u64_t *pgdir, vir_bytes va, int create)
         }
 
         /* Get next level page table */
-        pt = (u64_t *)PTE_TO_PA(pte);
+        pt = (u64_t *)pt_phys_to_virt(PTE_TO_PA(pte));
     }
 
     return &pt[VPN0(va)];

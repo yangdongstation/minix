@@ -31,6 +31,12 @@ static void sync_boot_pgdir(void)
 
 	memcpy(_boot_pgdir, __k_unpaged__boot_pgdir, RISCV_PAGE_SIZE);
 	boot_pgdir_synced = 1;
+	{
+		phys_bytes mem_start, mem_size;
+
+		bsp_get_memory(&mem_start, &mem_size);
+		pg_extend_kernel_map(mem_start, mem_size);
+	}
 	direct_print("rv64: boot_pgdir synced\n");
 }
 
