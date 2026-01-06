@@ -105,6 +105,8 @@ void kernel_main(void)
 	direct_init();
 	direct_print("rv64: kernel_main\n");
 
+	bsp_early_init();
+
 	/* Call generic kernel main */
 	riscv64_init_kinfo();
 	kmain(&kinfo);

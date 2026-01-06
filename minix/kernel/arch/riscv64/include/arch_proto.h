@@ -115,6 +115,7 @@ void riscv_cons_putc(int c);
 int  riscv_cons_getc(void);
 
 /* bsp/virt */
+void bsp_early_init(void);
 void bsp_serial_init(void);
 void bsp_get_memory(phys_bytes *start, phys_bytes *size);
 
