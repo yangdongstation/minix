@@ -1698,7 +1698,7 @@ void pt_init(void)
 #elif defined(__arm__)
 	u32_t myttbr;
 #elif defined(__riscv64__)
-	u32_t mypdbr;
+	phys_bytes mypdbr;
 #endif
 
 	/* Find what the physical location of the kernel is. */
@@ -2209,12 +2209,13 @@ int pt_bind(pt_t *pt, struct vmproc *who)
 #if defined(__riscv64__)
 		printf("VM: pt_bind set_addrspace r=%d\n", r);
 		if (r == OK && who->vm_endpoint == VM_PROC_NR) {
-			u32_t pdbr = 0;
+			phys_bytes pdbr = 0;
 			int r2 = sys_vmctl_get_pdbr(SELF, &pdbr);
 			if (r2 == OK) {
-				if (pdbr != (u32_t)pt->pt_dir_phys) {
-					printf("VM: pt_bind pdbr mismatch pdbr=0x%x want=0x%llx\n",
-					    pdbr, (unsigned long long)pt->pt_dir_phys);
+				if (pdbr != pt->pt_dir_phys) {
+					printf("VM: pt_bind pdbr mismatch pdbr=0x%llx want=0x%llx\n",
+					    (unsigned long long)pdbr,
+					    (unsigned long long)pt->pt_dir_phys);
 					r = sys_vmctl_set_addrspace(who->vm_endpoint,
 					    pt->pt_dir_phys, pdes);
 				}

@@ -58,8 +58,13 @@ int sys_setgrant(cp_grant_t *grants, int ngrants);
 int sys_vm_setbuf(phys_bytes base, phys_bytes size, phys_bytes high);
 int sys_vm_map(endpoint_t proc_ep, int do_map, phys_bytes base,
 	phys_bytes size, phys_bytes offset);
+#if defined(__riscv64__)
+int sys_vmctl(endpoint_t who, int param, u64_t value);
+int sys_vmctl_get_pdbr(endpoint_t who, phys_bytes *pdbr);
+#else
 int sys_vmctl(endpoint_t who, int param, u32_t value);
 int sys_vmctl_get_pdbr(endpoint_t who, u32_t *pdbr);
+#endif
 int sys_vmctl_get_memreq(endpoint_t *who, vir_bytes *mem, vir_bytes
 	*len, int *wrflag, endpoint_t *who_s, vir_bytes *mem_s, endpoint_t *);
 int sys_vmctl_enable_paging(void * data);

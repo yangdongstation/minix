@@ -369,7 +369,11 @@
 /* Field names for SYS_VMCTL. */
 #define SVMCTL_WHO	m1_i1
 #define SVMCTL_PARAM	m1_i2	/* All SYS_VMCTL requests. */
+#if defined(__riscv64__)
+#define SVMCTL_VALUE	m1ull1
+#else
 #define SVMCTL_VALUE	m1_i3
+#endif
 #define	SVMCTL_MRG_TARGET	m2_i1	/* MEMREQ_GET reply: target process */
 #if defined(__riscv64__)
 #define	SVMCTL_MRG_ADDR		m2_l1	/* MEMREQ_GET reply: address */
@@ -383,7 +387,11 @@
 #define	SVMCTL_MRG_ADDR2	m2_l2	/* MEMREQ_GET reply: source address */
 #define SVMCTL_MRG_REQUESTOR	m2_p1	/* MEMREQ_GET reply: requestor */
 #define SVMCTL_MAP_VIR_ADDR	m1_p1
+#if defined(__riscv64__)
+#define SVMCTL_PTROOT		m1_p2
+#else
 #define SVMCTL_PTROOT		m1_i3
+#endif
 #define SVMCTL_PTROOT_V		m1_p1
 
 /* Reply message for VMCTL_KERN_PHYSMAP */

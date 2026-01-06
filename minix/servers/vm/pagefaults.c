@@ -119,15 +119,15 @@ static void handle_memory_final(struct hm_state *state, int result);
 #if defined(__riscv64__)
 static void vm_trace_pdbr(const char *tag, struct vmproc *vmp, int r)
 {
-	u32_t pdbr = 0;
+	phys_bytes pdbr = 0;
 	phys_bytes vm_pdbr = vmproc[VM_PROC_NR].vm_pt.pt_dir_phys;
 	phys_bytes tgt_pdbr = vmp ? vmp->vm_pt.pt_dir_phys : 0;
 	int r2;
 
 	r2 = sys_vmctl_get_pdbr(SELF, &pdbr);
 	if (r2 == OK) {
-		printf("vm: %s pdbr=0x%x vm_pt=0x%llx tgt_pt=0x%llx ep=%d r=%d\n",
-		    tag, pdbr, (unsigned long long)vm_pdbr,
+		printf("vm: %s pdbr=0x%llx vm_pt=0x%llx tgt_pt=0x%llx ep=%d r=%d\n",
+		    tag, (unsigned long long)pdbr, (unsigned long long)vm_pdbr,
 		    (unsigned long long)tgt_pdbr,
 		    vmp ? vmp->vm_endpoint : -1, r);
 	} else {

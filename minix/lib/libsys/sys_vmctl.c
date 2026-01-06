@@ -1,6 +1,10 @@
 #include "syslib.h"
 
+#if defined(__riscv64__)
+int sys_vmctl(endpoint_t who, int param, u64_t value)
+#else
 int sys_vmctl(endpoint_t who, int param, u32_t value)
+#endif
 {
   message m;
   int r;
@@ -13,7 +17,11 @@ int sys_vmctl(endpoint_t who, int param, u32_t value)
 }
 
 /* Get page directory base register */
+#if defined(__riscv64__)
+int sys_vmctl_get_pdbr(endpoint_t who, phys_bytes *pdbr)
+#else
 int sys_vmctl_get_pdbr(endpoint_t who, u32_t *pdbr)
+#endif
 {
   message m;
   int r;
@@ -35,7 +43,11 @@ int sys_vmctl_set_addrspace(endpoint_t who,
 
   m.SVMCTL_WHO = who;
   m.SVMCTL_PARAM = VMCTL_SETADDRSPACE;
+#if defined(__riscv64__)
+  m.SVMCTL_PTROOT = (void *)(unsigned long)ptroot;
+#else
   m.SVMCTL_PTROOT = ptroot;
+#endif
   m.SVMCTL_PTROOT_V = ptroot_v;
   r = _kernel_call(SYS_VMCTL, &m);
 

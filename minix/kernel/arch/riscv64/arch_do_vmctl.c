@@ -62,9 +62,9 @@ int arch_do_vmctl(message *m_ptr, struct proc *p)
     case VMCTL_GET_PDBR:
         /* Return page directory base register (SATP) */
         if (p->p_seg.p_satp != 0)
-            m_ptr->SVMCTL_VALUE = (u32_t)p->p_seg.p_satp;
+            m_ptr->SVMCTL_VALUE = p->p_seg.p_satp;
         else
-            m_ptr->SVMCTL_VALUE = (u32_t)get_current_pgdir();
+            m_ptr->SVMCTL_VALUE = get_current_pgdir();
         return OK;
 
     case VMCTL_FLUSHTLB:
@@ -75,7 +75,7 @@ int arch_do_vmctl(message *m_ptr, struct proc *p)
     case VMCTL_SETADDRSPACE:
         /* Set address space for process */
         {
-            phys_bytes root = (phys_bytes)(u32_t)m_ptr->SVMCTL_PTROOT;
+            phys_bytes root = (phys_bytes)(vir_bytes)m_ptr->SVMCTL_PTROOT;
             if (vmctl_trace_count < 8) {
                 direct_print("rv64: vmctl setaddrspace ep=");
                 direct_print_hex((u64_t)p->p_endpoint);
