@@ -6,10 +6,10 @@ This document is a practical, code-driven porting guide that emphasizes an itera
 
 **Document Info / 文档信息**
 - Last updated / 最后更新: 2026-01-07
-- Version / 版本: 1.1
+- Version / 版本: 1.2
 - Scope / 范围: evbriscv64 on QEMU virt; kernel + VM + UART + build pipeline
 - Update rule / 更新规则: append notes after code review; file issues in `issue.md`
-- Change note / 变更说明: 2026-01-07 文档同步，未重新构建或测试。
+- Change note / 变更说明: 2026-01-07 补充 2026-01-06 01:00 前代码变更，未重新构建或测试。
 
 ---
 
@@ -34,6 +34,24 @@ This document is a practical, code-driven porting guide that emphasizes an itera
 > 建议实践方式：读完一个模块（例如 arch/riscv64/exception.c），立即在对应章节补充“流程+约束+已知问题”。
 > Suggested practice: after finishing a module (e.g., arch/riscv64/exception.c), immediately
 > update the matching section with “flow + constraints + known issues”.
+
+---
+
+## 0.1 Pre-2026-01-06 01:00 Code Review Notes / 2026-01-06 01:00 前代码复核要点
+
+**中文**
+- crt0 初始化 `gp`，并在多个用户态组件加入 `gp.c` 兼容 `__global_pointer$`（静态链接绕过项）。
+- ucontext 改用 `ucontextoffsets.h` 并写入 `MCF_MAGIC`；栈布局对齐指针宽度。
+- exec/VM 传递 PF_X/PROT_EXEC，新增 `MVM_EXEC` 与 `VR_EXEC` 执行权限标记。
+- IPC/VM ABI 修正：`senda` 参数顺序调整；`VM_PAGEFAULT` 地址字段为 64-bit。
+- `arch_proc_init` 保留 `p_seg.p_satp`，VM 在缺页时可补齐用户可见的内核映射。
+
+**English**
+- crt0 initializes `gp`, and many userland components add `gp.c` stubs for `__global_pointer$` (static-link workaround).
+- ucontext uses `ucontextoffsets.h` and writes `MCF_MAGIC`; stack layout respects pointer width.
+- exec/VM propagate PF_X/PROT_EXEC and add `MVM_EXEC` + `VR_EXEC` exec flags.
+- IPC/VM ABI fixes: `senda` argument order swap; `VM_PAGEFAULT` address is 64-bit.
+- `arch_proc_init` preserves `p_seg.p_satp`; VM can re-map user-visible kernel mappings on faults.
 
 ---
 

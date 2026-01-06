@@ -2,7 +2,7 @@
 
 **Document Info / 文档信息**
 - Last updated / 最后更新: 2026-01-07
-- Version / 版本: 1.1
+- Version / 版本: 1.2
 - Scope / 范围: evbriscv64 on QEMU virt
 - Purpose / 用途: actionable checklist; do not re-apply steps already present in tree
 
@@ -18,13 +18,15 @@
 - Phase 0/1：构建系统与目录结构已在代码树中观察到（见 `build.sh`、`sys/arch/*`、`share/mk/bsd.own.mk`）。
 - Phase 2：`minix/kernel/arch/riscv64` 已存在，内核基础具备但运行不稳定（见 `RISC64-STATUS.md`）。
 - 运行时关键问题与修复建议见 `issue.md`。
-- 2026-01-07 文档同步：计划内容未变更，状态沿用 2026-01-06。
+- 2026-01-06 01:00 前变更：gp 初始化、exec/ucontext/VM 执行权限标记、IPC/缺页 ABI 修复已落地。
+- 2026-01-07 文档更新：计划内容未变更，状态沿用 2026-01-06。
 
 **English**
 - Phase 0/1: build-system and arch directories are present in tree (`build.sh`, `sys/arch/*`, `share/mk/bsd.own.mk`).
 - Phase 2: `minix/kernel/arch/riscv64` exists; runtime remains unstable (see `RISC64-STATUS.md`).
 - Runtime issues and fixes are tracked in `issue.md`.
-- 2026-01-07 doc sync: plan unchanged; status carried forward from 2026-01-06.
+- Pre-2026-01-06 01:00 changes: gp init, exec/ucontext + VM exec flags, IPC/pagefault ABI fixes landed.
+- 2026-01-07 doc update: plan unchanged; status carried forward from 2026-01-06.
 
 ## Phase Overview / 阶段概览
 

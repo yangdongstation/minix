@@ -9,13 +9,13 @@ targeting the QEMU virt platform.
 ## 文档信息 / Document Info
 
 **中文**
-- 版本：1.1
+- 版本：1.2
 - 最后更新：2026-01-07
 - 适用范围：evbriscv64（QEMU virt）
 - 文档性质：构建/运行/测试操作手册，不是开发计划
 
 **English**
-- Version: 1.1
+- Version: 1.2
 - Last updated: 2026-01-07
 - Scope: evbriscv64 (QEMU virt)
 - Doc type: build/run/test manual, not a development plan
@@ -27,7 +27,9 @@ targeting the QEMU virt platform.
 - 运行：内核可进入早期初始化，但尚未稳定进入用户态
 - 关键风险：PTROOT 32 位截断、UART 阻塞读缺少回复、leaf->non-leaf 拆分后 TLB 刷新缺失、SBI legacy IPI/fence 传递 VA（详见 `issue.md`）
 - 进度估计：约 60%（内核基础具备，VM/IO 关键链路仍待修复）
-- 文档更新：本次仅同步文档，自 2026-01-06 起未重新构建或运行测试。
+- 代码更新（至 2026-01-06 01:00 前）：用户态 gp 初始化（crt0 + gp.c）、exec/ucontext 与
+  VM 执行权限标记、IPC/缺页 ABI 修复（64 位地址、senda 参数顺序）。
+- 文档更新：已根据 2026-01-06 01:00 前代码变更补充文档，自 2026-01-06 起未重新构建或运行测试。
 
 **English**
 - Build: passes with workaround flags (see commands below and `RISC64-STATUS.md`)
@@ -35,7 +37,9 @@ targeting the QEMU virt platform.
 - Key risks: PTROOT 32-bit truncation, UART blocking read reply, missing TLB flush after
   leaf->non-leaf splits, SBI legacy IPI/fence VA usage (see `issue.md`)
 - Progress estimate: ~60% (core kernel in place; VM/IO still pending)
-- Doc refresh: documentation sync only; no new build or test run since 2026-01-06.
+- Code updates (through 2026-01-06 01:00): userland gp init (crt0 + gp.c),
+  exec/ucontext + VM exec flags, IPC/pagefault ABI fixes (64-bit addr, senda arg order).
+- Doc refresh: updated after reviewing pre-2026-01-06 01:00 changes; no new build or test run since 2026-01-06.
 
 ## 系统要求 / System Requirements
 
@@ -215,14 +219,14 @@ MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
 - 内核启动测试：失败，QEMU 中出现 `rv64: kernel_main` 后触发 `System reset...`，详见 `/tmp/boot_test.log`。
   该失败与地址空间切换等关键问题高度相关（详见 `issue.md`）。
 - SMP initialization：当前脚本固定标记为跳过（not yet implemented）。
-- 备注：本节结果沿用 2026-01-06 的结论，本次未重新运行。
+- 备注：本节结果沿用 2026-01-06 的结论，本次未重新运行；上述代码变更未重新验证。
 
 **English (as of 2026-01-07)**
 - Userland compile tests: pass (script uses in-tree toolchain + sysroot and `-std=gnu99`).
 - Kernel boot test: fails; QEMU shows `rv64: kernel_main` then `System reset...` (see `/tmp/boot_test.log`).
   This correlates with address-space handoff and other critical issues (see `issue.md`).
 - SMP initialization: script marks as skipped (not yet implemented).
-- Note: results carried forward from 2026-01-06; no new test run in this update.
+- Note: results carried forward from 2026-01-06; pre-2026-01-06 01:00 changes were not re-tested.
 
 #### 5.1 内核启动复位排查记录 / Boot Reset Investigation
 
@@ -355,6 +359,11 @@ mkdir -p $DESTDIR/usr/include/g++/bits/riscv32
 mkdir -p $DESTDIR/usr/include/g++/bits/riscv64
 ```
 
+### 5. 静态链接需要 __global_pointer$ 兼容层 / Static Linking Needs __global_pointer$ Stub
+
+**问题 / Problem**: 部分工具链仅导出 `_gp`，静态链接缺少 `__global_pointer$`。  
+**解决 / Fix**: 目前在多个用户态组件内使用 `gp.c` 提供符号；长期建议在 crt0 或链接脚本中统一处理（详见 `issue.md`）。
+
 ## 架构特定实现 / Architecture Details
 
 ### 内存映射（QEMU virt 平台）/ Memory Map (QEMU virt)
@@ -476,4 +485,4 @@ MINIX 3 is licensed under BSD. See LICENSE in the source tree.
 ---
 
 **最后更新 / Last updated**：2026-01-07  
-**版本 / Version**：1.1
+**版本 / Version**：1.2

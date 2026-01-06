@@ -4,7 +4,7 @@ This repository contains the full MINIX 3 source tree plus an active RISC-V 64-b
 (evbriscv64) port targeting the QEMU virt platform.
 本仓库包含完整的 MINIX 3 源码树，以及面向 QEMU virt 平台的 RISC-V 64 位移植版本。
 
-**Documentation Version / 文档版本**: 1.1 (2026-01-07)
+**Documentation Version / 文档版本**: 1.2 (2026-01-07)
 
 ## Current Status / 当前状态（as of 2026-01-07 / 截至 2026-01-07）
 
@@ -14,8 +14,13 @@ This repository contains the full MINIX 3 source tree plus an active RISC-V 64-b
   运行：内核可进入早期初始化，用户态尚不稳定，详见 `RISC64-STATUS.md`。
 - Risk tracking: code-review issues with file/line evidence are in `issue.md`.
   风险跟踪：带文件/行号证据的评审问题见 `issue.md`。
-- Status refresh: documentation sync only; no new build/test run since 2026-01-06.
-  状态更新：本次仅同步文档，自 2026-01-06 起未重新构建或测试。
+- Pre-2026-01-06 01:00 changes: userland gp init (crt0 + gp.c), exec/ucontext +
+  VM exec flags, IPC/pagefault ABI fixes (64-bit addr, senda arg order).
+  2026-01-06 01:00 前变更：用户态 gp 初始化（crt0 + gp.c）、exec/ucontext 与 VM
+  执行权限标记、IPC/缺页 ABI 修复（64 位地址、senda 参数顺序）。
+- Status refresh: doc update after reviewing pre-2026-01-06 01:00 changes; no new
+  build/test run since 2026-01-06.
+  状态更新：已根据 2026-01-06 01:00 前代码变更补充文档，自 2026-01-06 起未重新构建或测试。
 
 ## Quick Links / 快速链接
 
