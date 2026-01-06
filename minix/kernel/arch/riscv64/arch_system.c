@@ -8,8 +8,11 @@
 
 #include <assert.h>
 #include <string.h>
+#include <machine/fpu.h>
 
 extern u64_t _boot_pgdir[];
+
+static struct fpu_state fpu_state[NR_PROCS] __aligned(FPUALIGN);
 
 /* Shutdown types */
 #define RBT_HALT        0
@@ -129,10 +132,34 @@ void save_local_fpu(struct proc *pr, int retain)
 
 void enable_fpu_exception(void)
 {
+	struct proc *pr = get_cpulocal_var(proc_ptr);
+	u64_t sstatus;
+
+	if (pr != NULL) {
+		pr->p_reg.psr &= ~SSTATUS_FS_MASK;
+		pr->p_reg.psr |= SSTATUS_FS_OFF;
+	}
+
+	sstatus = csr_read_sstatus();
+	sstatus &= ~SSTATUS_FS_MASK;
+	sstatus |= SSTATUS_FS_OFF;
+	csr_write_sstatus(sstatus);
 }
 
 void disable_fpu_exception(void)
 {
+	struct proc *pr = get_cpulocal_var(proc_ptr);
+	u64_t sstatus;
+
+	if (pr != NULL) {
+		pr->p_reg.psr &= ~SSTATUS_FS_MASK;
+		pr->p_reg.psr |= SSTATUS_FS_INITIAL;
+	}
+
+	sstatus = csr_read_sstatus();
+	sstatus &= ~SSTATUS_FS_MASK;
+	sstatus |= SSTATUS_FS_INITIAL;
+	csr_write_sstatus(sstatus);
 }
 
 void fpu_sigcontext(struct proc *pr, struct sigframe_sigcontext *fr,
@@ -155,7 +182,14 @@ void arch_set_secondary_ipc_return(struct proc *p, reg_t val)
 
 void arch_proc_reset(struct proc *pr)
 {
+	char *v = NULL;
+
 	assert(pr->p_nr < NR_PROCS);
+
+	if (pr->p_nr >= 0) {
+		v = (char *)&fpu_state[pr->p_nr];
+		memset(v, 0, FPU_XFP_SIZE);
+	}
 
 	memset(&pr->p_reg, 0, sizeof(pr->p_reg));
 	pr->p_reg.psr = SSTATUS_SPIE;
@@ -166,7 +200,7 @@ void arch_proc_reset(struct proc *pr)
 
 	pr->p_seg.p_satp = 0;
 	pr->p_seg.p_satp_v = NULL;
-	pr->p_seg.fpu_state = NULL;
+	pr->p_seg.fpu_state = v;
 }
 
 void riscv64_switch_address_space(struct proc *p)

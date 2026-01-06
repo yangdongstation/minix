@@ -6,6 +6,9 @@
 
 #include "include/sconst.h"
 #include "include/archconst.h"
+#include "kernel/procoffsets.h"
+
+#define FPU_FCSR_OFFSET    (32 * 8)
 
     .section .text
     .align 2
@@ -84,8 +87,45 @@ save_fpu:
     and     t0, t0, t1
     beqz    t0, .Lsave_fpu_done
 
-    /* TODO: Save F registers */
-    /* fsd f0-f31 to proc structure */
+    ld      t2, P_FPU_STATE(a0)
+    beqz    t2, .Lsave_fpu_done
+
+    /* Save F registers */
+    fsd     f0, (0 * 8)(t2)
+    fsd     f1, (1 * 8)(t2)
+    fsd     f2, (2 * 8)(t2)
+    fsd     f3, (3 * 8)(t2)
+    fsd     f4, (4 * 8)(t2)
+    fsd     f5, (5 * 8)(t2)
+    fsd     f6, (6 * 8)(t2)
+    fsd     f7, (7 * 8)(t2)
+    fsd     f8, (8 * 8)(t2)
+    fsd     f9, (9 * 8)(t2)
+    fsd     f10, (10 * 8)(t2)
+    fsd     f11, (11 * 8)(t2)
+    fsd     f12, (12 * 8)(t2)
+    fsd     f13, (13 * 8)(t2)
+    fsd     f14, (14 * 8)(t2)
+    fsd     f15, (15 * 8)(t2)
+    fsd     f16, (16 * 8)(t2)
+    fsd     f17, (17 * 8)(t2)
+    fsd     f18, (18 * 8)(t2)
+    fsd     f19, (19 * 8)(t2)
+    fsd     f20, (20 * 8)(t2)
+    fsd     f21, (21 * 8)(t2)
+    fsd     f22, (22 * 8)(t2)
+    fsd     f23, (23 * 8)(t2)
+    fsd     f24, (24 * 8)(t2)
+    fsd     f25, (25 * 8)(t2)
+    fsd     f26, (26 * 8)(t2)
+    fsd     f27, (27 * 8)(t2)
+    fsd     f28, (28 * 8)(t2)
+    fsd     f29, (29 * 8)(t2)
+    fsd     f30, (30 * 8)(t2)
+    fsd     f31, (31 * 8)(t2)
+
+    csrr    t0, CSR_FCSR
+    sd      t0, FPU_FCSR_OFFSET(t2)
 
 .Lsave_fpu_done:
     ret
@@ -102,11 +142,56 @@ restore_fpu:
     li      t0, SSTATUS_FS_INITIAL
     csrs    CSR_SSTATUS, t0
 
-    /* TODO: Restore F registers */
-    /* fld f0-f31 from proc structure */
+    ld      t2, P_FPU_STATE(a0)
+    beqz    t2, .Lrestore_fpu_fail
+
+    /* Restore F registers */
+    fld     f0, (0 * 8)(t2)
+    fld     f1, (1 * 8)(t2)
+    fld     f2, (2 * 8)(t2)
+    fld     f3, (3 * 8)(t2)
+    fld     f4, (4 * 8)(t2)
+    fld     f5, (5 * 8)(t2)
+    fld     f6, (6 * 8)(t2)
+    fld     f7, (7 * 8)(t2)
+    fld     f8, (8 * 8)(t2)
+    fld     f9, (9 * 8)(t2)
+    fld     f10, (10 * 8)(t2)
+    fld     f11, (11 * 8)(t2)
+    fld     f12, (12 * 8)(t2)
+    fld     f13, (13 * 8)(t2)
+    fld     f14, (14 * 8)(t2)
+    fld     f15, (15 * 8)(t2)
+    fld     f16, (16 * 8)(t2)
+    fld     f17, (17 * 8)(t2)
+    fld     f18, (18 * 8)(t2)
+    fld     f19, (19 * 8)(t2)
+    fld     f20, (20 * 8)(t2)
+    fld     f21, (21 * 8)(t2)
+    fld     f22, (22 * 8)(t2)
+    fld     f23, (23 * 8)(t2)
+    fld     f24, (24 * 8)(t2)
+    fld     f25, (25 * 8)(t2)
+    fld     f26, (26 * 8)(t2)
+    fld     f27, (27 * 8)(t2)
+    fld     f28, (28 * 8)(t2)
+    fld     f29, (29 * 8)(t2)
+    fld     f30, (30 * 8)(t2)
+    fld     f31, (31 * 8)(t2)
+
+    ld      t0, FPU_FCSR_OFFSET(t2)
+    csrw    CSR_FCSR, t0
+
+    lw      t0, P_MISC_FLAGS(a0)
+    ori     t0, t0, MF_FPU_INITIALIZED
+    sw      t0, P_MISC_FLAGS(a0)
 
     /* Return OK */
     li      a0, 0
+    ret
+
+.Lrestore_fpu_fail:
+    li      a0, 1
     ret
 
 /*

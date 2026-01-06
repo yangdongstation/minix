@@ -46,6 +46,8 @@ static void handle_interrupt(struct trapframe *tf, u64_t cause);
 static void handle_exception(struct trapframe *tf, u64_t cause);
 static void handle_syscall(struct trapframe *tf);
 static void handle_page_fault(struct trapframe *tf, u64_t cause, u64_t addr);
+void copr_not_available_handler(void);
+extern int catch_pagefaults;
 
 /*
  * Initialize exception handling
@@ -141,7 +143,12 @@ static void handle_exception(struct trapframe *tf, u64_t cause)
         break;
 
     case EXC_ILLEGAL_INST:
-        /* Illegal instruction */
+        /* Illegal instruction (may be FPU use with FS=OFF) */
+        if (!(tf->tf_sstatus & SSTATUS_SPP) &&
+            ((tf->tf_sstatus & SSTATUS_FS_MASK) == SSTATUS_FS_OFF)) {
+            copr_not_available_handler();
+            NOT_REACHABLE;
+        }
         panic("Illegal instruction at %p: %p", (void *)tf->tf_sepc,
             (void *)tf->tf_stval);
         break;

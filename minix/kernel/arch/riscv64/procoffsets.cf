@@ -7,6 +7,7 @@ include "kernel/proc.h"
 # Process structure offsets
 define P_REG			offsetof(struct proc, p_reg)
 define PSWFRAME			sizeof(struct stackframe_s)
+define P_FPU_STATE		offsetof(struct proc, p_seg.fpu_state)
 
 # Trapframe/stackframe register offsets
 # These match the trapframe structure in exception.c
@@ -17,5 +18,6 @@ define PSREG			offsetof(struct stackframe_s, psr)
 # For compatibility with existing code
 define P_MISC_FLAGS		offsetof(struct proc, p_misc_flags)
 define MF_CONTEXT_SET		MF_CONTEXT_SET
+define MF_FPU_INITIALIZED	MF_FPU_INITIALIZED
 
 # Kernel stack

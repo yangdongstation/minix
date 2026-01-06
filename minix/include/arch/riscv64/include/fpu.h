@@ -11,6 +11,9 @@ struct fpu_state {
     unsigned long fcsr;     /* FP control and status register */
 };
 
+#define FPU_XFP_SIZE        (sizeof(struct fpu_state))
+#define FPUALIGN            16
+
 /* FPU control flags in sstatus */
 #define SSTATUS_FS_MASK     (3UL << 13)
 #define SSTATUS_FS_OFF      (0UL << 13)

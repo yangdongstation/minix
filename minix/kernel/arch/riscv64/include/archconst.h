@@ -84,6 +84,7 @@
 #define CSR_STVAL           0x143
 #define CSR_SIP             0x144
 #define CSR_SATP            0x180
+#define CSR_FCSR            0x003
 
 /* Encoded instructions for older assemblers */
 #define RISCV_WFI_INSN      0x10500073
