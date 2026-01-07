@@ -36,6 +36,7 @@ obj
 boot-evbriscv64-*.log
 build-*.log
 _tmp/*.log
+_tmp/
 usr.bin/mdocml/man/*.7
 etc/passwd
 etc/pwd.db
