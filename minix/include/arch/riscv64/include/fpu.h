@@ -15,11 +15,13 @@ struct fpu_state {
 #define FPUALIGN            16
 
 /* FPU control flags in sstatus */
+#ifndef SSTATUS_FS_MASK
 #define SSTATUS_FS_MASK     (3UL << 13)
 #define SSTATUS_FS_OFF      (0UL << 13)
 #define SSTATUS_FS_INITIAL  (1UL << 13)
 #define SSTATUS_FS_CLEAN    (2UL << 13)
 #define SSTATUS_FS_DIRTY    (3UL << 13)
+#endif
 
 /* FCSR bits */
 #define FCSR_NX             (1 << 0)    /* Inexact */

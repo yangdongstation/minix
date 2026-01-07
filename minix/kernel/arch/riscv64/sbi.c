@@ -62,6 +62,17 @@ struct sbiret {
 #define SBI_ERR_INVALID_ADDRESS         -5
 #define SBI_ERR_ALREADY_AVAILABLE       -6
 
+static unsigned long sbi_hart_mask_pa(const unsigned long *mask)
+{
+    phys_bytes phys;
+
+    phys = umap_local(NULL, 0, (vir_bytes)mask, sizeof(*mask));
+    if (!phys)
+        panic("sbi: umap_local hart mask failed");
+
+    return (unsigned long)phys;
+}
+
 /*
  * SBI ecall wrapper
  * Arguments passed in a0-a5, extension ID in a7, function ID in a6
@@ -130,7 +141,10 @@ void sbi_set_timer(u64_t stime_value)
  */
 void sbi_send_ipi(unsigned long hart_mask)
 {
-    sbi_ecall(SBI_EXT_0_1_SEND_IPI, 0, (unsigned long)&hart_mask, 0, 0, 0, 0, 0);
+    unsigned long mask = hart_mask;
+
+    sbi_ecall(SBI_EXT_0_1_SEND_IPI, 0, sbi_hart_mask_pa(&mask),
+        0, 0, 0, 0, 0);
 }
 
 /*
@@ -138,7 +152,10 @@ void sbi_send_ipi(unsigned long hart_mask)
  */
 void sbi_remote_fence_i(unsigned long hart_mask)
 {
-    sbi_ecall(SBI_EXT_0_1_REMOTE_FENCE_I, 0, (unsigned long)&hart_mask, 0, 0, 0, 0, 0);
+    unsigned long mask = hart_mask;
+
+    sbi_ecall(SBI_EXT_0_1_REMOTE_FENCE_I, 0, sbi_hart_mask_pa(&mask),
+        0, 0, 0, 0, 0);
 }
 
 /*
@@ -147,8 +164,10 @@ void sbi_remote_fence_i(unsigned long hart_mask)
 void sbi_remote_sfence_vma(unsigned long hart_mask,
     unsigned long start, unsigned long size)
 {
+    unsigned long mask = hart_mask;
+
     sbi_ecall(SBI_EXT_0_1_REMOTE_SFENCE_VMA, 0,
-              (unsigned long)&hart_mask, start, size, 0, 0, 0);
+              sbi_hart_mask_pa(&mask), start, size, 0, 0, 0);
 }
 
 /*

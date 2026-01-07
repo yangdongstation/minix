@@ -68,3 +68,22 @@ MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no HAVE_LLVM=no MKLLVM=no \
 仅根据 2026-01-06 01:00 前代码变更补充文档，未执行新的构建或测试。
 **Scope / 范围**: `README.md`, `README-RISCV64.md`, `RISC64-STATUS.md`, `issue.md`,
 `docs/RISCV64_PORTING_GUIDE.md`, `docs/RISCV64_PORT_PLAN.md`.
+
+### Entry 7 — Toolchain + Kernel Rebuild (2026-01-07) / 工具链 + 内核重建
+**Workspace / 工作区**: `/root/minix`  
+**Commands / 命令**:
+```bash
+# Rebuild tools (LLVM enabled) after ValueMap.h fix
+MKPCI=no HOST_CFLAGS="-O -fcommon" HAVE_GOLD=no ./build.sh -U -m evbriscv64 tools
+
+# Kernel rebuild with GCC toolchain + out-of-tree objdir
+MAKEOBJDIRPREFIX=/root/minix/obj \
+  obj/tooldir.Linux-6.12.57+deb13-amd64-x86_64/bin/nbmake-evbriscv64 \
+  -C minix/kernel \
+  CC=/root/minix/obj/tooldir.Linux-6.12.57+deb13-amd64-x86_64/bin/riscv64-elf32-minix-gcc \
+  ACTIVE_CC=gcc \
+  RISCV_ARCH_FLAGS='-march=RV64IMAFD -mcmodel=medany'
+```
+**Result / 结果**:
+- Tools build succeeded after fixing `llvm/IR/ValueMap.h` explicit bool conversion.
+- Kernel build succeeded with GCC toolchain + `MAKEOBJDIRPREFIX` setup.

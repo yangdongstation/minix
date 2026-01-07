@@ -28,6 +28,18 @@ This file records concrete issues in the RISC-V 64-bit port with evidence and su
 - Next steps / 下一步:
   - Capture faulting `addr` with matching `pc` to confirm heap boundaries. / 采集 fault addr 与 pc 对应关系以确认堆边界。
   - Audit `malloc.c` + VM mappings on RV64; verify `brk`/`sbrk` flow and VM map permissions. / 审核 RV64 的 `malloc.c` 与 VM 映射；核对 `brk`/`sbrk` 路径与权限。
+- Update / 进展:
+  - Boot now reaches shell after mapping `.usermapped` into the boot page table for `minix_kerninfo_user`. / 启动页表加入 `.usermapped` 后可进入 shell（修复早期 `minix_kerninfo_user` 缺页）。
+    Evidence: `minix/kernel/arch/riscv64/protect.c`
+  - `virtio_blk_mmio` sys_vumap failures are fixed by using SELF iovec addresses; `/usr` mount succeeds. / `virtio_blk_mmio` 的 sys_vumap 失败已修复（SELF 用地址），`/usr` 可挂载。
+    Evidence: `minix/drivers/storage/virtio_blk_mmio/virtio_blk_mmio.c`, `minix/drivers/storage/virtio_blk/virtio_blk.c`
+  - VM slaballoc assert on `ls /usr` is addressed by expanding slab size classes for RV64 message sizes. / `ls /usr` 触发的 slaballoc 断言已通过扩展 RV64 slab 大小类修复。
+    Evidence: `minix/servers/vm/slaballoc.c`
+- Remaining / 保留问题:
+  - `loadramdisk` still fails when `ramimagename` is unset; kernel default is added but needs rebuild verification. / `ramimagename` 未设置时 `loadramdisk` 仍失败；内核默认值已补充但需重建验证。
+    Evidence: `minix/kernel/arch/riscv64/kernel.c`
+  - `REQ_GETDENTS` may hit `sys_safecopyto` EFAULT with `CPF_TRY` grants; VFS retries and succeeds, but logs are noisy. / `REQ_GETDENTS` 在 `CPF_TRY` 下可能触发 `sys_safecopyto` EFAULT；VFS 会重试成功，但日志较噪。
+    Evidence: `minix/kernel/system/do_safecopy.c`, `minix/servers/vfs/request.c`
 
 ### A2) RV64 process support exists in loader/CPU mode but is not stable end-to-end / RV64 进程支持具备基础但端到端不稳定
 - Evidence / 证据:
@@ -39,10 +51,14 @@ This file records concrete issues in the RISC-V 64-bit port with evidence and su
     Evidence: `minix/lib/libexec/exec_elf.c:4`, `sys/arch/riscv/include/elf_machdep.h:24`
   - Current status explicitly says userland is not yet stable. / 现状明确用户态仍不稳定。  
     Evidence: `README-RISCV64.md:27`
+  - `ld.elf_so` only builds when `MKPIC != "no"`, but current riscv64 builds report `MKPIC=no`, so no dynamic loader is produced/installed. / `ld.elf_so` 仅在 `MKPIC != "no"` 时构建，而当前 riscv64 构建为 `MKPIC=no`，动态加载器未生成/安装。  
+    Evidence: `libexec/ld.elf_so/Makefile:31-47`
 - Impact / 影响:
   - Kernel has RV64 U-mode + ELF64 exec plumbing, but user processes are not reliably runnable yet. / 内核具备基础通路，但 RV64 进程尚不可稳定运行。
+  - No `ld.elf_so` means dynamic binaries cannot be validated; only static ELF64 execs are currently exercised. / 缺少 `ld.elf_so` 导致动态二进制无法验证，当前仅运行静态 ELF64 可执行文件。
 - Suggested fix / 修复建议:
   - Resolve A1 and top Major issues (VM/PT/TLB/IPI), then validate exec with a minimal ELF64 user binary + ld.so. / 先修复 A1 与主要问题（VM/PT/TLB/IPI），再用最小 ELF64 用户程序验证 exec/ld.so。
+  - Enable `MKPIC`/`MKPICLIB` for riscv64 and build/install `ld.elf_so`, then test a small dynamic binary with `PT_INTERP=/libexec/ld.elf_so`. / 为 riscv64 开启 `MKPIC`/`MKPICLIB` 并构建安装 `ld.elf_so`，再用带 `PT_INTERP=/libexec/ld.elf_so` 的小动态程序验证。
   - Validation checklist (doc-only): / 验证清单（文档）:
     1) Confirm target ELF64/EM_RISCV via `readelf -h` on the test binary. / 通过 `readelf -h` 确认 ELF64/EM_RISCV。
     2) Prefer a minimal static executable if available; otherwise verify `PT_INTERP` points to `/libexec/ld.elf_so`. / 尽量使用静态可执行文件；否则确认 `PT_INTERP` 指向 `/libexec/ld.elf_so`。  
@@ -65,6 +81,10 @@ This file records concrete issues in the RISC-V 64-bit port with evidence and su
   - Stale large-page TLB entries may persist, causing wrong mappings. / 旧的大页 TLB 项可能继续生效，导致映射错误。
 - Suggested fix / 修复建议:
   - Issue `VMCTL_FLUSHTLB` or targeted `sfence.vma` after the split. / 拆分后执行 `VMCTL_FLUSHTLB` 或定向 `sfence.vma`。
+- Update / 进展:
+  - Added `VMCTL_FLUSHTLB` after leaf-to-non-leaf splits in `pt_l0alloc`/`pt_l1alloc` (needs runtime validation).  
+    在 `pt_l0alloc`/`pt_l1alloc` 的叶子拆分后增加 `VMCTL_FLUSHTLB`（需运行时验证）。  
+    Evidence: `minix/servers/vm/pagetable.c`
 
 ### 5) SBI legacy IPI/fence calls pass virtual addresses / SBI v0.1 旧接口传递 VA
 - Evidence / 证据:
@@ -74,6 +94,10 @@ This file records concrete issues in the RISC-V 64-bit port with evidence and su
   - IPI and remote fence may silently fail. / IPI 与远程指令缓存刷新可能失效。
 - Suggested fix / 修复建议:
   - Use SBI v0.2+ extensions or translate to PA. / 切换到 SBI v0.2+ 扩展或传递物理地址。
+- Update / 进展:
+  - Legacy SBI IPI/RFENCE calls now translate the hart mask pointer to PA via `umap_local` (needs kernel rebuild to validate).  
+    旧 SBI IPI/RFENCE 已通过 `umap_local` 将 hart mask 指针转为 PA（需重建内核验证）。  
+    Evidence: `minix/kernel/arch/riscv64/sbi.c`
 
 ### 6) UART driver blocks reads without replying / UART 阻塞读无延迟回复
 - Evidence / 证据:
@@ -83,6 +107,10 @@ This file records concrete issues in the RISC-V 64-bit port with evidence and su
   - Blocking reads hang indefinitely; userland console read stalls. / 阻塞读无限期挂起，用户态无法读取。
 - Suggested fix / 修复建议:
   - Track pending reads and reply on RX interrupts. / 保存挂起请求并在 RX 中断时回复。
+- Update / 进展:
+  - Added pending read tracking plus RX interrupt reply; adjusted ioctl handling to NetBSD-style `TIOC*` and SEF startup flow (needs rebuild/runtime validation).  
+    增加挂起读记录并在 RX 中断时回复；ioctl 改为 `TIOC*` 风格并调整 SEF 启动（需重建/运行验证）。  
+    Evidence: `minix/drivers/tty/ns16550/ns16550.c`
 
 ### 7) vm_map_range marks pages executable unconditionally / vm_map_range 无条件设置可执行
 - Evidence / 证据:
@@ -91,6 +119,10 @@ This file records concrete issues in the RISC-V 64-bit port with evidence and su
   - W^X is violated; data pages become executable. / 违反 W^X，数据页被标记为可执行。
 - Suggested fix / 修复建议:
   - Set `PTE_X` only for executable mappings (use VMMF flags). / 仅在可执行映射时设置 `PTE_X`。
+- Update / 进展:
+  - Drop unconditional `PTE_X`; only add execute on non-writable mappings to keep W^X with current VMMF flags (needs rebuild/runtime validation).  
+    移除无条件 `PTE_X`；仅对非写映射设置执行位以保持 W^X（需重建/运行验证）。  
+    Evidence: `minix/kernel/arch/riscv64/memory.c`
 
 ### 8) Breakpoint exception always advances PC by 4 bytes / 断点异常固定前移 4 字节
 - Evidence / 证据:
@@ -99,6 +131,10 @@ This file records concrete issues in the RISC-V 64-bit port with evidence and su
   - Compressed `ebreak` is 2 bytes; advancing by 4 skips the next instruction. / 压缩 `ebreak` 为 2 字节，前移 4 字节会跳过下一条指令。
 - Suggested fix / 修复建议:
   - Decode instruction length before advancing `sepc`. / 根据指令长度推进 `sepc`。
+- Update / 进展:
+  - Use 16-bit low bits to pick 2 vs 4 byte instruction length when skipping kernel breakpoints (needs rebuild/runtime validation).  
+    内核断点前移时按低位判断 2/4 字节指令长度（需重建/运行验证）。  
+    Evidence: `minix/kernel/arch/riscv64/exception.c`
 
 ### 9) Software interrupts (IPI) not enabled in SIE / SIE 中未开启 SSIE
 - Evidence / 证据:
@@ -107,6 +143,10 @@ This file records concrete issues in the RISC-V 64-bit port with evidence and su
   - SMP IPIs will not be delivered even if SBI works. / 即使 SBI 正常，SMP IPI 也不会送达。
 - Suggested fix / 修复建议:
   - Enable `SIE_SSIE` when SMP is configured. / SMP 场景下开启 `SIE_SSIE`。
+- Update / 进展:
+  - Enable `SIE_SSIE` under `CONFIG_SMP` during exception init (needs rebuild/runtime validation).  
+    在异常初始化中为 `CONFIG_SMP` 启用 `SIE_SSIE`（需重建/运行验证）。  
+    Evidence: `minix/kernel/arch/riscv64/exception.c`
 
 ### 15) RISC-V SMP core missing (arch_smp + smp.c not implemented) / RISC-V SMP 核心缺失
 - Evidence / 证据:
@@ -204,6 +244,20 @@ This file records concrete issues in the RISC-V 64-bit port with evidence and su
   `minix/lib/libc/arch/riscv64/sys/_ipc.S:101` 修正 `senda` 参数顺序以匹配内核。
 - `minix/lib/libc/arch/riscv64/sys/ucontext.S:7` uses generated offsets and sets `MCF_MAGIC` for RV64 ucontext.  
   `minix/lib/libc/arch/riscv64/sys/ucontext.S:7` 使用偏移头与 `MCF_MAGIC`，统一 RV64 ucontext 约定。
+- `minix/kernel/arch/riscv64/protect.c` maps `.usermapped` into the boot page table for `minix_kerninfo_user`.  
+  `minix/kernel/arch/riscv64/protect.c` 在启动页表映射 `.usermapped`，修复早期 `minix_kerninfo_user` 缺页。
+- `minix/drivers/storage/virtio_blk_mmio/virtio_blk_mmio.c` and `minix/drivers/storage/virtio_blk/virtio_blk.c` fix SELF iovec handling for sys_vumap.  
+  `minix/drivers/storage/virtio_blk_mmio/virtio_blk_mmio.c` 与 `minix/drivers/storage/virtio_blk/virtio_blk.c` 修复 sys_vumap 的 SELF iovec 处理。
+- `minix/servers/vm/slaballoc.c` increases slab size classes to cover RV64 message sizes (avoids slaballoc assert).  
+  `minix/servers/vm/slaballoc.c` 扩展 slab 大小类以覆盖 RV64 message（避免 slaballoc 断言）。
+- `minix/servers/vm/pagetable.c` flushes TLB after leaf-to-non-leaf splits for RV64 page tables.  
+  `minix/servers/vm/pagetable.c` 在 RV64 叶子拆分后刷新 TLB。
+- `minix/kernel/arch/riscv64/sbi.c` passes physical hart mask addresses to legacy SBI IPI/RFENCE calls.  
+  `minix/kernel/arch/riscv64/sbi.c` 让旧 SBI IPI/RFENCE 传递物理 hart mask 地址。
+- `minix/releasetools/riscv64/system.conf` adds MFS to the ramdisk service set.  
+  `minix/releasetools/riscv64/system.conf` 为 ramdisk 服务集补充 MFS。
+- `minix/kernel/arch/riscv64/kernel.c` defaults `ramimagename=imgrd` when the parameter buffer is empty.  
+  `minix/kernel/arch/riscv64/kernel.c` 在参数缓冲为空时默认 `ramimagename=imgrd`。
 - Former Critical #2: SATP root VA pointer is now passed via `SVMCTL_PTROOT_V` and used by the kernel (`minix/lib/libsys/sys_vmctl.c:30-40`,
   `minix/servers/vm/pagetable.c:2199-2208`, `minix/kernel/arch/riscv64/arch_do_vmctl.c:75-90`,
   `minix/kernel/arch/riscv64/memory.c:60-63`).  
@@ -218,6 +272,16 @@ This file records concrete issues in the RISC-V 64-bit port with evidence and su
   FPU 保存/恢复已实现（f0-f31 + fcsr）。
 - Former Moderate #10: pagefault message is stack-local (`minix/kernel/arch/riscv64/exception.c:232-290`).  
   缺页消息已改为栈上局部变量。
+- `minix/kernel/arch/riscv64/klib.S` uses `li/or` for `MF_FPU_INITIALIZED` to avoid out-of-range immediates in `ori`.  
+  `minix/kernel/arch/riscv64/klib.S` 使用 `li/or` 设置 `MF_FPU_INITIALIZED`，避免 `ori` 立即数越界。
+- `minix/kernel/arch/riscv64/bsp/virt/bsp_init.c` uses a local byte-swap to avoid `__bswapsi2` link errors.  
+  `minix/kernel/arch/riscv64/bsp/virt/bsp_init.c` 改为本地字节翻转，避免链接缺失 `__bswapsi2`。
+- `minix/include/arch/riscv64/include/machine/fpu.h` guards `SSTATUS_FS_*` to avoid redefinition with `archconst.h`.  
+  `minix/include/arch/riscv64/include/machine/fpu.h` 为 `SSTATUS_FS_*` 增加宏保护，避免与 `archconst.h` 重定义。
+- `minix/kernel/arch/riscv64/console.c` includes `kernel/kernel.h` to match kernel header include rules.  
+  `minix/kernel/arch/riscv64/console.c` 改为包含 `kernel/kernel.h` 以符合内核头文件规则。
+- `minix/drivers/tty/ns16550/Makefile` adds `gp.c` and `__global_pointer$` defsym for static RV64 builds.  
+  `minix/drivers/tty/ns16550/Makefile` 增加 `gp.c` 与 `__global_pointer$` defsym，支持 RV64 静态链接。
 
 ## Vision / 愿景: pkgsrc on MINIX RV64
 

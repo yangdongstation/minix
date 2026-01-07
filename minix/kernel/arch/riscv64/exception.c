@@ -48,6 +48,14 @@ static void handle_page_fault(struct trapframe *tf, u64_t cause, u64_t addr);
 void copr_not_available_handler(void);
 extern int catch_pagefaults;
 
+static unsigned int
+riscv_inst_len(const void *pc)
+{
+	const u16_t insn = *(const u16_t *)pc;
+
+	return (insn & 0x3) == 0x3 ? 4 : 2;
+}
+
 /*
  * Initialize exception handling
  */
@@ -60,6 +68,9 @@ void exception_init(void)
 
     /* Enable timer and external interrupts */
     csr_set_sie(SIE_STIE | SIE_SEIE);
+#ifdef CONFIG_SMP
+    csr_set_sie(SIE_SSIE);
+#endif
 }
 
 /*
@@ -165,7 +176,7 @@ static void handle_exception(struct trapframe *tf, u64_t cause)
             return;
         }
         /* Breakpoint in kernel - skip instruction */
-        tf->tf_sepc += 4;
+        tf->tf_sepc += riscv_inst_len((const void *)(uintptr_t)tf->tf_sepc);
         break;
 
     case EXC_INST_MISALIGNED:

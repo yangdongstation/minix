@@ -20,8 +20,34 @@
 
 extern u64_t __k_unpaged__boot_pgdir[];
 extern u64_t _boot_pgdir[];
+extern char usermapped_start, usermapped_end;
 
 static int boot_pgdir_synced;
+
+static void map_usermapped_boot(void)
+{
+	vir_bytes start, end, map_start, map_end, vbase;
+	phys_bytes phys;
+	size_t len;
+
+	start = (vir_bytes)&usermapped_start;
+	end = (vir_bytes)&usermapped_end;
+	if (end <= start)
+		return;
+
+	map_start = rounddown(start, RISCV_PAGE_SIZE);
+	map_end = roundup(end, RISCV_PAGE_SIZE);
+	len = map_end - map_start;
+
+	phys = umap_local(NULL, 0, map_start, 1);
+	if (!phys)
+		panic("rv64: usermapped umap_local failed");
+
+	vbase = ((vir_bytes)kinfo.freepde_start << 30);
+	vbase += (map_start - start);
+
+	pg_map(phys, vbase, len, RISCV_PTE_U | RISCV_PTE_R);
+}
 
 static void sync_boot_pgdir(void)
 {
@@ -37,6 +63,7 @@ static void sync_boot_pgdir(void)
 		bsp_get_memory(&mem_start, &mem_size);
 		pg_extend_kernel_map(mem_start, mem_size);
 	}
+	map_usermapped_boot();
 	direct_print("rv64: boot_pgdir synced\n");
 }
 

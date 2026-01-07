@@ -32,6 +32,7 @@ static void riscv64_init_kinfo(void)
 	phys_bytes reserved_end;
 	const struct riscv_bootinfo *bi;
 	unsigned int i;
+	size_t len;
 
 	memset(&kinfo, 0, sizeof(kinfo));
 
@@ -42,6 +43,13 @@ static void riscv64_init_kinfo(void)
 	/* Reserve user space (0-3) and early identity mappings (0,2). */
 	kinfo.freepde_start = 4;
 	kinfo.serial_debug_baud = 115200;
+	/* Provide a default ramdisk source when no monitor params exist. */
+	if (kinfo.param_buf[0] == '\0') {
+		len = strlcpy(kinfo.param_buf, "ramimagename=imgrd",
+			sizeof(kinfo.param_buf));
+		if (len + 1 < sizeof(kinfo.param_buf))
+			kinfo.param_buf[len + 1] = '\0';
+	}
 
 	kinfo.bootstrap_start = (vir_bytes)&__k_unpaged__kern_unpaged_start;
 	kinfo.bootstrap_len = (vir_bytes)&__k_unpaged__kern_unpaged_end -

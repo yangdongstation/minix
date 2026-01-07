@@ -6,9 +6,12 @@
 
 #include <minix/drivers.h>
 #include <minix/chardriver.h>
+#include <minix/sef.h>
 #include <minix/sysutil.h>
 #include <minix/vm.h>
-#include <sys/termios.h>
+#include <sys/mman.h>
+#include <termios.h>
+#include <sys/ttycom.h>
 
 #include "ns16550.h"
 
@@ -33,6 +36,13 @@ static int inbuf_head;
 static int inbuf_tail;
 static int inbuf_count;
 
+/* Pending blocking read */
+static int pending_read;
+static endpoint_t pending_endpt;
+static cp_grant_id_t pending_grant;
+static size_t pending_size;
+static cdev_id_t pending_id;
+
 /* IRQ hook */
 static int irq_hook;
 
@@ -46,6 +56,8 @@ static ssize_t ns16550_write(devminor_t minor, u64_t position, endpoint_t endpt,
 static int ns16550_ioctl(devminor_t minor, unsigned long request, endpoint_t endpt,
     cp_grant_id_t grant, int flags, endpoint_t user, cdev_id_t id);
 static void ns16550_intr(unsigned int irqs);
+static void ns16550_reply_pending(void);
+static void sef_local_startup(void);
 
 /* Character driver table */
 static struct chardriver ns16550_tab = {
@@ -177,6 +189,10 @@ static ssize_t ns16550_read(devminor_t minor, u64_t position, endpoint_t endpt,
 
     if (minor != 0)
         return ENXIO;
+    if (pending_read)
+        return EIO;
+    if (size == 0)
+        return EINVAL;
 
     while (count < size && inbuf_count > 0) {
         c = inbuf[inbuf_tail];
@@ -189,8 +205,16 @@ static ssize_t ns16550_read(devminor_t minor, u64_t position, endpoint_t endpt,
         count++;
     }
 
-    if (count == 0 && !(flags & CDEV_NONBLOCK))
+    if (count == 0) {
+        if (flags & CDEV_NONBLOCK)
+            return EAGAIN;
+        pending_read = 1;
+        pending_endpt = endpt;
+        pending_grant = grant;
+        pending_size = size;
+        pending_id = id;
         return EDONTREPLY;  /* Block until data available */
+    }
 
     return count;
 }
@@ -233,13 +257,13 @@ static int ns16550_ioctl(devminor_t minor, unsigned long request, endpoint_t end
         return ENXIO;
 
     switch (request) {
-    case TCGETS:
+    case TIOCGETA:
         r = sys_safecopyto(endpt, grant, 0, (vir_bytes)&term, sizeof(term));
         break;
 
-    case TCSETS:
-    case TCSETSW:
-    case TCSETSF:
+    case TIOCSETA:
+    case TIOCSETAW:
+    case TIOCSETAF:
         r = sys_safecopyfrom(endpt, grant, 0, (vir_bytes)&term, sizeof(term));
         break;
 
@@ -275,6 +299,7 @@ static void ns16550_intr(unsigned int irqs)
                     inbuf_count++;
                 }
             }
+            ns16550_reply_pending();
             break;
 
         case IIR_TX_EMPTY:
@@ -297,6 +322,34 @@ static void ns16550_intr(unsigned int irqs)
     sys_irqenable(&irq_hook);
 }
 
+static void ns16550_reply_pending(void)
+{
+    size_t count = 0;
+    char c;
+    int r;
+
+    if (!pending_read || inbuf_count == 0)
+        return;
+
+    while (count < pending_size && inbuf_count > 0) {
+        c = inbuf[inbuf_tail];
+        inbuf_tail = (inbuf_tail + 1) % INBUF_SIZE;
+        inbuf_count--;
+
+        r = sys_safecopyto(pending_endpt, pending_grant, count,
+            (vir_bytes)&c, 1);
+        if (r != OK) {
+            pending_read = 0;
+            chardriver_reply_task(pending_endpt, pending_id, r);
+            return;
+        }
+        count++;
+    }
+
+    pending_read = 0;
+    chardriver_reply_task(pending_endpt, pending_id, count);
+}
+
 /*
  * Main entry point
  */
@@ -306,7 +359,7 @@ int main(void)
     int r, ipc_status;
 
     /* Initialize driver */
-    sef_startup();
+    sef_local_startup();
 
     /* Initialize hardware */
     r = uart_hw_init();
@@ -366,8 +419,8 @@ static int sef_cb_init(int type, sef_init_info_t *info)
     return OK;
 }
 
-void sef_startup(void)
+static void sef_local_startup(void)
 {
     sef_setcb_init_fresh(sef_cb_init);
-    sef_startup_default();
+    sef_startup();
 }

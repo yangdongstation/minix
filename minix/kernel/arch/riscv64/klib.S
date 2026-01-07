@@ -192,7 +192,8 @@ restore_fpu:
     csrw    CSR_FCSR, t0
 
     lw      t0, P_MISC_FLAGS(a0)
-    ori     t0, t0, MF_FPU_INITIALIZED
+    li      t1, MF_FPU_INITIALIZED
+    or      t0, t0, t1
     sw      t0, P_MISC_FLAGS(a0)
 
     /* Return OK */

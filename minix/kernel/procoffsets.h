@@ -1,0 +1,9 @@
+#define P_REG 0
+#define PSWFRAME 280
+#define P_FPU_STATE 296
+#define PCREG 248
+#define SPREG 8
+#define PSREG 256
+#define P_MISC_FLAGS 324
+#define MF_CONTEXT_SET 16384
+#define MF_FPU_INITIALIZED 4096

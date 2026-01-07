@@ -49,7 +49,10 @@ struct fdt_header {
 
 static uint32_t fdt32_to_cpu(uint32_t v)
 {
-    return __builtin_bswap32(v);
+    return ((v & 0x000000ffU) << 24) |
+        ((v & 0x0000ff00U) << 8) |
+        ((v & 0x00ff0000U) >> 8) |
+        ((v & 0xff000000U) >> 24);
 }
 
 static size_t fdt_strnlen(const char *s, size_t maxlen)

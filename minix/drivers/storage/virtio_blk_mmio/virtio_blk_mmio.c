@@ -77,7 +77,7 @@ static void virtio_blk_intr(unsigned int irqs);
 static int virtio_blk_device(devminor_t minor, device_id_t *id);
 static int prepare_bufs(struct vumap_phys *phys, int cnt, int write);
 static int prepare_vir_vec(endpoint_t endpt, struct vumap_vir *vir,
-    iovec_s_t *iv, int cnt, vir_bytes *size);
+    const iovec_t *iv, int cnt, vir_bytes *size);
 
 static struct blockdriver virtio_blk_tab = {
     .bdr_type       = BLOCKDRIVER_TYPE_DISK,
@@ -141,7 +141,7 @@ static int prepare_bufs(struct vumap_phys *phys, int cnt, int write)
 }
 
 static int prepare_vir_vec(endpoint_t endpt, struct vumap_vir *vir,
-    iovec_s_t *iv, int cnt, vir_bytes *size)
+    const iovec_t *iv, int cnt, vir_bytes *size)
 {
     vir_bytes s, total = 0;
 
@@ -160,9 +160,9 @@ static int prepare_vir_vec(endpoint_t endpt, struct vumap_vir *vir,
         }
 
         if (endpt == SELF)
-            vir[i].vv_addr = (vir_bytes)iv[i].iov_grant;
+            vir[i].vv_addr = iv[i].iov_addr;
         else
-            vir[i].vv_grant = iv[i].iov_grant;
+            vir[i].vv_grant = (cp_grant_id_t)iv[i].iov_addr;
 
         vir[i].vv_size = iv[i].iov_size;
     }
@@ -286,7 +286,7 @@ static ssize_t virtio_blk_transfer(devminor_t minor, int write, u64_t position,
     thread_id_t tid;
     int r, pcnt, access;
     void *data;
-    iovec_s_t *iv = (iovec_s_t *)iovec;
+    const iovec_t *iv = iovec;
 
     dev = virtio_blk_part(minor);
     if (dev == NULL)

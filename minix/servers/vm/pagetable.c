@@ -56,7 +56,7 @@ static int pt_l0alloc(pt_t *pt, int pde, int pte1, int verify)
 		if (pt->pt_pt[pde][pte1] & RISCV_PTE_LEAF) {
 			phys_bytes base;
 			u64_t flags;
-			int i;
+			int i, r;
 
 			if (verify)
 				return EFAULT;
@@ -84,6 +84,9 @@ static int pt_l0alloc(pt_t *pt, int pde, int pte1, int verify)
 			}
 			pt->pt_pt_l0[pde][pte1] = p;
 			pt->pt_pt[pde][pte1] = RISCV_PA_TO_PTE(pt_phys);
+			r = sys_vmctl(SELF, VMCTL_FLUSHTLB, 0);
+			if (r != OK)
+				panic("VMCTL_FLUSHTLB failed: %d", r);
 			return OK;
 		}
 		if (!pt->pt_pt_l0[pde]) {
@@ -155,7 +158,7 @@ static int pt_l1alloc(pt_t *pt, int pde, int verify)
 	u64_t flags;
 	u64_t *p;
 	u64_t **l0;
-	int i;
+	int i, r;
 
 	if (!(pt->pt_dir[pde] & RISCV_PTE_LEAF))
 		return OK;
@@ -188,6 +191,9 @@ static int pt_l1alloc(pt_t *pt, int pde, int verify)
 	pt->pt_pt[pde] = p;
 	pt->pt_pt_l0[pde] = l0;
 	pt->pt_dir[pde] = RISCV_PA_TO_PTE(pt_phys);
+	r = sys_vmctl(SELF, VMCTL_FLUSHTLB, 0);
+	if (r != OK)
+		panic("VMCTL_FLUSHTLB failed: %d", r);
 
 	return OK;
 }

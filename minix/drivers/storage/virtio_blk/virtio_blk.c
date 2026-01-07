@@ -197,7 +197,7 @@ prepare_bufs(struct vumap_vir *vir, struct vumap_phys *phys, int cnt, int w)
 }
 
 static int
-prepare_vir_vec(endpoint_t endpt, struct vumap_vir *vir, iovec_s_t *iv,
+prepare_vir_vec(endpoint_t endpt, struct vumap_vir *vir, const iovec_t *iv,
 		int cnt, vir_bytes *size)
 {
 	/* This is pretty much the same as sum_iovec from AHCI,
@@ -222,9 +222,9 @@ prepare_vir_vec(endpoint_t endpt, struct vumap_vir *vir, iovec_s_t *iv,
 		}
 
 		if (endpt == SELF)
-			vir[i].vv_addr = (vir_bytes)iv[i].iov_grant;
+			vir[i].vv_addr = iv[i].iov_addr;
 		else
-			vir[i].vv_grant = iv[i].iov_grant;
+			vir[i].vv_grant = (cp_grant_id_t)iv[i].iov_addr;
 
 		vir[i].vv_size = iv[i].iov_size;
 
@@ -255,7 +255,7 @@ virtio_blk_transfer(devminor_t minor, int write, u64_t position,
 	u64_t end_part;
 	int r, pcnt = sizeof(phys) / sizeof(phys[0]);
 
-	iovec_s_t *iv = (iovec_s_t *)iovec;
+	const iovec_t *iv = iovec;
 	int access = write ? VUA_READ : VUA_WRITE;
 
 	/* Make sure we don't touch this one anymore */

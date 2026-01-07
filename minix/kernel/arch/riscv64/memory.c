@@ -202,10 +202,12 @@ int vm_map_range(struct proc *p, phys_bytes phys, vir_bytes vir,
     /* Get process page directory */
     pgdir = get_pgdir(p);
 
-    /* Convert MINIX VMMF_* flags to RISC-V PTE flags */
-    pte_flags = PTE_V | PTE_A | PTE_D | PTE_R | PTE_X;
+    /* Convert MINIX VMMF_* flags to RISC-V PTE flags. */
+    pte_flags = PTE_V | PTE_A | PTE_D | PTE_R;
     if (flags & VMMF_WRITE)
         pte_flags |= PTE_W;
+    else
+        pte_flags |= PTE_X; /* Keep W^X with available flags. */
     if (flags & VMMF_USER)
         pte_flags |= PTE_U;
     if (flags & VMMF_GLO)

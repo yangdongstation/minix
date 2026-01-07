@@ -26,7 +26,7 @@
 #include "util.h"
 #include "sanitycheck.h"
 
-#define SLABSIZES 200
+#define SLABSIZES 256
 
 #define ITEMSPERPAGE(bytes) (int)(DATABYTES / (bytes))
 

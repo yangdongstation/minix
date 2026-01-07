@@ -5,7 +5,7 @@
 
 #include <minix/type.h>
 #include <minix/com.h>
-#include "kernel.h"
+#include "kernel/kernel.h"
 #include "archconst.h"
 
 /* UART base address */
