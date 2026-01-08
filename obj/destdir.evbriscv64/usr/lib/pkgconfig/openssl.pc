@@ -1,0 +1,13 @@
+# $NetBSD: mkpc,v 1.4 2014/07/07 09:14:43 joerg Exp $
+prefix=/usr
+exec_prefix=/usr
+libdir=/usr/lib
+includedir=/usr/include
+
+Name: OpenSSL
+Description: Sockets Layer and cryptography libraries and tools
+Version: 1.0.1p
+Requires: 
+Libs: -lssl -lcrypto
+Libs.private:
+Cflags:

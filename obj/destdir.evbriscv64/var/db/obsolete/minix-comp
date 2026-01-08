@@ -1,0 +1,17 @@
+./usr/lib/libnetsock.a
+./usr/lib/libminlib.a
+./usr/lib/libcompat_minix.a
+./usr/include/ufs/chfs
+./usr/include/sys/vm.h
+./usr/include/sys/simplelock.h
+./usr/include/sys/jmp_buf.h
+./usr/include/net/gen/resolv.h
+./usr/include/net/gen/netdb.h
+./usr/include/net/gen/nameser.h
+./usr/include/minix/queryparam.h
+./usr/include/minix/netsock.h
+./usr/include/lzma/lzma.h
+./usr/include/env.h
+./usr/include/compat/machine
+./usr/include/compat
+./usr/include/clang-3.4

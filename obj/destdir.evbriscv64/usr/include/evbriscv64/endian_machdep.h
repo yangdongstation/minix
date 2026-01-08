@@ -1,0 +1,8 @@
+/*	$NetBSD$	*/
+
+#ifndef _RISCV_ENDIAN_MACHDEP_H_
+#define _RISCV_ENDIAN_MACHDEP_H_
+
+#define _BYTE_ORDER _LITTLE_ENDIAN
+
+#endif /* _RISCV_ENDIAN_MACHDEP_H_ */

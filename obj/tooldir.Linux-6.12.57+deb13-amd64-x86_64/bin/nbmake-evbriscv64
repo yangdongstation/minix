@@ -1,0 +1,51 @@
+#! /usr/bin/sh
+# Set proper variables to allow easy "make" building of a NetBSD subtree.
+# Generated from:  $NetBSD: build.sh,v 1.308 2015/06/27 06:00:28 matt Exp $
+# with these arguments: -U -u -j4 -m evbriscv64 -V AVAILABLE_COMPILER=gcc -V ACTIVE_CC=gcc -V ACTIVE_CPP=gcc -V ACTIVE_CXX=gcc -V ACTIVE_OBJC=gcc -V RISCV_ARCH_FLAGS=-march=RV64IMAFD -mcmodel=medany -V NOGCCERROR=yes -V MKPIC=no -V MKPICLIB=no -V MKPICINSTALL=no -V MKGCC=yes -V MKGCCCMDS=no -V MKLIBSTDCXX=no -V MKCXX=no -V MKLIBCXX=no -V MKATF=yes -V MKKYUA=yes -V USE_PCI=no -V MKLIBOBJC=no -V MKLIBGOMP=no -V CHECKFLIST_FLAGS=-m -e distribution
+#
+
+# LSC We are cross compiling, so do not install to root!
+ACTIVE_CC=gcc; export ACTIVE_CC
+ACTIVE_CPP=gcc; export ACTIVE_CPP
+ACTIVE_CXX=gcc; export ACTIVE_CXX
+ACTIVE_OBJC=gcc; export ACTIVE_OBJC
+AVAILABLE_COMPILER=gcc; export AVAILABLE_COMPILER
+BSHELL=/usr/bin/sh; export BSHELL
+BUILDSEED=MINIX-3.4.0; export BUILDSEED
+CHECKFLIST_FLAGS='-m -e'; export CHECKFLIST_FLAGS
+CONFIG_SHELL=/usr/bin/sh; export CONFIG_SHELL
+DESTDIR=/root/minix/obj/destdir.evbriscv64; export DESTDIR
+HOST_SH=/usr/bin/sh; export HOST_SH
+LC_ALL=C; export LC_ALL
+MACHINE=evbriscv64; export MACHINE
+MACHINE_ARCH=riscv64; export MACHINE_ARCH
+MAKEFLAGS='-de -m /root/minix/share/mk  MKOBJDIRS=yes'; export MAKEFLAGS
+MAKEWRAPPERMACHINE=evbriscv64; export MAKEWRAPPERMACHINE
+MKARZERO=yes; export MKARZERO
+MKATF=yes; export MKATF
+MKCXX=no; export MKCXX
+MKGCC=yes; export MKGCC
+MKGCCCMDS=no; export MKGCCCMDS
+MKINSTALLBOOT=no; export MKINSTALLBOOT
+MKKYUA=yes; export MKKYUA
+MKLIBCXX=no; export MKLIBCXX
+MKLIBGOMP=no; export MKLIBGOMP
+MKLIBOBJC=no; export MKLIBOBJC
+MKLIBSTDCXX=no; export MKLIBSTDCXX
+MKPIC=no; export MKPIC
+MKPICINSTALL=no; export MKPICINSTALL
+MKPICLIB=no; export MKPICLIB
+MKUNPRIVED=yes; export MKUNPRIVED
+MKUPDATE=yes; export MKUPDATE
+NETBSDSRCDIR=/root/minix; export NETBSDSRCDIR
+NOGCCERROR=yes; export NOGCCERROR
+RELEASEDIR=/root/minix/obj/releasedir; export RELEASEDIR
+RISCV_ARCH_FLAGS='-march=RV64IMAFD -mcmodel=medany'; export RISCV_ARCH_FLAGS
+TOOLDIR='/root/minix/obj/tooldir.Linux-6.12.57+deb13-amd64-x86_64'; export TOOLDIR
+USETOOLS=yes; export USETOOLS
+USE_PCI=no; export USE_PCI
+unset INFODIR
+unset LESSCHARSET
+unset TERMINFO
+
+exec "${TOOLDIR}/bin/nbmake" ${1+"$@"}

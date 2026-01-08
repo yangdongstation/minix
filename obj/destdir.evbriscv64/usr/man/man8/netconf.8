@@ -1,0 +1,37 @@
+.Dd February 22, 2017
+.Dt NETCONF 8
+.Os
+.Sh NAME
+.Nm netconf
+.Nd configure the network interactively
+.Sh SYNOPSIS
+.Nm
+.Op Fl lh
+.Op Fl p Ar prefix
+.Sh DESCRIPTION
+The
+.Nm
+utility allows the root user to configure the network in an interactive mode.
+.Sh OPTIONS
+.Bl -tag -width XpXprefixXX
+.It Fl l
+Print a list of configurable interfaces.
+.It Fl h
+Print usage.
+.It Fl p Ar prefix
+Set a path prefix for configuration files (e.g., /mnt).
+.El
+.Sh SEE ALSO
+.Xr ifconfig.if 5 ,
+.Xr resolv.conf 5 ,
+.Xr ifconfig 8 ,
+.Xr route 8 ,
+.Xr dhcpcd 8
+.Sh BUGS
+IPv6 support is limited at this time.
+.Sh AUTHORS
+Original version by Thomas Veerman <thomas@minix3.org>.
+.Pp
+NetBSD networking rewrite by David van Moolenbroek <david@minix3.org>.
+.Pp
+Original manual page by Leith Brandeland <lb.minix@gmail.com>.

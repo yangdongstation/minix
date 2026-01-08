@@ -1,0 +1,467 @@
+# /usr/etc/rc - continued system initialization.
+
+RANDOM_FILE=/usr/adm/random.dat
+TCPISN_FILE=/usr/adm/tcpisn.dat
+LOCAL_FILE=/usr/etc/rc.local
+
+ARCH="`sysenv arch`"
+
+if [ ! "$ARCH" ]
+then    # Older kernels do not provide an arch sysenv variable.
+        # We assume we are on x86 then, as existing systems with
+        # kernel and userland (i.e. this script) unsynchronized
+        # will be x86.
+        ARCH=i386
+fi
+
+# Get $SERVICES_DIRS
+. /etc/rc.conf
+
+# Directories to find services in
+if [ ! "$SERVICES_DIRS" ]
+then	SERVICES_DIRS=/service
+fi
+
+# Booting from cd?
+bootcd="`/bin/sysenv bootcd`"
+
+case "$#:$1" in
+1:start|1:stop)
+    action=$1
+    ;;
+*)  echo >&2 "Usage: $0 [start|stop]"
+    exit 1
+esac
+
+if [ -f "$LOCAL_FILE" ]
+then	. "$LOCAL_FILE" $1
+fi
+
+disabled()
+{
+    ifs="$IFS"; IFS=,
+    for skip in `sysenv disable`
+    do 
+        if [ "$skip" = "$1" ]
+	then 	 
+                IFS="$ifs"; unset ifs
+		return 0
+	fi
+    done
+    IFS="$ifs"; unset ifs
+    return 1
+}
+
+daemonize()
+{
+    # Function to start a daemon, if it exists.
+    local IFS=':'
+    local name="$1"
+
+    for dir in $PATH
+    do
+	if [ -f "$dir/$1" ]
+	then
+
+            # check if this service is disabled at the boot monitor.
+            if disabled $name; then return; fi
+
+	    echo -n " $name"
+	    "$@" &
+	    return
+	fi
+    done
+}
+
+up()
+{
+    # Function to dynamically start a system service
+    opt=""
+    prefix=$(expr "$1 " : '\(-\)')
+    if [ "$prefix" = "-" ];
+    then
+         opt=$1
+         shift
+    fi
+    service=$1
+    shift
+
+    # First check if this service is disabled at the boot monitor.
+    if disabled $service; then return; fi
+
+    # Service is not disabled. Try to bring it up.
+    found=""
+    for dir in $SERVICES_DIRS
+    do	bin=$dir/$service
+	if [ -x $bin -a -z "$found" ]
+	then	minix-service $opt up $bin "$@" 
+    		echo -n " $service"
+		found=yes
+	fi
+    done
+    if [ -z "$found" ]
+    then	echo " ($service not found in $SERVICES_DIRS)"
+    fi
+}
+
+# Print a list of labels of detected PCI ethernet hardware devices.
+get_pci_eth_labels()
+{
+	# We need to match all PCI ethernet hardware devices against all
+	# drivers.  For performance reasons, we construct a lookup table on the
+	# fly here.  In order to do that, we need to give both a list of all
+	# available network drivers with PCI device IDs (part 1 of the code
+	# below) and a list of all actually present ethernet hardware devices
+	# (part 2) to an awk script (part 3).  The awk script can tell the
+	# difference between the list entries based on whether there is a
+	# leading space on the line.  For part 2, we grab only devices that are
+	# in PCI class 2 (network controller) subclass 0 (ethernet controller).
+
+	# Part 1: collect all network drivers with supported PCI IDs
+	(for dir in $SYSTEM_CONF_DIRS; do
+		for f in $dir/$SYSTEM_CONF_SUBDIR/*; do
+			if [ -f $f ]; then
+				printconfig $f | grep ',type net.*,pci device'
+			fi
+		done
+	done | sed 's/^service \([^,]*\),.*,pci device/ \1/g';
+	# Part 2: grab all PCI IDs of ethernet hardware devices (class 2/0)
+	cat /proc/pci | grep '^[^ ]* 2/0/' | cut -d' ' -f3) | awk '
+	# Part 3: first construct a PCI-ID-to-driver table based on the lines
+	# produced by part 1 (with leading space), which each contain one
+	# driver name followed by one or more PCI IDs; then, go through all
+	# the ethernet hardware devices found in part 2 (no leading space) and
+	# if if there is a hit in the table, print the driver label to use.
+	/^ / { for (i=2;i<=NF;i++) drivers[$(i)]=$1 }
+	/^[^ ]/ {
+		# There is a bit of a discrepancy between output formats of
+		# /proc/pci and printconfig: the former uses
+		# "vid:did:sub_vid:sub_did" whereas the latter uses
+		# "vid:did/sub_vid:sub_did".  No problem; in the common case
+		# (= no sub IDs used) we need to split the PCI ID anyway.
+		if (split($1,id,":") >= 4) {
+			# Try a full "vid:did:sub_vid:sub_did" match.
+			name=drivers[id[1]":"id[2]"/"id[3]":"id[4]]
+		}
+		# No sub IDs or no match found?  Try a "vid:did" match.
+		if (!name) name=drivers[id[1]":"id[2]]
+		# If found, print the resulting label (<name>_<instance>)
+		if (name) {
+			print name"_"(instance[name]+0)
+			instance[name]++
+		}
+	}
+	'
+}
+
+# Print a list of labels of ethernet hardware devices that have been detected
+# to be present on the system.  Each label has the format '<driver>_<instance>'
+# where <driver> is the file name of the driver (in /service) and <instance> is
+# a zero-based, per-driver instance number of the device.
+get_eth_labels() {
+	# For now, do autodetection only on platforms with (x86) PCI support.
+	# For (x86) ISA drivers, a custom network setting script is required;
+	# see below.  For ARM platforms, the driver (if any) is started based
+	# on the board; there is no device autodetection.
+	if [ -f /proc/pci ]; then
+		get_pci_eth_labels
+	fi
+
+	# Add any network drivers manually configured in /usr/etc/rc.local by
+	# the netconf(8) utility.
+	if [ -n "$netdriver" ]; then
+		echo "${netdriver}_0"
+	fi
+}
+
+# Detect expansion boards on the BeagleBone and load the proper drivers.
+capemgr() {
+
+    # Probe each possible cape EEPROM slave address for a BeagleBone cape.
+    for slave_addr in 54 55 56 57
+    do
+
+        # See if there is a readable EEPROM with address ${slave_addr}.
+        eepromread -f /dev/i2c-3 -a 0x${slave_addr} > /dev/null 2>&1
+        RESULT=$?
+	if [ $RESULT -eq 0 ]
+	then
+
+	    # Found an alive EEPROM. Try reading the cape name.
+            CAPE=`eepromread -i -f /dev/i2c-3 -a 0x${slave_addr} | \
+	        sed -n 's/^PART_NUMBER     : \(.*\)$/\1/p' | \
+		sed -e 's/\.*$//g'` # Strip trailing periods.
+
+	    # Look for a cape specific RC script.
+            if [ -x /etc/rc.capes/${CAPE} ]
+	    then
+
+	        # CAT24C256 EEPROM -- all capes have this chip.
+		test -e /dev/eepromb3s${slave_addr} || \
+		    (cd /dev && MAKEDEV eepromb3s${slave_addr})
+		up cat24c256 -dev /dev/eepromb3s${slave_addr} \
+		    -label cat24c256.3.${slave_addr} \
+		    -args "bus=3 address=0x${slave_addr}"
+
+                # Load the drivers for the cape and do any other configuration.
+		. "/etc/rc.capes/${CAPE}"
+
+	    else
+
+		echo ""
+	        echo "** UNSUPPORTED CAPE: ${CAPE}"
+		echo ""
+
+	    fi
+	fi
+    done
+}
+
+case $action in
+start)
+    # Select console font.
+    test -f /etc/font && loadfont /etc/font </dev/console
+
+    # Cleanup.
+    rm -rf /tmp/* /usr/run/* /usr/spool/lpd/* /usr/spool/locks/*
+
+    # Start servers and drivers set at the boot monitor.
+    echo -n "Starting services:"
+    up -n random -dev /dev/random -period 3HZ
+
+    # load random number generator
+    if [ -f $RANDOM_FILE ]
+    then
+    	cat < $RANDOM_FILE >/dev/random
+    	# overwrite $RANDOM_FILE. We don't want to use this data again
+    	dd if=/dev/random of=$RANDOM_FILE bs=1024 count=1 2> /dev/null
+    else
+	# We couldn't find the old state to restart from, so use a binary
+	# file and the current date instead, even if this is less than ideal.
+	cat /bin/sh >> /dev/urandom
+	date >> /dev/urandom
+    fi
+
+    # start network driver instances for all detected ethernet devices
+    for label in $(get_eth_labels); do
+        driver=$(echo $label | sed 's/\(.*\)_.*/\1/')
+        instance=$(echo $label | sed 's/.*_//')
+        eval arg=\$${driver}_arg
+        if [ ! -z "$arg" ]; then arg=" $arg"; fi
+        arg="-args \"instance=$instance$arg\""
+        eval up $driver -label $label $arg -period 5HZ
+    done
+
+    # pty needs to know the "tty" group ID
+    up pty -dev /dev/ptmx -args "gid=`stat -f '%g' /dev/ptmx`"
+
+    # Start the LWIP service.
+    up lwip -dev /dev/bpf -script /etc/rs.lwip
+
+    # Load stable seed for TCP Initial Sequence Number generation (RFC 6528).
+    # The idea here is that (especially) after a system crash, the seed stays
+    # the same, so as to make it unlikely that incoming packets for connections
+    # from before the crash are accepted on connections after the crash.
+    TCPISN_LEN=$(sysctl -n net.inet.tcp.isn_secret | awk '{print length/2}')
+    if [ ! -f $TCPISN_FILE ]; then
+	# If the /usr file system is read-only, we cannot create the file.  In
+	# that case, we draw a temporary secret from the random service.
+	if grep ' \/usr .*rw.*' /etc/mtab >/dev/null; then
+	    dd if=/dev/random of=$TCPISN_FILE bs=$TCPISN_LEN count=1 2>/dev/null
+	else
+	    TCPISN_FILE=/dev/random
+	fi
+    fi
+    sysctl -qw net.inet.tcp.isn_secret=`dd if=$TCPISN_FILE bs=$TCPISN_LEN \
+	count=1 2>/dev/null | hexdump -v -e '/1 "%02x"'` 2>/dev/null
+
+    # LWIP does not block until all network drivers have fully initialized and
+    # reported back to LWIP.  That may prevent proper configuration of the
+    # corresponding interfaces a bit later.  Sleep up to five seconds waiting
+    # for all registered network drivers to initialize and report to LWIP.
+    for i in 1 2 3 4 5; do
+	[ $(sysctl -n minix.lwip.drivers.pending) -gt 0 ] && sleep 1
+    done
+
+    up uds
+
+    up -n ipc
+
+    up log -dev /dev/klog
+
+    if [ $ARCH = i386 ]
+    then
+	up -n printer -dev /dev/lp -period 10HZ
+	# start VirtualBox time sync driver if the device is there
+	if grep '^[^ ]* [^ ]* 80EE:CAFE[^ ]* ' /proc/pci >/dev/null; then
+		up -n vbox -period 10HZ
+	fi
+    fi
+
+    echo .
+
+    echo -n "Starting daemons:"
+    daemonize update
+
+    # Ugly error message when starting cron from CD.
+    # (and cron unnecessary then so..)
+    if [ ! -f /CD ]
+    then	daemonize cron
+    else	mkdir /tmp/log
+    		rm -f /var/log || true
+		ln -s /tmp/log /var/log || true
+		. /etc/rc.cd
+    fi
+
+    echo .
+
+    # i2c only supported on ARM at the moment
+    if [ $ARCH = earm ]
+    then
+	echo -n "Starting i2c subsystem: "
+	for bus in 1 2 3
+	do
+		test -e /dev/i2c-${bus} || (cd /dev && MAKEDEV i2c-${bus})
+		up i2c -dev /dev/i2c-${bus} -label i2c.${bus} \
+			-args instance=${bus}
+	done
+	echo .
+
+	BOARD_NAME=`sysenv board`
+	case "${BOARD_NAME}" in
+
+		ARM-ARMV7-TI-BB-WHITE)
+			echo "Running on a BeagleBone"
+			echo -n "Starting i2c device drivers: "
+
+			# start EEPROM driver for reading board info
+			test -e /dev/eepromb1s50 || \
+				(cd /dev && MAKEDEV eepromb1s50)
+			up cat24c256 -dev /dev/eepromb1s50 \
+				-label cat24c256.1.50 \
+				-args 'bus=1 address=0x50'
+
+			# Start TPS65217 driver for power management.
+			up tps65217 -label tps65217.1.24 \
+			        -args 'bus=1 address=0x24'
+
+			# Start ethernet driver.
+			up lan8710a -label lan8710a_0 -args 'instance=0'
+
+			# check for the presence of a display
+			eepromread -f /dev/i2c-2 -n > /dev/null 2>&1
+			RESULT=$?
+			if [ $RESULT -eq 0 ]
+			then
+				# start eeprom driver for reading EDID.
+				test -e /dev/eepromb2s50 || \
+					(cd /dev && MAKEDEV eepromb2s50)
+				up cat24c256 -dev /dev/eepromb2s50 \
+					-label cat24c256.2.50 \
+					-args 'bus=2 address=0x50'
+
+				# start frame buffer
+				#up fb -dev /dev/fb0 -args edid.0=cat24c256.2.50
+				# fb hasn't been ported to AM335X yet.
+			fi
+
+			if [ -e /service/usbd ]
+			then
+				echo "Starting USBD"
+				up usbd
+			fi
+			# Detect expansion boards and start drivers.
+			capemgr
+
+			;;
+
+		ARM-ARMV7-TI-BB-BLACK)
+			echo "Running on a BeagleBone Black"
+			echo -n "Starting i2c device drivers: "
+
+			# start EEPROM driver for reading board info
+			test -e /dev/eepromb1s50 || \
+				(cd /dev && MAKEDEV eepromb1s50)
+			up cat24c256 -dev /dev/eepromb1s50 \
+				-label cat24c256.1.50 \
+				-args 'bus=1 address=0x50'
+
+			# Start TPS65217 driver for power management.
+			up tps65217 -label tps65217.1.24 \
+			        -args 'bus=1 address=0x24'
+
+			# Start TDA19988 driver for reading EDID.
+			up tda19988 -label tda19988.1.3470 -args \
+				'cec_bus=1 cec_address=0x34 hdmi_bus=1 hdmi_address=0x70'
+
+			# Start ethernet driver.
+			up lan8710a -label lan8710a_0 -args 'instance=0'
+
+			# start frame buffer
+			#up fb -dev /dev/fb0 -args edid.0=tda19988.1.3470
+			# fb hasn't been ported to AM335X yet.
+
+			if [ -e /service/usbd ]
+			then
+				echo "Starting USBD"
+				up usbd
+			fi
+			# Detect expansion boards and start drivers.
+			capemgr
+
+			;;
+
+		ARM-ARMV7-TI-BBXM-GENERIC)
+			echo "Running on a BeagleBoard-xM"
+			echo -n "Starting i2c device drivers: "
+
+			# Start TPS65950 driver for power management.
+			up tps65950 -label tps65950.1.48 \
+				-args 'bus=1 address=0x48'
+
+			# Set the system time to the time in the TPS65950's RTC
+			readclock
+
+			# check for the presence of a display
+			eepromread -f /dev/i2c-3 -n > /dev/null 2>&1
+			RESULT=$?
+			if [ $RESULT -eq 0 ]
+			then
+				# start eeprom driver for reading edid
+				test -e /dev/eepromb3s50 || \
+					(cd /dev && MAKEDEV eepromb3s50)
+				up cat24c256 -dev /dev/eepromb3s50 \
+					-label cat24c256.3.50 \
+					-args 'bus=3 address=0x50'
+
+				# start frame buffer
+				up fb -dev /dev/fb0 -args edid.0=cat24c256.3.50
+			fi
+
+			;;
+	esac
+
+	echo .
+    fi
+
+    # Load the stored hostname into the sysctl database.
+    test -r /etc/hostname.file && hostname $(cat /etc/hostname.file)
+
+    # Recover files being edited when the system crashed.
+    test -f /usr/bin/elvprsv && elvprsv /usr/tmp/elv*
+
+    # Run the daily cleanup on systems that are not on at night.
+    test -f /usr/etc/daily && sh /usr/etc/daily boot &
+;;
+stop)
+    	# Save random data, if /usr is mounted rw.
+	if grep ' \/usr .*rw.*' /etc/mtab >/dev/null
+	then
+	  if dd if=/dev/random of=$RANDOM_FILE.new bs=1024 count=1 2>/dev/null
+    	  then
+    		mv $RANDOM_FILE.new $RANDOM_FILE
+	  else
+		echo 'Failed to save random data.'
+	  fi
+	fi
+esac

@@ -1,0 +1,45 @@
+.TH PROFILE 1
+.SH NAME
+profile \- MINIX statistical profiling control command
+.SH SYNOPSIS
+.B "profile start"
+[
+.B -m 
+.I memsize
+]
+[
+.B "-o" 
+.I outfile
+]
+[
+.B -f
+.I frequency
+] 
+.br
+.B "profile stop "
+.br
+.B "sprofalyze.pl"
+.SH DESCRIPTION
+This command controls MINIX system profiling. There is support for
+statistical profiling, which causes a CMOS interrupt to regularly sample
+the position of the program counter. To enable support for this,
+recompile the kernel with SPROFILE in
+<minix/config.h> set to 1.
+.SH OPTIONS
+.IP start
+start measuring using statistical profiling. 
+.IP stop
+stop measuring using statistical profiling. 
+.IP "-m"
+memory buffer size used to store profiling data in, allocated by the
+profile command.
+.IP "-o outfile"
+output file.
+.IP "-f frequency"
+frequency for statistical sampling.
+.PP
+After you have the output file, analysis can be done using the
+.B sprofalyze
+command.
+.SH AUTHOR
+Rogier Meurs

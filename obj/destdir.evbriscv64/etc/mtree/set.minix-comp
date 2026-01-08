@@ -1,0 +1,158 @@
+. type=dir uname=root gname=wheel mode=0755
+./etc type=dir uname=root gname=wheel mode=0755
+./etc/mtree type=dir uname=root gname=wheel mode=0755
+./etc/mtree/set.minix-comp type=file uname=root gname=wheel mode=0444
+./usr type=dir uname=root gname=wheel mode=0755
+./usr/include type=dir uname=root gname=wheel mode=0755
+./usr/include/altq type=dir uname=root gname=wheel mode=0755
+./usr/include/arpa type=dir uname=root gname=wheel mode=0755
+./usr/include/atf-c type=dir uname=root gname=wheel mode=0755
+./usr/include/atf-c++ type=dir uname=root gname=wheel mode=0755
+./usr/include/c++ type=dir uname=root gname=wheel mode=0755
+./usr/include/c++/experimental type=dir uname=root gname=wheel mode=0755
+./usr/include/c++/ext type=dir uname=root gname=wheel mode=0755
+./usr/include/clang-3.6 type=dir uname=root gname=wheel mode=0755
+./usr/include/crypto type=dir uname=root gname=wheel mode=0755
+./usr/include/ddekit type=dir uname=root gname=wheel mode=0755
+./usr/include/ddekit/minix type=dir uname=root gname=wheel mode=0755
+./usr/include/dev type=dir uname=root gname=wheel mode=0755
+./usr/include/dev/pci type=dir uname=root gname=wheel mode=0755
+./usr/include/evbriscv64 type=dir uname=root gname=wheel mode=0755
+./usr/include/evbriscv64/cpu.h type=link uname=root gname=wheel mode=0755 link=../riscv64/cpu.h
+./usr/include/event2 type=dir uname=root gname=wheel mode=0755
+./usr/include/fs type=dir uname=root gname=wheel mode=0755
+./usr/include/g++ type=dir uname=root gname=wheel mode=0755
+./usr/include/g++/bits type=dir uname=root gname=wheel mode=0755
+./usr/include/g++/bits/riscv32 type=dir uname=root gname=wheel mode=0755
+./usr/include/g++/bits/riscv64 type=dir uname=root gname=wheel mode=0755
+./usr/include/gssapi type=dir uname=root gname=wheel mode=0755
+./usr/include/isofs type=dir uname=root gname=wheel mode=0755
+./usr/include/isofs/cd9660 type=dir uname=root gname=wheel mode=0755
+./usr/include/kadm5 type=dir uname=root gname=wheel mode=0755
+./usr/include/krb5 type=dir uname=root gname=wheel mode=0755
+./usr/include/lutok type=dir uname=root gname=wheel mode=0755
+./usr/include/lzma type=dir uname=root gname=wheel mode=0755
+./usr/include/minix type=dir uname=root gname=wheel mode=0755
+./usr/include/minix/com.h type=file uname=root gname=wheel mode=0644 size=49066 sha256=38dce2e2f34a38af6dc15969b6f90492ce8effe99453801adb9e9c33f6e72ed1
+./usr/include/minix/syslib.h type=file uname=root gname=wheel mode=0644 size=13147 sha256=42e4a7abc0ec6ca34f2be4a8a4f6b85479079951fdd0dd552156ec19637d20eb
+./usr/include/msdosfs type=dir uname=root gname=wheel mode=0755
+./usr/include/net type=dir uname=root gname=wheel mode=0755
+./usr/include/net80211 type=dir uname=root gname=wheel mode=0755
+./usr/include/netatalk type=dir uname=root gname=wheel mode=0755
+./usr/include/netinet type=dir uname=root gname=wheel mode=0755
+./usr/include/netinet6 type=dir uname=root gname=wheel mode=0755
+./usr/include/netmpls type=dir uname=root gname=wheel mode=0755
+./usr/include/netpgp type=dir uname=root gname=wheel mode=0755
+./usr/include/openssl type=dir uname=root gname=wheel mode=0755
+./usr/include/pcap type=dir uname=root gname=wheel mode=0755
+./usr/include/ppath type=dir uname=root gname=wheel mode=0755
+./usr/include/prop type=dir uname=root gname=wheel mode=0755
+./usr/include/protocols type=dir uname=root gname=wheel mode=0755
+./usr/include/readline type=dir uname=root gname=wheel mode=0755
+./usr/include/riscv64 type=dir uname=root gname=wheel mode=0755
+./usr/include/riscv64/fpu.h type=file uname=root gname=wheel mode=0644 size=1415 sha256=2b04c30fc9ef0911da98ade5e5ea09cd0a0f1db000e250e928cfa03d045ebe93
+./usr/include/rpcsvc type=dir uname=root gname=wheel mode=0755
+./usr/include/ssp type=dir uname=root gname=wheel mode=0755
+./usr/include/sys type=dir uname=root gname=wheel mode=0755
+./usr/include/ufs type=dir uname=root gname=wheel mode=0755
+./usr/include/ufs/ext2fs type=dir uname=root gname=wheel mode=0755
+./usr/include/ufs/ffs type=dir uname=root gname=wheel mode=0755
+./usr/include/ufs/lfs type=dir uname=root gname=wheel mode=0755
+./usr/include/ufs/mfs type=dir uname=root gname=wheel mode=0755
+./usr/include/ufs/ufs type=dir uname=root gname=wheel mode=0755
+./usr/lib type=dir uname=root gname=wheel mode=0755
+./usr/lib/libarchive.a type=file uname=root gname=wheel mode=0644 size=877490 sha256=eb83d64289075f8fddec6b534e17e973fa4c9f18c4c8c731530e2f2562f77878
+./usr/lib/libasyn.a type=file uname=root gname=wheel mode=0644 size=21830 sha256=d6ad2442c8c302cd76d3217be607134b98a1155d6dcbf818c9c7046f4dd14602
+./usr/lib/libaudiodriver.a type=file uname=root gname=wheel mode=0644 size=35420 sha256=0da1e6722c7e803d7a1f1178e12c50c48d07e8f49f2b670b516102bd1f67c68b
+./usr/lib/libbdev.a type=file uname=root gname=wheel mode=0644 size=51748 sha256=a20b277f0792bb71cc876645a2ac06a437c8e7df57b9c951ed20e73cb8c0593d
+./usr/lib/libbind9.a type=file uname=root gname=wheel mode=0644 size=150542 sha256=a34979cb9b163f4c26a71d9be955681d48c0fd7d56fce9d7e8867b88e00022ff
+./usr/lib/libblockdriver.a type=file uname=root gname=wheel mode=0644 size=64464 sha256=daf197401be619a71021e2093fda123dbedbd4e063ab80c3d9e7b38c07826824
+./usr/lib/libbz2.a type=file uname=root gname=wheel mode=0644 size=170462 sha256=10e9f439fa2e78f48b4e10f93296922ec49bca7d18cf73edb5c8b3c6880eddef
+./usr/lib/libc.a type=file uname=root gname=wheel mode=0644 size=4712594 sha256=2967b46e7c00325ffc20aebbe40bde44ee5543c6759eab2ce0daa06b13075293
+./usr/lib/libchardriver.a type=file uname=root gname=wheel mode=0644 size=18112 sha256=de44856c28832c2973570ee0cf7e2a26c4b8a9be8a6a04c9c360cd77981c52e4
+./usr/lib/libcrypt.a type=file uname=root gname=wheel mode=0644 size=58512 sha256=8a2697e0ddf453d4c78630f08e5f0708050a8924705b9dd54c4d10b60507ee2b
+./usr/lib/libcurses.a type=file uname=root gname=wheel mode=0644 size=604044 sha256=474a5a1be6940408368d99ec7c17135bdda846429045ec1d79956b97c0288bbe
+./usr/lib/libddekit.a type=file uname=root gname=wheel mode=0644 size=112646 sha256=37c4657f1b2588bc3be361f727c88c3ada8bd3a810dfa6cb93ac8d70f61b4e61
+./usr/lib/libddekit_usb_client.a type=file uname=root gname=wheel mode=0644 size=7020 sha256=435fadf8fdd19275a34aa046443e1db9e3db470964e0f43e9970a6a13cdc1140
+./usr/lib/libddekit_usb_server.a type=file uname=root gname=wheel mode=0644 size=16160 sha256=1220c472eb973848dde146cbb0d017e93bf093452959339214163f903569f128
+./usr/lib/libdevman.a type=file uname=root gname=wheel mode=0644 size=22348 sha256=43e740be663bbaa256557da0de213c4295ec5c1c32eb6ad886b366ae6b0f5068
+./usr/lib/libdns.a type=file uname=root gname=wheel mode=0644 size=7377202 sha256=06b39191e83f5d322de6163cb6ad437914e44d9fc9c41efc0e09911b5f49a0ae
+./usr/lib/libedit.a type=file uname=root gname=wheel mode=0644 size=540138 sha256=c6f0b0fcac6ba85b048d79b2dc50457980f894a5a8b8350b7894268b995e28fd
+./usr/lib/libelf.a type=file uname=root gname=wheel mode=0644 size=369452 sha256=39b70e325570647dff5d4974d03fdf5f35424fb1466b4b39a285cd3834f90513
+./usr/lib/libevent.a type=file uname=root gname=wheel mode=0644 size=821800 sha256=d929fab572b15f13f1d20d7e0add3ec40d0346ff3ff7b90b8965ed7c5574289a
+./usr/lib/libexec.a type=file uname=root gname=wheel mode=0644 size=18200 sha256=677bc84a9661fd5ba427534c15f472df8c9a491a638caf1d1b97c26835a8df6c
+./usr/lib/libexecinfo.a type=file uname=root gname=wheel mode=0644 size=21214 sha256=e6dd823231c697a8f7e45526e1fd41abe7cdc487b8a19d920803ae5d355e6220
+./usr/lib/libexpat.a type=file uname=root gname=wheel mode=0644 size=734808 sha256=cf87a7ebd413f2f3fa3d007b3a09d5a74bfb38b1f0bad144a8a4d712a114b2e7
+./usr/lib/libfetch.a type=file uname=root gname=wheel mode=0644 size=185720 sha256=cb82fea3ba063b7a837b4fe873f5c46120ec2875b3b09eff03b2be8909bd3b42
+./usr/lib/libfl.a type=file uname=root gname=wheel mode=0644 size=3324 sha256=cc4bf334f376a70b2fb9a74269fb8d966ec2b17b9b291711bcb84ec43130a6f4
+./usr/lib/libform.a type=file uname=root gname=wheel mode=0644 size=184600 sha256=b8f601935d05fc3bd5fec4ff4c0f60838c068765fd456c98eadb6e27a12fc853
+./usr/lib/libfsdriver.a type=file uname=root gname=wheel mode=0644 size=48640 sha256=85dc1c6f0755a286ce92c6f5da4b1652ef812c8086fd28000534d4cb559e52b8
+./usr/lib/libgcc_s.a type=file uname=root gname=wheel mode=0644 size=950 sha256=6845398cfa6db4591461013786f96aea6afdedcbc36137a1273e189f5a31b7e6
+./usr/lib/libinputdriver.a type=file uname=root gname=wheel mode=0644 size=8040 sha256=2d425cc570d21ca3a746d992288e6051585f2b729bae870e90fa51d109b668b4
+./usr/lib/libintl.a type=file uname=root gname=wheel mode=0644 size=99032 sha256=db44524bd0865337c8e030192c30a4e7d7eb980d02128b12c1339ad319ea1b67
+./usr/lib/libirs.a type=file uname=root gname=wheel mode=0644 size=52652 sha256=61d2551d71733eae811614696b8c296cdb46c294245cd2580208ebc5a9a5ccbc
+./usr/lib/libisc.a type=file uname=root gname=wheel mode=0644 size=1534078 sha256=29f75cf847bbca797c524c80d903935045387fafe9405b79c85d5f8975f725c3
+./usr/lib/libisccc.a type=file uname=root gname=wheel mode=0644 size=104988 sha256=eaa1623bed17d695b8ad13775a6d611aae2f6c5e56bd8b2ffb38d1d2156da833
+./usr/lib/libisccfg.a type=file uname=root gname=wheel mode=0644 size=322004 sha256=237408cc277cb223568a488299177a03a50cc78308658ed9b228d40271c78711
+./usr/lib/libkvm.a type=file uname=root gname=wheel mode=0644 size=78664 sha256=5498f4b098f33cb4ab3ef71c93e83f645ea6dd7eb92ad57d3709dbd2cf695c5e
+./usr/lib/libl.a type=file uname=root gname=wheel mode=0644 size=3324 sha256=cc4bf334f376a70b2fb9a74269fb8d966ec2b17b9b291711bcb84ec43130a6f4
+./usr/lib/liblua.a type=file uname=root gname=wheel mode=0644 size=800086 sha256=f620689328e26d923fcad8efd9ff82d6205f9ebe65581c0f7edd89161cf5b179
+./usr/lib/liblwip.a type=file uname=root gname=wheel mode=0644 size=485974 sha256=2cd8efeb7fe6dcc3b3360b7ff0e19f43da387c568caba965d6621679b6edaa7d
+./usr/lib/liblwres.a type=file uname=root gname=wheel mode=0644 size=237216 sha256=cf7fb4142494879ab04748535efded10928e176aeea0484c4aa1781f7fab5c42
+./usr/lib/liblzma.a type=file uname=root gname=wheel mode=0644 size=433182 sha256=20f6d3f02c10e981cb5dff079daf91822dcf30afc5a9b5db5fc1166549c4848d
+./usr/lib/libm.a type=file uname=root gname=wheel mode=0644 size=966970 sha256=d61b4273ffd54429c1e5d38ee714471d76cb62a7b2746e7dc9f2bb2d02f46ea0
+./usr/lib/libmagic.a type=file uname=root gname=wheel mode=0644 size=461728 sha256=32832e732586a0e9c486cb80f17423fdf622bd9c9a75a5505e5923e845227200
+./usr/lib/libmenu.a type=file uname=root gname=wheel mode=0644 size=69512 sha256=aa0b0b917add6645c565e238048c649f3b943abc57ee98501d36fc1dc7367bda
+./usr/lib/libminc.a type=file uname=root gname=wheel mode=0644 size=558490 sha256=3855fba0d1038c8de5850f78b4b335272e8f5b9d394d6074e002f8809b157eca
+./usr/lib/libminixfs.a type=file uname=root gname=wheel mode=0644 size=74476 sha256=72442a1738810dd3d599fd941f99e72d7edf11230241ff83154ead4e4fe97aa6
+./usr/lib/libmthread.a type=file uname=root gname=wheel mode=0644 size=75488 sha256=812cec05a75a9ad4f8e27a72be34404f42cefdd1a30a259c45af0beb29ae16ce
+./usr/lib/libnetdriver.a type=file uname=root gname=wheel mode=0644 size=51062 sha256=0d0f19572ab320d6362e45fe221315aa25c8f98c85b59501dd84f32ba2a1d58f
+./usr/lib/libpcap.a type=file uname=root gname=wheel mode=0644 size=752124 sha256=d7647dacdd5c8e8063188173ba6bb83b7031edf50502c32c661cb5e8ff33f830
+./usr/lib/libpci.a type=file uname=root gname=wheel mode=0644 size=425650 sha256=894957433010cde517ea53254a3abcd1728b433249f7b102fceb7dd2978af268
+./usr/lib/libprop.a type=file uname=root gname=wheel mode=0644 size=226144 sha256=c9e016c62638994d6d1228b461988bf433b4da35aac5923749804d238b21fe14
+./usr/lib/libpuffs.a type=file uname=root gname=wheel mode=0644 size=152714 sha256=1b69966b28a0af9537b402586eb99d3fb9e1d01b64e225a8608b19a61215309f
+./usr/lib/librefuse.a type=file uname=root gname=wheel mode=0644 size=47082 sha256=02a8db63b901c05f1a9141251ac8bd5dcf2b573495510913d63fa778e72dbfe6
+./usr/lib/librmt.a type=file uname=root gname=wheel mode=0644 size=22458 sha256=e3ef0af642a7254d27bd6993c9c1f50e868b702fec97beb2f061cb922ed4e1f3
+./usr/lib/libsffs.a type=file uname=root gname=wheel mode=0644 size=79988 sha256=6eaf5e8e11156291957364353698b87df3d504cedf079d7e1e8931b325da1522
+./usr/lib/libsockdriver.a type=file uname=root gname=wheel mode=0644 size=35316 sha256=75c774ffea5de4c1199d9737600b172ebfd9630e99ecee9a42e2eda5649dad41
+./usr/lib/libsockevent.a type=file uname=root gname=wheel mode=0644 size=77468 sha256=c0a55800f40badc0ac5ea2b46954fe3c2bd135f2a96075fd7b16de6db0f012d1
+./usr/lib/libsqlite3.a type=file uname=root gname=wheel mode=0644 size=2263974 sha256=8178b479eaa0dfdc4b7c2c29694761bf61b1a42e3f9d5b59d9791d86bdbf358f
+./usr/lib/libsys.a type=file uname=root gname=wheel mode=0644 size=336312 sha256=fbab34d8a6ecedeee75278d16141002389d0e3998ee7b8ce60315a38b002f2fa
+./usr/lib/libterminfo.a type=file uname=root gname=wheel mode=0644 size=153278 sha256=baec6f13266b043226c0d4ba023328a06adf9c5880b85ff4de689327c4341dfa
+./usr/lib/libtimers.a type=file uname=root gname=wheel mode=0644 size=6292 sha256=3f27d2d63496dc977861bdd790565354f10ab04840e07d8718e332a88a715d65
+./usr/lib/libusb.a type=file uname=root gname=wheel mode=0644 size=9354 sha256=7fcde705287f22bfd6c18f71435bff02887278490a966317a3320caf80d6728c
+./usr/lib/libutil.a type=file uname=root gname=wheel mode=0644 size=294764 sha256=b485e9158bd14d46b66b2b4ad778639c9a3cb2c87872fd477c7f82734894e2fc
+./usr/lib/libvtreefs.a type=file uname=root gname=wheel mode=0644 size=92334 sha256=b2ae48c81d94f7915443ac0dd9a7b5e81a5bd81fdace93c30884ad99cfefa398
+./usr/lib/libwrap.a type=file uname=root gname=wheel mode=0644 size=103184 sha256=af135433aa21497e5eb9403547d8e9314c92bce2d817b4b6c56eab1a4a47541b
+./usr/lib/libz.a type=file uname=root gname=wheel mode=0644 size=198612 sha256=4e83649dcb3c94b5728a0b75648119f76ba2b302b39fd1be19e748fd23e560ea
+./usr/lib/bc type=dir uname=root gname=wheel mode=0755
+./usr/lib/i18n type=dir uname=root gname=wheel mode=0755 optional
+./usr/lib/i18n/libBIG5.a type=file uname=root gname=wheel mode=0644 size=49572 sha256=1b0f62caecd7e1c22848d75cd04d3e0932100df9bd22c8f6967e8c72b829161b
+./usr/lib/i18n/libDECHanyu.a type=file uname=root gname=wheel mode=0644 size=25544 sha256=c6a3218c8da86d18c626dbd087672f6dfc54b5a720322244fd3eacd19129dbef
+./usr/lib/i18n/libEUC.a type=file uname=root gname=wheel mode=0644 size=26908 sha256=3ac99930ebd71f1bc5ab4025dd9387f8e0a6c0a19a0f7640186382ad689db618
+./usr/lib/i18n/libEUCTW.a type=file uname=root gname=wheel mode=0644 size=24300 sha256=bf7578d52331886beed0189a2e0bbe637719e23e7b937287e9d6b149cd9056ea
+./usr/lib/i18n/libGBK2K.a type=file uname=root gname=wheel mode=0644 size=27244 sha256=6227bc239c20f2d5f18d03dbf610da1e06fceeb9d0f33f2f5b64786e1d61cc60
+./usr/lib/i18n/libHZ.a type=file uname=root gname=wheel mode=0644 size=59748 sha256=11ac9be780d568550c6853ff8e28a8061243e74d4e87aa59858d70553d7a869d
+./usr/lib/i18n/libISO2022.a type=file uname=root gname=wheel mode=0644 size=67818 sha256=caa0263581f1fc411db5480f4da595c53061889d7e41b5636c23ca4bc4ec7e24
+./usr/lib/i18n/libJOHAB.a type=file uname=root gname=wheel mode=0644 size=25476 sha256=0445ae1264d99f3ca7b6e381d32e65d45bf5127fb3a8af71aaf0369012aefd6b
+./usr/lib/i18n/libMSKanji.a type=file uname=root gname=wheel mode=0644 size=26730 sha256=1aab85cedc41851f8257a5b612c57c5354b3d16a44517a7ea74c4e7b4a063e90
+./usr/lib/i18n/libUES.a type=file uname=root gname=wheel mode=0644 size=28268 sha256=74eaf913f6050a6580f6a30a908dcc559daf17a2304c9b5021c9d463e56901c3
+./usr/lib/i18n/libUTF1632.a type=file uname=root gname=wheel mode=0644 size=15636 sha256=54c98578d4f575232763808e0a687b4fe213957d69b920c7c6df87ca9214e272
+./usr/lib/i18n/libUTF7.a type=file uname=root gname=wheel mode=0644 size=31688 sha256=64c5a75b899e94401f40daa789077b6166626fa5981df94db7e14a0f49a6e54d
+./usr/lib/i18n/libUTF8.a type=file uname=root gname=wheel mode=0644 size=27096 sha256=08facef6ac41ba5467a3ff4feb716304b016094572b02184627f254792f2d3b5
+./usr/lib/i18n/libVIQR.a type=file uname=root gname=wheel mode=0644 size=40656 sha256=585a3c93f91455d8abc358150215742a6a0cd661f4cf4d3062aba5a70b271c6a
+./usr/lib/i18n/libZW.a type=file uname=root gname=wheel mode=0644 size=29368 sha256=ec6ae9732ae12f10b99dcb79aa67f0b0bc48f5688a55c89c3cb71c6d252bcd65
+./usr/lib/i18n/libiconv_none.a type=file uname=root gname=wheel mode=0644 size=4060 sha256=8409e5be2d4400f928194c2c05f46be400208216149690f0ec35ad422b0c792d
+./usr/lib/i18n/libiconv_std.a type=file uname=root gname=wheel mode=0644 size=14312 sha256=f80b3bae789fb0d34121813af09029e85d1bbc8f205cef55623098530f57a1ce
+./usr/lib/i18n/libmapper_646.a type=file uname=root gname=wheel mode=0644 size=10278 sha256=aa3003bb38ad4e755746da398eaf4142dbdafc3312d87a61672188a193812812
+./usr/lib/i18n/libmapper_none.a type=file uname=root gname=wheel mode=0644 size=3512 sha256=0808248342214777acfd1ef7a1ec63f685f2d2c43eceab1510c58c42263925c1
+./usr/lib/i18n/libmapper_parallel.a type=file uname=root gname=wheel mode=0644 size=8526 sha256=2df609b6afc28086c3e7f6643e6ac7da451770cb14f9d10e6a2aae324b977ed8
+./usr/lib/i18n/libmapper_serial.a type=file uname=root gname=wheel mode=0644 size=8526 sha256=2df609b6afc28086c3e7f6643e6ac7da451770cb14f9d10e6a2aae324b977ed8
+./usr/lib/i18n/libmapper_std.a type=file uname=root gname=wheel mode=0644 size=11782 sha256=5221f0a5ee47b335db6c9626f92b9f5ee35279993770fe86bebeb51d4b3b9cf8
+./usr/lib/i18n/libmapper_zone.a type=file uname=root gname=wheel mode=0644 size=9904 sha256=e5e0a77d4338eba4cca2ab53be3af2974495189497b47b11ca85cdb64374bfc0
+./usr/libexec type=dir uname=root gname=wheel mode=0755 optional
+./usr/man type=dir uname=root gname=wheel mode=0755
+./usr/man/man1 type=dir uname=root gname=wheel mode=0755
+./var type=dir uname=root gname=wheel mode=0755
+./var/db type=dir uname=root gname=wheel mode=0755
+./var/db/obsolete type=dir uname=root gname=wheel mode=0755

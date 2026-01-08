@@ -1,0 +1,4 @@
+./usr/lib/libgcc_eh.a
+./usr/lib/libobjc.a
+./usr/libexec/lto-wrapper
+./usr/libexec/lto1

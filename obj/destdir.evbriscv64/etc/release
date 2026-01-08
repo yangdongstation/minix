@@ -1,0 +1,113 @@
+NetBSD 3.4.0/evbriscv64
+
+Copyright (c) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+    2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015
+    The NetBSD Foundation, Inc.  All rights reserved.
+Copyright (c) 1982, 1986, 1989, 1991, 1993
+    The Regents of the University of California.  All rights reserved.
+
+Build information:
+          Build date   Wed Jan  7 18:31:01 UTC 2026
+            Built by   root@iZj6c5jsfa8vwh4eyh9h5jZ
+
+Build settings:
+
+           BSDOBJDIR = '/usr/obj'
+           BSDSRCDIR = '/usr/src'
+             BUILDID = (undefined)
+           BUILDINFO = (undefined)
+           BUILDSEED = 'MINIX-3.4.0'
+             DESTDIR = '/root/minix/obj/destdir.evbriscv64'
+          DISTRIBVER = '3.4.0'
+  EXTERNAL_TOOLCHAIN = (undefined)
+            HAVE_GCC = '5'
+            HAVE_GDB = '79'
+           HAVE_LLVM = 'no'
+            HAVE_PCC = (undefined)
+     INSTALLWORLDDIR = (undefined)
+         KERNARCHDIR = (undefined)
+         KERNCONFDIR = (undefined)
+          KERNOBJDIR = (undefined)
+          KERNSRCDIR = (undefined)
+             MACHINE = 'evbriscv64'
+        MACHINE_ARCH = 'riscv64'
+                MAKE = '/root/minix/obj/tooldir.Linux-6.12.57+deb13-amd64-x86_64/bin/nbmake'
+            MAKECONF = '/etc/mk.conf'
+           MAKEFLAGS = ' -d e -m /root/minix/share/mk -j 4 -J 15,16 .MAKE.LEVEL.ENV=MAKELEVEL HOST_OSTYPE=Linux-6.12.57+deb13-amd64-x86_64 MKOBJDIRS=yes NOPOSTINSTALL=1 USETOOLS=yes _SRC_TOP_=/root/minix _SRC_TOP_OBJ_=/root/minix/obj _THISDIR_=etc/'
+          MAKEOBJDIR = (undefined)
+    MAKEOBJDIRPREFIX = (undefined)
+         MAKEVERBOSE = '2'
+            MKARZERO = 'yes'
+               MKATF = 'no'
+               MKBFD = (undefined)
+          MKBINUTILS = 'no'
+          MKCATPAGES = 'no'
+            MKCRYPTO = 'yes'
+        MKCRYPTO_RC5 = 'no'
+               MKCTF = 'no'
+               MKCVS = 'yes'
+             MKDEBUG = 'no'
+          MKDEBUGLIB = 'no'
+               MKDOC = 'yes'
+            MKDTRACE = 'no'
+       MKDYNAMICROOT = 'no'
+               MKGCC = 'yes'
+           MKGCCCMDS = 'no'
+               MKGDB = 'no'
+            MKHESIOD = 'no'
+              MKHTML = 'no'
+            MKIEEEFP = 'yes'
+             MKINET6 = 'yes'
+              MKINFO = 'yes'
+          MKIPFILTER = 'no'
+          MKKERBEROS = 'no'
+              MKKYUA = 'no'
+              MKLDAP = 'no'
+           MKLINKLIB = 'yes'
+              MKLINT = 'no'
+              MKLLVM = 'no'
+               MKMAN = 'yes'
+              MKMANZ = 'no'
+              MKMDNS = 'no'
+               MKNLS = 'yes'
+               MKNPF = 'no'
+               MKOBJ = 'yes'
+           MKOBJDIRS = 'yes'
+               MKPAM = 'no'
+               MKPCC = 'no'
+                MKPF = 'no'
+               MKPIC = 'no'
+        MKPICINSTALL = 'no'
+            MKPICLIB = 'no'
+           MKPOSTFIX = 'no'
+           MKPROFILE = 'no'
+             MKREPRO = 'no'
+             MKSHARE = 'yes'
+              MKSKEY = 'no'
+         MKSOFTFLOAT = 'no'
+         MKSTATICLIB = 'yes'
+          MKUNPRIVED = 'yes'
+            MKUPDATE = 'yes'
+               MKX11 = 'no'
+                MKYP = 'no'
+          NBUILDJOBS = (undefined)
+        NETBSDSRCDIR = '/root/minix'
+          NOCLEANDIR = (undefined)
+       NODISTRIBDIRS = (undefined)
+          NOINCLUDES = (undefined)
+          OBJMACHINE = (undefined)
+          RELEASEDIR = '/root/minix/obj/releasedir'
+   RELEASEMACHINEDIR = 'evbriscv64-el'
+   TOOLCHAIN_MISSING = 'no'
+             TOOLDIR = '/root/minix/obj/tooldir.Linux-6.12.57+deb13-amd64-x86_64'
+          USE_HESIOD = 'no'
+           USE_INET6 = 'yes'
+        USE_JEMALLOC = 'yes'
+        USE_KERBEROS = 'no'
+            USE_LDAP = 'no'
+             USE_PAM = 'no'
+            USE_SKEY = 'no'
+              USE_YP = 'no'
+            USETOOLS = 'yes'
+      USR_OBJMACHINE = (undefined)
+           X11SRCDIR = '/usr/xsrc'

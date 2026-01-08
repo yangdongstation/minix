@@ -1,0 +1,23 @@
+. type=dir uname=root gname=wheel mode=0755
+./boot type=dir uname=root gname=wheel mode=0755
+./boot/minix type=dir uname=root gname=wheel mode=0755
+./boot/minix/.temp type=dir uname=root gname=wheel mode=0755
+./boot/minix/.temp/kernel type=file uname=root gname=wheel mode=0755 size=196839 sha256=9ef02ecb685f90d22b18adcee860a102db2388b47c8898fed7b4a674cab7812e
+./boot/minix/.temp/mod01_ds type=file uname=root gname=wheel mode=0755 size=106710 sha256=358182076be1a36367094eb19e22bf23738619f49048ac899f6b2ffb0ce99557
+./boot/minix/.temp/mod02_rs type=file uname=root gname=wheel mode=0755 size=151742 sha256=583bea00cb5edc98c4a5a6a60d92c0e6355c9b044dffe3e741e56c48b9a70ed7
+./boot/minix/.temp/mod03_pm type=file uname=root gname=wheel mode=0755 size=114043 sha256=27e43702cd999b927b7afe4cae7cf6fc494e56b7b84e6cf54e8ba00e553dbf83
+./boot/minix/.temp/mod04_sched type=file uname=root gname=wheel mode=0755 size=69165 sha256=99cb5bb8ac6f70cd7b5ee0df6a48945467f78d6b2f79e89da231f26fb30fc9d7
+./boot/minix/.temp/mod05_vfs type=file uname=root gname=wheel mode=0755 size=250275 sha256=b4b04f311c1563c5a1c83a6caec4844dfbdcf4d2138557979f8b3c5513c01eac
+./boot/minix/.temp/mod06_memory type=file uname=root gname=wheel mode=0755 size=4550182 sha256=bf979bb465014d3922ed2333d3146e87e9a08fefa3b70afb0a49fed6fa6a8ac8
+./boot/minix/.temp/mod07_tty type=file uname=root gname=wheel mode=0755 size=91604 sha256=d31871179a583daff97111e776fb030ad67d398069b6952041fad4a23ac1b4cf
+./boot/minix/.temp/mod08_mib type=file uname=root gname=wheel mode=0755 size=122324 sha256=cd0c816914df0bc2631e3c6b755df3eaadac6b2e091dcde264a908a6aa3f6023
+./boot/minix/.temp/mod09_vm type=file uname=root gname=wheel mode=0755 size=210589 sha256=ff363de0d42b1de7008cba90c915a5145f9218f89b6fba703b9251c7d6aa1b3c
+./boot/minix/.temp/mod10_pfs type=file uname=root gname=wheel mode=0755 size=82583 sha256=94390c58c628e35553051f0f3191e92e261477d7bf99113b873275f9b218e87d
+./boot/minix/.temp/mod11_mfs type=file uname=root gname=wheel mode=0755 size=144468 sha256=f6c4993fe607544a7e4761d6c4a77b381478f451e2ac3acee9667b35412e68a4
+./boot/minix/.temp/mod12_init type=file uname=root gname=wheel mode=0755 size=402495 sha256=4e298a1732fdda9144e6089678ef1cf38b660c596c87012c96746d219acdcf6c
+./etc type=dir uname=root gname=wheel mode=0755
+./etc/mtree type=dir uname=root gname=wheel mode=0755
+./etc/mtree/set.minix-kernel type=file uname=root gname=wheel mode=0444
+./var type=dir uname=root gname=wheel mode=0755
+./var/db type=dir uname=root gname=wheel mode=0755
+./var/db/obsolete type=dir uname=root gname=wheel mode=0755
